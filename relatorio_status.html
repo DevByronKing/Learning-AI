@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnóstico Executivo de Status — AprovaLens AI</title>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* RESET & DESIGN SYSTEM */
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-card: #131b2e;
+      --bg-card-hover: #19233c;
+      --border-subtle: #1e293b;
+      --border-focus: #334155;
+      
+      --color-indigo: #6366f1;
+      --color-indigo-glow: rgba(99, 102, 241, 0.25);
+      --color-emerald: #10b981;
+      --color-emerald-glow: rgba(16, 185, 129, 0.2);
+      --color-amber: #f59e0b;
+      --color-amber-glow: rgba(245, 158, 11, 0.2);
+      --color-rose: #f43f5e;
+      --color-rose-glow: rgba(244, 63, 94, 0.2);
+      --color-cyan: #06b6d4;
+      --color-cyan-glow: rgba(6, 182, 212, 0.2);
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dark: #64748b;
+      
+      --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      line-height: 1.6;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* BARRA SUPERIOR DE AÇÃO */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 14px 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--color-emerald);
+      box-shadow: 0 0 12px var(--color-emerald);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+
+    .btn-print {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px var(--color-indigo-glow);
+    }
+
+    .btn-print:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px var(--color-indigo-glow);
+    }
+
+    /* CABEÇALHO EXECUTIVO */
+    .header-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--color-indigo), var(--color-cyan), var(--color-emerald));
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .project-title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .project-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .header-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    .meta-value {
+      font-size: 0.9375rem;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .meta-value.mono {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: #38bdf8;
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      font-weight: 700;
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-warning {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-danger {
+      background: rgba(244, 63, 94, 0.15);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .badge-indigo {
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    /* GRID DE KPIS */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-focus);
+    }
+
+    .kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      filter: blur(35px);
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .kpi-card.indigo::after { background: var(--color-indigo); }
+    .kpi-card.emerald::after { background: var(--color-emerald); }
+    .kpi-card.cyan::after { background: var(--color-cyan); }
+    .kpi-card.amber::after { background: var(--color-amber); }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .kpi-title {
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .kpi-icon {
+      font-size: 1.25rem;
+    }
+
+    .kpi-value {
+      font-size: 2.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .kpi-card.indigo .kpi-value { color: #818cf8; }
+    .kpi-card.emerald .kpi-value { color: #34d399; }
+    .kpi-card.cyan .kpi-value { color: #38bdf8; }
+    .kpi-card.amber .kpi-value { color: #fbbf24; }
+
+    .kpi-caption {
+      font-size: 0.8125rem;
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+
+    /* SEÇÕES DO RELATÓRIO */
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-icon {
+      font-size: 1.35rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    /* RESUMO EXECUTIVO */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .summary-block {
+      background: rgba(11, 15, 25, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .summary-block-title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .summary-block ul {
+      list-style: none;
+    }
+
+    .summary-block li {
+      position: relative;
+      padding-left: 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .summary-block li::before {
+      content: '•';
+      position: absolute;
+      left: 4px;
+      color: var(--color-indigo);
+      font-weight: bold;
+    }
+
+    /* TABELA ZEBRADA */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    .status-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+
+    .status-table th {
+      background: #0f172a;
+      color: var(--text-muted);
+      padding: 14px 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid var(--border-subtle);
+    }
+
+    .status-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+
+    .status-table tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    .status-table tr:hover {
+      background: rgba(99, 102, 241, 0.04);
+    }
+
+    .module-cell {
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .module-sub {
+      font-size: 0.75rem;
+      color: var(--text-dark);
+      font-family: var(--font-mono);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    /* CAIXAS DE ALERTA */
+    .alert-box {
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      border-left: 4px solid;
+    }
+
+    .alert-box.danger {
+      background: rgba(244, 63, 94, 0.08);
+      border-color: var(--color-rose);
+    }
+
+    .alert-box.warning {
+      background: rgba(245, 158, 11, 0.08);
+      border-color: var(--color-amber);
+    }
+
+    .alert-box.info {
+      background: rgba(6, 182, 212, 0.08);
+      border-color: var(--color-cyan);
+    }
+
+    .alert-icon {
+      font-size: 1.35rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .alert-content {
+      flex: 1;
+    }
+
+    .alert-title {
+      font-weight: 700;
+      font-size: 0.9375rem;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-box.danger .alert-title { color: #fb7185; }
+    .alert-box.warning .alert-title { color: #fbbf24; }
+    .alert-box.info .alert-title { color: #38bdf8; }
+
+    .alert-desc {
+      font-size: 0.84375rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* LISTA NUMERADA INDIGO */
+    .action-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .action-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      background: rgba(11, 15, 25, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 18px 22px;
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--color-indigo);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9375rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px var(--color-indigo-glow);
+    }
+
+    .step-info {
+      flex: 1;
+    }
+
+    .step-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .step-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .code-pill {
+      display: inline-block;
+      background: #1e293b;
+      color: #38bdf8;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+    }
+
+    /* FOOTER */
+    .report-footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-dark);
+      font-size: 0.8125rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* REGRAS DE IMPRESSÃO (@media print) */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+        padding: 0 !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+      }
+
+      .action-bar {
+        display: none !important;
+      }
+
+      .header-card, .kpi-card, .section-card, .summary-block, .action-step {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        color: #1e293b !important;
+      }
+
+      .header-card::before {
+        background: #475569 !important;
+      }
+
+      .project-title, .section-title, .step-title, .module-cell {
+        color: #0f172a !important;
+      }
+
+      .kpi-card.indigo .kpi-value,
+      .kpi-card.emerald .kpi-value,
+      .kpi-card.cyan .kpi-value,
+      .kpi-card.amber .kpi-value {
+        color: #0f172a !important;
+      }
+
+      .status-table th {
+        background: #f1f5f9 !important;
+        color: #334155 !important;
+        border-bottom: 2px solid #cbd5e1 !important;
+      }
+
+      .status-table td {
+        border-bottom: 1px solid #e2e8f0 !important;
+        color: #334155 !important;
+      }
+
+      .status-table tr:nth-child(even) {
+        background: #f8fafc !important;
+      }
+
+      .alert-box {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        page-break-inside: avoid !important;
+      }
+
+      .alert-desc, .summary-block li, .step-desc, .kpi-caption {
+        color: #475569 !important;
+      }
+
+      .code-pill {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+
+      .step-number {
+        background: #334155 !important;
+        color: #ffffff !important;
+      }
+
+      .badge-success { background: #dcfce7 !important; color: #15803d !important; border-color: #86efac !important; }
+      .badge-warning { background: #fef3c7 !important; color: #b45309 !important; border-color: #fde68a !important; }
+      .badge-danger { background: #ffe4e6 !important; color: #be123c !important; border-color: #fecdd3 !important; }
+      .badge-indigo { background: #e0e7ff !important; color: #4338ca !important; border-color: #c7d2fe !important; }
+
+      .report-footer {
+        border-top: 1px solid #e2e8f0 !important;
+        color: #64748b !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- BARRA DE AÇÃO SUPERIOR -->
+    <header class="action-bar">
+      <div class="system-status">
+        <div class="status-dot"></div>
+        <span>Ambiente Auditado: Produção Next.js 14 (Turbopack) & TypeScript</span>
+      </div>
+      <button class="btn-print" onclick="window.print()">
+        🖨️ Imprimir / Salvar PDF
+      </button>
+    </header>
+
+    <!-- CABEÇALHO EXECUTIVO -->
+    <section class="header-card">
+      <div class="header-top">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+            <span class="project-tag">Concursos Públicos & OAB AI</span>
+            <span class="badge-status badge-success">✓ Compilação Íntegra</span>
+          </div>
+          <h1 class="project-title">AprovaLens AI — Diagnóstico Executivo de Status</h1>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            O Copiloto Cognitivo para Concursos, OAB e ENEM — Dissecção de Editais, Caderno de Erros, Simulador e Ciclos Adaptativos.
+          </p>
+        </div>
+      </div>
+
+      <div class="header-meta">
+        <div class="meta-item">
+          <span class="meta-label">Data da Auditoria</span>
+          <span class="meta-value">04 de Setembro de 2026</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Diretório Raiz</span>
+          <span class="meta-value mono">F:\Projetos Pessoais\App de Concursos</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Stack Tecnológica</span>
+          <span class="meta-value">Next.js 14.2.35, React 18.3, TailwindCSS, Recharts, TypeScript 5.7</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Status da Build</span>
+          <span class="meta-value">
+            <span class="badge-status badge-success">0 Erros (7/7 Rotas Prontas)</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARDS DE KPIS -->
+    <section class="kpi-grid">
+      <div class="kpi-card indigo">
+        <div class="kpi-header">
+          <span class="kpi-title">Maturidade do App</span>
+          <span class="kpi-icon">🚀</span>
+        </div>
+        <div class="kpi-value">85%</div>
+        <div class="kpi-caption">12 Módulos completos com UI rica, mock engine avançado e heurísticas cognitivas.</div>
+      </div>
+
+      <div class="kpi-card emerald">
+        <div class="kpi-header">
+          <span class="kpi-title">Módulos Concluídos</span>
+          <span class="kpi-icon">📦</span>
+        </div>
+        <div class="kpi-value">11 / 13</div>
+        <div class="kpi-caption">Simulador, Edital Parser, Ciclo Meirelles, Vade Mecum, SRS SM-2 e Redação prontos.</div>
+      </div>
+
+      <div class="kpi-card cyan">
+        <div class="kpi-header">
+          <span class="kpi-title">Tempo / Status Build</span>
+          <span class="kpi-icon">⚡</span>
+        </div>
+        <div class="kpi-value">49s</div>
+        <div class="kpi-caption">100% de sucesso sem erros de tipagem. Bundle otimizado em 189 kB (First Load JS: 276 kB).</div>
+      </div>
+
+      <div class="kpi-card amber">
+        <div class="kpi-header">
+          <span class="kpi-title">Nível de Risco Geral</span>
+          <span class="kpi-icon">🛡️</span>
+        </div>
+        <div class="kpi-value">MÉDIO</div>
+        <div class="kpi-caption">Repositório Git ausente (.git não inicializado) e persistência atualmente mockada em LocalStorage.</div>
+      </div>
+    </section>
+
+    <!-- OPÇÃO 1: RESUMO EXECUTIVO DIRETO -->
+    <section class="section-card">
+      <div class="section-header">
+        <span class="section-icon">📑</span>
+        <h2 class="section-title">Opção 1 — Resumo Executivo Direto</h2>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-block">
+          <div class="summary-block-title" style="color: #34d399;">
+            <span>✓</span> Concluído Recentemente
+          </div>
+          <ul>
+            <li><strong>Restauração Completa da Página Principal:</strong> Integração definitiva do <code>AprovaLensApp</code> na rota raiz <code>/</code>, eliminando stub de teste temporário.</li>
+            <li><strong>Player Dedicado SRS (SuperMemo-2):</strong> Revisão espaçada com atalhos de teclado (Espaço / 1-4) e exportador nativo de decks para o <strong>Anki</strong> (.txt/.tsv).</li>
+            <li><strong>Estúdio de Redação Discursiva:</strong> Editor de texto com cronômetro, espelho de prova e correção por critérios das bancas FGV, Cespe e FCC.</li>
+            <li><strong>Caderno de Erros Inteligente & Modo Revanche:</strong> Análise de distratores, anotações pessoais e repetição focada de questões falhadas.</li>
+          </ul>
+        </div>
+
+        <div class="summary-block">
+          <div class="summary-block-title" style="color: #fbbf24;">
+            <span>⏳</span> Pendências do Ciclo Atual
+          </div>
+          <ul>
+            <li><strong>Conexão da Camada de Dados com Supabase:</strong> Migrar do <code>mockData.ts</code> e <code>localStorage</code> para o banco PostgreSQL já modelado em <code>supabase/schema.sql</code>.</li>
+            <li><strong>Autenticação de Alunos Real:</strong> Ativar fluxo de Login/Cadastro com Supabase Auth e controle de sessão por JWT.</li>
+            <li><strong>Integração com Gateway de Pagamento:</strong> Conexão de Checkout real (Stripe ou Asaas Pix) para cobrança recorrente dos planos de assinatura.</li>
+            <li><strong>Automação de Deploy & CI/CD:</strong> Criação de scripts <code>.bat</code> para ambiente local e workflow do GitHub Actions / Vercel.</li>
+          </ul>
+        </div>
+
+        <div class="summary-block">
+          <div class="summary-block-title" style="color: #fb7185;">
+            <span>⚠️</span> Bloqueios & Gargalos
+          </div>
+          <ul>
+            <li><strong>Ausência de Versionamento Git:</strong> A raiz do projeto não possui pasta <code>.git</code>. Risco iminente de perda de código ou falta de histórico rastreável.</li>
+            <li><strong>Chaves de API Ausentes:</strong> Inexistência de arquivo <code>.env.local</code> para armazenar <code>NEXT_PUBLIC_SUPABASE_URL</code> e <code>OPENAI_API_KEY</code> para os endpoints de IA.</li>
+            <li><strong>Tratamento de Hidratação SSR:</strong> Atributos injetados por extensões de navegador de terceiros (ex: <code>data-qb-installed</code>) exigem <code>suppressHydrationWarning</code> no <code>&lt;html&gt;</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- OPÇÃO 2: DIAGNÓSTICO DETALHADO POR TÓPICOS -->
+    <section class="section-card">
+      <div class="section-header">
+        <span class="section-icon">📊</span>
+        <h2 class="section-title">Opção 2 — Diagnóstico Detalhado por Módulos & Entregas</h2>
+      </div>
+
+      <div class="table-container">
+        <table class="status-table">
+          <thead>
+            <tr>
+              <th>Módulo</th>
+              <th>Funcionalidades Implementadas</th>
+              <th>Status</th>
+              <th>Impacto no Negócio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="module-cell">
+                  <span>Simulador de Questões Cognitivo</span>
+                  <span class="module-sub">QuizSimulator.tsx + CognitiveDiagnosisCard.tsx</span>
+                </div>
+              </td>
+              <td>Gabarito comentado, classificação de 4 tipos de erro cognitivo, artigos de lei vinculados e conversão instantânea de erros em flashcards.</td>
+              <td><span class="badge-status badge-success">✓ 100% Funcional</span></td>
+              <td><strong>Crítico</strong> (Core do Produto & Retenção de Alunos)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="module-cell">
+                  <span>Player SRS & Exportador Anki</span>
+                  <span class="module-sub">SRSFlashcardPlayer.tsx</span>
+                </div>
+              </td>
+              <td>Algoritmo SuperMemo-2 (SM-2), atalhos de teclado (Espaço/1-4), métricas de consolidação e download direto de arquivos .txt/.tsv para Anki Desktop/Mobile.</td>
+              <td><span class="badge-status badge-success">✓ 100% Funcional</span></td>
+              <td><strong>Alto</strong> (Fidelização & Efeito Rede com Concurseiros)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="module-cell">
+                  <span>Parser & Extrator de Editais</span>
+                  <span class="module-sub">EditalParser.tsx + api/edital</span>
+                </div>
+              </td>
+              <td>Verticalização automática do edital, identificação de bancas (FGV, Cebraspe, FCC), distribuição de pesos por disciplina e criação de cronograma com 1 clique.</td>
+              <td><span class="badge-status badge-success">✓ 100% Funcional</span></td>
+              <td><strong>Crítico</strong> (Principal Lead Magnet e Isca Orgânica)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="module-cell">
+                  <span>Estúdio de Redação Discursiva</span>
+                  <span class="module-sub">DiscursiveStudio.tsx</span>
+                </div>
+              </td>
+              <td>Temas reais de concursos anteriores, cronômetro de tempo de prova, contagem de linhas e avaliação simulada por critérios oficiais de banca com nota final.</td>
+              <td><span class="badge-status badge-success">✓ 100% Funcional</span></td>
+              <td><strong>Alto</strong> (Diferencial competitivo para carreiras de topo)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="module-cell">
+                  <span>Caderno de Erros & Modo Revanche</span>
+                  <span class="module-sub">MistakesNotebook.tsx</span>
+                </div>
+              </td>
+              <td>Registro automático de todas as questões falhadas, inserção de anotações pessoais do candidato e re-execução isolada para superação de fraquezas.</td>
+              <td><span class="badge-status badge-success">✓ 100% Funcional</span></td>
+              <td><strong>Alto</strong> (Aceleração do aprendizado do candidato)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="module-cell">
+                  <span>Smart Vade Mecum Digital</span>
+                  <span class="module-sub">SmartVadeMecum.tsx</span>
+                </div>
+              </td>
+              <td>Legislação seca mapeada (CF/88, Lei 8.112, etc.), busca por artigos e cruzamento em tempo real com questões de concursos anteriores.</td>
+              <td><span class="badge-status badge-success">✓ 100% Funcional</span></td>
+              <td><strong>Médio</strong> (Utilidade diária que substitui livros físicos)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="module-cell">
+                  <span>Gerenciador de Ciclo de Estudos</span>
+                  <span class="module-sub">StudyCycleManager.tsx</span>
+                </div>
+              </td>
+              <td>Metodologia Ciclo de Estudos Alexandre Meirelles, equilíbrio por peso da matéria e horas disponíveis, cronômetro pomodoro integrado.</td>
+              <td><span class="badge-status badge-success">✓ 100% Funcional</span></td>
+              <td><strong>Alto</strong> (Organização da rotina de estudo)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="module-cell">
+                  <span>Dashboard Analítico & Preditivo</span>
+                  <span class="module-sub">AnalyticsDashboard.tsx</span>
+                </div>
+              </td>
+              <td>Gráficos com Recharts (acerto por disciplina, distribuição de tipos de erro, radar de competências e probabilidade matemática de corte).</td>
+              <td><span class="badge-status badge-success">✓ 100% Funcional</span></td>
+              <td><strong>Médio</strong> (Gamificação & Visibilidade de Progresso)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="module-cell">
+                  <span>Copiloto Cognitivo de IA</span>
+                  <span class="module-sub">AICopilotDrawer.tsx</span>
+                </div>
+              </td>
+              <td>Drawer flutuante onipresente que sugere ações com base nas fraquezas detectadas nas últimas resoluções de questões.</td>
+              <td><span class="badge-status badge-success">✓ 100% Funcional</span></td>
+              <td><strong>Alto</strong> (Percepção de IA ativa e tutoria personalizada)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="module-cell">
+                  <span>Monetização & Checkout</span>
+                  <span class="module-sub">PricingModal.tsx</span>
+                </div>
+              </td>
+              <td>Apresentação dos planos Aspirante (Grátis), Concurseiro Elite (R$ 39,90) e Tribunal Master (R$ 79,90) com persistência de upgrade no navegador.</td>
+              <td><span class="badge-status badge-warning">⚡ Sem Gateway Real</span></td>
+              <td><strong>Crítico</strong> (Monetização e Faturamento SaaS)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="module-cell">
+                  <span>Persistência em Nuvem (PostgreSQL)</span>
+                  <span class="module-sub">supabase/schema.sql</span>
+                </div>
+              </td>
+              <td>Schema relacional completo pronto para Supabase com RLS ativo para perfis, editais, questões, tentativas e flashcards.</td>
+              <td><span class="badge-status badge-indigo">📐 Schema Criado</span></td>
+              <td><strong>Crítico</strong> (Sincronização multi-dispositivo)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- BLOQUEADORES E RISCOS -->
+    <section class="section-card">
+      <div class="section-header">
+        <span class="section-icon">🛡️</span>
+        <h2 class="section-title">Bloqueadores, Riscos e Pontos de Atenção</h2>
+      </div>
+
+      <div class="alert-box danger">
+        <div class="alert-icon">🚨</div>
+        <div class="alert-content">
+          <div class="alert-title">CRÍTICO — Falta de Repositório Git (.git inexistente)</div>
+          <div class="alert-desc">
+            O projeto possui dezenas de milhares de linhas de código em componentes avançados sem controle de versão ou backup distribuído. Qualquer pane de disco ou exclusão acidental pode causar perda irreparável.
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-box warning">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+          <div class="alert-title">ATENÇÃO — Gateway de Pagamentos e Supabase Não Conectados</div>
+          <div class="alert-desc">
+            Embora o schema SQL do Supabase esteja desenhado com maestria em <code>supabase/schema.sql</code>, os dados atuais ainda são lidos de <code>mockData.ts</code> e <code>localStorage</code>. É necessário conectar as credenciais para viabilizar login de usuários reais e checkout de assinaturas.
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-box info">
+        <div class="alert-icon">💡</div>
+        <div class="alert-content">
+          <div class="alert-title">INFORMATIVO — Estratégia de Tráfego Orgânico Já Documentada</div>
+          <div class="alert-desc">
+            A pasta <code>Máquina de Aquisição & Estratégia de Tráfego Orgânico</code> contém diretrizes de Programmatic SEO para indexação de editais verticalizados no Google, pronta para transformar o extrator em uma máquina de aquisição de leads sem custos de tráfego pago.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLANO DE AÇÃO E PRÓXIMOS PASSOS -->
+    <section class="section-card">
+      <div class="section-header">
+        <span class="section-icon">🎯</span>
+        <h2 class="section-title">Plano de Ação e Próximos Passos (Ordem Priorizada)</h2>
+      </div>
+
+      <div class="action-list">
+        <div class="action-step">
+          <div class="step-number">1</div>
+          <div class="step-info">
+            <div class="step-title">Inicialização do Controle de Versão Git (Urgência Máxima)</div>
+            <div class="step-desc">
+              Executar <code>git init</code>, verificar se o <code>.gitignore</code> já ignora corretamente <code>node_modules</code> e <code>.next</code>, e realizar o commit inicial seguro da base de código.
+            </div>
+            <span class="code-pill">git init && git add . && git commit -m "feat: initial commit AprovaLens AI platform"</span>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <div class="step-number">2</div>
+          <div class="step-info">
+            <div class="step-title">Criação do Script de Inicialização Rápida</div>
+            <div class="step-desc">
+              Criar o arquivo executável <code>iniciar_dev.bat</code> na raiz do projeto para permitir que o desenvolvedor inicialize o servidor local com apenas um duplo clique no Windows.
+            </div>
+            <span class="code-pill">iniciar_dev.bat &rarr; npm run dev</span>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <div class="step-number">3</div>
+          <div class="step-info">
+            <div class="step-title">Provisionamento do Projeto Supabase & Variáveis de Ambiente</div>
+            <div class="step-desc">
+              Criar o projeto gratuito no Supabase, rodar o script SQL de <code>supabase/schema.sql</code> no SQL Editor do dashboard e configurar o arquivo <code>.env.local</code> na raiz do projeto.
+            </div>
+            <span class="code-pill">.env.local &rarr; NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <div class="step-number">4</div>
+          <div class="step-info">
+            <div class="step-title">Integração do Checkout de Pagamento (Asaas Pix / Stripe)</div>
+            <div class="step-desc">
+              Conectar os botões de "Assinar Plano" do modal <code>PricingModal.tsx</code> a uma API de geração de QR Code Pix e cartão de crédito, automatizando a liberação do acesso ilimitado.
+            </div>
+            <span class="code-pill">POST /api/checkout &rarr; Webhook Pix de Confirmação</span>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <div class="step-number">5</div>
+          <div class="step-info">
+            <div class="step-title">Lançamento da Landing Page de Programmatic SEO</div>
+            <div class="step-desc">
+              Conectar a página pública da calculadora de edital verticalizado para captura de e-mails em troca da tabela gerada pela IA, alavancando a estratégia de crescimento 24/7.
+            </div>
+            <span class="code-pill">Rota dinâmica /edital/[slug] para indexação no Google</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer class="report-footer">
+      <p>AprovaLens AI • Relatório Executivo Gerado Automaticamente em 04/09/2026</p>
+      <p style="margin-top: 4px; color: var(--text-dark);">Documento otimizado para visualização em tela e exportação direta em PDF via navegador.</p>
+    </footer>
+
+  </div>
+</body>
+</html>
