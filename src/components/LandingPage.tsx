@@ -23,6 +23,7 @@ import {
   PenTool
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
+import { INITIAL_EXAMS } from '@/lib/mockData';
 
 interface LandingPageProps {
   onStartEdital: () => void;
@@ -51,14 +52,28 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     setIsCalculating(true);
     setTimeout(() => {
       setIsCalculating(false);
+
+      // Search for an exam matching the input
+      const searchTerms = leadInput.toLowerCase().trim();
+      const matchedExam = INITIAL_EXAMS.find(exam => 
+        exam.title.toLowerCase().includes(searchTerms) ||
+        exam.role.toLowerCase().includes(searchTerms)
+      ) || INITIAL_EXAMS[0]; // fallback to first (INSS) if none matches
+
+      // Get top 3 topics by accuracyRate (simulating the most difficult ones or highest weight)
+      const allTopics = matchedExam.subjects.flatMap(sub => 
+        sub.topics.map(topic => `${sub.name} (${topic.name} - Peso ${sub.weight})`)
+      );
+
+      const topTopics = allTopics.slice(0, 3);
+      if (topTopics.length === 0) {
+        topTopics.push('Conteúdo base do edital', 'Conhecimentos Específicos', 'Língua Portuguesa');
+      }
+
       setLeadResult({
-        totalHoursNeeded: 180,
-        topTopics: [
-          'Direito Previdenciário (Segurados & Benefícios - Peso 3)',
-          'Direito Administrativo (Nova Lei de Improbidade & Atos)',
-          'Português Cebraspe (Reescritura e Sintaxe de Período)'
-        ],
-        bancaTrapIndex: '84% de distratores baseados em jurisprudência recente'
+        totalHoursNeeded: matchedExam.daysRemaining * 3, // mock 3h a day
+        topTopics,
+        bancaTrapIndex: `Alta probabilidade de pegadinhas da banca ${matchedExam.banca} em temas de jurisprudência recente`
       });
     }, 1200);
   };
@@ -109,7 +124,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           
           <button
             onClick={onOpenPricing}
-            className="w-full sm:w-auto px-6 py-4 rounded-xl bg-white dark:bg-dark-surface/80 hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 text-slate-800 dark:text-slate-200 font-bold text-base transition-all flex items-center justify-center gap-2 shadow-sm"
+            className="w-full sm:w-auto px-6 py-4 rounded-xl bg-white dark:bg-dark-surface/80 hover:bg-slate-50 dark:hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 text-slate-800 dark:text-slate-200 font-bold text-base transition-all flex items-center justify-center gap-2 shadow-sm"
           >
             <Zap className="w-4 h-4 text-amber-500 dark:text-amber-400" />
             <span>Ver Planos & Preços</span>
@@ -162,10 +177,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <Zap className="w-3.5 h-3.5 fill-emerald-400" />
               <span>FERRAMENTA 100% GRATUITA</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white">
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
               Calculadora de Edital Verticalizado & Rota de Carga Horária
             </h2>
-            <p className="mt-2 text-sm text-slate-300">
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
               Descubra quantas horas você realmente precisa estudar e quais matérias têm 80% do peso do seu concurso.
             </p>
           </div>
@@ -177,7 +192,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 placeholder="Ex: Técnico do Seguro Social - INSS 2026 ou Escrevente TJ-SP"
                 value={leadInput}
                 onChange={(e) => setLeadInput(e.target.value)}
-                className="w-full px-4 py-3.5 rounded-xl glass-input text-sm text-white placeholder-slate-400 font-medium"
+                className="w-full px-4 py-3.5 rounded-xl glass-input text-sm text-slate-900 dark:text-white placeholder-slate-400 font-medium"
               />
             </div>
             <button
@@ -201,7 +216,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
           {/* Quick Preset Buttons */}
           <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-            <span className="text-slate-400">Sugestões rápidas:</span>
+            <span className="text-slate-500 dark:text-slate-400">Sugestões rápidas:</span>
             {['INSS 2026', 'OAB 43º Exame', 'TJ-SP Escrevente', 'Polícia Federal Agente'].map((preset) => (
               <button
                 key={preset}
@@ -210,7 +225,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   setLeadInput(preset);
                   setSelectedPreset(preset);
                 }}
-                className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 transition-colors font-medium"
+                className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 transition-colors font-medium"
               >
                 {preset}
               </button>
@@ -219,28 +234,28 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
           {/* Lead Result Card */}
           {leadResult && (
-            <div className="mt-6 p-5 rounded-2xl bg-dark-surface/90 border border-emerald-500/40 animate-fadeIn">
-              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+            <div className="mt-6 p-5 rounded-2xl bg-white dark:bg-dark-surface/90 border border-emerald-500/40 animate-fadeIn">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-300 dark:border-white/10">
                 <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
                   ✓ Diagnóstico do Edital Gerado
                 </span>
-                <span className="text-xs text-slate-400">Tempo estimado: ~{leadResult.totalHoursNeeded}h de estudo líquido</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Tempo estimado: ~{leadResult.totalHoursNeeded}h de estudo líquido</span>
               </div>
               <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-xs font-semibold text-slate-300 mb-1.5">Matérias com 80% do Peso no Ponto de Corte:</p>
+                  <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">Matérias com 80% do Peso no Ponto de Corte:</p>
                   <ul className="space-y-1">
                     {leadResult.topTopics.map((top, i) => (
-                      <li key={i} className="text-xs text-slate-200 flex items-center gap-2">
+                      <li key={i} className="text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                         {top}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className="bg-dark-card/60 p-3 rounded-xl border border-indigo-500/20">
+                <div className="bg-white dark:bg-dark-card/60 p-3 rounded-xl border border-indigo-500/20">
                   <p className="text-xs font-semibold text-indigo-300">Índice de Pegadinhas da Banca:</p>
-                  <p className="text-xs text-slate-300 mt-1">{leadResult.bancaTrapIndex}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">{leadResult.bancaTrapIndex}</p>
                   <button
                     onClick={onStartEdital}
                     className="mt-3 w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5"
@@ -262,7 +277,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <h2 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">
             A Diferença na Sua Rotina de Estudos
           </h2>
-          <p className="text-3xl sm:text-4xl font-black text-white">
+          <p className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
             Por que 95% dos candidatos não alcançam a nota de corte?
           </p>
         </div>
@@ -276,12 +291,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <XCircle className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Método Convencional (Estudo Passivo)</h3>
-                <p className="text-xs text-slate-400">Planejamento manual rígido e resolução sem diagnóstico</p>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Método Convencional (Estudo Passivo)</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Planejamento manual rígido e resolução sem diagnóstico</p>
               </div>
             </div>
 
-            <ul className="space-y-4 text-sm text-slate-300">
+            <ul className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
               <li className="flex items-start gap-3">
                 <XCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                 <span><strong>Cronogramas inflexíveis:</strong> Diante de imprevistos do dia a dia, a planilha inteira se desorganiza e quebra a constância do candidato.</span>
@@ -304,12 +319,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <CheckCircle2 className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Método AprovaLens AI</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Método AprovaLens AI</h3>
                 <p className="text-xs text-emerald-400 font-medium">Preparação Adaptativa e Engenharia Cognitiva</p>
               </div>
             </div>
 
-            <ul className="space-y-4 text-sm text-slate-300">
+            <ul className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
               <li className="flex items-start gap-3">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <span><strong>Ciclos autoajustáveis:</strong> Se você perder um dia de estudo, a IA recalibra o cronograma redistribuindo as matérias de maior peso.</span>
@@ -334,7 +349,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <h2 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">
             Recursos Projetados para Aprovação
           </h2>
-          <p className="text-3xl sm:text-4xl font-black text-white">
+          <p className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
             Engenharia de Alto Rendimento para Concursos
           </p>
         </div>
@@ -350,12 +365,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <div className="w-12 h-12 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400 mb-4 group-hover:scale-105 transition-transform">
                 <FileText className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white group-hover:text-indigo-300 transition-colors">Dissecador de Editais em PDF</h3>
-              <p className="mt-2 text-xs text-slate-300 leading-relaxed">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-indigo-300 transition-colors">Dissecador de Editais em PDF</h3>
+              <p className="mt-2 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 Faça o upload do edital e receba em segundos a árvore verticalizada, o peso de cada matéria e os artigos de lei mais cobrados.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-white/5 text-xs text-indigo-400 font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/5 text-xs text-indigo-400 font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
               <span>Dissecar Edital</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </div>
@@ -370,12 +385,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <div className="w-12 h-12 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400 mb-4 group-hover:scale-105 transition-transform">
                 <PenTool className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">Estúdio de Discursivas & Peças</h3>
-              <p className="mt-2 text-xs text-slate-300 leading-relaxed">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-emerald-300 transition-colors">Estúdio de Discursivas & Peças</h3>
+              <p className="mt-2 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 Treine na folha pautada de 30 linhas com correção imediata por IA baseada na régua oficial de pontuação (Cebraspe, FGV e OAB).
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-white/5 text-xs text-emerald-400 font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/5 text-xs text-emerald-400 font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
               <span>Treinar Discursiva</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </div>
@@ -387,12 +402,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <div className="w-12 h-12 rounded-xl bg-purple-500/15 flex items-center justify-center text-purple-400 mb-4">
                 <BrainCircuit className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white">Diagnóstico Cognitivo de Erro</h3>
-              <p className="mt-2 text-xs text-slate-300 leading-relaxed">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Diagnóstico Cognitivo de Erro</h3>
+              <p className="mt-2 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 Ao errar uma questão, a IA analisa os distratores da banca e identifica a raiz da falha: pegadinha, lacuna teórica ou desatenção.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-white/5 text-xs text-purple-400 font-semibold flex items-center gap-1">
+            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/5 text-xs text-purple-400 font-semibold flex items-center gap-1">
               <span>Classificação em 4 Tipos</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </div>
@@ -404,12 +419,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <div className="w-12 h-12 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400 mb-4">
                 <BarChart3 className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white">Mapa de Calor & SRS</h3>
-              <p className="mt-2 text-xs text-slate-300 leading-relaxed">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Mapa de Calor & SRS</h3>
+              <p className="mt-2 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 Mapeamento visual de pontos críticos e geração de flashcards inteligentes para fixação definitiva na memória de longo prazo.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-white/5 text-xs text-cyan-400 font-semibold flex items-center gap-1">
+            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/5 text-xs text-cyan-400 font-semibold flex items-center gap-1">
               <span>Previsor de Corte</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </div>
@@ -425,10 +440,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <Crown className="w-3.5 h-3.5 fill-amber-400" />
             <span>INVESTIMENTO NO SEU CARGO PÚBLICO</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-white">
+          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white">
             Planos Simples e Transparentes
           </h2>
-          <p className="mt-3 text-sm text-slate-300 max-w-xl mx-auto">
+          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
             Cancele a qualquer momento com 1 clique. Garantia incondicional de 7 dias com reembolso integral.
           </p>
         </div>
@@ -436,17 +451,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
           
           {/* Plano Aspirante (Free) */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl flex flex-col justify-between border-slate-700">
+          <div className="glass-panel p-6 sm:p-8 rounded-3xl flex flex-col justify-between border-slate-200 dark:border-slate-700">
             <div>
-              <h3 className="text-xl font-bold text-white">Aspirante</h3>
-              <p className="text-xs text-slate-400 mt-1">Para quem está conhecendo o método</p>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Aspirante</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Para quem está conhecendo o método</p>
               
               <div className="mt-6 mb-6">
-                <span className="text-4xl font-black text-white">R$ 0</span>
-                <span className="text-xs text-slate-400"> / sempre grátis</span>
+                <span className="text-4xl font-black text-slate-900 dark:text-white">R$ 0</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400"> / sempre grátis</span>
               </div>
 
-              <ul className="space-y-3 text-xs text-slate-300 border-t border-white/5 pt-6">
+              <ul className="space-y-3 text-xs text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-white/5 pt-6">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span>1 Edital processado por mês</span>
@@ -468,7 +483,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             <button
               onClick={() => onSelectPlan('aspirante')}
-              className="mt-8 w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs transition-colors shadow-sm"
+              className="mt-8 w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs transition-colors shadow-sm"
             >
               Começar Gratuitamente
             </button>
@@ -482,20 +497,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
 
             <div>
-              <h3 className="text-xl font-bold text-white">Gabarito Pro</h3>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Gabarito Pro</h3>
               <p className="text-xs text-indigo-300 mt-1">O pacote completo de alta performance</p>
               
               <div className="mt-6 mb-6">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-black text-white">R$ 39,90</span>
-                  <span className="text-xs text-slate-400"> / mês</span>
+                  <span className="text-4xl font-black text-slate-900 dark:text-white">R$ 39,90</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400"> / mês</span>
                 </div>
                 <p className="text-[11px] text-emerald-400 font-semibold mt-1">
                   ou R$ 297/ano (Economize 38%)
                 </p>
               </div>
 
-              <ul className="space-y-3 text-xs text-slate-200 border-t border-white/10 pt-6">
+              <ul className="space-y-3 text-xs text-slate-700 dark:text-slate-200 border-t border-slate-300 dark:border-white/10 pt-6">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span><strong>Editais ilimitados</strong> com IA</span>
@@ -531,17 +546,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </div>
 
           {/* Plano Elite / Mentoria IA */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl flex flex-col justify-between border-slate-700">
+          <div className="glass-panel p-6 sm:p-8 rounded-3xl flex flex-col justify-between border-slate-200 dark:border-slate-700">
             <div>
-              <h3 className="text-xl font-bold text-white">Elite & Discursivas</h3>
-              <p className="text-xs text-slate-400 mt-1">Para carreiras jurídicas, fiscais e OAB</p>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Elite & Discursivas</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Para carreiras jurídicas, fiscais e OAB</p>
               
               <div className="mt-6 mb-6">
-                <span className="text-4xl font-black text-white">R$ 79,90</span>
-                <span className="text-xs text-slate-400"> / mês</span>
+                <span className="text-4xl font-black text-slate-900 dark:text-white">R$ 79,90</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400"> / mês</span>
               </div>
 
-              <ul className="space-y-3 text-xs text-slate-300 border-t border-white/5 pt-6">
+              <ul className="space-y-3 text-xs text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-white/5 pt-6">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span>Tudo incluído no Plano Pro</span>
@@ -566,7 +581,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 onSelectPlan('elite');
                 onOpenPricing();
               }}
-              className="mt-8 w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs transition-colors shadow-sm"
+              className="mt-8 w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs transition-colors shadow-sm"
             >
               Assinar Plano Elite
             </button>
@@ -576,10 +591,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-white/5 py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center text-xs text-slate-500">
+      <footer className="border-t border-slate-200 dark:border-white/5 py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center text-xs text-slate-500">
         <div className="flex items-center justify-center gap-2 mb-3">
           <BrainCircuit className="w-4 h-4 text-indigo-400" />
-          <span className="font-bold text-slate-300">AprovaLens AI</span>
+          <span className="font-bold text-slate-600 dark:text-slate-300">AprovaLens AI</span>
           <span>• Acelerador Cognitivo de Aprovação</span>
         </div>
         <p>© 2026 AprovaLens AI Inc. Todos os direitos reservados. Feito para concurseiros de alta performance.</p>

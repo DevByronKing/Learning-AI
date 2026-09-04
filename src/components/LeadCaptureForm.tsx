@@ -146,9 +146,9 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
           </div>
 
           <div>
-            <h3 className="text-xl font-black text-white">Material Liberado com Sucesso!</h3>
-            <p className="text-xs text-slate-300 mt-1">
-              Olá, <strong className="text-emerald-400">{name.split(' ')[0]}</strong>! Seu edital esquematizado para <strong className="text-white">{edital.institution}</strong> está pronto.
+            <h3 className="text-xl font-black text-slate-900 dark:text-white">Material Liberado com Sucesso!</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
+              Olá, <strong className="text-emerald-400">{name.split(' ')[0]}</strong>! Seu edital esquematizado para <strong className="text-slate-900 dark:text-white">{edital.institution}</strong> está pronto.
             </p>
           </div>
 
@@ -164,7 +164,7 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
 
             <button
               onClick={handlePrint}
-              className="w-full py-3 px-4 rounded-xl bg-dark-card hover:bg-dark-hover border border-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="w-full py-3 px-4 rounded-xl bg-white dark:bg-dark-card hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               <Printer className="w-4 h-4 text-cyan-400" />
               <span>Salvar em PDF ou Imprimir</span>
@@ -182,7 +182,7 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
             </div>
           </div>
 
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400">
             Você também pode acessar o simulador de questões da banca <strong>{edital.banca}</strong> sem custo.
           </p>
         </div>
@@ -193,10 +193,10 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
             <span>Download 100% Gratuito</span>
           </div>
 
-          <h3 className="text-xl sm:text-2xl font-black text-white mb-1.5 leading-snug">
+          <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mb-1.5 leading-snug">
             Baixe o Edital Verticalizado
           </h3>
-          <p className="text-xs text-slate-300 mb-5 leading-relaxed">
+          <p className="text-xs text-slate-600 dark:text-slate-300 mb-5 leading-relaxed">
             Receba a planilha oficial com todos os tópicos, incidência estatística da banca <strong>{edital.banca}</strong> e colunas de controle de revisões espaçadas.
           </p>
 
@@ -208,7 +208,7 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
 
           <form onSubmit={handleSubmit} className="space-y-3">
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider block mb-1">
                 Seu Nome Completo
               </label>
               <div className="relative">
@@ -219,13 +219,13 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
                   placeholder="Ex: Lucas Barbosa"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#090D16] border border-white/10 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#090D16] border border-slate-300 dark:border-white/10 text-xs text-slate-900 dark:text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider block mb-1">
                 Seu Melhor E-mail
               </label>
               <div className="relative">
@@ -236,13 +236,13 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
                   placeholder="seu.email@exemplo.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#090D16] border border-white/10 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#090D16] border border-slate-300 dark:border-white/10 text-xs text-slate-900 dark:text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider block mb-1">
+              <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider block mb-1">
                 WhatsApp (com DDD)
               </label>
               <div className="relative">
@@ -252,7 +252,7 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
                   placeholder="(11) 99999-9999"
                   value={phone}
                   onChange={handlePhoneChange}
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#090D16] border border-white/10 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors font-mono"
+                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#090D16] border border-slate-300 dark:border-white/10 text-xs text-slate-900 dark:text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors font-mono"
                 />
               </div>
             </div>
@@ -276,7 +276,7 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
             </button>
           </form>
 
-          <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-center gap-2 text-[11px] text-slate-400">
+          <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/5 flex items-center justify-center gap-2 text-[11px] text-slate-500 dark:text-slate-400">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
             <span>Sem spam. Seus dados estão 100% seguros com criptografia.</span>
           </div>

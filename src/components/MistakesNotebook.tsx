@@ -178,7 +178,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
       default:
         return {
           label: 'Ajuste de Conceito',
-          bg: 'bg-slate-500/10 border-slate-500/30 text-slate-300',
+          bg: 'bg-slate-500/10 border-slate-500/30 text-slate-600 dark:text-slate-300',
           dot: 'bg-slate-400'
         };
     }
@@ -201,10 +201,10 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
               <RotateCcw className="w-3.5 h-3.5" />
               Estudo Reverso & Metacognição
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               Caderno de Erros Estratégico
             </h1>
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               O concurseiro de alta performance não revisa o que já domina: ele ataca cirurgicamente as armadilhas que o reprovariam. Use o <strong className="text-rose-300">Modo Revanche</strong> para zerar suas pendências antes da prova.
             </p>
           </div>
@@ -216,7 +216,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
               className={`flex items-center gap-2 px-5 py-3 rounded-xl font-black text-sm tracking-wide transition-all shadow-xl ${
                 pendingMistakes > 0
                   ? 'bg-gradient-to-r from-rose-600 via-pink-600 to-indigo-600 hover:from-rose-500 hover:to-indigo-500 text-white shadow-rose-600/30 glow-rose active:scale-95'
-                  : 'bg-dark-surface border border-white/10 text-slate-500 cursor-not-allowed'
+                  : 'bg-white dark:bg-dark-surface border border-slate-300 dark:border-white/10 text-slate-500 cursor-not-allowed'
               }`}
             >
               <Flame className="w-4 h-4 text-amber-300 fill-amber-300" />
@@ -225,26 +225,26 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
 
             <button
               onClick={handlePrint}
-              className="flex items-center gap-2 px-4 py-3 rounded-xl bg-dark-surface hover:bg-white/5 border border-white/10 text-slate-300 text-xs font-bold transition-all"
+              className="flex items-center gap-2 px-4 py-3 rounded-xl bg-white dark:bg-dark-surface hover:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-600 dark:text-slate-300 text-xs font-bold transition-all"
               title="Gerar visualização para impressão ou PDF"
             >
-              <Printer className="w-4 h-4 text-slate-400" />
+              <Printer className="w-4 h-4 text-slate-500 dark:text-slate-400" />
               <span className="hidden sm:inline">Exportar / Imprimir</span>
             </button>
           </div>
         </div>
 
         {/* Quick KPI Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-white/5">
-          <div className="bg-dark-bg/60 border border-white/5 rounded-2xl p-4">
-            <span className="text-xs text-slate-400 font-medium">Total de Erros</span>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-slate-200 dark:border-white/5">
+          <div className="bg-dark-bg/60 border border-slate-200 dark:border-white/5 rounded-2xl p-4">
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Total de Erros</span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-black text-white">{totalMistakes}</span>
-              <span className="text-[11px] text-slate-400">questões</span>
+              <span className="text-2xl font-black text-slate-900 dark:text-white">{totalMistakes}</span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400">questões</span>
             </div>
           </div>
 
-          <div className="bg-dark-bg/60 border border-white/5 rounded-2xl p-4">
+          <div className="bg-dark-bg/60 border border-slate-200 dark:border-white/5 rounded-2xl p-4">
             <span className="text-xs text-amber-300 font-medium">Pendentes</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl font-black text-amber-400">{pendingMistakes}</span>
@@ -252,7 +252,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
             </div>
           </div>
 
-          <div className="bg-dark-bg/60 border border-white/5 rounded-2xl p-4">
+          <div className="bg-dark-bg/60 border border-slate-200 dark:border-white/5 rounded-2xl p-4">
             <span className="text-xs text-emerald-400 font-medium">Erros Superados</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl font-black text-emerald-400">{overcomeMistakes}</span>
@@ -260,7 +260,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
             </div>
           </div>
 
-          <div className="bg-dark-bg/60 border border-white/5 rounded-2xl p-4">
+          <div className="bg-dark-bg/60 border border-slate-200 dark:border-white/5 rounded-2xl p-4">
             <span className="text-xs text-indigo-300 font-medium">Taxa de Recuperação</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl font-black text-indigo-400">{recoveryRate}%</span>
@@ -273,16 +273,16 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
       </div>
 
       {/* Filter Bar */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-dark-surface/70 border border-white/5 p-4 rounded-2xl backdrop-blur-xl">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white dark:bg-dark-surface/70 border border-slate-200 dark:border-white/5 p-4 rounded-2xl backdrop-blur-xl">
         
         {/* Status Filter Tabs */}
-        <div className="flex items-center gap-1.5 bg-dark-bg/80 p-1 rounded-xl border border-white/5">
+        <div className="flex items-center gap-1.5 bg-dark-bg/80 p-1 rounded-xl border border-slate-200 dark:border-white/5">
           <button
             onClick={() => setFilterStatus('pending')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               filterStatus === 'pending'
                 ? 'bg-rose-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'
             }`}
           >
             Pendentes ({pendingMistakes})
@@ -292,7 +292,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               filterStatus === 'overcome'
                 ? 'bg-emerald-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'
             }`}
           >
             Superados ({overcomeMistakes})
@@ -302,7 +302,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               filterStatus === 'all'
                 ? 'bg-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'
             }`}
           >
             Todos ({totalMistakes})
@@ -314,11 +314,11 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
           
           {/* Error Type Selector */}
           <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400 font-medium">Causa do Erro:</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Causa do Erro:</span>
             <select
               value={filterErrorType}
               onChange={(e) => setFilterErrorType(e.target.value)}
-              className="bg-dark-bg border border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-rose-500"
+              className="bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-rose-500"
             >
               <option value="all">Todas as Causas</option>
               <option value="pegadinha_banca">🎯 Pegadinhas de Banca ({errorTypeCounts.pegadinha_banca})</option>
@@ -331,11 +331,11 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
           {/* Subject Filter */}
           {availableSubjects.length > 0 && (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400 font-medium">Disciplina:</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Disciplina:</span>
               <select
                 value={selectedSubject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
-                className="bg-dark-bg border border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                className="bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-indigo-500"
               >
                 <option value="all">Todas as Matérias</option>
                 {availableSubjects.map((sub) => (
@@ -350,12 +350,12 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
 
       {/* Main Content Area */}
       {filteredMistakes.length === 0 ? (
-        <div className="text-center py-16 px-4 bg-dark-surface/40 border border-white/5 rounded-3xl space-y-4">
+        <div className="text-center py-16 px-4 bg-white dark:bg-dark-surface/40 border border-slate-200 dark:border-white/5 rounded-3xl space-y-4">
           <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-2xl">
             🎉
           </div>
-          <h3 className="text-lg font-bold text-white">Nenhum erro encontrado com os filtros selecionados</h3>
-          <p className="text-sm text-slate-400 max-w-md mx-auto">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Nenhum erro encontrado com os filtros selecionados</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
             {filterStatus === 'pending'
               ? 'Excelente! Você não possui erros pendentes nesta categoria. Continue resolvendo simulados!'
               : 'Tente mudar os filtros de causa ou disciplina para visualizar outras questões.'}
@@ -382,22 +382,22 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                 className={`rounded-2xl border transition-all duration-200 ${
                   mistake.isOvercome
                     ? 'bg-emerald-950/10 border-emerald-500/20 hover:border-emerald-500/40'
-                    : 'bg-dark-surface/80 border-white/5 hover:border-rose-500/30'
+                    : 'bg-white dark:bg-dark-surface/80 border-slate-200 dark:border-white/5 hover:border-rose-500/30'
                 }`}
               >
                 {/* Card Header Summary */}
                 <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="space-y-1.5 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-xs font-black text-slate-400">#{index + 1}</span>
-                      <span className="text-xs font-bold text-slate-200 bg-white/5 px-2 py-0.5 rounded">
+                      <span className="text-xs font-black text-slate-500 dark:text-slate-400">#{index + 1}</span>
+                      <span className="text-xs font-bold text-slate-700 dark:text-slate-200 bg-white/5 px-2 py-0.5 rounded">
                         {mistake.question.banca} • {mistake.question.year}
                       </span>
                       <span className="text-xs font-semibold text-indigo-300">
                         {mistake.question.subjectName}
                       </span>
-                      <span className="text-xs text-slate-400">›</span>
-                      <span className="text-xs text-slate-300 font-medium">
+                      <span className="text-xs text-slate-500 dark:text-slate-400">›</span>
+                      <span className="text-xs text-slate-600 dark:text-slate-300 font-medium">
                         {mistake.question.topicName}
                       </span>
 
@@ -421,7 +421,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                       )}
                     </div>
 
-                    <p className="text-sm text-slate-100 font-medium line-clamp-2 pt-1">
+                    <p className="text-sm text-slate-800 dark:text-slate-100 font-medium line-clamp-2 pt-1">
                       {mistake.question.statement}
                     </p>
                   </div>
@@ -430,7 +430,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                   <div className="flex items-center gap-2 shrink-0">
                     <button
                       onClick={() => toggleExpand(mistake.id)}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-bg hover:bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold transition-all"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-bg hover:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-600 dark:text-slate-300 text-xs font-semibold transition-all"
                     >
                       <span>{isExpanded ? 'Recolher' : 'Ver Detalhes'}</span>
                       {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -440,14 +440,14 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
 
                 {/* Expanded Details Section */}
                 {isExpanded && (
-                  <div className="px-5 pb-5 pt-2 border-t border-white/5 space-y-5 animate-fadeIn">
+                  <div className="px-5 pb-5 pt-2 border-t border-slate-200 dark:border-white/5 space-y-5 animate-fadeIn">
                     
                     {/* Full Statement */}
-                    <div className="bg-dark-bg/60 p-4 rounded-xl border border-white/5">
-                      <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block mb-1">
+                    <div className="bg-dark-bg/60 p-4 rounded-xl border border-slate-200 dark:border-white/5">
+                      <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">
                         Enunciado da Questão
                       </span>
-                      <p className="text-sm text-slate-200 whitespace-pre-line leading-relaxed">
+                      <p className="text-sm text-slate-700 dark:text-slate-200 whitespace-pre-line leading-relaxed">
                         {mistake.question.statement}
                       </p>
                     </div>
@@ -459,7 +459,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                           <XCircle className="w-4 h-4" />
                           <span>Sua Resposta:</span>
                         </div>
-                        <p className="text-xs text-slate-200">
+                        <p className="text-xs text-slate-700 dark:text-slate-200">
                           {userOption ? `${userOption.text}` : 'Não respondida'}
                         </p>
                       </div>
@@ -469,7 +469,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                           <CheckCircle2 className="w-4 h-4" />
                           <span>Gabarito Oficial:</span>
                         </div>
-                        <p className="text-xs text-slate-200">
+                        <p className="text-xs text-slate-700 dark:text-slate-200">
                           {correctOption?.text}
                         </p>
                       </div>
@@ -482,7 +482,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                         <span>DIAGNÓSTICO DA IA & REGRA DA BANCA</span>
                       </div>
 
-                      <p className="text-xs text-slate-300 leading-relaxed">
+                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                         {mistake.feedback}
                       </p>
 
@@ -491,7 +491,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                       </div>
 
                       {mistake.question.codeCitation && (
-                        <div className="text-[11px] text-slate-400">
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400">
                           📖 <strong>Base Legal:</strong> {mistake.question.codeCitation}
                         </div>
                       )}
@@ -522,12 +522,12 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                             onChange={(e) => setTempNoteText(e.target.value)}
                             placeholder="Escreva aqui seu resumo, mnemônico ou aviso para não errar mais essa questão..."
                             rows={3}
-                            className="w-full bg-dark-surface border border-amber-500/30 rounded-lg p-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                            className="w-full bg-white dark:bg-dark-surface border border-amber-500/30 rounded-lg p-2.5 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-amber-400"
                           />
                           <div className="flex justify-end gap-2">
                             <button
                               onClick={() => setEditingNoteId(null)}
-                              className="px-3 py-1 rounded bg-dark-surface text-slate-400 text-xs font-semibold"
+                              className="px-3 py-1 rounded bg-white dark:bg-dark-surface text-slate-500 dark:text-slate-400 text-xs font-semibold"
                             >
                               Cancelar
                             </button>
@@ -541,7 +541,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                           </div>
                         </div>
                       ) : (
-                        <p className="text-xs text-slate-300 italic pt-1">
+                        <p className="text-xs text-slate-600 dark:text-slate-300 italic pt-1">
                           {mistake.userPersonalNote || 'Nenhuma nota adicionada ainda. Clique em "Editar Anotação" para registrar sua lição aprendida.'}
                         </p>
                       )}
@@ -558,19 +558,19 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
       {/* Interactive Revanche Modal View */}
       {isRevancheActive && currentRevancheMistake && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
-          <div className="bg-dark-surface border border-rose-500/30 rounded-3xl max-w-3xl w-full p-6 sm:p-8 space-y-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+          <div className="bg-white dark:bg-dark-surface border border-rose-500/30 rounded-3xl max-w-3xl w-full p-6 sm:p-8 space-y-6 shadow-2xl overflow-y-auto max-h-[90vh]">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="flex items-center justify-between border-b border-slate-300 dark:border-white/10 pb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-indigo-600 flex items-center justify-center text-white font-black">
                   <Flame className="w-5 h-5 text-amber-300" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-black text-white">
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white">
                     Modo Revanche — Questão {revancheIndex + 1} de {pendingListForRevanche.length}
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     {currentRevancheMistake.question.subjectName} • {currentRevancheMistake.question.banca}
                   </p>
                 </div>
@@ -578,7 +578,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
 
               <button
                 onClick={() => setIsRevancheActive(false)}
-                className="text-slate-400 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg bg-white/5"
+                className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white text-xs font-bold px-3 py-1.5 rounded-lg bg-white/5"
               >
                 Encerrar
               </button>
@@ -586,8 +586,8 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
 
             {/* Question Statement */}
             <div className="space-y-4">
-              <div className="bg-dark-bg p-4 rounded-2xl border border-white/5">
-                <p className="text-sm text-slate-100 whitespace-pre-line leading-relaxed font-medium">
+              <div className="bg-dark-bg p-4 rounded-2xl border border-slate-200 dark:border-white/5">
+                <p className="text-sm text-slate-800 dark:text-slate-100 whitespace-pre-line leading-relaxed font-medium">
                   {currentRevancheMistake.question.statement}
                 </p>
               </div>
@@ -596,7 +596,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
               <div className="space-y-2.5">
                 {currentRevancheMistake.question.options.map((option) => {
                   const isSelected = revancheSelectedOption === option.id;
-                  let optionStyles = 'bg-dark-bg/60 border-white/10 text-slate-200 hover:border-white/20';
+                  let optionStyles = 'bg-dark-bg/60 border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-200 hover:border-white/20';
 
                   if (revancheSubmitted) {
                     if (option.isCorrect) {
@@ -648,7 +648,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                     </>
                   )}
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed mt-2">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mt-2">
                   {currentRevancheMistake.question.explanation}
                 </p>
               </div>
@@ -663,7 +663,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                   className={`px-6 py-3 rounded-xl font-bold text-xs tracking-wide transition-all ${
                     revancheSelectedOption
                       ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/30'
-                      : 'bg-dark-bg text-slate-500 border border-white/5 cursor-not-allowed'
+                      : 'bg-dark-bg text-slate-500 border border-slate-200 dark:border-white/5 cursor-not-allowed'
                   }`}
                 >
                   Confirmar Resposta da Revanche

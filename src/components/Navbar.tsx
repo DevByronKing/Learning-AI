@@ -134,7 +134,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <header className={`sticky top-0 z-40 w-full border-b transition-colors duration-300 ${
         isLight 
           ? 'bg-white/85 border-slate-200/80 backdrop-blur-xl shadow-sm' 
-          : 'bg-[#090D16]/90 border-white/10 backdrop-blur-2xl'
+          : 'bg-[#090D16]/90 border-slate-300 dark:border-white/10 backdrop-blur-2xl'
       }`}>
         <div className="max-w-7xl mx-auto px-3 sm:px-5 lg:px-7">
           
@@ -157,7 +157,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div>
                 <div className="flex items-center gap-1.5">
                   <span className={`text-lg sm:text-xl font-black tracking-tight transition-colors ${
-                    isLight ? 'text-slate-900' : 'text-white'
+                    isLight ? 'text-slate-900' : 'text-slate-900 dark:text-white'
                   }`}>
                     Learning <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-400">AI</span>
                   </span>
@@ -170,7 +170,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </span>
                 </div>
                 <p className={`text-[10px] -mt-0.5 hidden xl:block transition-colors ${
-                  isLight ? 'text-slate-500' : 'text-slate-400'
+                  isLight ? 'text-slate-500' : 'text-slate-500 dark:text-slate-400'
                 }`}>
                   Copiloto Cognitivo de Concursos
                 </p>
@@ -181,7 +181,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <nav className={`hidden lg:flex items-center justify-center gap-0.5 xl:gap-1 p-1 rounded-2xl border shadow-inner flex-1 max-w-3xl xl:max-w-4xl overflow-x-auto no-scrollbar transition-colors ${
               isLight 
                 ? 'bg-slate-100/95 border-slate-200/90' 
-                : 'bg-[#11182c]/85 border-white/5'
+                : 'bg-white dark:bg-[#11182c]/85 border-slate-200 dark:border-white/5'
             }`}>
               {navTabs.map((tab) => {
                 const Icon = tab.icon;
@@ -197,10 +197,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                           : 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/30 font-extrabold'
                         : isLight
                           ? 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
-                          : 'text-slate-400 hover:text-slate-100 hover:bg-white/5'
+                          : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-100 hover:bg-white/5'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? (isLight ? 'text-indigo-600' : 'text-white') : (isLight ? 'text-slate-500' : 'opacity-70')}`} />
+                    <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? (isLight ? 'text-indigo-600' : 'text-slate-900 dark:text-white') : (isLight ? 'text-slate-500' : 'opacity-70')}`} />
                     <span className="whitespace-nowrap">{tab.label}</span>
                     {tab.badge && (
                       <span className={`w-4 h-4 rounded-full text-[10px] font-black flex items-center justify-center shrink-0 ${tab.badgeColor || 'bg-rose-500 text-white'}`}>
@@ -222,7 +222,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className={`p-2 rounded-xl border transition-all flex items-center justify-center ${
                     isLight 
                       ? 'bg-slate-100 hover:bg-slate-200 text-amber-600 border-slate-200 shadow-sm' 
-                      : 'bg-[#11182c] hover:bg-[#18223d] text-amber-400 border-white/10'
+                      : 'bg-white dark:bg-[#11182c] hover:bg-[#18223d] text-amber-400 border-slate-300 dark:border-white/10'
                   }`}
                   title={isLight ? 'Alternar para Modo Escuro' : 'Alternar para Modo Claro'}
                   aria-label="Alternar tema de cores"
@@ -293,7 +293,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className={`lg:hidden p-2 rounded-xl border transition-colors ${
                   isLight 
                     ? 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900' 
-                    : 'bg-[#11182c] border-white/10 text-slate-300 hover:text-white'
+                    : 'bg-white dark:bg-[#11182c] border-slate-300 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:text-white'
                 }`}
                 aria-label="Abrir menu de navegação"
               >
@@ -306,7 +306,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Subheader Strip: Clean Horizontal Scroll for Tablets and Phones (< lg) */}
           <div className={`lg:hidden border-t py-2 overflow-x-auto no-scrollbar scroll-smooth flex items-center gap-1.5 ${
-            isLight ? 'border-slate-200' : 'border-white/5'
+            isLight ? 'border-slate-200' : 'border-slate-200 dark:border-white/5'
           }`}>
             {navTabs.map((tab) => {
               const Icon = tab.icon;
@@ -322,7 +322,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         : 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30 font-extrabold'
                       : isLight
                         ? 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200'
-                        : 'bg-[#11182c]/80 text-slate-400 hover:text-white border border-white/5'
+                        : 'bg-white dark:bg-[#11182c]/80 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white border border-slate-200 dark:border-white/5'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5 shrink-0" />
@@ -351,12 +351,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className={`relative w-full max-w-xs sm:max-w-sm h-full p-5 sm:p-6 overflow-y-auto flex flex-col justify-between shadow-2xl z-10 border-l transition-colors ${
             isLight 
               ? 'bg-white border-slate-200 text-slate-900' 
-              : 'bg-[#0c1322] border-white/10 text-white'
+              : 'bg-[#0c1322] border-slate-300 dark:border-white/10 text-slate-900 dark:text-white'
           }`}>
             <div>
               {/* Drawer Header */}
               <div className={`flex items-center justify-between pb-4 border-b mb-5 ${
-                isLight ? 'border-slate-200' : 'border-white/10'
+                isLight ? 'border-slate-200' : 'border-slate-300 dark:border-white/10'
               }`}>
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white">
@@ -364,7 +364,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </div>
                   <div>
                     <span className="text-sm font-black">Learning AI</span>
-                    <span className={`block text-[10px] ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                    <span className={`block text-[10px] ${isLight ? 'text-slate-500' : 'text-slate-500 dark:text-slate-400'}`}>
                       Navegação Completa
                     </span>
                   </div>
@@ -375,7 +375,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <button
                       onClick={onToggleTheme}
                       className={`p-1.5 rounded-lg border ${
-                        isLight ? 'bg-slate-100 border-slate-200 text-slate-700' : 'bg-white/5 border-white/10 text-slate-300'
+                        isLight ? 'bg-slate-100 border-slate-200 text-slate-700' : 'bg-white/5 border-slate-300 dark:border-white/10 text-slate-600 dark:text-slate-300'
                       }`}
                       title={isLight ? 'Modo Escuro' : 'Modo Claro'}
                     >
@@ -384,7 +384,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   )}
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`p-1.5 rounded-lg ${isLight ? 'bg-slate-100 text-slate-600' : 'bg-white/5 text-slate-400'}`}
+                    className={`p-1.5 rounded-lg ${isLight ? 'bg-slate-100 text-slate-600' : 'bg-white/5 text-slate-500 dark:text-slate-400'}`}
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -410,7 +410,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* All Navigation Modules */}
               <div className="space-y-1.5">
                 <span className={`text-[10px] font-bold uppercase tracking-wider px-2 block mb-1 ${
-                  isLight ? 'text-slate-400' : 'text-slate-500'
+                  isLight ? 'text-slate-500 dark:text-slate-400' : 'text-slate-500'
                 }`}>
                   Módulos de Estudo
                 </span>
@@ -429,14 +429,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                             : 'bg-indigo-600/25 border border-indigo-500/40 text-white font-bold'
                           : isLight
                             ? 'bg-slate-50 hover:bg-slate-100 text-slate-700 border border-transparent'
-                            : 'bg-[#11182c]/50 hover:bg-[#11182c] text-slate-300 border border-transparent'
+                            : 'bg-white dark:bg-[#11182c]/50 hover:bg-white dark:bg-[#11182c] text-slate-600 dark:text-slate-300 border border-transparent'
                       }`}
                     >
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-xl ${
                           isActive 
                             ? 'bg-indigo-600 text-white' 
-                            : isLight ? 'bg-slate-200 text-slate-600' : 'bg-white/5 text-slate-400'
+                            : isLight ? 'bg-slate-200 text-slate-600' : 'bg-white/5 text-slate-500 dark:text-slate-400'
                         }`}>
                           <Icon className="w-4 h-4" />
                         </div>
@@ -450,7 +450,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                             )}
                           </div>
                           <span className={`text-[11px] block mt-0.5 ${
-                            isLight ? 'text-slate-500' : 'text-slate-400'
+                            isLight ? 'text-slate-500' : 'text-slate-500 dark:text-slate-400'
                           }`}>
                             {tab.desc}
                           </span>
@@ -465,11 +465,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* Drawer Bottom CTA */}
-            <div className={`mt-6 pt-4 border-t space-y-2 ${isLight ? 'border-slate-200' : 'border-white/10'}`}>
+            <div className={`mt-6 pt-4 border-t space-y-2 ${isLight ? 'border-slate-200' : 'border-slate-300 dark:border-white/10'}`}>
               <a
                 href="/edital/inss-tecnico-seguro-social-2026"
                 className={`w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-between transition-colors ${
-                  isLight ? 'bg-slate-100 hover:bg-slate-200 text-slate-800' : 'bg-white/5 hover:bg-white/10 text-slate-300'
+                  isLight ? 'bg-slate-100 hover:bg-slate-200 text-slate-800' : 'bg-white/5 hover:bg-white/10 text-slate-600 dark:text-slate-300'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -498,7 +498,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <nav className={`sm:hidden fixed bottom-0 left-0 right-0 z-40 border-t py-1.5 px-2 flex items-center justify-around transition-colors ${
         isLight 
           ? 'bg-white/95 backdrop-blur-2xl border-slate-200 text-slate-600' 
-          : 'bg-[#0c1222]/95 backdrop-blur-2xl border-white/10 text-slate-400'
+          : 'bg-[#0c1222]/95 backdrop-blur-2xl border-slate-300 dark:border-white/10 text-slate-500 dark:text-slate-400'
       }`}>
         <button
           onClick={() => handleTabClick('edital')}

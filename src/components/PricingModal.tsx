@@ -152,7 +152,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card border border-slate-200 dark:border-white/5 transition-colors"
+          className="absolute top-6 right-6 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-900 dark:text-white p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card border border-slate-200 dark:border-white/5 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
@@ -200,10 +200,10 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           {/* Plano Pro */}
           <div
             onClick={() => setSelectedPlanToBuy('pro')}
-            className={`p-6 rounded-3xl border transition-all cursor-pointer flex flex-col justify-between ${
+            className={`p-6 sm:p-8 rounded-3xl border transition-all cursor-pointer flex flex-col justify-between ${
               selectedPlanToBuy === 'pro'
-                ? 'bg-indigo-50/80 dark:bg-indigo-600/15 border-indigo-500 ring-2 ring-indigo-400/50 glow-brand shadow-sm'
-                : 'bg-white dark:bg-dark-surface/80 border-slate-200 dark:border-white/5 hover:border-slate-400 dark:hover:border-slate-600'
+                ? 'glass-panel border-indigo-500/50 bg-indigo-50/50 dark:bg-indigo-900/20 ring-2 ring-indigo-400/30 glow-brand shadow-lg'
+                : 'glass-panel border-slate-200 dark:border-white/5 hover:border-indigo-500/30 dark:hover:border-indigo-400/30'
             }`}
           >
             <div>
@@ -256,10 +256,10 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           {/* Plano Elite */}
           <div
             onClick={() => setSelectedPlanToBuy('elite')}
-            className={`p-6 rounded-3xl border transition-all cursor-pointer flex flex-col justify-between ${
+            className={`p-6 sm:p-8 rounded-3xl border transition-all cursor-pointer flex flex-col justify-between ${
               selectedPlanToBuy === 'elite'
-                ? 'bg-purple-50/80 dark:bg-purple-600/15 border-purple-500 ring-2 ring-purple-400/50 glow-brand shadow-sm'
-                : 'bg-white dark:bg-dark-surface/80 border-slate-200 dark:border-white/5 hover:border-slate-400 dark:hover:border-slate-600'
+                ? 'glass-panel border-purple-500/50 bg-purple-50/50 dark:bg-purple-900/20 ring-2 ring-purple-400/30 glow-brand shadow-lg'
+                : 'glass-panel border-slate-200 dark:border-white/5 hover:border-purple-500/30 dark:hover:border-purple-400/30'
             }`}
           >
             <div>
@@ -312,7 +312,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         </div>
 
         {/* Payment Methods Section */}
-        <div className="mt-8 p-6 rounded-3xl bg-slate-50/90 dark:bg-dark-surface/90 border border-slate-200 dark:border-white/10 shadow-sm">
+        <div className="mt-8 p-6 sm:p-8 rounded-3xl glass-panel border border-slate-200 dark:border-white/10 shadow-lg">
           
           <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-white/10">
             <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Método de Pagamento:</span>
@@ -392,7 +392,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                     />
                     <button
                       onClick={handleCopyPix}
-                      className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold flex items-center gap-1 shrink-0 transition-colors shadow-sm"
+                      className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold flex items-center gap-1 shrink-0 transition-colors shadow-sm"
                     >
                       {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                       <span>{isCopied ? 'Copiado!' : 'Copiar'}</span>
@@ -441,13 +441,13 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                 <input
                   type="text"
                   placeholder="Número do Cartão"
-                  className="p-3 rounded-xl glass-input text-xs text-white"
+                  className="p-3 rounded-xl glass-input text-xs text-slate-900 dark:text-white"
                   defaultValue="4532 •••• •••• 8821"
                 />
                 <input
                   type="text"
                   placeholder="Nome Impresso no Cartão"
-                  className="p-3 rounded-xl glass-input text-xs text-white"
+                  className="p-3 rounded-xl glass-input text-xs text-slate-900 dark:text-white"
                   defaultValue="LUCAS BARBOSA"
                 />
               </div>
@@ -455,13 +455,13 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                 <input
                   type="text"
                   placeholder="Validade (MM/AA)"
-                  className="p-3 rounded-xl glass-input text-xs text-white"
+                  className="p-3 rounded-xl glass-input text-xs text-slate-900 dark:text-white"
                   defaultValue="09/30"
                 />
                 <input
                   type="text"
                   placeholder="CVV"
-                  className="p-3 rounded-xl glass-input text-xs text-white"
+                  className="p-3 rounded-xl glass-input text-xs text-slate-900 dark:text-white"
                   defaultValue="842"
                 />
               </div>
@@ -489,7 +489,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         </div>
 
         {/* Security & Guarantee Footer */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 dark:text-slate-400">
           <span className="flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-emerald-400" /> Garantia incondicional de 7 dias
           </span>

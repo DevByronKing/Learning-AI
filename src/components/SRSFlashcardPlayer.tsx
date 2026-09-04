@@ -198,16 +198,16 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fadeIn">
       
       {/* Top Breadcrumb & Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-300 dark:border-white/10">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-xs font-bold flex items-center gap-1">
               <BrainCircuit className="w-3.5 h-3.5" />
               Revisão Ativa SRS & Algoritmo SM-2
             </span>
-            <span className="text-xs text-slate-400">Repetição Espaçada de Ebbinghaus</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">Repetição Espaçada de Ebbinghaus</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white mt-1">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
             Deck de Flashcards & Memorização de Longo Prazo
           </h1>
         </div>
@@ -216,7 +216,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
           <button
             type="button"
             onClick={handleExportToAnki}
-            className="px-3.5 py-2 rounded-xl bg-dark-surface hover:bg-dark-hover border border-slate-700 text-slate-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+            className="px-3.5 py-2 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
             title="Exportar todos os flashcards em arquivo formatado para Anki Desktop e AnkiMobile"
           >
             <Download className="w-3.5 h-3.5 text-indigo-400" />
@@ -227,7 +227,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-2 rounded-xl bg-dark-surface hover:bg-dark-hover border border-slate-700 text-slate-400 hover:text-white text-xs font-bold transition-all"
+              className="px-3 py-2 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white text-xs font-bold transition-all"
             >
               Fechar
             </button>
@@ -247,56 +247,56 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
                 <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-400">
                   Para Revisar Hoje
                 </span>
-                <p className="text-3xl font-black text-white font-mono mt-1">
+                <p className="text-3xl font-black text-slate-900 dark:text-white font-mono mt-1">
                   {dueCards.length}
                 </p>
               </div>
-              <span className="text-[10px] text-slate-400 mt-3 flex items-center gap-1">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-3 flex items-center gap-1">
                 <Clock className="w-3 h-3 text-amber-400" />
                 <span>Cards no ponto ideal da curva</span>
               </span>
             </div>
 
-            <div className="glass-panel p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
+            <div className="glass-panel p-5 rounded-3xl border border-slate-300 dark:border-white/10 flex flex-col justify-between">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                   Em Consolidação
                 </span>
-                <p className="text-3xl font-black text-white font-mono mt-1">
+                <p className="text-3xl font-black text-slate-900 dark:text-white font-mono mt-1">
                   {learningCards.length}
                 </p>
               </div>
-              <span className="text-[10px] text-slate-400 mt-3 flex items-center gap-1">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-3 flex items-center gap-1">
                 <Flame className="w-3 h-3 text-amber-400" />
                 <span>Intervalo de 2 a 10 dias</span>
               </span>
             </div>
 
-            <div className="glass-panel p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
+            <div className="glass-panel p-5 rounded-3xl border border-slate-300 dark:border-white/10 flex flex-col justify-between">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400">
                   Dominados
                 </span>
-                <p className="text-3xl font-black text-white font-mono mt-1">
+                <p className="text-3xl font-black text-slate-900 dark:text-white font-mono mt-1">
                   {masteredCards.length}
                 </p>
               </div>
-              <span className="text-[10px] text-slate-400 mt-3 flex items-center gap-1">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-3 flex items-center gap-1">
                 <Award className="w-3 h-3 text-emerald-400" />
                 <span>Fixados na memória permanente</span>
               </span>
             </div>
 
-            <div className="glass-panel p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
+            <div className="glass-panel p-5 rounded-3xl border border-slate-300 dark:border-white/10 flex flex-col justify-between">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
                   Total no Deck
                 </span>
-                <p className="text-3xl font-black text-white font-mono mt-1">
+                <p className="text-3xl font-black text-slate-900 dark:text-white font-mono mt-1">
                   {flashcards.length}
                 </p>
               </div>
-              <span className="text-[10px] text-slate-400 mt-3 flex items-center gap-1">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-3 flex items-center gap-1">
                 <Layers className="w-3 h-3 text-cyan-400" />
                 <span>Criados via simulador e manuais</span>
               </span>
@@ -305,18 +305,18 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
           </div>
 
           {/* Filter and Actions Bar */}
-          <div className="glass-panel p-4 rounded-2xl border border-white/10 flex flex-wrap items-center justify-between gap-4">
+          <div className="glass-panel p-4 rounded-2xl border border-slate-300 dark:border-white/10 flex flex-wrap items-center justify-between gap-4">
             
             {/* Subject Selector */}
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 text-xs text-slate-400">
+              <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
                 <Filter className="w-3.5 h-3.5" />
                 <span>Filtrar por Matéria:</span>
               </div>
               <select
                 value={selectedSubjectFilter}
                 onChange={(e) => setSelectedSubjectFilter(e.target.value)}
-                className="px-3 py-1.5 rounded-xl glass-input text-xs text-white bg-dark-surface font-medium cursor-pointer"
+                className="px-3 py-1.5 rounded-xl glass-input text-xs text-slate-900 dark:text-white bg-white dark:bg-dark-surface font-medium cursor-pointer"
               >
                 <option value="todas">Todas as Matérias ({flashcards.length})</option>
                 {subjects.map((sub, i) => (
@@ -330,7 +330,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
               <button
                 type="button"
                 onClick={() => setViewMode('create')}
-                className="px-3.5 py-2 rounded-xl bg-dark-surface hover:bg-dark-hover border border-slate-700 text-slate-300 text-xs font-bold transition-all flex items-center gap-1.5"
+                className="px-3.5 py-2 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold transition-all flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Criar Flashcard</span>
@@ -356,7 +356,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
 
           {/* Cards List Preview */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
               <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
               <span>Cartões Cadastrados no Deck ({filteredCards.length}):</span>
             </h3>
@@ -367,7 +367,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
                 return (
                   <div
                     key={card.id}
-                    className="p-4 rounded-2xl bg-dark-surface/80 border border-white/5 hover:border-indigo-500/30 transition-all flex flex-col justify-between text-xs"
+                    className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 hover:border-indigo-500/30 transition-all flex flex-col justify-between text-xs"
                   >
                     <div>
                       <div className="flex items-center justify-between gap-2 mb-2">
@@ -375,17 +375,17 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
                           {card.subjectName}
                         </span>
                         <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                          isDue ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-800 text-slate-400'
+                          isDue ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                         }`}>
                           {isDue ? 'Revisar Hoje' : `Em ${card.intervalDays}d`}
                         </span>
                       </div>
-                      <p className="text-slate-200 font-medium line-clamp-2 leading-relaxed">
+                      <p className="text-slate-700 dark:text-slate-200 font-medium line-clamp-2 leading-relaxed">
                         {card.front}
                       </p>
                     </div>
 
-                    <div className="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                    <div className="mt-3 pt-2 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono">
                       <span>Repetições: {card.repetitions}x</span>
                       <span>Facilidade: {(card.easeFactor || 2.5).toFixed(1)}x</span>
                     </div>
@@ -403,28 +403,28 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
         <div className="space-y-6 max-w-3xl mx-auto animate-fadeIn">
           
           {/* Progress Header */}
-          <div className="flex items-center justify-between text-xs text-slate-400 pb-2 border-b border-white/10">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pb-2 border-b border-slate-300 dark:border-white/10">
             <button
               type="button"
               onClick={() => setViewMode('overview')}
-              className="hover:text-white flex items-center gap-1 font-bold transition-colors"
+              className="hover:text-slate-900 dark:text-white flex items-center gap-1 font-bold transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               <span>Sair da Sessão</span>
             </button>
 
-            <div className="font-mono font-bold text-slate-300">
+            <div className="font-mono font-bold text-slate-600 dark:text-slate-300">
               Card {currentQueueIndex + 1} de {sessionQueue.length}
             </div>
 
             <div className="flex items-center gap-1 text-[11px] text-indigo-300">
               <span className="hidden sm:inline">Dica: </span>
-              <kbd className="px-1.5 py-0.5 rounded bg-dark-surface border border-slate-700 text-[10px]">Espaço</kbd> vira o card
+              <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-dark-surface border border-slate-200 dark:border-slate-700 text-[10px]">Espaço</kbd> vira o card
             </div>
           </div>
 
           {/* Progress bar */}
-          <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+          <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
             <div
               className="bg-gradient-to-r from-indigo-500 to-purple-500 h-full transition-all duration-300"
               style={{ width: `${((currentQueueIndex + 1) / sessionQueue.length) * 100}%` }}
@@ -438,17 +438,17 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
           >
             
             {/* Top metadata */}
-            <div className="flex items-center justify-between text-xs pb-4 border-b border-white/10">
+            <div className="flex items-center justify-between text-xs pb-4 border-b border-slate-300 dark:border-white/10">
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold">
                   {currentCard.subjectName}
                 </span>
-                <span className="text-slate-400">
+                <span className="text-slate-500 dark:text-slate-400">
                   {currentCard.topicName}
                 </span>
               </div>
               
-              <span className="text-[11px] font-mono text-slate-400 flex items-center gap-1">
+              <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 flex items-center gap-1">
                 <RotateCw className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-500 text-indigo-400" />
                 <span>{isFlipped ? 'VERSO' : 'FRENTE'}</span>
               </span>
@@ -461,10 +461,10 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
                   <span className="text-xs uppercase tracking-widest text-indigo-400 font-black">
                     Pergunta / Enunciado
                   </span>
-                  <p className="text-lg sm:text-xl font-bold text-white leading-relaxed whitespace-pre-line">
+                  <p className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white leading-relaxed whitespace-pre-line">
                     {currentCard.front}
                   </p>
-                  <p className="text-xs text-slate-400 italic pt-4">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 italic pt-4">
                     Pense na resposta e clique no cartão (ou aperte Espaço) para conferir...
                   </p>
                 </div>
@@ -474,7 +474,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
                     <Check className="w-4 h-4" />
                     <span>Resposta & Fundamentação</span>
                   </span>
-                  <div className="text-sm sm:text-base text-slate-100 font-medium leading-relaxed whitespace-pre-line bg-dark-bg/60 p-5 rounded-2xl border border-white/5">
+                  <div className="text-sm sm:text-base text-slate-800 dark:text-slate-100 font-medium leading-relaxed whitespace-pre-line bg-dark-bg/60 p-5 rounded-2xl border border-slate-200 dark:border-white/5">
                     {currentCard.back}
                   </div>
                 </div>
@@ -482,7 +482,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
             </div>
 
             {/* Bottom prompt indicator */}
-            <div className="pt-4 border-t border-white/10 text-center text-xs text-slate-400">
+            <div className="pt-4 border-t border-slate-300 dark:border-white/10 text-center text-xs text-slate-500 dark:text-slate-400">
               {!isFlipped ? (
                 <span>Clique para virar o card</span>
               ) : (
@@ -562,30 +562,30 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
               Sessão Diária Finalizada!
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-white mt-1">
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
               Curva de Retenção Calibrada
             </h2>
-            <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
               Você revisou <strong>{sessionStats.reviewed} cards</strong> hoje com base no algoritmo SM-2. A memória de longo prazo foi fortalecida contra o decaimento natural.
             </p>
           </div>
 
           {/* Session breakdown */}
-          <div className="grid grid-cols-4 gap-2 p-4 rounded-2xl bg-dark-surface/90 border border-white/5 text-xs font-mono">
+          <div className="grid grid-cols-4 gap-2 p-4 rounded-2xl bg-white dark:bg-dark-surface/90 border border-slate-200 dark:border-white/5 text-xs font-mono">
             <div>
-              <span className="text-slate-400 text-[10px] block">Errei</span>
+              <span className="text-slate-500 dark:text-slate-400 text-[10px] block">Errei</span>
               <strong className="text-rose-400 text-sm">{sessionStats.errei}</strong>
             </div>
             <div>
-              <span className="text-slate-400 text-[10px] block">Difícil</span>
+              <span className="text-slate-500 dark:text-slate-400 text-[10px] block">Difícil</span>
               <strong className="text-amber-400 text-sm">{sessionStats.dificil}</strong>
             </div>
             <div>
-              <span className="text-slate-400 text-[10px] block">Bom</span>
+              <span className="text-slate-500 dark:text-slate-400 text-[10px] block">Bom</span>
               <strong className="text-indigo-400 text-sm">{sessionStats.bom}</strong>
             </div>
             <div>
-              <span className="text-slate-400 text-[10px] block">Fácil</span>
+              <span className="text-slate-500 dark:text-slate-400 text-[10px] block">Fácil</span>
               <strong className="text-emerald-400 text-sm">{sessionStats.facil}</strong>
             </div>
           </div>
@@ -605,17 +605,17 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
 
       {/* VIEW MODE 4: CREATE CARD */}
       {viewMode === 'create' && (
-        <div className="max-w-2xl mx-auto glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-6 animate-fadeIn">
+        <div className="max-w-2xl mx-auto glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10 space-y-6 animate-fadeIn">
           
-          <div className="flex items-center justify-between pb-4 border-b border-white/10">
+          <div className="flex items-center justify-between pb-4 border-b border-slate-300 dark:border-white/10">
             <div>
-              <h2 className="text-lg font-black text-white">Criar Novo Flashcard</h2>
-              <p className="text-xs text-slate-400">Adicione um conceito, artigo de lei ou mnemônico para repetição espaçada.</p>
+              <h2 className="text-lg font-black text-slate-900 dark:text-white">Criar Novo Flashcard</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Adicione um conceito, artigo de lei ou mnemônico para repetição espaçada.</p>
             </div>
             <button
               type="button"
               onClick={() => setViewMode('overview')}
-              className="text-xs text-slate-400 hover:text-white"
+              className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white"
             >
               Cancelar
             </button>
@@ -625,47 +625,47 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-slate-400 font-bold mb-1">Disciplina:</label>
+                <label className="block text-slate-500 dark:text-slate-400 font-bold mb-1">Disciplina:</label>
                 <input
                   type="text"
                   value={newSubject}
                   onChange={(e) => setNewSubject(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl glass-input text-white text-xs"
+                  className="w-full px-3 py-2.5 rounded-xl glass-input text-slate-900 dark:text-white text-xs"
                   required
                 />
               </div>
               <div>
-                <label className="block text-slate-400 font-bold mb-1">Tópico ou Artigo de Lei:</label>
+                <label className="block text-slate-500 dark:text-slate-400 font-bold mb-1">Tópico ou Artigo de Lei:</label>
                 <input
                   type="text"
                   value={newTopic}
                   onChange={(e) => setNewTopic(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl glass-input text-white text-xs"
+                  className="w-full px-3 py-2.5 rounded-xl glass-input text-slate-900 dark:text-white text-xs"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-slate-400 font-bold mb-1">Frente (Pergunta / Comando):</label>
+              <label className="block text-slate-500 dark:text-slate-400 font-bold mb-1">Frente (Pergunta / Comando):</label>
               <textarea
                 rows={3}
                 value={newFront}
                 onChange={(e) => setNewFront(e.target.value)}
                 placeholder="Ex: Qual é o prazo prescricional para a ação de improbidade administrativa segundo a Lei 14.230/21?"
-                className="w-full px-3 py-2.5 rounded-xl glass-input text-white text-xs resize-none"
+                className="w-full px-3 py-2.5 rounded-xl glass-input text-slate-900 dark:text-white text-xs resize-none"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-slate-400 font-bold mb-1">Verso (Resposta / Fundamentação):</label>
+              <label className="block text-slate-500 dark:text-slate-400 font-bold mb-1">Verso (Resposta / Fundamentação):</label>
               <textarea
                 rows={4}
                 value={newBack}
                 onChange={(e) => setNewBack(e.target.value)}
                 placeholder="Ex: O prazo prescricional é de 8 (oito) anos, contados a partir da data de ocorrência do fato ou, no caso de infrações permanentes, do dia em que tiver cessado a permanência (Art. 23 da Lei 8.429/92 reformada)."
-                className="w-full px-3 py-2.5 rounded-xl glass-input text-white text-xs resize-none"
+                className="w-full px-3 py-2.5 rounded-xl glass-input text-slate-900 dark:text-white text-xs resize-none"
                 required
               />
             </div>
@@ -674,7 +674,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
               <button
                 type="button"
                 onClick={() => setViewMode('overview')}
-                className="px-4 py-2.5 rounded-xl bg-dark-surface hover:bg-dark-hover border border-slate-700 text-slate-300 text-xs font-bold"
+                className="px-4 py-2.5 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold"
               >
                 Cancelar
               </button>

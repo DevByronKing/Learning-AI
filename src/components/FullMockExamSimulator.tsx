@@ -286,19 +286,19 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
         <div className="space-y-8">
           
           {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-white/10">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-300 dark:border-white/10">
             <div>
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold flex items-center gap-1">
                   <Trophy className="w-3.5 h-3.5" />
                   Simulados Oficiais de Prova Real
                 </span>
-                <span className="text-xs text-slate-400">Padrão Cebraspe • FGV • FCC</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Padrão Cebraspe • FGV • FCC</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white mt-1">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
                 Central de Simulados Cronometrados & Ranking
               </h1>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Simule a pressão real do dia da prova com cartão-resposta digital, anulação de questões e apuração de nota líquida oficial.
               </p>
             </div>
@@ -306,7 +306,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             {onGoBackToQuickQuiz && (
               <button
                 onClick={onGoBackToQuickQuiz}
-                className="px-4 py-2.5 rounded-xl bg-dark-surface hover:bg-dark-hover border border-slate-700 text-slate-300 text-xs font-bold transition-all flex items-center gap-2 self-start md:self-auto"
+                className="px-4 py-2.5 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold transition-all flex items-center gap-2 self-start md:self-auto"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Voltar ao Treino Avulso</span>
@@ -319,46 +319,46 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             {exams.map((exam) => (
               <div
                 key={exam.id}
-                className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 hover:border-indigo-500/40 transition-all flex flex-col justify-between group"
+                className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10 hover:border-indigo-500/40 transition-all flex flex-col justify-between group"
               >
                 <div>
                   
                   {/* Meta Badges */}
-                  <div className="flex items-center justify-between pb-4 border-b border-white/10 text-xs">
+                  <div className="flex items-center justify-between pb-4 border-b border-slate-300 dark:border-white/10 text-xs">
                     <span className="px-3 py-1 rounded-xl bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">
                       Banca {exam.banca}
                     </span>
-                    <span className="text-slate-400 font-mono flex items-center gap-1.5">
+                    <span className="text-slate-500 dark:text-slate-400 font-mono flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-amber-400" />
                       {exam.durationMinutes} minutos
                     </span>
                   </div>
 
-                  <h2 className="text-xl font-black text-white mt-4 group-hover:text-indigo-300 transition-colors">
+                  <h2 className="text-xl font-black text-slate-900 dark:text-white mt-4 group-hover:text-indigo-300 transition-colors">
                     {exam.title}
                   </h2>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                     {exam.institution} • Cargo: <strong>{exam.role}</strong>
                   </p>
 
-                  <p className="text-xs text-slate-300 mt-4 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-4 leading-relaxed">
                     {exam.description}
                   </p>
 
                   {/* Highlights Grid */}
-                  <div className="grid grid-cols-3 gap-3 mt-6 p-4 rounded-2xl bg-dark-surface/80 border border-white/5 text-center text-xs">
+                  <div className="grid grid-cols-3 gap-3 mt-6 p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 text-center text-xs">
                     <div>
-                      <span className="text-[10px] uppercase text-slate-400 font-bold">Questões</span>
-                      <p className="text-base font-black text-white font-mono mt-0.5">{exam.totalQuestions}</p>
+                      <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">Questões</span>
+                      <p className="text-base font-black text-slate-900 dark:text-white font-mono mt-0.5">{exam.totalQuestions}</p>
                     </div>
                     <div>
-                      <span className="text-[10px] uppercase text-slate-400 font-bold">Regra</span>
+                      <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">Regra</span>
                       <p className="text-xs font-bold text-amber-400 mt-1">
                         {exam.scoringRule === 'cebraspe_uma_anula_uma' ? '1 Errada Anula 1' : 'Ponderada'}
                       </p>
                     </div>
                     <div>
-                      <span className="text-[10px] uppercase text-slate-400 font-bold">Corte Estimado</span>
+                      <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">Corte Estimado</span>
                       <p className="text-base font-black text-emerald-400 font-mono mt-0.5">{exam.estimatedCutoffScore}%</p>
                     </div>
                   </div>
@@ -374,7 +374,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                 </div>
 
                 {/* Start Button */}
-                <div className="mt-8 pt-4 border-t border-white/10">
+                <div className="mt-8 pt-4 border-t border-slate-300 dark:border-white/10">
                   <button
                     onClick={() => handleStartExam(exam)}
                     className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30"
@@ -396,7 +396,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
         <div className="space-y-6">
           
           {/* Top Real-time Bar */}
-          <div className="glass-panel p-4 rounded-2xl border border-white/10 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md">
+          <div className="glass-panel p-4 rounded-2xl border border-slate-300 dark:border-white/10 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md">
             
             {/* Title & Question number */}
             <div className="flex items-center gap-3">
@@ -404,10 +404,10 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                 {selectedExam.banca}
               </span>
               <div>
-                <h3 className="text-xs sm:text-sm font-black text-white">
+                <h3 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
                   Questão {currentQuestionIndex + 1} de {selectedExam.questions.length}
                 </h3>
-                <span className="text-[11px] text-slate-400">
+                <span className="text-[11px] text-slate-500 dark:text-slate-400">
                   {currentQuestion.subjectName} • {currentQuestion.topicName}
                 </span>
               </div>
@@ -417,7 +417,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border font-mono font-black text-sm ${
               remainingSeconds <= 300
                 ? 'bg-rose-500/20 border-rose-500/50 text-rose-400 animate-pulse'
-                : 'bg-dark-surface border-white/10 text-amber-400'
+                : 'bg-white dark:bg-dark-surface border-slate-300 dark:border-white/10 text-amber-400'
             }`}>
               <Clock className="w-4 h-4" />
               <span>{formatTime(remainingSeconds)}</span>
@@ -431,7 +431,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                 className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                   currentAnswer?.isFlaggedForReview
                     ? 'bg-amber-500 text-black shadow-md shadow-amber-500/30 font-black'
-                    : 'bg-dark-surface text-slate-300 hover:text-white border border-slate-700'
+                    : 'bg-white dark:bg-dark-surface text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700'
                 }`}
               >
                 <Bookmark className="w-3.5 h-3.5" />
@@ -455,7 +455,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             {/* Question Card */}
             <div className="lg:col-span-8 space-y-6">
               
-              <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10">
+              <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10">
                 
                 {/* Law citation badge */}
                 {currentQuestion.codeCitation && (
@@ -466,7 +466,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                 )}
 
                 {/* Statement */}
-                <p className="text-sm sm:text-base text-slate-100 font-medium leading-relaxed whitespace-pre-line">
+                <p className="text-sm sm:text-base text-slate-800 dark:text-slate-100 font-medium leading-relaxed whitespace-pre-line">
                   {currentQuestion.statement}
                 </p>
 
@@ -481,12 +481,12 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                         className={`w-full p-4 rounded-2xl border text-left text-xs sm:text-sm font-medium transition-all flex items-center justify-between gap-4 ${
                           isSelected
                             ? 'bg-indigo-600/20 border-indigo-400 text-white shadow-lg shadow-indigo-600/20 ring-1 ring-indigo-400'
-                            : 'bg-dark-surface/70 hover:bg-dark-hover border-slate-700/80 text-slate-200'
+                            : 'bg-white dark:bg-dark-surface/70 hover:bg-slate-50 dark:hover:bg-dark-hover border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-200'
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
-                            isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-slate-400'
+                            isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                           }`}>
                             {option.id.replace('opt-', '').toUpperCase()}
                           </div>
@@ -499,13 +499,13 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                 </div>
 
                 {/* Question Bottom Bar: Leave in blank & Navigation */}
-                <div className="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="mt-8 pt-6 border-t border-slate-300 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   
                   {/* Clear answer button (Cebraspe feature) */}
                   <button
                     type="button"
                     onClick={() => handleClearAnswer(currentQuestion.id)}
-                    className="text-xs text-slate-400 hover:text-rose-400 transition-colors flex items-center gap-1.5 self-start"
+                    className="text-xs text-slate-500 dark:text-slate-400 hover:text-rose-400 transition-colors flex items-center gap-1.5 self-start"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>Deixar esta questão em branco</span>
@@ -517,7 +517,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                       type="button"
                       disabled={currentQuestionIndex === 0}
                       onClick={() => setCurrentQuestionIndex((prev) => Math.max(0, prev - 1))}
-                      className="px-4 py-2.5 rounded-xl bg-dark-surface hover:bg-dark-hover disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700 text-slate-300 text-xs font-bold transition-all flex items-center gap-1.5"
+                      className="px-4 py-2.5 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover disabled:opacity-40 disabled:cursor-not-allowed border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold transition-all flex items-center gap-1.5"
                     >
                       <ChevronLeft className="w-4 h-4" />
                       <span>Anterior</span>
@@ -543,20 +543,20 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             {/* Cartão-Resposta Digital (Gabarito Lateral) */}
             <div className="lg:col-span-4 space-y-4">
               
-              <div className="glass-panel p-6 rounded-3xl border border-white/10 sticky top-36">
+              <div className="glass-panel p-6 rounded-3xl border border-slate-300 dark:border-white/10 sticky top-36">
                 
-                <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-300 dark:border-white/10">
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
                     <FileText className="w-3.5 h-3.5 text-indigo-400" />
                     <span>Cartão-Resposta Digital</span>
                   </h4>
-                  <span className="text-[11px] text-slate-400 font-mono">
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
                     {answeredCount} / {selectedExam.questions.length} marcadas
                   </span>
                 </div>
 
                 {/* Legend */}
-                <div className="grid grid-cols-3 gap-2 mt-4 text-[10px] text-slate-300">
+                <div className="grid grid-cols-3 gap-2 mt-4 text-[10px] text-slate-600 dark:text-slate-300">
                   <div className="flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded-full bg-indigo-500" />
                     <span>Marcada</span>
@@ -566,7 +566,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                     <span>Revisar</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-full bg-slate-800 border border-slate-700" />
+                    <span className="w-3 h-3 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
                     <span>Em branco</span>
                   </div>
                 </div>
@@ -593,7 +593,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                             ? 'bg-amber-400 text-black shadow-md shadow-amber-400/20'
                             : isAnswered
                             ? 'bg-indigo-600 text-white'
-                            : 'bg-dark-surface hover:bg-dark-hover border border-slate-700 text-slate-400'
+                            : 'bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400'
                         }`}
                       >
                         <span>{String(idx + 1).padStart(2, '0')}</span>
@@ -608,16 +608,16 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                 </div>
 
                 {/* Live exam summary box */}
-                <div className="mt-6 p-4 rounded-2xl bg-dark-surface/80 border border-white/5 space-y-2 text-xs">
-                  <div className="flex items-center justify-between text-slate-300">
+                <div className="mt-6 p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 space-y-2 text-xs">
+                  <div className="flex items-center justify-between text-slate-600 dark:text-slate-300">
                     <span>Respondidas:</span>
-                    <strong className="text-white font-mono">{answeredCount}</strong>
+                    <strong className="text-slate-900 dark:text-white font-mono">{answeredCount}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-300">
+                  <div className="flex items-center justify-between text-slate-600 dark:text-slate-300">
                     <span>Em Branco:</span>
                     <strong className="text-amber-400 font-mono">{blankCount}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-300">
+                  <div className="flex items-center justify-between text-slate-600 dark:text-slate-300">
                     <span>Para Revisão:</span>
                     <strong className="text-amber-400 font-mono">{flaggedCount}</strong>
                   </div>
@@ -642,33 +642,33 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
           {/* Confirm Finish Modal */}
           {showConfirmModal && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-              <div className="max-w-md w-full glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 glow-brand">
+              <div className="max-w-md w-full glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10 glow-brand">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-4">
                   <FileText className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-black text-white">
+                <h3 className="text-lg font-black text-slate-900 dark:text-white">
                   Entregar Gabarito Definitivo?
                 </h3>
-                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
                   Confira o resumo do seu preenchimento antes de fechar a prova:
                 </p>
 
-                <div className="my-5 p-4 rounded-2xl bg-dark-surface border border-white/5 space-y-2 text-xs">
+                <div className="my-5 p-4 rounded-2xl bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/5 space-y-2 text-xs">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Questões Respondidas:</span>
+                    <span className="text-slate-500 dark:text-slate-400">Questões Respondidas:</span>
                     <strong className="text-emerald-400 font-mono">{answeredCount}</strong>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Questões em Branco:</span>
+                    <span className="text-slate-500 dark:text-slate-400">Questões em Branco:</span>
                     <strong className="text-amber-400 font-mono">{blankCount}</strong>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Marcadas para Revisão:</span>
+                    <span className="text-slate-500 dark:text-slate-400">Marcadas para Revisão:</span>
                     <strong className="text-amber-400 font-mono">{flaggedCount}</strong>
                   </div>
-                  <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                    <span className="text-slate-400">Tempo Restante:</span>
-                    <strong className="text-white font-mono">{formatTime(remainingSeconds)}</strong>
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-white/5">
+                    <span className="text-slate-500 dark:text-slate-400">Tempo Restante:</span>
+                    <strong className="text-slate-900 dark:text-white font-mono">{formatTime(remainingSeconds)}</strong>
                   </div>
                 </div>
 
@@ -682,7 +682,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                   <button
                     type="button"
                     onClick={() => setShowConfirmModal(false)}
-                    className="flex-1 py-3 rounded-xl bg-dark-surface hover:bg-dark-hover border border-slate-700 text-slate-300 text-xs font-bold transition-all"
+                    className="flex-1 py-3 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold transition-all"
                   >
                     Voltar à Prova
                   </button>
@@ -708,7 +708,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
           {/* Hero Performance Card */}
           <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-indigo-500/40 glow-brand">
             
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-300 dark:border-white/10">
               
               <div className="flex items-center gap-4">
                 <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-black shrink-0 ${
@@ -725,32 +725,32 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                     }`}>
                       {result.isAboveCutoff ? 'DENTRO DA NOTA DE CORTE' : 'ABAIXO DA NOTA DE CORTE'}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono">
                       Corte Estimado: {result.cutoffScore}%
                     </span>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white mt-1">
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
                     Nota Líquida: <span className={result.isAboveCutoff ? 'text-emerald-400' : 'text-rose-400'}>
                       {result.netScore > 0 ? `+${result.netScore}` : result.netScore}
                     </span> / {result.totalQuestions} pts líquidos ({result.percentage}%)
                   </h2>
-                  <p className="text-xs text-slate-300 mt-1">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
                     {result.mockExamTitle} • Concluído em {result.completedAt} ({Math.round(result.timeSpentSeconds / 60)} min gastos).
                   </p>
                 </div>
               </div>
 
               {/* Formula calculation badge */}
-              <div className="bg-dark-surface/90 p-4 rounded-2xl border border-white/5 text-xs self-start md:self-auto">
-                <span className="text-slate-400">Fórmula de Apuração Oficial:</span>
+              <div className="bg-white dark:bg-dark-surface/90 p-4 rounded-2xl border border-slate-200 dark:border-white/5 text-xs self-start md:self-auto">
+                <span className="text-slate-500 dark:text-slate-400">Fórmula de Apuração Oficial:</span>
                 {result.scoringRule === 'cebraspe_uma_anula_uma' ? (
                   <div className="mt-1">
-                    <p className="font-mono font-bold text-white">Nota Líquida = Acertos ({result.correctCount}) - Erros ({result.wrongCount})</p>
+                    <p className="font-mono font-bold text-slate-900 dark:text-white">Nota Líquida = Acertos ({result.correctCount}) - Erros ({result.wrongCount})</p>
                     <p className="text-[11px] text-rose-400 mt-0.5">Penalidades deduzidas: -{result.penaltyDeductions} pts</p>
                   </div>
                 ) : (
                   <div className="mt-1">
-                    <p className="font-mono font-bold text-white">Nota = {result.correctCount} acertos de {result.totalQuestions} questões</p>
+                    <p className="font-mono font-bold text-slate-900 dark:text-white">Nota = {result.correctCount} acertos de {result.totalQuestions} questões</p>
                     <p className="text-[11px] text-emerald-400 mt-0.5">Sem fator de penalização por erro</p>
                   </div>
                 )}
@@ -768,17 +768,17 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                   <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                     Posição no Ranking Simulado do Concurso
                   </span>
-                  <h3 className="text-xl font-black text-white mt-0.5">
+                  <h3 className="text-xl font-black text-slate-900 dark:text-white mt-0.5">
                     🏆 Você ficou em <span className="text-amber-400">{result.simulatedRank}º lugar</span> entre {result.totalCandidates.toLocaleString('pt-BR')} candidatos
                   </h3>
-                  <p className="text-xs text-slate-300 mt-0.5">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
                     Percentil atingido: <strong>{Math.max(1, 100 - Math.round((result.simulatedRank / result.totalCandidates) * 100))}%</strong> dos concorrentes simulados.
                   </p>
                 </div>
               </div>
 
               <div className="text-right shrink-0">
-                <span className="text-[10px] uppercase text-slate-400 font-bold block">Status no Concurso</span>
+                <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold block">Status no Concurso</span>
                 <span className={`px-3 py-1.5 rounded-xl text-xs font-black inline-block mt-1 ${
                   result.isAboveCutoff 
                     ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' 
@@ -791,20 +791,20 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
 
             {/* Quick Metrics Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 text-xs text-center">
-              <div className="p-4 rounded-2xl bg-dark-surface/80 border border-white/5">
-                <span className="text-slate-400">Acertos (Certas)</span>
+              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5">
+                <span className="text-slate-500 dark:text-slate-400">Acertos (Certas)</span>
                 <p className="text-xl font-black text-emerald-400 font-mono mt-1">+{result.correctCount}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-dark-surface/80 border border-white/5">
-                <span className="text-slate-400">Erros (Anulam)</span>
+              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5">
+                <span className="text-slate-500 dark:text-slate-400">Erros (Anulam)</span>
                 <p className="text-xl font-black text-rose-400 font-mono mt-1">-{result.wrongCount}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-dark-surface/80 border border-white/5">
-                <span className="text-slate-400">Em Branco (Neutras)</span>
+              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5">
+                <span className="text-slate-500 dark:text-slate-400">Em Branco (Neutras)</span>
                 <p className="text-xl font-black text-amber-400 font-mono mt-1">{result.blankCount}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-dark-surface/80 border border-white/5">
-                <span className="text-slate-400">Tempo Médio/Questão</span>
+              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5">
+                <span className="text-slate-500 dark:text-slate-400">Tempo Médio/Questão</span>
                 <p className="text-xl font-black text-indigo-400 font-mono mt-1">
                   {Math.round(result.timeSpentSeconds / result.totalQuestions)}s
                 </p>
@@ -814,28 +814,28 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
           </div>
 
           {/* Performance by Subject Breakdown Table */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10">
-            <h3 className="text-base font-black text-white flex items-center gap-2 mb-4">
+          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10">
+            <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2 mb-4">
               <BarChart2 className="w-5 h-5 text-indigo-400" />
               <span>Desempenho Discriminado por Disciplina</span>
             </h3>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left text-slate-300">
-                <thead className="bg-dark-surface text-slate-400 uppercase text-[10px] font-bold border-b border-white/10">
+              <table className="w-full text-xs text-left text-slate-600 dark:text-slate-300">
+                <thead className="bg-white dark:bg-dark-surface text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold border-b border-slate-300 dark:border-white/10">
                   <tr>
                     <th className="p-3">Disciplina</th>
                     <th className="p-3 text-center">Questões</th>
                     <th className="p-3 text-center text-emerald-400">Acertos</th>
                     <th className="p-3 text-center text-rose-400">Erros</th>
                     <th className="p-3 text-center text-amber-400">Em Branco</th>
-                    <th className="p-3 text-center font-bold text-white">Saldo Líquido</th>
+                    <th className="p-3 text-center font-bold text-slate-900 dark:text-white">Saldo Líquido</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5 font-mono">
                   {result.subjectBreakdown.map((subj, idx) => (
                     <tr key={idx} className="hover:bg-white/5 transition-colors">
-                      <td className="p-3 font-sans font-bold text-white">{subj.subjectName}</td>
+                      <td className="p-3 font-sans font-bold text-slate-900 dark:text-white">{subj.subjectName}</td>
                       <td className="p-3 text-center">{subj.total}</td>
                       <td className="p-3 text-center text-emerald-400">+{subj.correct}</td>
                       <td className="p-3 text-center text-rose-400">-{subj.wrong}</td>
@@ -851,22 +851,22 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
           </div>
 
           {/* Complete Answer Key (Gabarito Comentado Oficial) */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-6">
+          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10 space-y-6">
             
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-300 dark:border-white/10">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">Gabarito Comentado</span>
-                <h3 className="text-lg font-black text-white mt-0.5">
+                <h3 className="text-lg font-black text-slate-900 dark:text-white mt-0.5">
                   Conferência Questão por Questão com Análise da Banca
                 </h3>
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex items-center p-1 rounded-2xl bg-dark-surface border border-white/10 text-xs">
+              <div className="flex items-center p-1 rounded-2xl bg-white dark:bg-dark-surface border border-slate-300 dark:border-white/10 text-xs">
                 <button
                   onClick={() => setResultFilter('all')}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
-                    resultFilter === 'all' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                    resultFilter === 'all' ? 'bg-indigo-600 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-white'
                   }`}
                 >
                   Todas ({result.totalQuestions})
@@ -874,7 +874,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                 <button
                   onClick={() => setResultFilter('wrong')}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
-                    resultFilter === 'wrong' ? 'bg-rose-600 text-white' : 'text-slate-400 hover:text-white'
+                    resultFilter === 'wrong' ? 'bg-rose-600 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-white'
                   }`}
                 >
                   Erros ({result.wrongCount})
@@ -882,7 +882,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                 <button
                   onClick={() => setResultFilter('blank')}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
-                    resultFilter === 'blank' ? 'bg-amber-600 text-white' : 'text-slate-400 hover:text-white'
+                    resultFilter === 'blank' ? 'bg-amber-600 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-white'
                   }`}
                 >
                   Em Branco ({result.blankCount})
@@ -947,10 +947,10 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                       }`}
                     >
                       {/* Meta header */}
-                      <div className="flex items-center justify-between pb-3 border-b border-white/5 text-xs">
+                      <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/5 text-xs">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-white">Questão #{selectedExam.questions.indexOf(q) + 1}</span>
-                          <span className="text-slate-400">• {q.subjectName}</span>
+                          <span className="font-bold text-slate-900 dark:text-white">Questão #{selectedExam.questions.indexOf(q) + 1}</span>
+                          <span className="text-slate-500 dark:text-slate-400">• {q.subjectName}</span>
                         </div>
                         <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
                           isCorrect
@@ -964,26 +964,26 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                       </div>
 
                       {/* Statement */}
-                      <p className="mt-3 text-slate-200 leading-relaxed font-medium">
+                      <p className="mt-3 text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
                         {q.statement}
                       </p>
 
                       {/* Comparison of Selected vs Correct */}
-                      <div className="mt-4 p-3.5 rounded-xl bg-dark-bg/70 border border-white/5 space-y-1.5 text-xs font-mono">
+                      <div className="mt-4 p-3.5 rounded-xl bg-dark-bg/70 border border-slate-200 dark:border-white/5 space-y-1.5 text-xs font-mono">
                         <div className="flex items-center gap-2">
-                          <span className="text-slate-400">Sua Marcação:</span>
+                          <span className="text-slate-500 dark:text-slate-400">Sua Marcação:</span>
                           <strong className={isCorrect ? 'text-emerald-400' : isBlank ? 'text-amber-400' : 'text-rose-400'}>
                             {isBlank ? 'EM BRANCO' : selectedOpt?.text}
                           </strong>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-slate-400">Gabarito Oficial:</span>
+                          <span className="text-slate-500 dark:text-slate-400">Gabarito Oficial:</span>
                           <strong className="text-emerald-400">{correctOpt?.text}</strong>
                         </div>
                       </div>
 
                       {/* Explanation */}
-                      <div className="mt-4 pt-3 border-t border-white/5 text-xs text-slate-300 leading-relaxed">
+                      <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                         <strong className="text-indigo-300">Fundamentação: </strong>
                         {q.explanation}
                       </div>
@@ -1004,11 +1004,11 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             </div>
 
             {/* Bottom Actions */}
-            <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="pt-6 border-t border-slate-300 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <button
                 type="button"
                 onClick={() => setViewMode('select')}
-                className="px-6 py-3 rounded-xl bg-dark-surface hover:bg-dark-hover border border-slate-700 text-slate-300 text-xs font-bold transition-all"
+                className="px-6 py-3 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold transition-all"
               >
                 Voltar aos Simulados
               </button>

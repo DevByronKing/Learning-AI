@@ -180,6 +180,20 @@ html.light .glass-input {
   color: #0f172a;
 }
 
+/* Inputs e textareas legíveis no Modo Claro */
+html.light input,
+html.light textarea,
+html.light select {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
 /* Inversão inteligente de cards com fundos escuros fixos para Modo Claro */
 html.light .bg-\[\#11182c\],
 html.light .bg-\[\#111726\],
@@ -187,10 +201,28 @@ html.light .bg-\[\#0d1322\],
 html.light .bg-\[\#0a0f1d\],
 html.light .bg-\[\#161F33\],
 html.light .bg-\[\#16203a\],
-html.light .bg-\[\#0e1424\] {
+html.light .bg-\[\#0e1424\],
+html.light .bg-\[\#0c1322\],
+html.light .bg-\[\#0c1222\],
+html.light .bg-\[\#080C14\],
+html.light .bg-\[\#080c14\],
+html.light .bg-\[\#090D16\],
+html.light .bg-\[\#090d16\] {
   background-color: rgba(255, 255, 255, 0.92) !important;
   border-color: rgba(226, 232, 240, 0.95) !important;
   box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Elementos com bg-dark-* no Modo Claro */
+html.light [class*="bg-dark-surface"],
+html.light [class*="bg-dark-card"] {
+  background-color: #ffffff !important;
+  color: #1e293b;
+}
+
+html.light [class*="bg-dark-surface"]:hover,
+html.light [class*="bg-dark-card"]:hover {
+  background-color: #f1f5f9 !important;
 }
 
 /* Inversão de bordas sutis para modo claro */
@@ -246,13 +278,20 @@ html.light .text-purple-300 {
   color: #7e22ce !important;
 }
 
-/* Textos brancos genéricos tornam-se escuros, exceto em botões e badges vibrantes */
-html.light span.text-white:not([class*="bg-"]):not([class*="from-"]):not([class*="badge"]),
-html.light div.text-white:not([class*="bg-"]):not([class*="from-"]),
-html.light p.text-white,
-html.light strong.text-white,
-html.light li.text-white {
+/* CATCH-ALL: qualquer .text-white no modo claro fica escuro por padrão */
+html.light .text-white {
   color: #0f172a;
+}
+
+/* Preserva .text-white dentro de botões/links com fundo colorido saturado */
+html.light button[class*="from-indigo"] .text-white,
+html.light button[class*="from-purple"] .text-white,
+html.light button[class*="from-amber"] .text-white,
+html.light button[class*="from-rose"] .text-white,
+html.light button[class*="from-emerald"] .text-white,
+html.light button[class*="from-teal"] .text-white,
+html.light a[class*="from-"] .text-white {
+  color: #ffffff !important;
 }
 
 /* Preserva texto branco estritamente em botões com gradientes escuros ou cores sólidas saturadas */
@@ -337,6 +376,15 @@ html.light [class*="bg-amber-100"] {
 html.light [class*="bg-emerald-50"],
 html.light [class*="bg-emerald-100"] {
   color: #065f46 !important;
+}
+
+/* Progress bars e backgrounds cinza-escuro invertem para cinza-claro */
+html.light .bg-slate-800 {
+  background-color: #e2e8f0 !important;
+}
+
+html.light .bg-slate-900 {
+  background-color: #f1f5f9 !important;
 }
 
 /* Animações e Utilitários */

@@ -143,21 +143,21 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
       >
         
         {/* Drawer Header */}
-        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-indigo-950/40 via-dark-surface to-dark-bg">
+        <div className="p-5 border-b border-slate-300 dark:border-white/10 flex items-center justify-between bg-gradient-to-r from-indigo-950/40 via-dark-surface to-dark-bg">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-600 to-cyan-400 p-[1.5px] glow-brand">
-              <div className="w-full h-full bg-dark-surface rounded-[10px] flex items-center justify-center">
+              <div className="w-full h-full bg-white dark:bg-dark-surface rounded-[10px] flex items-center justify-center">
                 <BrainCircuit className="w-5 h-5 text-indigo-400" />
               </div>
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <h2 className="text-base font-black text-white">Nexus AI</h2>
+                <h2 className="text-base font-black text-slate-900 dark:text-white">Nexus AI</h2>
                 <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                   COPILOTO 2.0
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Waze dos Estudos & Análise Preditiva
               </p>
             </div>
@@ -165,20 +165,20 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-all"
+            className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-all"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Sub-tabs Header */}
-        <div className="flex items-center justify-around border-b border-white/5 bg-dark-surface/40 p-1.5 text-xs">
+        <div className="flex items-center justify-around border-b border-slate-200 dark:border-white/5 bg-white dark:bg-dark-surface/40 p-1.5 text-xs">
           <button
             onClick={() => setActiveSubTab('mission')}
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-bold transition-all ${
               activeSubTab === 'mission'
                 ? 'bg-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
@@ -190,7 +190,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-bold transition-all ${
               activeSubTab === 'chat'
                 ? 'bg-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'
             }`}
           >
             <MessageSquare className="w-3.5 h-3.5" />
@@ -202,7 +202,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-bold transition-all ${
               activeSubTab === 'summaries'
                 ? 'bg-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -229,24 +229,24 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                   </span>
                 </div>
 
-                <h3 className="text-base font-black text-white">
+                <h3 className="text-base font-black text-slate-900 dark:text-white">
                   Dominar Ponto Cego: {blindSpotTopic?.name || 'Tópico Prioritário'}
                 </h3>
 
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   Seu índice de acertos neste tópico está abaixo do corte histórico da banca <strong>{selectedExam?.banca || 'Cebraspe'}</strong>. O algoritmo identificou alta probabilidade de cobrança com armadilhas doutrinárias.
                 </p>
 
-                <div className="p-3 rounded-xl bg-dark-bg/80 border border-white/5 space-y-2 text-xs">
-                  <div className="flex items-center justify-between text-slate-400">
+                <div className="p-3 rounded-xl bg-dark-bg/80 border border-slate-200 dark:border-white/5 space-y-2 text-xs">
+                  <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
                     <span>Tempo sugerido:</span>
-                    <strong className="text-white">35 minutos</strong>
+                    <strong className="text-slate-900 dark:text-white">35 minutos</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-400">
+                  <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
                     <span>Meta de fixação:</span>
                     <strong className="text-emerald-400">10 questões + 1 micro-resumo</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-400">
+                  <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
                     <span>Ganho estimado:</span>
                     <strong className="text-indigo-300">+4.2 pts líquidos</strong>
                   </div>
@@ -266,15 +266,15 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
 
               {/* Status checklist */}
               <div className="space-y-3">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                   Checklist Cognitivo do Dia
                 </span>
 
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-dark-surface/60 border border-white/5 text-xs">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-dark-surface/60 border border-slate-200 dark:border-white/5 text-xs">
                     <div className="flex items-center gap-2.5">
                       <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                      <span className="text-slate-200">Revisão SRS SM-2 de Flashcards</span>
+                      <span className="text-slate-700 dark:text-slate-200">Revisão SRS SM-2 de Flashcards</span>
                     </div>
                     <button 
                       onClick={() => { onClose(); onNavigateTab('analytics'); }}
@@ -284,14 +284,14 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                     </button>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-dark-surface/60 border border-white/5 text-xs">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-dark-surface/60 border border-slate-200 dark:border-white/5 text-xs">
                     <div className="flex items-center gap-2.5">
                       <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
                         pendingMistakesCount > 0 ? 'border-amber-400 text-amber-400' : 'border-emerald-400 text-emerald-400'
                       }`}>
                         {pendingMistakesCount > 0 ? '!' : '✓'}
                       </div>
-                      <span className="text-slate-200">
+                      <span className="text-slate-700 dark:text-slate-200">
                         Zerar Caderno de Erros ({pendingMistakesCount} pendências)
                       </span>
                     </div>
@@ -303,10 +303,10 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                     </button>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-dark-surface/60 border border-white/5 text-xs">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-dark-surface/60 border border-slate-200 dark:border-white/5 text-xs">
                     <div className="flex items-center gap-2.5">
-                      <Clock className="w-4 h-4 text-slate-400" />
-                      <span className="text-slate-200">Leitura de 5 Artigos Grifados da Lei Seca</span>
+                      <Clock className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                      <span className="text-slate-700 dark:text-slate-200">Leitura de 5 Artigos Grifados da Lei Seca</span>
                     </div>
                     <button 
                       onClick={() => { onClose(); onNavigateTab('vademecum'); }}
@@ -327,7 +327,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
               
               {/* Quick Prompt Chips */}
               <div className="space-y-1.5">
-                <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">
                   Dúvidas Rápidas de Alta Incidência:
                 </span>
                 <div className="grid grid-cols-1 gap-1.5">
@@ -335,7 +335,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                     <button
                       key={i}
                       onClick={() => handleSendPrompt(qp.prompt)}
-                      className="text-left px-3 py-2 rounded-xl bg-dark-surface/80 hover:bg-white/5 border border-white/5 hover:border-indigo-500/30 text-slate-300 text-xs transition-all flex items-center justify-between"
+                      className="text-left px-3 py-2 rounded-xl bg-white dark:bg-dark-surface/80 hover:bg-white/5 border border-slate-200 dark:border-white/5 hover:border-indigo-500/30 text-slate-600 dark:text-slate-300 text-xs transition-all flex items-center justify-between"
                     >
                       <span>{qp.label}</span>
                       <ArrowRight className="w-3 h-3 text-slate-500" />
@@ -355,7 +355,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                       className={`max-w-[90%] p-3.5 rounded-2xl text-xs leading-relaxed ${
                         m.sender === 'user'
                           ? 'bg-indigo-600 text-white rounded-br-none'
-                          : 'bg-dark-surface border border-white/10 text-slate-200 rounded-bl-none shadow-md'
+                          : 'bg-white dark:bg-dark-surface border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-200 rounded-bl-none shadow-md'
                       }`}
                     >
                       <div className="whitespace-pre-line">
@@ -363,7 +363,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                       </div>
 
                       {m.quickAction && (
-                        <div className="mt-3 pt-2 border-t border-white/10 flex justify-end">
+                        <div className="mt-3 pt-2 border-t border-slate-300 dark:border-white/10 flex justify-end">
                           <button
                             onClick={() => {
                               onClose();
@@ -399,7 +399,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
             <div className="space-y-4 animate-fadeIn">
               
               <div className="space-y-1">
-                <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">
                   Selecione o Micro-Resumo da Banca:
                 </span>
                 <div className="flex flex-col gap-2">
@@ -410,12 +410,12 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                       className={`text-left p-3 rounded-xl border transition-all text-xs ${
                         selectedSummary?.id === s.id
                           ? 'bg-indigo-600/20 border-indigo-500 text-white font-bold'
-                          : 'bg-dark-surface border-white/5 text-slate-300 hover:bg-white/5'
+                          : 'bg-white dark:bg-dark-surface border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-300 hover:bg-white/5'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-[10px] font-semibold text-indigo-300">{s.subjectName}</span>
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/5 text-slate-400">{s.banca}</span>
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/5 text-slate-500 dark:text-slate-400">{s.banca}</span>
                       </div>
                       <p className="line-clamp-1">{s.title}</p>
                     </button>
@@ -425,16 +425,16 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
 
               {/* Selected Summary Card */}
               {selectedSummary && (
-                <div className="p-4 rounded-2xl bg-dark-surface border border-indigo-500/20 space-y-3">
-                  <h4 className="text-sm font-black text-white">
+                <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface border border-indigo-500/20 space-y-3">
+                  <h4 className="text-sm font-black text-slate-900 dark:text-white">
                     {selectedSummary.title}
                   </h4>
 
                   <div className="space-y-2">
-                    <span className="text-[11px] font-bold text-slate-400 uppercase">Pontos Chave:</span>
+                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">Pontos Chave:</span>
                     <ul className="space-y-1.5">
                       {selectedSummary.keyPoints.map((kp, idx) => (
-                        <li key={idx} className="text-xs text-slate-200 flex items-start gap-2">
+                        <li key={idx} className="text-xs text-slate-700 dark:text-slate-200 flex items-start gap-2">
                           <span className="text-indigo-400 font-bold">•</span>
                           <span>{kp}</span>
                         </li>
@@ -447,7 +447,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                       <ShieldAlert className="w-4 h-4 text-rose-400" />
                       <span>Alerta de Armadilha da Banca:</span>
                     </div>
-                    <p className="text-[11px] text-slate-300">{selectedSummary.bancaTrapAlert}</p>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300">{selectedSummary.bancaTrapAlert}</p>
                   </div>
 
                   {selectedSummary.mnemonic && (
@@ -456,7 +456,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                         <Lightbulb className="w-4 h-4 text-amber-400" />
                         <span>Mnemônico de Fixação Rápida:</span>
                       </div>
-                      <p className="text-xs font-mono font-bold text-white">{selectedSummary.mnemonic}</p>
+                      <p className="text-xs font-mono font-bold text-slate-900 dark:text-white">{selectedSummary.mnemonic}</p>
                     </div>
                   )}
                 </div>
@@ -469,7 +469,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
 
         {/* Bottom Input Area for Chat */}
         {activeSubTab === 'chat' && (
-          <div className="p-4 border-t border-white/10 bg-dark-surface/80">
+          <div className="p-4 border-t border-slate-300 dark:border-white/10 bg-white dark:bg-dark-surface/80">
             <div className="flex items-center gap-2">
               <input
                 type="text"
@@ -477,7 +477,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                 onChange={(e) => setInputQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSendPrompt()}
                 placeholder="Pergunte sobre jurisprudência, prazos ou bancas..."
-                className="flex-1 bg-dark-bg border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                className="flex-1 bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
               />
               <button
                 onClick={() => handleSendPrompt()}

@@ -22,7 +22,8 @@ import {
   TrendingUp,
   FileCheck,
   Zap,
-  Filter
+  Filter,
+  Upload
 } from 'lucide-react';
 import { DiscursivePrompt, DiscursiveEvaluation, DiscursiveSubmission } from '@/lib/types';
 import { MOCK_DISCURSIVE_PROMPTS } from '@/lib/mockData';
@@ -239,33 +240,33 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fadeIn">
       
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-white/10">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-300 dark:border-white/10">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-xs font-bold flex items-center gap-1">
               <PenTool className="w-3.5 h-3.5" />
               Estúdio de Discursivas & Redações 2.0
             </span>
-            <span className="text-xs text-slate-400">Régua Oficial Cebraspe • FGV • FCC • OAB</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">Régua Oficial Cebraspe • FGV • FCC • OAB</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white mt-1">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
             Simulador de Prova Discursiva com Correção por IA
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Treine na folha pautada de 30 linhas, receba a nota analítica por critério da banca e compare com o espelho de resposta.
           </p>
         </div>
 
         {/* Area Filter Selector */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 text-xs text-slate-400">
+          <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
             <Filter className="w-3.5 h-3.5" />
             <span>Área:</span>
           </div>
           <select
             value={selectedAreaFilter}
             onChange={(e) => setSelectedAreaFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl glass-input text-xs text-white bg-dark-surface cursor-pointer font-medium"
+            className="px-3 py-2 rounded-xl glass-input text-xs text-slate-900 dark:text-white bg-white dark:bg-dark-surface cursor-pointer font-medium"
           >
             <option value="todas">Todas as Áreas</option>
             <option value="Policial">Carreiras Policiais</option>
@@ -291,7 +292,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
             className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0 ${
               selectedPromptId === prompt.id
                 ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30 ring-2 ring-indigo-400/50'
-                : 'bg-dark-surface hover:bg-dark-hover border border-slate-700 text-slate-300'
+                : 'bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -309,15 +310,15 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
         {/* Left Column: O Enunciado Oficial da Prova */}
         <div className="lg:col-span-5 space-y-6">
           
-          <div className="glass-panel p-6 rounded-3xl border border-white/10">
+          <div className="glass-panel p-6 rounded-3xl border border-slate-300 dark:border-white/10">
             
             {/* Meta Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-white/10 text-xs">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-300 dark:border-white/10 text-xs">
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">
                   {currentPrompt.banca} • {currentPrompt.year}
                 </span>
-                <span className="px-2.5 py-1 rounded-lg bg-dark-card text-slate-300 border border-slate-700 font-semibold">
+                <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-dark-card text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-semibold">
                   {currentPrompt.area}
                 </span>
               </div>
@@ -327,21 +328,21 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
             </div>
 
             <div className="mt-4">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 {currentPrompt.institution} • {currentPrompt.role}
               </span>
-              <h2 className="text-lg font-black text-white mt-1 leading-snug">
+              <h2 className="text-lg font-black text-slate-900 dark:text-white mt-1 leading-snug">
                 {currentPrompt.title}
               </h2>
             </div>
 
             {/* Motivating Text */}
-            <div className="mt-5 p-4 rounded-2xl bg-dark-surface/80 border border-white/5">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-300 mb-2">
+            <div className="mt-5 p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 mb-2">
                 <FileText className="w-4 h-4 text-indigo-400" />
                 <span>Texto Motivador da Prova:</span>
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed italic">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic">
                 "{currentPrompt.motivatingText}"
               </p>
             </div>
@@ -354,12 +355,12 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
               </h3>
               <div className="space-y-2.5">
                 {currentPrompt.mandatoryTopics.map((topic, idx) => (
-                  <div key={topic.id} className="p-3 rounded-xl bg-dark-card/70 border border-white/5 flex items-start justify-between gap-3 text-xs">
+                  <div key={topic.id} className="p-3 rounded-xl bg-white dark:bg-dark-card/70 border border-slate-200 dark:border-white/5 flex items-start justify-between gap-3 text-xs">
                     <div className="flex items-start gap-2.5">
                       <span className="w-5 h-5 rounded-md bg-indigo-500/20 text-indigo-300 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
                         {idx + 1}
                       </span>
-                      <span className="text-slate-200 leading-relaxed">{topic.description}</span>
+                      <span className="text-slate-700 dark:text-slate-200 leading-relaxed">{topic.description}</span>
                     </div>
                     <span className="text-[11px] font-mono font-bold text-indigo-300 shrink-0 px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20">
                       {topic.maxPoints} pts
@@ -370,19 +371,19 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
             </div>
 
             {/* View Official Answer Key Toggle */}
-            <div className="mt-6 pt-4 border-t border-white/10">
+            <div className="mt-6 pt-4 border-t border-slate-300 dark:border-white/10">
               <button
                 onClick={() => setShowAnswerModel(!showAnswerModel)}
-                className="w-full py-2.5 rounded-xl bg-dark-surface hover:bg-dark-hover border border-slate-700 text-slate-300 text-xs font-bold transition-all flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold transition-all flex items-center justify-center gap-2"
               >
                 <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
                 <span>{showAnswerModel ? 'Ocultar Padrão Preliminar da Banca' : 'Ver Padrão Preliminar da Banca (Espelho)'}</span>
               </button>
 
               {showAnswerModel && (
-                <div className="mt-4 p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-xs text-slate-200 animate-fadeIn">
+                <div className="mt-4 p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-xs text-slate-700 dark:text-slate-200 animate-fadeIn">
                   <h4 className="font-bold text-indigo-300 mb-2">Padrão de Resposta Oficial Esperado:</h4>
-                  <p className="leading-relaxed whitespace-pre-line text-slate-300">
+                  <p className="leading-relaxed whitespace-pre-line text-slate-600 dark:text-slate-300">
                     {currentPrompt.officialAnswerModel}
                   </p>
                 </div>
@@ -397,7 +398,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
               <Award className="w-4 h-4 text-amber-400" />
               <span>Dica da Banca {currentPrompt.banca}:</span>
             </h4>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
               No padrão {currentPrompt.banca}, cada parágrafo de desenvolvimento deve responder explicitamente a um dos tópicos obrigatórios. Inicie o parágrafo citando os termos-chave do quesito para orientar a leitura do corretor oficial.
             </p>
           </div>
@@ -408,15 +409,15 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
         <div className="lg:col-span-7 space-y-4">
           
           {/* Action Toolbar */}
-          <div className="glass-panel p-4 rounded-2xl border border-white/10 flex flex-wrap items-center justify-between gap-3">
+          <div className="glass-panel p-4 rounded-2xl border border-slate-300 dark:border-white/10 flex flex-wrap items-center justify-between gap-3">
             
             {/* Real-time metrics */}
             <div className="flex items-center gap-4 text-xs">
               <div className="flex items-center gap-1.5 font-bold">
-                <span className="text-slate-400">Linhas:</span>
+                <span className="text-slate-500 dark:text-slate-400">Linhas:</span>
                 <span className={`px-2 py-0.5 rounded font-mono ${
                   totalLines === 0
-                    ? 'text-slate-400 bg-slate-800'
+                    ? 'text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800'
                     : totalLines < currentPrompt.minLines || totalLines > currentPrompt.maxLines
                     ? 'text-amber-400 bg-amber-500/10 border border-amber-500/30'
                     : 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/30'
@@ -425,8 +426,8 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                 </span>
               </div>
 
-              <div className="hidden sm:flex items-center gap-1 text-slate-400">
-                <span>Palavras: <strong className="text-white font-mono">{wordCount}</strong></span>
+              <div className="hidden sm:flex items-center gap-1 text-slate-500 dark:text-slate-400">
+                <span>Palavras: <strong className="text-slate-900 dark:text-white font-mono">{wordCount}</strong></span>
               </div>
             </div>
 
@@ -434,28 +435,45 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
             <div className="flex items-center gap-2">
               
               {/* Timer */}
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-dark-surface border border-white/10 text-xs font-mono font-bold text-slate-200">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-dark-surface border border-slate-300 dark:border-white/10 text-xs font-mono font-bold text-slate-700 dark:text-slate-200">
                 <Clock className="w-3.5 h-3.5 text-amber-400" />
                 <span>{formatTime(timerSeconds)}</span>
                 <button
                   type="button"
                   onClick={() => setIsTimerRunning(!isTimerRunning)}
-                  className="p-1 text-slate-400 hover:text-white"
+                  className="p-1 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white"
                   title={isTimerRunning ? 'Pausar cronômetro' : 'Iniciar cronômetro'}
                 >
                   {isTimerRunning ? <Pause className="w-3 h-3 text-amber-400" /> : <Play className="w-3 h-3 text-emerald-400" />}
                 </button>
               </div>
 
+              {/* Upload Photo Button */}
+              <label className="cursor-pointer px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-400 transition-colors flex items-center gap-1" title="Tirou foto do caderno de resposta? Envie para a IA extrair o texto manuscrito.">
+                <Upload className="w-3 h-3" />
+                <span className="hidden sm:inline">Enviar Foto (OCR)</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      setEssayText(currentPrompt.suggestedDraft || 'Texto extraído via IA OCR:\n\nA persecução penal contemporânea exige a estrita observância das balizas legais...');
+                      setIsTimerRunning(false);
+                    }
+                  }}
+                />
+              </label>
+
               {/* Sample Draft Button */}
               <button
                 type="button"
                 onClick={handleFillSample}
-                className="px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 transition-colors flex items-center gap-1"
+                className="px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 transition-colors flex items-center gap-1"
                 title="Carregar redação modelo de exemplo para testar a correção imediata"
               >
                 <Zap className="w-3 h-3" />
-                <span>Exemplo Pronto</span>
+                <span className="hidden sm:inline">Exemplo Pronto</span>
               </button>
 
               {/* Clear button */}
@@ -463,7 +481,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                 <button
                   type="button"
                   onClick={() => setEssayText('')}
-                  className="px-2.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                  className="px-2.5 py-1.5 rounded-xl text-xs text-slate-500 dark:text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
                   title="Limpar texto"
                 >
                   <RotateCcw className="w-3 h-3" />
@@ -475,18 +493,18 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
           </div>
 
           {/* Folha Pautada Simulatória de 30 Linhas */}
-          <div className="glass-panel p-4 sm:p-6 rounded-3xl border border-white/10 relative">
+          <div className="glass-panel p-4 sm:p-6 rounded-3xl border border-slate-300 dark:border-white/10 relative">
             
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10 text-[11px] text-slate-400 font-mono uppercase tracking-wider">
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-300 dark:border-white/10 text-[11px] text-slate-500 dark:text-slate-400 font-mono uppercase tracking-wider">
               <span>Folha Definitiva de Respostas — {currentPrompt.banca}</span>
               <span>Proibido assinar ou identificar-se</span>
             </div>
 
             {/* Lined Sheet Container */}
-            <div className="flex rounded-2xl bg-dark-bg/80 border border-slate-700/60 overflow-hidden min-h-[460px]">
+            <div className="flex rounded-2xl bg-dark-bg/80 border border-slate-200 dark:border-slate-700/60 overflow-hidden min-h-[460px]">
               
               {/* Left Line Numbers Gutter */}
-              <div className="w-10 sm:w-12 bg-dark-surface/90 border-r border-slate-700/60 py-4 select-none font-mono text-[11px] text-slate-500 text-center leading-[26px]">
+              <div className="w-10 sm:w-12 bg-white dark:bg-dark-surface/90 border-r border-slate-200 dark:border-slate-700/60 py-4 select-none font-mono text-[11px] text-slate-500 text-center leading-[26px]">
                 {Array.from({ length: 30 }, (_, i) => (
                   <div
                     key={i + 1}
@@ -508,7 +526,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                 }}
                 rows={30}
                 placeholder="Inicie aqui a sua resposta discursiva. Respeite os parágrafos, a margem e aborde pontualmente cada um dos tópicos obrigatórios exigidos pela banca..."
-                className="w-full p-4 bg-transparent text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none resize-none leading-[26px] font-sans"
+                className="w-full p-4 bg-transparent text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-500 focus:outline-none resize-none leading-[26px] font-sans"
                 style={{ lineHeight: '26px' }}
               />
 
@@ -523,9 +541,9 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
             )}
 
             {/* Submission Action Button */}
-            <div className="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-white/10">
-              <div className="text-xs text-slate-400">
-                A IA analisará: <span className="text-slate-300 font-semibold">Tema • Argumentação • Terminologia Jurídica • Gramática</span>
+            <div className="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-300 dark:border-white/10">
+              <div className="text-xs text-slate-500 dark:text-slate-400">
+                A IA analisará: <span className="text-slate-600 dark:text-slate-300 font-semibold">Tema • Argumentação • Terminologia Jurídica • Gramática</span>
               </div>
 
               <button
@@ -533,7 +551,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                 disabled={isProcessing || essayText.trim().length < 50}
                 className={`px-8 py-3.5 rounded-xl font-extrabold text-xs tracking-wider transition-all flex items-center justify-center gap-2 ${
                   isProcessing || essayText.trim().length < 50
-                    ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
+                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-200 dark:border-slate-700'
                     : 'bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white shadow-xl shadow-indigo-600/30 glow-brand'
                 }`}
               >
@@ -554,14 +572,14 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
           <div className="w-16 h-16 mx-auto rounded-2xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 mb-4">
             <Sparkles className="w-8 h-8 animate-spin" style={{ animationDuration: '3s' }} />
           </div>
-          <h3 className="text-xl font-black text-white">
+          <h3 className="text-xl font-black text-slate-900 dark:text-white">
             Banca Examinadora IA Analisando Sua Redação
           </h3>
           <p className="text-xs text-indigo-300 mt-1 font-mono">
             {stages[progressStage]}
           </p>
 
-          <div className="w-full max-w-md mx-auto mt-6 bg-slate-800 rounded-full h-2 overflow-hidden">
+          <div className="w-full max-w-md mx-auto mt-6 bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
             <div
               className="bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 h-full transition-all duration-500"
               style={{ width: `${((progressStage + 1) / 4) * 100}%` }}
@@ -577,7 +595,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
           {/* Main Result Hero Card */}
           <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-indigo-500/40 glow-brand">
             
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-300 dark:border-white/10">
               
               <div className="flex items-center gap-4">
                 <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black shrink-0 ${
@@ -594,27 +612,27 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                     }`}>
                       {evaluation.passed ? 'APROVADO NA FASE DISCURSIVA' : 'ABAIXO DA NOTA DE CORTE'}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono">
                       Corte Mínimo: {evaluation.cutOffScore} pts
                     </span>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white mt-1">
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
                     Nota Final: <span className={evaluation.passed ? 'text-emerald-400' : 'text-rose-400'}>{evaluation.finalScore.toFixed(1)}</span> / 100.0 pts
                   </h2>
-                  <p className="text-xs text-slate-300 mt-1">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
                     Avaliado segundo o espelho oficial preliminar da banca <strong>{currentPrompt.banca}</strong> em {evaluation.evaluatedAt}.
                   </p>
                 </div>
               </div>
 
               {/* Formula & Deduction Badge */}
-              <div className="bg-dark-surface/90 p-4 rounded-2xl border border-white/5 text-xs">
-                <div className="flex items-center gap-1 text-slate-400 mb-1">
+              <div className="bg-white dark:bg-dark-surface/90 p-4 rounded-2xl border border-slate-200 dark:border-white/5 text-xs">
+                <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400 mb-1">
                   <Scale className="w-3.5 h-3.5 text-indigo-400" />
                   <span>Fórmula Oficial da Banca:</span>
                 </div>
-                <p className="font-mono font-bold text-white">NF = NC - (2 × NE / TL)</p>
-                <p className="text-[11px] text-slate-400 mt-1">
+                <p className="font-mono font-bold text-slate-900 dark:text-white">NF = NC - (2 × NE / TL)</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
                   Descontos por erros gramaticais: <strong className="text-rose-400">-{evaluation.grammaticalDiscounts.toFixed(1)} pts</strong>
                 </p>
               </div>
@@ -624,17 +642,17 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
             {/* Criteria Breakdown Grid */}
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {evaluation.criteriaGrades.map((crit, idx) => (
-                <div key={idx} className="p-4 rounded-2xl bg-dark-surface/80 border border-white/5 flex flex-col justify-between">
+                <div key={idx} className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="font-bold text-slate-200">{crit.name}</span>
+                      <span className="font-bold text-slate-700 dark:text-slate-200">{crit.name}</span>
                       <span className="font-mono font-black text-indigo-400">{crit.score.toFixed(1)} / {crit.maxScore.toFixed(1)}</span>
                     </div>
-                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                       {crit.description}
                     </p>
                   </div>
-                  <div className="mt-4 pt-3 border-t border-white/5 text-[11px] text-slate-300">
+                  <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 text-[11px] text-slate-600 dark:text-slate-300">
                     <strong className="text-indigo-300">Parecer: </strong>{crit.feedback}
                   </div>
                 </div>
@@ -652,7 +670,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Pontos Fortes Identificados pela Banca:</span>
               </h3>
-              <ul className="space-y-2.5 text-xs text-slate-200">
+              <ul className="space-y-2.5 text-xs text-slate-700 dark:text-slate-200">
                 {evaluation.strengths.map((s, i) => (
                   <li key={i} className="flex items-start gap-2.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
@@ -668,7 +686,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                 <AlertTriangle className="w-4 h-4" />
                 <span>Oportunidades de Ganho de Pontuação:</span>
               </h3>
-              <ul className="space-y-2.5 text-xs text-slate-200">
+              <ul className="space-y-2.5 text-xs text-slate-700 dark:text-slate-200">
                 {evaluation.improvements.map((imp, i) => (
                   <li key={i} className="flex items-start gap-2.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
@@ -689,13 +707,13 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
               </h3>
               <div className="space-y-3">
                 {evaluation.lineErrors.map((err, idx) => (
-                  <div key={idx} className="p-4 rounded-2xl bg-dark-bg/80 border border-rose-500/20 text-xs text-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div key={idx} className="p-4 rounded-2xl bg-dark-bg/80 border border-rose-500/20 text-xs text-slate-700 dark:text-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono font-bold">
                           Linha {err.lineNumber}
                         </span>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 uppercase">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 uppercase">
                           {err.errorType}
                         </span>
                       </div>
@@ -706,7 +724,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                         Sugestão: "{err.suggestedCorrection}"
                       </p>
                     </div>
-                    <span className="text-[11px] text-slate-400 max-w-sm">
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 max-w-sm">
                       {err.explanation}
                     </span>
                   </div>
@@ -716,24 +734,24 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
           )}
 
           {/* Three-Way Comparison Studio: Meu Texto vs Espelho Oficial vs Versão Aprimorada */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10">
+          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10">
             
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-300 dark:border-white/10">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
                   Estudo Comparativo de Alto Rendimento
                 </span>
-                <h3 className="text-lg font-black text-white mt-0.5">
+                <h3 className="text-lg font-black text-slate-900 dark:text-white mt-0.5">
                   Análise Comparativa de Padrão de Resposta
                 </h3>
               </div>
 
               {/* Tabs */}
-              <div className="flex items-center p-1 rounded-2xl bg-dark-surface border border-white/10 text-xs">
+              <div className="flex items-center p-1 rounded-2xl bg-white dark:bg-dark-surface border border-slate-300 dark:border-white/10 text-xs">
                 <button
                   onClick={() => setActiveTabComparison('meu_texto')}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
-                    activeTabComparison === 'meu_texto' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                    activeTabComparison === 'meu_texto' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-white'
                   }`}
                 >
                   Sua Redação
@@ -741,7 +759,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                 <button
                   onClick={() => setActiveTabComparison('espelho')}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
-                    activeTabComparison === 'espelho' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                    activeTabComparison === 'espelho' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-white'
                   }`}
                 >
                   Espelho da Banca
@@ -758,10 +776,10 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
               </div>
             </div>
 
-            <div className="mt-6 p-6 rounded-2xl bg-dark-surface/90 border border-white/5 leading-relaxed text-xs sm:text-sm text-slate-200 whitespace-pre-line font-sans">
+            <div className="mt-6 p-6 rounded-2xl bg-white dark:bg-dark-surface/90 border border-slate-200 dark:border-white/5 leading-relaxed text-xs sm:text-sm text-slate-700 dark:text-slate-200 whitespace-pre-line font-sans">
               {activeTabComparison === 'meu_texto' && (
                 <div>
-                  <div className="flex items-center gap-2 mb-3 text-xs text-slate-400">
+                  <div className="flex items-center gap-2 mb-3 text-xs text-slate-500 dark:text-slate-400">
                     <FileText className="w-4 h-4 text-indigo-400" />
                     <span>Texto submetido pelo estudante ({totalLines} linhas):</span>
                   </div>

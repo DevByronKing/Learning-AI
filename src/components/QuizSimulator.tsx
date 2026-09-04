@@ -20,19 +20,26 @@ import { Question, QuestionAttempt, Flashcard, UserMetrics } from '@/lib/types';
 import { MOCK_QUESTIONS } from '@/lib/mockData';
 import { CognitiveDiagnosisCard } from './CognitiveDiagnosisCard';
 import { FullMockExamSimulator } from './FullMockExamSimulator';
+import { ExamNotice } from '@/lib/types';
 
 interface QuizSimulatorProps {
   onAddFlashcard: (flashcard: Flashcard) => void;
   onAddFlashcardsBatch?: (flashcards: Flashcard[]) => void;
   onRecordAttempt: (attempt: QuestionAttempt) => void;
   metrics: UserMetrics;
+  exams?: ExamNotice[];
+  selectedExam?: ExamNotice;
+  onSelectExam?: (exam: ExamNotice) => void;
 }
 
 export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
   onAddFlashcard,
   onAddFlashcardsBatch,
   onRecordAttempt,
-  metrics
+  metrics,
+  exams = [],
+  selectedExam,
+  onSelectExam
 }) => {
   const [simulatorMode, setSimulatorMode] = useState<'quick' | 'full_mock' | 'ai_generator'>('quick');
   const [questions, setQuestions] = useState<Question[]>(MOCK_QUESTIONS);
@@ -53,9 +60,13 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
   const [aiIsAnswered, setAiIsAnswered] = useState<boolean>(false);
 
   // Filter questions
+  const filteredByExam = selectedExam 
+    ? questions.filter(q => q.banca === selectedExam.banca) // Simulação: filtra por banca do concurso
+    : questions;
+
   const filteredQuestions = selectedSubjectFilter === 'todas'
-    ? questions
-    : questions.filter((q) => q.subjectId === selectedSubjectFilter || q.subjectName.toLowerCase().includes(selectedSubjectFilter.toLowerCase()));
+    ? filteredByExam
+    : filteredByExam.filter((q) => q.subjectId === selectedSubjectFilter || q.subjectName.toLowerCase().includes(selectedSubjectFilter.toLowerCase()));
 
   const currentQuestion = filteredQuestions[currentIndex] || filteredQuestions[0];
 
@@ -241,13 +252,13 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
       
       {/* Top Mode Switcher Bar */}
       <div className="flex items-center justify-center sm:justify-start mb-6">
-        <div className="inline-flex flex-wrap p-1.5 rounded-2xl bg-dark-surface border border-white/10 text-xs shadow-lg gap-1">
+        <div className="inline-flex flex-wrap p-1.5 rounded-2xl bg-white dark:bg-dark-surface border border-slate-300 dark:border-white/10 text-xs shadow-lg gap-1">
           <button
             onClick={() => setSimulatorMode('quick')}
             className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2 ${
               simulatorMode === 'quick'
                 ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'
             }`}
           >
             <Target className="w-4 h-4" />
@@ -296,20 +307,20 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
               <span>Simulador de Questões Inéditas com IA Preditiva</span>
             </div>
             
-            <h2 className="text-xl font-black text-white">
+            <h2 className="text-xl font-black text-slate-900 dark:text-white">
               Gere Questões Nunca Vistas no Estilo Exato da Banca
             </h2>
-            <p className="text-xs text-slate-300">
+            <p className="text-xs text-slate-600 dark:text-slate-300">
               Já decorou as questões anteriores? Nossa IA replica a semântica do Cebraspe, os casos práticos da FGV e a literalidade da FCC.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
               <div>
-                <label className="text-[11px] font-bold text-slate-400 uppercase block mb-1">Banca Alvo:</label>
+                <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1">Banca Alvo:</label>
                 <select
                   value={aiBanca}
                   onChange={(e) => setAiBanca(e.target.value as any)}
-                  className="w-full bg-dark-bg border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500"
+                  className="w-full bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-purple-500"
                 >
                   <option value="Cebraspe">Cebraspe (Certo / Errado)</option>
                   <option value="FGV">FGV (Casos Práticos A-E)</option>
@@ -319,11 +330,11 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-slate-400 uppercase block mb-1">Disciplina:</label>
+                <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1">Disciplina:</label>
                 <select
                   value={aiSubject}
                   onChange={(e) => setAiSubject(e.target.value)}
-                  className="w-full bg-dark-bg border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500"
+                  className="w-full bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-purple-500"
                 >
                   <option value="Direito Constitucional">Direito Constitucional</option>
                   <option value="Direito Administrativo">Direito Administrativo</option>
@@ -335,11 +346,11 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-slate-400 uppercase block mb-1">Nível de Rigor:</label>
+                <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1">Nível de Rigor:</label>
                 <select
                   value={aiDifficulty}
                   onChange={(e) => setAiDifficulty(e.target.value)}
-                  className="w-full bg-dark-bg border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500"
+                  className="w-full bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-purple-500"
                 >
                   <option value="Moderado (Nível Técnico/Analista)">Moderado (Técnico/Analista)</option>
                   <option value="Alta Maldade (Nível Auditor / Juiz)">Alta Maldade (Auditor / Juiz)</option>
@@ -370,23 +381,23 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
 
           {/* Generated Question Display */}
           {generatedQuestion && (
-            <div className="p-6 rounded-3xl bg-dark-surface border border-purple-500/20 shadow-2xl space-y-6 animate-fadeIn">
+            <div className="p-6 rounded-3xl bg-white dark:bg-dark-surface border border-purple-500/20 shadow-2xl space-y-6 animate-fadeIn">
               
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-300 dark:border-white/10 pb-4">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-bold text-xs border border-purple-500/30">
                     QUESTÃO INÉDITA IA
                   </span>
-                  <span className="text-xs font-bold text-slate-300">
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
                     {generatedQuestion.banca} • {generatedQuestion.subjectName}
                   </span>
                 </div>
-                <span className="text-[11px] text-slate-400">{generatedQuestion.topicName}</span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400">{generatedQuestion.topicName}</span>
               </div>
 
               {/* Statement */}
-              <div className="bg-dark-bg p-5 rounded-2xl border border-white/5">
-                <p className="text-sm sm:text-base text-slate-100 whitespace-pre-line leading-relaxed font-medium">
+              <div className="bg-dark-bg p-5 rounded-2xl border border-slate-200 dark:border-white/5">
+                <p className="text-sm sm:text-base text-slate-800 dark:text-slate-100 whitespace-pre-line leading-relaxed font-medium">
                   {generatedQuestion.statement}
                 </p>
               </div>
@@ -395,7 +406,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
               <div className="space-y-2.5">
                 {generatedQuestion.options.map((option) => {
                   const isSelected = aiSelectedOptionId === option.id;
-                  let style = 'bg-dark-bg/60 border-white/10 text-slate-200 hover:border-white/20';
+                  let style = 'bg-dark-bg/60 border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-200 hover:border-white/20';
 
                   if (aiIsAnswered) {
                     if (option.isCorrect) {
@@ -439,9 +450,9 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                   <div className="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-500/30 text-xs space-y-2">
                     <div className="flex items-center justify-between font-bold text-indigo-300">
                       <span>Fundamentação e Justificativa da IA:</span>
-                      <span className="text-slate-400 font-mono text-[10px]">{generatedQuestion.codeCitation}</span>
+                      <span className="text-slate-500 dark:text-slate-400 font-mono text-[10px]">{generatedQuestion.codeCitation}</span>
                     </div>
-                    <p className="text-slate-200 leading-relaxed">{generatedQuestion.explanation}</p>
+                    <p className="text-slate-700 dark:text-slate-200 leading-relaxed">{generatedQuestion.explanation}</p>
                     <div className="bg-dark-bg/80 p-3 rounded-xl border border-indigo-500/10 text-indigo-200">
                       💡 <strong>Pegadinha Evitada:</strong> {generatedQuestion.cognitiveAnalysis.commonTrap}
                     </div>
@@ -482,22 +493,45 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
       ) : (
         <div className="max-w-5xl mx-auto">
           {/* Header & Filter Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-300 dark:border-white/10">
             <div>
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold">
                   Simulador Cognitivo
                 </span>
-                <span className="text-xs text-slate-400">Questões Comentadas por IA</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Questões Comentadas por IA</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white mt-1">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
                 Treino Adaptativo de Questões
               </h1>
             </div>
 
         {/* Filter Dropdown */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
+        <div className="flex flex-col sm:flex-row items-center gap-3">
+          {/* Exam Selector */}
+          {exams.length > 0 && onSelectExam && (
+            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+              <span>Concurso:</span>
+              <select
+                value={selectedExam?.id || ''}
+                onChange={(e) => {
+                  const exam = exams.find(ex => ex.id === e.target.value);
+                  if (exam) onSelectExam(exam);
+                  setCurrentIndex(0);
+                  setIsAnswered(false);
+                  setSelectedOptionId(null);
+                }}
+                className="px-3 py-2 rounded-xl glass-input text-xs text-slate-900 dark:text-white font-medium cursor-pointer"
+              >
+                {exams.map(exam => (
+                  <option key={exam.id} value={exam.id}>{exam.title}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Subject Filter */}
+          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
             <Filter className="w-3.5 h-3.5" />
             <span>Matéria:</span>
           </div>
@@ -509,7 +543,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
               setIsAnswered(false);
               setSelectedOptionId(null);
             }}
-            className="px-3 py-2 rounded-xl glass-input text-xs text-white font-medium cursor-pointer"
+            className="px-3 py-2 rounded-xl glass-input text-xs text-slate-900 dark:text-white font-medium cursor-pointer"
           >
             <option value="todas">Todas as Disciplinas</option>
             <option value="sub-dir-prev">Direito Previdenciário (Peso 3)</option>
@@ -523,32 +557,32 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
         <div className="mt-8">
           
           {/* Question Meta Bar */}
-          <div className="glass-panel p-4 rounded-2xl border border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs mb-6">
+          <div className="glass-panel p-4 rounded-2xl border border-slate-300 dark:border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs mb-6">
             <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">
                 {currentQuestion.banca} • {currentQuestion.year}
               </span>
-              <span className="px-2.5 py-1 rounded-lg bg-dark-card text-slate-300 border border-slate-700 font-semibold">
+              <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-dark-card text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-semibold">
                 {currentQuestion.subjectName}
               </span>
-              <span className="px-2.5 py-1 rounded-lg bg-dark-card text-slate-400 border border-slate-700">
+              <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-dark-card text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                 {currentQuestion.topicName}
               </span>
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5 text-slate-300 font-mono font-bold bg-dark-surface px-3 py-1 rounded-xl border border-white/5">
+              <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-mono font-bold bg-white dark:bg-dark-surface px-3 py-1 rounded-xl border border-slate-200 dark:border-white/5">
                 <Clock className="w-3.5 h-3.5 text-amber-400" />
                 <span>{formatTimer(timeSpentSeconds)}</span>
               </div>
-              <span className="text-slate-400 font-semibold">
+              <span className="text-slate-500 dark:text-slate-400 font-semibold">
                 Questão {currentIndex + 1} de {filteredQuestions.length}
               </span>
             </div>
           </div>
 
           {/* Statement Box */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10">
+          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10">
             
             {currentQuestion.codeCitation && (
               <div className="mb-4 text-[11px] font-mono text-indigo-400 flex items-center gap-1.5">
@@ -559,7 +593,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
               </div>
             )}
 
-            <p className="text-sm sm:text-base text-slate-100 font-normal leading-relaxed whitespace-pre-line">
+            <p className="text-sm sm:text-base text-slate-800 dark:text-slate-100 font-normal leading-relaxed whitespace-pre-line">
               {currentQuestion.statement}
             </p>
 
@@ -567,7 +601,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
             <div className="mt-8 space-y-3">
               {currentQuestion.options.map((option, idx) => {
                 const isSelected = selectedOptionId === option.id;
-                let optionStyle = 'bg-dark-surface/80 border-white/5 hover:border-indigo-500/50 text-slate-200';
+                let optionStyle = 'bg-white dark:bg-dark-surface/80 border-slate-200 dark:border-white/5 hover:border-indigo-500/50 text-slate-700 dark:text-slate-200';
 
                 if (isSelected && !isAnswered) {
                   optionStyle = 'bg-indigo-600/20 border-indigo-500 text-white ring-2 ring-indigo-400/50';
@@ -577,7 +611,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                   } else if (isSelected && !option.isCorrect) {
                     optionStyle = 'bg-rose-500/20 border-rose-500 text-rose-200 ring-2 ring-rose-400/40';
                   } else {
-                    optionStyle = 'opacity-40 bg-dark-surface/40 border-transparent text-slate-400';
+                    optionStyle = 'opacity-40 bg-white dark:bg-dark-surface/40 border-transparent text-slate-500 dark:text-slate-400';
                   }
                 }
 
@@ -590,7 +624,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                     className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-start gap-3.5 ${optionStyle}`}
                   >
                     <div className={`w-7 h-7 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 transition-colors ${
-                      isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-slate-400 border border-slate-700'
+                      isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700'
                     }`}>
                       {String.fromCharCode(65 + idx)}
                     </div>
@@ -602,11 +636,11 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
 
             {/* Confidence Selector & Confirm Button (Before Answering) */}
             {!isAnswered && (
-              <div className="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="mt-8 pt-6 border-t border-slate-300 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 
                 {/* Confidence Buttons */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 mb-2">
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">
                     Grau de Convicção na Resposta (Calibragem do Diagnóstico):
                   </label>
                   <div className="flex items-center gap-2">
@@ -622,7 +656,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                         className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                           confidence === c.id
                             ? 'bg-indigo-600/30 border border-indigo-500 text-indigo-300'
-                            : 'bg-dark-card border border-slate-700 text-slate-400 hover:text-slate-200'
+                            : 'bg-white dark:bg-dark-card border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-200'
                         }`}
                       >
                         {c.label}
@@ -638,7 +672,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                   className={`px-8 py-3.5 rounded-xl font-extrabold text-xs tracking-wider transition-all flex items-center justify-center gap-2 ${
                     selectedOptionId
                       ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white shadow-lg shadow-indigo-600/30 glow-brand'
-                      : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-200 dark:border-slate-700'
                   }`}
                 >
                   <CheckCircle2 className="w-4 h-4" />
@@ -664,7 +698,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
 
         </div>
       ) : (
-        <div className="text-center py-16 text-slate-400">
+        <div className="text-center py-16 text-slate-500 dark:text-slate-400">
           Nenhuma questão encontrada para este filtro.
         </div>
       )}

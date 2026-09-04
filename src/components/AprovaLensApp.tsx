@@ -324,7 +324,7 @@ export function AprovaLensApp() {
 
   return (
     <div className={`min-h-screen flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200 transition-colors duration-300 relative ${
-      theme === 'light' ? 'app-bg-light text-slate-900 light' : 'app-bg-dark text-slate-100 dark'
+      theme === 'light' ? 'app-bg-light text-slate-900 light' : 'app-bg-dark text-slate-800 dark:text-slate-100 dark'
     }`}>
       
       {/* Ambient Background Glow Mesh Layer (Visível em ambos os modos) */}
@@ -408,6 +408,9 @@ export function AprovaLensApp() {
             onAddFlashcardsBatch={handleAddFlashcardsBatch}
             onRecordAttempt={handleRecordAttempt}
             metrics={metrics}
+            exams={exams}
+            selectedExam={selectedExam}
+            onSelectExam={handleSelectExam}
           />
         )}
 
