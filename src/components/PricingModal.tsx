@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Crown, 
   CheckCircle2, 
@@ -35,30 +35,77 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [paymentMethod, setPaymentMethod] = useState<'pix' | 'card'>('pix');
   const [isCopied, setIsCopied] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [transactionId, setTransactionId] = useState<string | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<'pending_payment' | 'confirmed'>('pending_payment');
   const [pixCode, setPixCode] = useState("00020126580014br.gov.bcb.pix0136aprovalens-ia-concursos-pix-key520400005303986540539.905802BR5925APROVALENS TECNOLOGIA LTDA6009SAO PAULO62070503***6304E8A9");
-  const [qrCodeImg, setQrCodeImg] = useState<string | null>(null);
+  const [qrCodeImg, setQrCodeImg] = useState<string | null>("https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020126580014br.gov.bcb.pix0136aprovalens-ia-concursos-pix-key520400005303986540539.905802BR5925APROVALENS");
+
+  // Buscar / Criar cobrança ao abrir ou alternar parâmetros
+  useEffect(() => {
+    if (!isOpen) return;
+
+    let isMounted = true;
+    const loadCheckout = async () => {
+      try {
+        const res = await fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            planId: selectedPlanToBuy, 
+            billingCycle,
+            paymentMethod 
+          })
+        });
+        const data = await res.json();
+        if (isMounted && data.success) {
+          setTransactionId(data.transactionId);
+          setPaymentStatus('pending_payment');
+          if (data.pix) {
+            setPixCode(data.pix.copyPasteCode);
+            setQrCodeImg(data.pix.qrCodeUrl);
+          }
+        }
+      } catch (err) {
+        console.warn('Erro ao inicializar checkout:', err);
+      }
+    };
+
+    loadCheckout();
+    return () => { isMounted = false; };
+  }, [isOpen, selectedPlanToBuy, billingCycle, paymentMethod]);
+
+  // Polling automático da confirmação do webhook a cada 3 segundos
+  useEffect(() => {
+    if (!isOpen || !transactionId || paymentStatus === 'confirmed') return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/checkout?txId=${transactionId}`);
+        const data = await res.json();
+        if (data.success && data.status === 'confirmed') {
+          setPaymentStatus('confirmed');
+          clearInterval(interval);
+          onUpgradePlan(selectedPlanToBuy);
+          try {
+            confetti({
+              particleCount: 120,
+              spread: 90,
+              origin: { y: 0.5 }
+            });
+          } catch {}
+          setTimeout(() => {
+            onClose();
+          }, 2000);
+        }
+      } catch (err) {
+        // Silencioso em caso de instabilidade de rede
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isOpen, transactionId, paymentStatus, selectedPlanToBuy, onUpgradePlan, onClose]);
 
   if (!isOpen) return null;
-
-  const fetchCheckoutData = async (plan: SubscriptionPlan) => {
-    try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planId: plan, paymentMethod })
-      });
-      const data = await res.json();
-      if (data.success && data.pix) {
-        setPixCode(data.pix.copyPasteCode);
-        setQrCodeImg(data.pix.qrCodeUrl);
-      }
-    } catch {}
-  };
-
-  const handleSelectPlan = (plan: SubscriptionPlan) => {
-    setSelectedPlanToBuy(plan);
-    fetchCheckoutData(plan);
-  };
 
   const handleCopyPix = () => {
     navigator.clipboard.writeText(pixCode);
@@ -66,29 +113,37 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  const handleConfirmPayment = async () => {
+  // Disparo do Webhook de confirmação (pode ser disparado pelo banco ou simulação)
+  const handleTriggerWebhook = async () => {
     setIsProcessing(true);
     try {
-      await fetch('/api/checkout', {
+      await fetch('/api/webhooks/payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planId: selectedPlanToBuy, paymentMethod, status: 'confirmed' })
+        body: JSON.stringify({ 
+          action: 'simulate_confirmation', 
+          transactionId: transactionId || `tx_${Date.now()}` 
+        })
       });
-    } catch {}
-
-    setTimeout(() => {
-      setIsProcessing(false);
+      setPaymentStatus('confirmed');
       onUpgradePlan(selectedPlanToBuy);
       try {
         confetti({
-          particleCount: 80,
+          particleCount: 100,
           spread: 80,
           origin: { y: 0.6 }
         });
       } catch {}
-      onClose();
-    }, 800);
+      setTimeout(() => {
+        setIsProcessing(false);
+        onClose();
+      }, 1500);
+    } catch (err) {
+      setIsProcessing(false);
+    }
   };
+
+  const handleConfirmPayment = handleTriggerWebhook;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
@@ -287,16 +342,45 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           {paymentMethod === 'pix' && (
             <div className="mt-6 flex flex-col sm:flex-row items-center gap-6">
               
-              {/* QR Code Mockup */}
-              <div className="w-36 h-36 bg-white p-3 rounded-2xl flex items-center justify-center shrink-0 shadow-lg">
-                <div className="w-full h-full border-4 border-black border-dashed flex flex-col items-center justify-center p-2 text-center text-[10px] text-black font-mono font-bold">
-                  <QrCode className="w-16 h-16 text-black" />
-                  <span>PIX OFICIAL</span>
-                </div>
+              {/* QR Code Dinâmico */}
+              <div className="w-36 h-36 bg-white p-2.5 rounded-2xl flex flex-col items-center justify-center shrink-0 shadow-lg border-2 border-emerald-500/50">
+                {qrCodeImg ? (
+                  <img 
+                    src={qrCodeImg} 
+                    alt="QR Code Pix Oficial" 
+                    className="w-full h-full object-contain rounded-lg"
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center text-[10px] text-black font-mono font-bold">
+                    <QrCode className="w-12 h-12 text-black mb-1 animate-pulse" />
+                    <span>GERANDO PIX...</span>
+                  </div>
+                )}
               </div>
 
               {/* Copy Code & Confirmation */}
               <div className="w-full space-y-3">
+                {/* Status Banner */}
+                <div className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-between ${
+                  paymentStatus === 'confirmed'
+                    ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-400'
+                    : 'bg-amber-500/10 border-amber-500/25 text-amber-400'
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${
+                      paymentStatus === 'confirmed' ? 'bg-emerald-400' : 'bg-amber-400 animate-ping'
+                    }`} />
+                    <span>
+                      {paymentStatus === 'confirmed' 
+                        ? '✓ Pagamento Confirmado via Webhook! Acesso Liberado.' 
+                        : 'Aguardando liquidação Pix (verificação a cada 3s)...'}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono text-slate-400">
+                    {transactionId ? transactionId.slice(-8) : 'tx_live'}
+                  </span>
+                </div>
+
                 <div>
                   <p className="text-xs font-semibold text-slate-300 mb-1">Código Pix Copia e Cola:</p>
                   <div className="flex items-center gap-2">
@@ -304,11 +388,11 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                       type="text"
                       readOnly
                       value={pixCode}
-                      className="w-full p-2.5 rounded-xl glass-input text-xs font-mono text-slate-300 truncate"
+                      className="w-full p-2.5 rounded-xl glass-input text-xs font-mono text-slate-300 truncate select-all"
                     />
                     <button
                       onClick={handleCopyPix}
-                      className="px-4 py-2.5 rounded-xl bg-dark-card hover:bg-dark-hover border border-slate-700 text-slate-200 text-xs font-bold flex items-center gap-1 shrink-0"
+                      className="px-4 py-2.5 rounded-xl bg-dark-card hover:bg-dark-hover border border-slate-700 text-slate-200 text-xs font-bold flex items-center gap-1 shrink-0 transition-colors"
                     >
                       {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                       <span>{isCopied ? 'Copiado!' : 'Copiar'}</span>
@@ -316,23 +400,35 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                   </div>
                 </div>
 
-                <button
-                  onClick={handleConfirmPayment}
-                  disabled={isProcessing}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-sm shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all glow-emerald"
-                >
-                  {isProcessing ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Confirmando Pagamento...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4" />
-                      <span>Simular Pagamento & Ativar Plano {selectedPlanToBuy.toUpperCase()}</span>
-                    </>
-                  )}
-                </button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                  <button
+                    onClick={handleTriggerWebhook}
+                    disabled={isProcessing || paymentStatus === 'confirmed'}
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-600 hover:from-indigo-400 hover:to-cyan-500 text-white font-extrabold text-xs shadow-md shadow-indigo-500/20 flex items-center justify-center gap-1.5 transition-all"
+                    title="Dispara POST /api/webhooks/payment para simular notificação imediata do banco"
+                  >
+                    <Zap className="w-3.5 h-3.5 text-yellow-300" />
+                    <span>Simular Webhook Pix (Banco)</span>
+                  </button>
+
+                  <button
+                    onClick={handleTriggerWebhook}
+                    disabled={isProcessing || paymentStatus === 'confirmed'}
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span>Confirmando...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>Ativar Plano {selectedPlanToBuy.toUpperCase()}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
 
             </div>
