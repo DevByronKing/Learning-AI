@@ -2,10 +2,10 @@ import type { Metadata, Viewport } from 'next';
 import '../styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'AprovaLens AI - O Copiloto Cognitivo para Concursos, OAB e ENEM',
+  title: 'Learning AI - O Copiloto Cognitivo para Concursos, OAB e ENEM',
   description: 'Disseque editais com IA, diagnostique a raiz dos seus erros em questões e gere cronogramas adaptativos de alta performance.',
-  keywords: ['concursos públicos', 'edital verticalizado', 'inteligência artificial concursos', 'simulador de questões', 'OAB', 'ENEM', 'diagnóstico de erros'],
-  authors: [{ name: 'AprovaLens AI Team' }],
+  keywords: ['Learning AI', 'concursos públicos', 'edital verticalizado', 'inteligência artificial concursos', 'simulador de questões', 'OAB', 'ENEM', 'diagnóstico de erros'],
+  authors: [{ name: 'Learning AI Team' }],
 };
 
 export const viewport: Viewport = {

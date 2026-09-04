@@ -38,6 +38,7 @@ export function AprovaLensApp() {
   const [flashcards, setFlashcards] = useState<Flashcard[]>(INITIAL_FLASHCARDS);
   const [mistakes, setMistakes] = useState<MistakeEntry[]>(INITIAL_MISTAKES);
   const [plan, setPlan] = useState<SubscriptionPlan>('aspirante');
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [isPricingOpen, setIsPricingOpen] = useState(false);
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -53,6 +54,19 @@ export function AprovaLensApp() {
 
       const savedMistakes = localStorage.getItem('aprovalens_mistakes');
       if (savedMistakes) setMistakes(JSON.parse(savedMistakes));
+
+      // Carregar preferência de tema (Claro / Escuro)
+      const savedTheme = localStorage.getItem('learning_ai_theme') as 'dark' | 'light';
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        setTheme(savedTheme);
+        if (savedTheme === 'light') {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+        } else {
+          document.documentElement.classList.remove('light');
+          document.documentElement.classList.add('dark');
+        }
+      }
 
       // Captura de parâmetros de URL originados de Landing Pages de SEO (?edital=...&tab=...)
       if (typeof window !== 'undefined') {
@@ -81,6 +95,22 @@ export function AprovaLensApp() {
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleToggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    try {
+      localStorage.setItem('learning_ai_theme', nextTheme);
+    } catch {}
+    if (nextTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+    }
+    showToast(nextTheme === 'light' ? '☀️ Modo Claro ativado!' : '🌙 Modo Escuro ativado!');
   };
 
   const handleSelectExam = (exam: ExamNotice) => {
@@ -288,7 +318,9 @@ export function AprovaLensApp() {
   const pendingMistakesCount = mistakes.filter((m) => !m.isOvercome).length;
 
   return (
-    <div className="min-h-screen bg-dark-bg text-slate-100 flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200">
+    <div className={`min-h-screen flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200 transition-colors duration-300 ${
+      theme === 'light' ? 'app-bg-light text-slate-900 light' : 'app-bg-dark text-slate-100 dark'
+    }`}>
       
       {/* Toast Notification */}
       {toastMessage && (
@@ -298,7 +330,7 @@ export function AprovaLensApp() {
         </div>
       )}
 
-      {/* Global Navbar */}
+      {/* Global Navbar com alternância de tema */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -309,6 +341,8 @@ export function AprovaLensApp() {
         pendingMistakesCount={pendingMistakesCount}
         onOpenCopilot={() => setIsCopilotOpen(true)}
         isSupabaseConfigured={isSupabaseConfigured()}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
       />
 
       {/* Main Content Area */}
