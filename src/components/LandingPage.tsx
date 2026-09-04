@@ -64,7 +64,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-dark-bg text-slate-100 overflow-hidden">
+    <div className="min-h-screen overflow-hidden">
       
       {/* Background Glow Blobs */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] pointer-events-none overflow-hidden -z-10">
@@ -77,23 +77,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto text-center">
         
         {/* Top Announcement Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold mb-8 backdrop-blur-md glow-brand">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold mb-8 backdrop-blur-md glow-brand">
           <Sparkles className="w-3.5 h-3.5 text-indigo-400 animate-spin" style={{ animationDuration: '4s' }} />
           <span>Nova IA 2.0: Detecção de Pegadinhas das Bancas FGV, Cebraspe e FCC</span>
           <ArrowRight className="w-3 h-3 text-indigo-400" />
         </div>
 
         {/* Main Headline */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white max-w-4xl mx-auto leading-[1.1]">
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight max-w-4xl mx-auto leading-[1.1]">
           Pare de colecionar PDFs. <br />
-          <span className="bg-gradient-to-r from-indigo-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
             Deixe a IA mapear seus pontos cegos.
           </span>
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-6 text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
-          O <strong className="text-white font-semibold">AprovaLens</strong> disseca o edital do seu concurso em segundos, gera um cronograma dinâmico que não quebra no primeiro imprevisto e diagnostica a causa psicológica exata de cada erro nas questões.
+        <p className="mt-6 text-lg sm:text-xl text-slate-400 dark:text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
+          O <strong className="font-bold text-indigo-500">Learning AI</strong> disseca o edital do seu concurso em segundos, gera um cronograma dinâmico que não quebra no primeiro imprevisto e diagnostica a causa psicológica exata de cada erro nas questões.
         </p>
 
         {/* CTA Buttons */}

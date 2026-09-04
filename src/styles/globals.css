@@ -3,114 +3,108 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 222 47% 5%;
-    --foreground: 210 40% 98%;
-    --card: 222 47% 8%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 47% 8%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 239 84% 67%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217 33% 17%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217 33% 20%;
-    --input: 217 33% 20%;
-    --ring: 239 84% 67%;
+  :root, html.dark {
+    --bg-canvas: #080C14;
+    --bg-surface: #0F172A;
+    --bg-card: #131E35;
+    --bg-card-hover: #1A2847;
+    --bg-input: rgba(15, 23, 42, 0.7);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --text-primary: #F8FAFC;
+    --text-secondary: #CBD5E1;
+    --text-muted: #94A3B8;
+    --ambient-mesh: 
+      radial-gradient(ellipse 80% 55% at 10% 5%, rgba(99, 102, 241, 0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 90% 12%, rgba(6, 182, 212, 0.16) 0%, transparent 55%),
+      radial-gradient(ellipse 65% 65% at 50% 95%, rgba(139, 92, 246, 0.14) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 70%, rgba(99, 102, 241, 0.10) 0%, transparent 50%);
   }
 
   html.light {
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
+    --bg-canvas: #F8FAFC;
+    --bg-surface: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #F1F5F9;
+    --bg-input: #FFFFFF;
+    --border-subtle: rgba(226, 232, 240, 0.9);
+    --border-strong: rgba(203, 213, 225, 0.9);
+    --text-primary: #0F172A;
+    --text-secondary: #334155;
+    --text-muted: #64748B;
+    --ambient-mesh: 
+      radial-gradient(ellipse 80% 55% at 10% 5%, rgba(99, 102, 241, 0.10) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 50% at 90% 12%, rgba(6, 182, 212, 0.09) 0%, transparent 50%),
+      radial-gradient(ellipse 65% 65% at 50% 95%, rgba(139, 92, 246, 0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 20% 70%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
   }
 
   body {
-    @apply min-h-screen antialiased transition-colors duration-300;
+    background-color: var(--bg-canvas);
+    background-image: var(--ambient-mesh);
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: var(--text-primary);
+    min-height: 100vh;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
 /* ==============================================================================
-   AMBIENT BACKGROUNDS: MODO ESCURO E MODO CLARO
+   CLASSES DE AMBIENTE & FUNDOS PERSONALIZADOS
    ============================================================================== */
 
-/* Fundo Modo Escuro: Profundo, elegante com nebulosas sutis em azul/violeta/ciano */
 .app-bg-dark {
-  background-color: #080C15;
+  background-color: #080C14;
   background-image: 
-    radial-gradient(ellipse 70% 55% at 12% 8%, rgba(99, 102, 241, 0.16) 0%, transparent 60%),
-    radial-gradient(ellipse 65% 50% at 88% 12%, rgba(6, 182, 212, 0.12) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 60% at 50% 95%, rgba(139, 92, 246, 0.10) 0%, transparent 60%);
+    radial-gradient(ellipse 80% 55% at 10% 5%, rgba(99, 102, 241, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 90% 12%, rgba(6, 182, 212, 0.16) 0%, transparent 55%),
+    radial-gradient(ellipse 65% 65% at 50% 95%, rgba(139, 92, 246, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 70%, rgba(99, 102, 241, 0.10) 0%, transparent 50%);
   background-attachment: fixed;
-  color: #f1f5f9;
+  color: #F8FAFC;
 }
 
-/* Fundo Modo Claro: Cristalino, moderno com gradientes astrais suaves e legibilidade impecável */
 .app-bg-light {
   background-color: #F8FAFC;
   background-image: 
-    radial-gradient(ellipse 70% 55% at 10% 8%, rgba(99, 102, 241, 0.08) 0%, transparent 55%),
-    radial-gradient(ellipse 65% 50% at 90% 12%, rgba(6, 182, 212, 0.07) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 50% at 50% 92%, rgba(139, 92, 246, 0.06) 0%, transparent 55%);
+    radial-gradient(ellipse 80% 55% at 10% 5%, rgba(99, 102, 241, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 90% 12%, rgba(6, 182, 212, 0.09) 0%, transparent 50%),
+    radial-gradient(ellipse 65% 65% at 50% 95%, rgba(139, 92, 246, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 20% 70%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
   background-attachment: fixed;
-  color: #0f172a;
+  color: #0F172A;
 }
 
-/* Glassmorphism Classes (Dark Mode) */
+/* Glassmorphism Dinâmico */
 .glass-panel {
-  background: rgba(17, 24, 40, 0.75);
+  background: var(--bg-surface);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.light .glass-panel {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(226, 232, 240, 0.85);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-subtle);
 }
 
 .glass-card {
-  background: rgba(17, 24, 39, 0.75);
+  background: var(--bg-card);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(99, 102, 241, 0.15);
+  border: 1px solid var(--border-subtle);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.light .glass-card {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  box-shadow: 0 4px 16px -2px rgba(99, 102, 241, 0.08);
 }
 
 .glass-card:hover {
   border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.12);
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.14);
   transform: translateY(-2px);
 }
 
 .glass-input {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
   backdrop-filter: blur(8px);
-  color: #f8fafc;
-}
-
-.light .glass-input {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(203, 213, 225, 0.9);
-  color: #0f172a;
+  color: var(--text-primary);
 }
 
 .glass-input:focus {
@@ -151,22 +145,119 @@
   background: #475569;
 }
 
-.light ::-webkit-scrollbar-thumb {
+html.light ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
 }
 
-.light ::-webkit-scrollbar-thumb:hover {
+html.light ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
-/* Shimmer animation for AI Processing */
+/* ==============================================================================
+   REGRAS DE ESTILO GLOBAIS PARA MODO CLARO
+   Garante contraste perfeito e legibilidade em cards, textos e inputs
+   ============================================================================== */
+
+html.light {
+  color-scheme: light;
+}
+
+html.light .glass-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+html.light .glass-panel {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.06);
+}
+
+html.light .glass-input {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+/* Inversão inteligente de cards com fundos escuros fixos para Modo Claro */
+html.light .bg-\[\#11182c\],
+html.light .bg-\[\#111726\],
+html.light .bg-\[\#0d1322\],
+html.light .bg-\[\#0a0f1d\],
+html.light .bg-\[\#161F33\],
+html.light .bg-\[\#16203a\],
+html.light .bg-\[\#0e1424\] {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(226, 232, 240, 0.95) !important;
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Inversão de bordas sutis para modo claro */
+html.light .border-white\/5,
+html.light .border-white\/10,
+html.light .border-white\/15,
+html.light .border-white\/20 {
+  border-color: rgba(226, 232, 240, 0.95) !important;
+}
+
+html.light .bg-white\/5 {
+  background-color: rgba(241, 245, 249, 0.85) !important;
+}
+
+html.light .bg-white\/10 {
+  background-color: rgba(226, 232, 240, 0.85) !important;
+}
+
+/* Textos de títulos e parágrafos adaptados no Modo Claro */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6 {
+  color: #0f172a !important;
+}
+
+/* Ajusta textos brancos para escuros, exceto quando dentro de botões ou badges coloridos */
+html.light p.text-slate-300,
+html.light p.text-slate-200,
+html.light span.text-slate-300,
+html.light span.text-slate-200 {
+  color: #334155 !important;
+}
+
+html.light .text-slate-400 {
+  color: #64748b !important;
+}
+
+html.light span.text-white,
+html.light div.text-white,
+html.light p.text-white,
+html.light strong.text-white {
+  color: #0f172a;
+}
+
+/* Preserva texto branco em botões e elementos coloridos vibrantes */
+html.light button[class*="bg-indigo"],
+html.light button[class*="bg-rose"],
+html.light button[class*="bg-emerald"],
+html.light button[class*="bg-purple"],
+html.light button[class*="bg-gradient"],
+html.light a[class*="bg-indigo"],
+html.light a[class*="bg-gradient"],
+html.light .badge-color,
+html.light [class*="bg-gradient-to-"] span,
+html.light [class*="bg-gradient-to-"] .text-white,
+html.light button.text-white,
+html.light a.text-white {
+  color: #ffffff !important;
+}
+
+/* Animações e Utilitários */
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .animate-shimmer {
@@ -175,7 +266,6 @@
   animation: shimmer 2s infinite;
 }
 
-/* Hide scrollbar utilities */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

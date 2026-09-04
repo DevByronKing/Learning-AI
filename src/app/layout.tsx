@@ -20,23 +20,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className="dark" suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                  for (var r of registrations) {
-                    r.unregister();
-                  }
-                });
-              }
+              (function() {
+                try {
+                  var saved = localStorage.getItem('learning_ai_theme');
+                  var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                  document.documentElement.classList.remove('light', 'dark');
+                  document.documentElement.classList.add(theme);
+                } catch(e) {}
+                if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+                  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for (var r of registrations) {
+                      r.unregister();
+                    }
+                  });
+                }
+              })();
             `,
           }}
         />
       </head>
-      <body className="bg-[#090D16] text-slate-100 min-h-screen antialiased" suppressHydrationWarning>
+      <body className="min-h-screen antialiased selection:bg-indigo-500/30 selection:text-indigo-300" suppressHydrationWarning>
         {children}
       </body>
     </html>

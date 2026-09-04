@@ -56,16 +56,13 @@ export function AprovaLensApp() {
       if (savedMistakes) setMistakes(JSON.parse(savedMistakes));
 
       // Carregar preferência de tema (Claro / Escuro)
-      const savedTheme = localStorage.getItem('learning_ai_theme') as 'dark' | 'light';
-      if (savedTheme === 'light' || savedTheme === 'dark') {
-        setTheme(savedTheme);
-        if (savedTheme === 'light') {
-          document.documentElement.classList.remove('dark');
-          document.documentElement.classList.add('light');
-        } else {
-          document.documentElement.classList.remove('light');
-          document.documentElement.classList.add('dark');
-        }
+      const savedTheme = (localStorage.getItem('learning_ai_theme') as 'dark' | 'light') || 'dark';
+      setTheme(savedTheme);
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add(savedTheme);
+      if (typeof document !== 'undefined' && document.body) {
+        document.body.classList.remove('light', 'dark');
+        document.body.classList.add(savedTheme);
       }
 
       // Captura de parâmetros de URL originados de Landing Pages de SEO (?edital=...&tab=...)
@@ -106,9 +103,17 @@ export function AprovaLensApp() {
     if (nextTheme === 'light') {
       document.documentElement.classList.remove('dark');
       document.documentElement.classList.add('light');
+      if (document.body) {
+        document.body.classList.remove('dark');
+        document.body.classList.add('light');
+      }
     } else {
       document.documentElement.classList.remove('light');
       document.documentElement.classList.add('dark');
+      if (document.body) {
+        document.body.classList.remove('light');
+        document.body.classList.add('dark');
+      }
     }
     showToast(nextTheme === 'light' ? '☀️ Modo Claro ativado!' : '🌙 Modo Escuro ativado!');
   };
@@ -318,10 +323,29 @@ export function AprovaLensApp() {
   const pendingMistakesCount = mistakes.filter((m) => !m.isOvercome).length;
 
   return (
-    <div className={`min-h-screen flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200 transition-colors duration-300 ${
+    <div className={`min-h-screen flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200 transition-colors duration-300 relative ${
       theme === 'light' ? 'app-bg-light text-slate-900 light' : 'app-bg-dark text-slate-100 dark'
     }`}>
       
+      {/* Ambient Background Glow Mesh Layer (Visível em ambos os modos) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {theme === 'dark' ? (
+          <>
+            <div className="absolute -top-32 -left-32 w-[650px] h-[650px] rounded-full bg-indigo-600/25 blur-[140px] animate-pulse-slow" />
+            <div className="absolute top-10 -right-32 w-[600px] h-[600px] rounded-full bg-cyan-500/20 blur-[150px]" />
+            <div className="absolute bottom-10 left-1/3 w-[700px] h-[500px] rounded-full bg-purple-600/18 blur-[160px]" />
+            <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:24px_24px]" />
+          </>
+        ) : (
+          <>
+            <div className="absolute -top-32 -left-32 w-[650px] h-[650px] rounded-full bg-indigo-400/25 blur-[130px]" />
+            <div className="absolute top-10 -right-32 w-[600px] h-[600px] rounded-full bg-cyan-400/20 blur-[140px]" />
+            <div className="absolute bottom-10 left-1/3 w-[700px] h-[500px] rounded-full bg-purple-300/20 blur-[150px]" />
+            <div className="absolute inset-0 bg-[radial-gradient(rgba(15,23,42,0.04)_1px,transparent_1px)] [background-size:24px_24px]" />
+          </>
+        )}
+      </div>
+
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-indigo-600 text-white text-xs font-bold shadow-2xl shadow-indigo-600/40 border border-indigo-400/40 animate-fadeIn flex items-center gap-2">
@@ -331,22 +355,24 @@ export function AprovaLensApp() {
       )}
 
       {/* Global Navbar com alternância de tema */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        streakDays={metrics.streakDays}
-        plan={plan}
-        onOpenPricing={() => setIsPricingOpen(true)}
-        selectedExamTitle={selectedExam?.title}
-        pendingMistakesCount={pendingMistakesCount}
-        onOpenCopilot={() => setIsCopilotOpen(true)}
-        isSupabaseConfigured={isSupabaseConfigured()}
-        theme={theme}
-        onToggleTheme={handleToggleTheme}
-      />
+      <div className="relative z-20">
+        <Navbar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          streakDays={metrics.streakDays}
+          plan={plan}
+          onOpenPricing={() => setIsPricingOpen(true)}
+          selectedExamTitle={selectedExam?.title}
+          pendingMistakesCount={pendingMistakesCount}
+          onOpenCopilot={() => setIsCopilotOpen(true)}
+          isSupabaseConfigured={isSupabaseConfigured()}
+          theme={theme}
+          onToggleTheme={handleToggleTheme}
+        />
+      </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 pb-20 sm:pb-8">
+      <main className="flex-1 pb-20 sm:pb-8 relative z-10">
         {activeTab === 'landing' && (
           <LandingPage
             onStartEdital={() => setActiveTab('edital')}

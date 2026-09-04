@@ -23,11 +23,11 @@ module.exports = {
           950: '#1e1b4b',
         },
         dark: {
-          bg: '#090D16',
-          surface: '#111726',
-          card: '#161F33',
-          border: '#232E4A',
-          hover: '#1C2740',
+          bg: 'var(--bg-canvas)',
+          surface: 'var(--bg-surface)',
+          card: 'var(--bg-card)',
+          border: 'var(--border-subtle)',
+          hover: 'var(--bg-card-hover)',
         },
         accent: {
           emerald: '#10B981',
