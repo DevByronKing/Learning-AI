@@ -77,10 +77,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto text-center">
         
         {/* Top Announcement Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold mb-8 backdrop-blur-md glow-brand">
-          <Sparkles className="w-3.5 h-3.5 text-indigo-400 animate-spin" style={{ animationDuration: '4s' }} />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/30 text-indigo-700 dark:text-indigo-300 text-xs font-semibold mb-8 backdrop-blur-md shadow-sm">
+          <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 animate-spin" style={{ animationDuration: '4s' }} />
           <span>Nova IA 2.0: Detecção de Pegadinhas das Bancas FGV, Cebraspe e FCC</span>
-          <ArrowRight className="w-3 h-3 text-indigo-400" />
+          <ArrowRight className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
         </div>
 
         {/* Main Headline */}
@@ -92,8 +92,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-6 text-lg sm:text-xl text-slate-400 dark:text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
-          O <strong className="font-bold text-indigo-500">Learning AI</strong> disseca o edital do seu concurso em segundos, gera um cronograma dinâmico que não quebra no primeiro imprevisto e diagnostica a causa psicológica exata de cada erro nas questões.
+        <p className="mt-6 text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
+          O <strong className="font-bold text-indigo-600 dark:text-indigo-400">Learning AI</strong> disseca o edital do seu concurso em segundos, gera um cronograma dinâmico que não quebra no primeiro imprevisto e diagnostica a causa psicológica exata de cada erro nas questões.
         </p>
 
         {/* CTA Buttons */}
@@ -109,43 +109,43 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           
           <button
             onClick={onOpenPricing}
-            className="w-full sm:w-auto px-6 py-4 rounded-xl bg-dark-surface/80 hover:bg-dark-hover border border-slate-700 hover:border-slate-500 text-slate-200 font-bold text-base transition-all flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-6 py-4 rounded-xl bg-white dark:bg-dark-surface/80 hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 text-slate-800 dark:text-slate-200 font-bold text-base transition-all flex items-center justify-center gap-2 shadow-sm"
           >
-            <Zap className="w-4 h-4 text-amber-400" />
+            <Zap className="w-4 h-4 text-amber-500 dark:text-amber-400" />
             <span>Ver Planos & Preços</span>
           </button>
         </div>
 
         {/* Micro-trust indicators */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-600 dark:text-slate-400">
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Sem necessidade de cartão no início
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Sem necessidade de cartão no início
           </span>
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Processamento em &lt; 20 segundos
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Processamento em &lt; 20 segundos
           </span>
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Atualizado com jurisprudência de 2026
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Atualizado com jurisprudência de 2026
           </span>
         </div>
 
         {/* Social Proof Counter Banner */}
         <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto">
-          <div className="glass-panel p-4 rounded-2xl text-center">
-            <p className="text-2xl sm:text-3xl font-black text-indigo-300">+14.800</p>
-            <p className="text-xs text-slate-400 mt-0.5">Editais Processados</p>
+          <div className="glass-panel p-4 rounded-2xl text-center border border-slate-200/80 dark:border-white/10 shadow-sm">
+            <p className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400">+14.800</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-0.5">Editais Processados</p>
           </div>
-          <div className="glass-panel p-4 rounded-2xl text-center">
-            <p className="text-2xl sm:text-3xl font-black text-cyan-300">1.2 Milhão</p>
-            <p className="text-xs text-slate-400 mt-0.5">Erros Diagnosticados</p>
+          <div className="glass-panel p-4 rounded-2xl text-center border border-slate-200/80 dark:border-white/10 shadow-sm">
+            <p className="text-2xl sm:text-3xl font-black text-cyan-600 dark:text-cyan-400">1.2 Milhão</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-0.5">Erros Diagnosticados</p>
           </div>
-          <div className="glass-panel p-4 rounded-2xl text-center">
-            <p className="text-2xl sm:text-3xl font-black text-emerald-300">3.4x</p>
-            <p className="text-xs text-slate-400 mt-0.5">Mais Retenção de Memória</p>
+          <div className="glass-panel p-4 rounded-2xl text-center border border-slate-200/80 dark:border-white/10 shadow-sm">
+            <p className="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">3.4x</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-0.5">Mais Retenção de Memória</p>
           </div>
-          <div className="glass-panel p-4 rounded-2xl text-center">
-            <p className="text-2xl sm:text-3xl font-black text-amber-300">78.5%</p>
-            <p className="text-xs text-slate-400 mt-0.5">Taxa Média de Acerto</p>
+          <div className="glass-panel p-4 rounded-2xl text-center border border-slate-200/80 dark:border-white/10 shadow-sm">
+            <p className="text-2xl sm:text-3xl font-black text-amber-600 dark:text-amber-400">78.5%</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-0.5">Taxa Média de Acerto</p>
           </div>
         </div>
 
@@ -210,7 +210,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   setLeadInput(preset);
                   setSelectedPreset(preset);
                 }}
-                className="px-2.5 py-1 rounded-lg bg-dark-card hover:bg-dark-hover border border-slate-700 text-slate-300 transition-colors"
+                className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 transition-colors font-medium"
               >
                 {preset}
               </button>
@@ -468,7 +468,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             <button
               onClick={() => onSelectPlan('aspirante')}
-              className="mt-8 w-full py-3 rounded-xl bg-dark-card hover:bg-dark-hover border border-slate-700 text-slate-200 font-bold text-xs transition-colors"
+              className="mt-8 w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs transition-colors shadow-sm"
             >
               Começar Gratuitamente
             </button>
@@ -566,7 +566,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 onSelectPlan('elite');
                 onOpenPricing();
               }}
-              className="mt-8 w-full py-3 rounded-xl bg-dark-card hover:bg-dark-hover border border-slate-700 text-slate-200 font-bold text-xs transition-colors"
+              className="mt-8 w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs transition-colors shadow-sm"
             >
               Assinar Plano Elite
             </button>

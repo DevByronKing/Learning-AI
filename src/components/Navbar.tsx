@@ -177,10 +177,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             </div>
 
-            {/* Desktop Navigation Tabs (Clean, Single Line, No Wrapping) */}
-            <nav className={`hidden lg:flex items-center gap-1 p-1 rounded-2xl border shadow-inner max-w-2xl overflow-x-auto no-scrollbar transition-colors ${
+            {/* Desktop Navigation Tabs (Clean, Single Line, No Wrapping - Fits all 8 tabs) */}
+            <nav className={`hidden lg:flex items-center justify-center gap-0.5 xl:gap-1 p-1 rounded-2xl border shadow-inner flex-1 max-w-3xl xl:max-w-4xl overflow-x-auto no-scrollbar transition-colors ${
               isLight 
-                ? 'bg-slate-100/90 border-slate-200/90' 
+                ? 'bg-slate-100/95 border-slate-200/90' 
                 : 'bg-[#11182c]/85 border-white/5'
             }`}>
               {navTabs.map((tab) => {
@@ -190,17 +190,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <button
                     key={tab.id}
                     onClick={() => handleTabClick(tab.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap shrink-0 select-none ${
+                    className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap shrink-0 select-none ${
                       isActive
                         ? isLight
-                          ? 'bg-white text-indigo-600 shadow-sm border border-indigo-100/80 font-extrabold'
+                          ? 'bg-white text-indigo-700 shadow-sm border border-indigo-200 font-extrabold'
                           : 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/30 font-extrabold'
                         : isLight
-                          ? 'text-slate-600 hover:text-slate-900 hover:bg-white/70'
+                          ? 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
                           : 'text-slate-400 hover:text-slate-100 hover:bg-white/5'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? (isLight ? 'text-indigo-600' : 'text-white') : 'opacity-70'}`} />
+                    <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? (isLight ? 'text-indigo-600' : 'text-white') : (isLight ? 'text-slate-500' : 'opacity-70')}`} />
                     <span className="whitespace-nowrap">{tab.label}</span>
                     {tab.badge && (
                       <span className={`w-4 h-4 rounded-full text-[10px] font-black flex items-center justify-center shrink-0 ${tab.badgeColor || 'bg-rose-500 text-white'}`}>
@@ -221,7 +221,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={onToggleTheme}
                   className={`p-2 rounded-xl border transition-all flex items-center justify-center ${
                     isLight 
-                      ? 'bg-slate-100 hover:bg-slate-200 text-amber-500 border-slate-200 shadow-sm' 
+                      ? 'bg-slate-100 hover:bg-slate-200 text-amber-600 border-slate-200 shadow-sm' 
                       : 'bg-[#11182c] hover:bg-[#18223d] text-amber-400 border-white/10'
                   }`}
                   title={isLight ? 'Alternar para Modo Escuro' : 'Alternar para Modo Claro'}
@@ -241,13 +241,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={onOpenCopilot}
                   className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-bold transition-all shadow-sm ${
                     isLight 
-                      ? 'bg-indigo-50 border-indigo-200 text-indigo-700 hover:bg-indigo-100' 
+                      ? 'bg-indigo-50 border-indigo-200 hover:bg-indigo-100' 
                       : 'bg-gradient-to-r from-indigo-500/15 via-purple-500/15 to-cyan-500/15 border-indigo-400/35 text-indigo-200 hover:border-indigo-400 hover:bg-indigo-500/25'
                   }`}
                   title="Abrir Copiloto Cognitivo Waze dos Estudos"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-                  <span className="hidden md:inline whitespace-nowrap">Copiloto</span>
+                  <Sparkles className={`w-3.5 h-3.5 ${isLight ? 'text-indigo-600' : 'text-cyan-400'} animate-pulse`} />
+                  <span className={`hidden md:inline whitespace-nowrap ${isLight ? 'text-indigo-700 font-black' : 'text-indigo-200'}`}>Copiloto</span>
                 </button>
               )}
 
@@ -255,7 +255,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div 
                 className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl border text-xs font-extrabold ${
                   isLight 
-                    ? 'bg-amber-50 border-amber-200 text-amber-700' 
+                    ? 'bg-amber-50 border-amber-200 text-amber-800' 
                     : 'bg-amber-500/10 border-amber-500/25 text-amber-400'
                 }`}
                 title="Sequência de dias consecutivos de estudo"
@@ -278,12 +278,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={onOpenPricing}
                   className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-extrabold whitespace-nowrap ${
                     isLight 
-                      ? 'bg-indigo-50 border-indigo-200 text-indigo-700' 
+                      ? 'bg-purple-50 border-purple-200 hover:bg-purple-100' 
                       : 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300'
                   }`}
                 >
-                  <Zap className="w-3.5 h-3.5 text-indigo-500 fill-indigo-500/40" />
-                  <span>{plan.toUpperCase()}</span>
+                  <Zap className={`w-3.5 h-3.5 ${isLight ? 'text-purple-600 fill-purple-600/40' : 'text-indigo-500 fill-indigo-500/40'}`} />
+                  <span className={isLight ? 'text-purple-800 font-black' : 'text-indigo-300'}>{plan.toUpperCase()}</span>
                 </button>
               )}
 

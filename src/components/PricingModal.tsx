@@ -152,30 +152,30 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-slate-400 hover:text-white p-2 rounded-xl bg-dark-card border border-white/5"
+          className="absolute top-6 right-6 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card border border-slate-200 dark:border-white/5 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Title & Cycle Switcher */}
         <div className="text-center max-w-xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold mb-3">
-            <Crown className="w-3.5 h-3.5 fill-amber-400" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-bold mb-3">
+            <Crown className="w-3.5 h-3.5 fill-amber-500 dark:fill-amber-400" />
             <span>PREPARAÇÃO DE ALTO RENDIMENTO</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-white">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
             Escolha o Plano Ideal para Sua Aprovação
           </h2>
-          <p className="text-xs sm:text-sm text-slate-300 mt-1">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1">
             Acesso ilimitado à dissecação de editais, diagnóstico cognitivo de erros e cronogramas dinâmicos.
           </p>
 
           {/* Billing Switch */}
-          <div className="mt-6 inline-flex items-center p-1 rounded-2xl bg-dark-surface border border-white/10">
+          <div className="mt-6 inline-flex items-center p-1 rounded-2xl bg-slate-100 dark:bg-dark-surface border border-slate-200 dark:border-white/10">
             <button
               onClick={() => setBillingCycle('monthly')}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                billingCycle === 'monthly' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                billingCycle === 'monthly' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               Mensal
@@ -183,7 +183,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             <button
               onClick={() => setBillingCycle('annual')}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                billingCycle === 'annual' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                billingCycle === 'annual' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <span>Anual</span>
@@ -202,53 +202,53 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             onClick={() => setSelectedPlanToBuy('pro')}
             className={`p-6 rounded-3xl border transition-all cursor-pointer flex flex-col justify-between ${
               selectedPlanToBuy === 'pro'
-                ? 'bg-indigo-600/15 border-indigo-500 ring-2 ring-indigo-400/50 glow-brand'
-                : 'bg-dark-surface/80 border-white/5 hover:border-slate-600'
+                ? 'bg-indigo-50/80 dark:bg-indigo-600/15 border-indigo-500 ring-2 ring-indigo-400/50 glow-brand shadow-sm'
+                : 'bg-white dark:bg-dark-surface/80 border-slate-200 dark:border-white/5 hover:border-slate-400 dark:hover:border-slate-600'
             }`}
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30">
                   PLANO PRO
                 </span>
-                {selectedPlanToBuy === 'pro' && <CheckCircle2 className="w-5 h-5 text-indigo-400" />}
+                {selectedPlanToBuy === 'pro' && <CheckCircle2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
               </div>
 
               <div className="mt-4 mb-4">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-black text-white">
+                  <span className="text-3xl font-black text-slate-900 dark:text-white">
                     {billingCycle === 'annual' ? 'R$ 24,75' : 'R$ 39,90'}
                   </span>
-                  <span className="text-xs text-slate-400"> / mês</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400"> / mês</span>
                 </div>
                 {billingCycle === 'annual' && (
-                  <p className="text-[11px] text-emerald-400 font-semibold mt-0.5">
+                  <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
                     Cobrado anualmente (R$ 297/ano)
                   </p>
                 )}
               </div>
 
-              <ul className="space-y-2.5 text-xs text-slate-200">
+              <ul className="space-y-2.5 text-xs text-slate-700 dark:text-slate-200">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Dissecação de editais ilimitada com IA Multimodal</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Diagnóstico cognitivo dos 4 tipos de falha</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Mapeamento analítico de pontos cegos</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Geração de cards para repetição espaçada (SRS)</span>
                 </li>
               </ul>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-white/10 text-center text-xs font-bold text-indigo-300">
+            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/10 text-center text-xs font-bold text-indigo-600 dark:text-indigo-300">
               {selectedPlanToBuy === 'pro' ? '✓ Plano Selecionado' : 'Clique para Selecionar'}
             </div>
           </div>
@@ -258,53 +258,53 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             onClick={() => setSelectedPlanToBuy('elite')}
             className={`p-6 rounded-3xl border transition-all cursor-pointer flex flex-col justify-between ${
               selectedPlanToBuy === 'elite'
-                ? 'bg-purple-600/15 border-purple-500 ring-2 ring-purple-400/50'
-                : 'bg-dark-surface/80 border-white/5 hover:border-slate-600'
+                ? 'bg-purple-50/80 dark:bg-purple-600/15 border-purple-500 ring-2 ring-purple-400/50 glow-brand shadow-sm'
+                : 'bg-white dark:bg-dark-surface/80 border-slate-200 dark:border-white/5 hover:border-slate-400 dark:hover:border-slate-600'
             }`}
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-purple-50 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30">
                   PLANO ELITE
                 </span>
-                {selectedPlanToBuy === 'elite' && <CheckCircle2 className="w-5 h-5 text-purple-400" />}
+                {selectedPlanToBuy === 'elite' && <CheckCircle2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />}
               </div>
 
               <div className="mt-4 mb-4">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-black text-white">
+                  <span className="text-3xl font-black text-slate-900 dark:text-white">
                     {billingCycle === 'annual' ? 'R$ 49,75' : 'R$ 79,90'}
                   </span>
-                  <span className="text-xs text-slate-400"> / mês</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400"> / mês</span>
                 </div>
                 {billingCycle === 'annual' && (
-                  <p className="text-[11px] text-emerald-400 font-semibold mt-0.5">
+                  <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
                     Cobrado anualmente (R$ 597/ano)
                   </p>
                 )}
               </div>
 
-              <ul className="space-y-2.5 text-xs text-slate-200">
+              <ul className="space-y-2.5 text-xs text-slate-700 dark:text-slate-200">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Todos os recursos do Plano Pro</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Correção analítica de redações e peças OAB por IA</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Simulados discursivos com régua de pontuação oficial</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Estimativa preditiva de nota de corte por microrregião</span>
                 </li>
               </ul>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-white/10 text-center text-xs font-bold text-purple-300">
+            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/10 text-center text-xs font-bold text-purple-600 dark:text-purple-300">
               {selectedPlanToBuy === 'elite' ? '✓ Plano Selecionado' : 'Clique para Selecionar'}
             </div>
           </div>
@@ -312,15 +312,15 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         </div>
 
         {/* Payment Methods Section */}
-        <div className="mt-8 p-6 rounded-3xl bg-dark-surface/90 border border-white/10">
+        <div className="mt-8 p-6 rounded-3xl bg-slate-50/90 dark:bg-dark-surface/90 border border-slate-200 dark:border-white/10 shadow-sm">
           
-          <div className="flex items-center justify-between pb-4 border-b border-white/10">
-            <span className="text-xs font-bold text-slate-300">Método de Pagamento:</span>
+          <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-white/10">
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Método de Pagamento:</span>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setPaymentMethod('pix')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                  paymentMethod === 'pix' ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400' : 'text-slate-400 hover:text-white'
+                  paymentMethod === 'pix' ? 'bg-emerald-50 dark:bg-emerald-500/20 border border-emerald-300 dark:border-emerald-500/40 text-emerald-700 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 <QrCode className="w-3.5 h-3.5" />
@@ -329,7 +329,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               <button
                 onClick={() => setPaymentMethod('card')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                  paymentMethod === 'card' ? 'bg-indigo-500/20 border border-indigo-500/40 text-indigo-300' : 'text-slate-400 hover:text-white'
+                  paymentMethod === 'card' ? 'bg-indigo-50 dark:bg-indigo-500/20 border border-indigo-300 dark:border-indigo-500/40 text-indigo-700 dark:text-indigo-300' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 <CreditCard className="w-3.5 h-3.5" />
@@ -363,12 +363,12 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                 {/* Status Banner */}
                 <div className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-between ${
                   paymentStatus === 'confirmed'
-                    ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-400'
-                    : 'bg-amber-500/10 border-amber-500/25 text-amber-400'
+                    ? 'bg-emerald-50 dark:bg-emerald-500/15 border-emerald-300 dark:border-emerald-500/40 text-emerald-700 dark:text-emerald-400'
+                    : 'bg-amber-50 dark:bg-amber-500/10 border-amber-300 dark:border-amber-500/25 text-amber-800 dark:text-amber-400'
                 }`}>
                   <div className="flex items-center gap-2">
                     <div className={`w-2 h-2 rounded-full ${
-                      paymentStatus === 'confirmed' ? 'bg-emerald-400' : 'bg-amber-400 animate-ping'
+                      paymentStatus === 'confirmed' ? 'bg-emerald-500' : 'bg-amber-500 animate-ping'
                     }`} />
                     <span>
                       {paymentStatus === 'confirmed' 
@@ -376,23 +376,23 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                         : 'Aguardando liquidação Pix (verificação a cada 3s)...'}
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono text-slate-400">
+                  <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
                     {transactionId ? transactionId.slice(-8) : 'tx_live'}
                   </span>
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold text-slate-300 mb-1">Código Pix Copia e Cola:</p>
+                  <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Código Pix Copia e Cola:</p>
                   <div className="flex items-center gap-2">
                     <input
                       type="text"
                       readOnly
                       value={pixCode}
-                      className="w-full p-2.5 rounded-xl glass-input text-xs font-mono text-slate-300 truncate select-all"
+                      className="w-full p-2.5 rounded-xl glass-input text-xs font-mono text-slate-800 dark:text-slate-300 truncate select-all"
                     />
                     <button
                       onClick={handleCopyPix}
-                      className="px-4 py-2.5 rounded-xl bg-dark-card hover:bg-dark-hover border border-slate-700 text-slate-200 text-xs font-bold flex items-center gap-1 shrink-0 transition-colors"
+                      className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold flex items-center gap-1 shrink-0 transition-colors shadow-sm"
                     >
                       {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                       <span>{isCopied ? 'Copiado!' : 'Copiar'}</span>
