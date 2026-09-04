@@ -53,6 +53,28 @@ export function AprovaLensApp() {
 
       const savedMistakes = localStorage.getItem('aprovalens_mistakes');
       if (savedMistakes) setMistakes(JSON.parse(savedMistakes));
+
+      // Captura de parâmetros de URL originados de Landing Pages de SEO (?edital=...&tab=...)
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const editalSlug = params.get('edital');
+        const tabParam = params.get('tab');
+
+        if (tabParam) {
+          setActiveTab(tabParam);
+        }
+
+        if (editalSlug) {
+          const matchingExam = INITIAL_EXAMS.find(e => 
+            e.id.toLowerCase().includes(editalSlug.toLowerCase()) || 
+            e.title.toLowerCase().includes(editalSlug.toLowerCase())
+          );
+          if (matchingExam) {
+            setSelectedExam(matchingExam);
+            showToast(`Edital carregado: ${matchingExam.title}`);
+          }
+        }
+      }
     } catch {}
   }, []);
 
@@ -290,7 +312,7 @@ export function AprovaLensApp() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1">
+      <main className="flex-1 pb-20 sm:pb-8">
         {activeTab === 'landing' && (
           <LandingPage
             onStartEdital={() => setActiveTab('edital')}

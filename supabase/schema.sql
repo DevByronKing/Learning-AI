@@ -83,11 +83,40 @@ CREATE TABLE IF NOT EXISTS public.flashcards (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 7. Row Level Security (RLS) Policies
+-- 7. Leads Table (Programmatic SEO & Marketing Capture)
+CREATE TABLE IF NOT EXISTS public.leads (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT,
+  target_edital TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 8. Transactions Table (Asaas Pix / Stripe Checkout)
+CREATE TABLE IF NOT EXISTS public.transactions (
+  id TEXT PRIMARY KEY,
+  plan_id TEXT NOT NULL,
+  billing_cycle TEXT NOT NULL,
+  amount NUMERIC NOT NULL,
+  payment_method TEXT NOT NULL,
+  status TEXT NOT NULL,
+  pix_code TEXT,
+  provider TEXT NOT NULL,
+  user_email TEXT NOT NULL,
+  external_id TEXT,
+  confirmed_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  expires_at TIMESTAMP WITH TIME ZONE NOT NULL
+);
+
+-- 9. Row Level Security (RLS) Policies
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.exam_notices ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.question_attempts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.flashcards ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Users can manage their own profile" ON public.profiles
   FOR ALL USING (auth.uid() = id);
@@ -102,4 +131,12 @@ CREATE POLICY "Users can manage their own flashcards" ON public.flashcards
   FOR ALL USING (auth.uid() = user_id);
 
 CREATE POLICY "Anyone authenticated can view questions" ON public.questions
+  FOR SELECT USING (true);
+
+-- Leads: permit public insertion from SEO landing pages
+CREATE POLICY "Public anonymous insert for leads" ON public.leads
+  FOR INSERT WITH CHECK (true);
+
+-- Transactions: permit reading for polling and updates via service key
+CREATE POLICY "Public read for transactions polling" ON public.transactions
   FOR SELECT USING (true);
