@@ -14,6 +14,7 @@
     "start": "next start",
     "lint": "next lint",
     "dev:mobile": "npm --prefix apps/mobile start",
+    "dev:mobile:clear": "npm --prefix apps/mobile start -- -c",
     "dev:mobile:tunnel": "npm --prefix apps/mobile run tunnel",
     "mobile:android": "npm --prefix apps/mobile run android",
     "mobile:ios": "npm --prefix apps/mobile run ios",
