@@ -2,11 +2,21 @@
   "name": "learning-ai",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "next dev",
+    "dev:web": "next dev",
     "build": "next build",
+    "build:web": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:mobile": "npm --prefix apps/mobile start",
+    "mobile:android": "npm --prefix apps/mobile run android",
+    "mobile:ios": "npm --prefix apps/mobile run ios",
+    "install:mobile": "npm --prefix apps/mobile install"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.115.0",
