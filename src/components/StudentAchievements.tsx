@@ -21,10 +21,12 @@ import {
   RefreshCw,
   TrendingUp,
   Filter,
-  Check
+  Check,
+  MessageSquare
 } from 'lucide-react';
 import { UserMetrics, ExamNotice, MascotId, MascotCompanion, Achievement, DailyMission } from '@/lib/types';
 import { MASCOTS_DATA, INITIAL_ACHIEVEMENTS, INITIAL_DAILY_MISSIONS } from '@/lib/mockData';
+import { MascotChatModal } from './MascotChatModal';
 import confetti from 'canvas-confetti';
 
 interface StudentAchievementsProps {
@@ -58,6 +60,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
   const [achievements, setAchievements] = useState<Achievement[]>(INITIAL_ACHIEVEMENTS);
   const [selectedCategory, setSelectedCategory] = useState<string>('todas');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   const currentMascot = MASCOTS_DATA.find((m) => m.id === selectedMascotId) || MASCOTS_DATA[0];
 
@@ -194,8 +197,15 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
                 <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed italic">
                   "{currentMascot.dailyAdvice}"
                 </p>
-                <div className="mt-2 flex items-center justify-between text-[11px] font-semibold text-emerald-500 dark:text-emerald-400">
-                  <span>✨ {currentMascot.encouragement}</span>
+                <div className="mt-3 flex items-center justify-between gap-2 border-t border-indigo-400/20 pt-2.5">
+                  <span className="text-[11px] font-semibold text-emerald-500 dark:text-emerald-400">✨ {currentMascot.encouragement}</span>
+                  <button
+                    onClick={() => setIsChatModalOpen(true)}
+                    className="shrink-0 px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold flex items-center gap-1.5 transition-all shadow-sm shadow-indigo-600/30 active:scale-95"
+                  >
+                    <MessageSquare className="w-3 h-3" />
+                    <span>Conversar</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -547,6 +557,12 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
         </div>
 
       </div>
+
+      <MascotChatModal
+        isOpen={isChatModalOpen}
+        onClose={() => setIsChatModalOpen(false)}
+        mascot={currentMascot}
+      />
 
     </div>
   );

@@ -11,6 +11,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { MASCOTS, Mascot } from '../data/mockData';
+import { MascotChatModal } from '../components/MascotChatModal';
+import { MobilePaywallModal } from '../components/MobilePaywallModal';
 
 export default function MobileHomeScreen() {
   const insets = useSafeAreaInsets();
@@ -22,6 +24,9 @@ export default function MobileHomeScreen() {
   const [xp, setXp] = useState(2450);
   const [level, setLevel] = useState(4);
   const [streakDays, setStreakDays] = useState(14);
+  const [isMascotChatOpen, setIsMascotChatOpen] = useState(false);
+  const [isPaywallOpen, setIsPaywallOpen] = useState(false);
+  const [isProUser, setIsProUser] = useState(false);
 
   const [missions, setMissions] = useState([
     { id: '1', title: 'Resolver 15 questões de Direito Previdenciário', xp: 120, done: true, route: '/simulado' },
@@ -51,12 +56,16 @@ export default function MobileHomeScreen() {
       {/* Header Superior com Inset de Segurança e Streak */}
       <View style={styles.headerRow}>
         <View>
-          <View style={styles.brandBadgeRow}>
-            <View style={styles.proTag}>
-              <Text style={styles.proTagText}>PRO IA</Text>
+          <TouchableOpacity 
+            style={styles.brandBadgeRow}
+            onPress={() => setIsPaywallOpen(true)}
+            activeOpacity={0.7}
+          >
+            <View style={[styles.proTag, isProUser && { backgroundColor: '#10B981' }]}>
+              <Text style={styles.proTagText}>{isProUser ? 'VIP ATIVO' : 'PRO IA'}</Text>
             </View>
-            <Text style={styles.brandSubtitle}>Concursos & OAB</Text>
-          </View>
+            <Text style={styles.brandSubtitle}>{isProUser ? 'Acesso Ilimitado' : 'Concursos & OAB'}</Text>
+          </TouchableOpacity>
           <Text style={styles.brandTitle}>Learning AI</Text>
         </View>
 
@@ -101,6 +110,15 @@ export default function MobileHomeScreen() {
               <Text style={styles.speechTag}>DIREÇÃO DO DIA • SEM ANSIEDADE</Text>
             </View>
             <Text style={styles.speechText}>"{mascot.advice}"</Text>
+
+            <TouchableOpacity
+              style={styles.chatMascotBtn}
+              onPress={() => setIsMascotChatOpen(true)}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="chatbubbles" size={14} color="#FFFFFF" />
+              <Text style={styles.chatMascotBtnText}>Conversar com {mascot.name}</Text>
+            </TouchableOpacity>
           </View>
 
           {/* Carrossel Seletor de Mascotes */}
@@ -258,6 +276,20 @@ export default function MobileHomeScreen() {
         </View>
 
       </ScrollView>
+
+      {/* Modal de Chat com o Mascote */}
+      <MascotChatModal
+        visible={isMascotChatOpen}
+        onClose={() => setIsMascotChatOpen(false)}
+        mascot={mascot}
+      />
+
+      {/* Modal de Pagamento Pix / Paywall */}
+      <MobilePaywallModal
+        visible={isPaywallOpen}
+        onClose={() => setIsPaywallOpen(false)}
+        onSuccess={() => setIsProUser(true)}
+      />
     </View>
   );
 }
@@ -427,6 +459,22 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     fontStyle: 'italic',
+  },
+  chatMascotBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    backgroundColor: '#4F46E5',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 8,
+    marginTop: 10,
+    gap: 6,
+  },
+  chatMascotBtnText: {
+    color: '#FFFFFF',
+    fontSize: 11,
+    fontWeight: '800',
   },
   mascotSelectorContainer: {
     borderTopWidth: 1,
