@@ -11,6 +11,7 @@ import { DiscursiveStudio } from '@/components/DiscursiveStudio';
 import { PricingModal } from '@/components/PricingModal';
 import { MistakesNotebook } from '@/components/MistakesNotebook';
 import { SmartVadeMecum } from '@/components/SmartVadeMecum';
+import { QuestionBank } from '@/components/QuestionBank';
 import { AICopilotDrawer } from '@/components/AICopilotDrawer';
 import { 
   ExamNotice, 
@@ -449,6 +450,15 @@ export function AprovaLensApp() {
             onReviewFlashcard={handleReviewFlashcard}
             onAddNewFlashcard={handleAddFlashcard}
             onGoToSimulator={() => setActiveTab('simulator')}
+          />
+        )}
+
+        {activeTab === 'questions' && (
+          <QuestionBank
+            onAddFlashcard={handleAddFlashcard}
+            onRecordAttempt={handleRecordAttempt}
+            onGoToSimulator={() => setActiveTab('simulator')}
+            onGoToMistakes={() => setActiveTab('mistakes')}
           />
         )}
       </main>

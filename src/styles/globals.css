@@ -5,9 +5,13 @@
 @layer base {
   :root, html.dark {
     --bg-canvas: #080C14;
+    --bg-canvas-rgb: 8 12 20;
     --bg-surface: #0F172A;
+    --bg-surface-rgb: 15 23 42;
     --bg-card: #131E35;
+    --bg-card-rgb: 19 30 53;
     --bg-card-hover: #1A2847;
+    --bg-card-hover-rgb: 26 40 71;
     --bg-input: rgba(15, 23, 42, 0.7);
     --border-subtle: rgba(255, 255, 255, 0.08);
     --border-strong: rgba(255, 255, 255, 0.16);
@@ -23,9 +27,13 @@
 
   html.light {
     --bg-canvas: #F8FAFC;
+    --bg-canvas-rgb: 248 250 252;
     --bg-surface: #FFFFFF;
+    --bg-surface-rgb: 255 255 255;
     --bg-card: #FFFFFF;
+    --bg-card-rgb: 255 255 255;
     --bg-card-hover: #F1F5F9;
+    --bg-card-hover-rgb: 241 245 249;
     --bg-input: #FFFFFF;
     --border-subtle: rgba(226, 232, 240, 0.9);
     --border-strong: rgba(203, 213, 225, 0.9);

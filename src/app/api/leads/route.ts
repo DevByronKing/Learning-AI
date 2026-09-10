@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase';
 import { getEditalBySlug } from '@/lib/editaisCatalog';
 
+export const dynamic = 'force-dynamic';
+
 export interface LeadRecord {
   id: string;
   name: string;

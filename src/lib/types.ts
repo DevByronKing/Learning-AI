@@ -56,6 +56,19 @@ export type ErrorType =
   | 'leitura_apressada'      // Interpretação / Desatenção ao comando
   | 'curva_esquecimento';    // Memória decaiu / falta de revisão
 
+export type QuestionDifficulty = 'Fácil' | 'Média' | 'Difícil';
+export type QuestionFormat = 'multipla_escolha' | 'certo_errado';
+
+export type QuestionBankFilter = {
+  searchQuery: string;
+  banca: string;
+  subject: string;
+  topic: string;
+  year: string;
+  difficulty: string;
+  status: 'todas' | 'nao_resolvidas' | 'acertos' | 'erros';
+};
+
 export type Question = {
   id: string;
   subjectId: string;
@@ -65,6 +78,9 @@ export type Question = {
   banca: string;
   year: number;
   institution: string;
+  role?: string;
+  difficulty?: QuestionDifficulty;
+  format?: QuestionFormat;
   statement: string; // Enunciado
   codeCitation?: string; // Ex: Art. 37, CF/88
   options: {

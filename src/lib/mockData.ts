@@ -317,6 +317,440 @@ export const MOCK_QUESTIONS: Question[] = [
       keyConcept: 'Diretor/Gestor com poder decisório = Incompatibilidade Total.',
       bancaTendency: 'A FGV sempre coloca cargos com nomes sutis para testar se o aluno sabe a fronteira entre art. 28 (incompatível) e art. 30 (impedido).'
     }
+  },
+  {
+    id: 'q-6',
+    subjectId: 'sub-dir-const',
+    subjectName: 'Direito Constitucional',
+    topicId: 'top-const-1',
+    topicName: 'Direitos Fundamentais e Remédios Constitucionais',
+    banca: 'Cebraspe',
+    year: 2026,
+    institution: 'Polícia Federal',
+    role: 'Agente de Polícia Federal',
+    difficulty: 'Média',
+    format: 'certo_errado',
+    statement: 'Com relação aos direitos fundamentais e às garantias constitucionais, julgue o item a seguir:\n\nA inviolabilidade do domicílio é protegida constitucionalmente, contudo, é lícita a entrada forçada em domicílio sem mandado judicial, inclusive durante a noite, quando houver fundada suspeita de flagrante delito devidamente justificada pelas circunstâncias fáticas preliminares.',
+    codeCitation: 'Art. 5º, XI, CF/88 e Tema 280 do STF (RE 603.616)',
+    options: [
+      {
+        id: 'opt-6-certo',
+        text: 'CERTO',
+        isCorrect: true
+      },
+      {
+        id: 'opt-6-errado',
+        text: 'ERRADO',
+        isCorrect: false,
+        distractorReason: 'O candidato desatento confunde a exigência de mandado judicial (que só autoriza entrada durante o dia) com as hipóteses excepcionais de flagrante delito, desastre ou socorro (que autorizam entrada a qualquer hora do dia ou da noite).'
+      }
+    ],
+    explanation: 'Nos termos do art. 5º, XI, da CF/88, a casa é asilo inviolável do indivíduo, mas em caso de flagrante delito ou desastre, ou para prestar socorro, a entrada pode ocorrer tanto de dia quanto de noite, independentemente de autorização judicial. O STF fixou no Tema 280 que a entrada forçada em domicílio sem mandado é lícita, a qualquer hora, quando amparada em fundadas razões, devidamente justificadas a posteriori.',
+    lawArticles: ['Art. 5º, XI, CF/88', 'STF - RE 603.616 (Tema 280 da Repercussão Geral)'],
+    cognitiveAnalysis: {
+      commonTrap: 'Achar que qualquer entrada forçada noturna em residência é nula, esquecendo a exceção expressa do flagrante delito.',
+      keyConcept: 'Dia: com mandado judicial. Qualquer horário (dia/noite): flagrante, desastre ou socorro.',
+      bancaTendency: 'O Cebraspe explora a colisão entre a garantia da inviolabilidade e a jurisprudência fixada pelo STF no Tema 280.'
+    }
+  },
+  {
+    id: 'q-7',
+    subjectId: 'sub-portugues',
+    subjectName: 'Língua Portuguesa',
+    topicId: 'top-port-1',
+    topicName: 'Sintaxe de Regência e Emprego do Sinal Indicativo de Crase',
+    banca: 'FGV',
+    year: 2026,
+    institution: 'Tribunal de Justiça - TJ/SP',
+    role: 'Escrevente Técnico Judiciário',
+    difficulty: 'Média',
+    format: 'multipla_escolha',
+    statement: 'Assinale a alternativa em que o sinal indicativo de crase foi empregado em estrita conformidade com as normas da língua culta:',
+    codeCitation: 'Norma culta gramatical - Bechara / Cegalla',
+    options: [
+      {
+        id: 'opt-7-a',
+        text: 'O magistrado solicitou que todos os servidores comparecessem à partir das 14 horas para o mutirão.',
+        isCorrect: false,
+        distractorReason: 'Crase proibida antes de verbos no infinitivo (partir).'
+      },
+      {
+        id: 'opt-7-b',
+        text: 'O advogado dirigiu-se à Vossa Excelência com urbanidade e respeito ao término da audiência.',
+        isCorrect: false,
+        distractorReason: 'Pronomes de tratamento não admitem artigo feminino, sendo a crase incorreta (com exceção de Senhora, Senhorita e Dona).'
+      },
+      {
+        id: 'opt-7-c',
+        text: 'A comissão processante comunicou a decisão às testemunhas que prestaram depoimento sigiloso.',
+        isCorrect: true
+      },
+      {
+        id: 'opt-7-d',
+        text: 'O estagiário entregou o relatório à uma funcionária do setor de protocolo judiciário.',
+        isCorrect: false,
+        distractorReason: 'Não há crase antes do artigo indefinido "uma".'
+      },
+      {
+        id: 'opt-7-e',
+        text: 'O servidor declarou que estava disposto à colaborar com todas as diligências determinadas pelo juiz.',
+        isCorrect: false,
+        distractorReason: 'Crase proibida antes de verbo (colaborar).'
+      }
+    ],
+    explanation: 'Na alternativa C, o verbo "comunicou" rege a preposição "a" (comunicar algo A alguém) e o substantivo feminino plural "testemunhas" vem precedido pelo artigo definido feminino "as". A fusão da preposição "a" + artigo "as" resulta legitimamente em "às". Nas demais alternativas, a crase é vedada (antes de verbo, pronome de tratamento e artigo indefinido).',
+    lawArticles: ['Manual de Redação da Presidência da República', 'Gramática Normativa da Língua Portuguesa'],
+    cognitiveAnalysis: {
+      commonTrap: 'Colocar crase antes de verbos no infinitivo ("à partir", "à realizar") por vício de linguagem do cotidiano corporativo.',
+      keyConcept: 'Crase = Preposição "a" exigida pelo termo regente + Artigo "a(s)" aceito pelo termo regido.',
+      bancaTendency: 'A FGV coloca alternativas com frases longas e estruturas sintáticas truncadas para dispersar a atenção do termo regente.'
+    }
+  },
+  {
+    id: 'q-8',
+    subjectId: 'sub-dir-const',
+    subjectName: 'Direito Constitucional',
+    topicId: 'top-const-2',
+    topicName: 'Controle de Constitucionalidade e Cláusula de Reserva de Plenário',
+    banca: 'FCC',
+    year: 2025,
+    institution: 'TRT 2ª Região',
+    role: 'Analista Judiciário - Área Judiciária',
+    difficulty: 'Difícil',
+    format: 'multipla_escolha',
+    statement: 'No âmbito do controle difuso de constitucionalidade realizado pelos tribunais, sobre a cláusula de reserva de plenário (art. 97 da CF/88 e Súmula Vinculante nº 10 do STF), é correto afirmar que:',
+    codeCitation: 'Art. 97 da CF/88 e Súmula Vinculante nº 10 do STF',
+    options: [
+      {
+        id: 'opt-8-a',
+        text: 'A Turma recursal ou Órgão Fracionário de tribunal pode declarar a inconstitucionalidade de lei ou ato normativo por maioria simples de seus membros presentes na sessão.',
+        isCorrect: false,
+        distractorReason: 'Violação direta do art. 97 da CF: somente pelo voto da maioria absoluta de seus membros ou do respectivo órgão especial.'
+      },
+      {
+        id: 'opt-8-b',
+        text: 'A decisão de órgão fracionário que, embora não declare expressamente a inconstitucionalidade, afasta a incidência de lei no todo ou em parte, viola a cláusula de reserva de plenário.',
+        isCorrect: true
+      },
+      {
+        id: 'opt-8-c',
+        text: 'A cláusula de reserva de plenário aplica-se obrigatoriamente às Turmas Recursais dos Juizados Especiais Cíveis e Criminais.',
+        isCorrect: false,
+        distractorReason: 'O STF pacificou que a reserva de plenário não se aplica a Turmas Recursais de Juizados Especiais por não serem tribunais.'
+      },
+      {
+        id: 'opt-8-d',
+        text: 'A declaração de constitucionalidade de uma lei pelo plenário do tribunal vincula o Supremo Tribunal Federal no julgamento de eventual recurso extraordinário.',
+        isCorrect: false,
+        distractorReason: 'O controle difuso em tribunais locais jamais vincula o STF, que é o guardião final da Constituição.'
+      }
+    ],
+    explanation: 'A Súmula Vinculante nº 10 do STF prescreve expressamente: "Viola a cláusula de reserva de plenário (CF, artigo 97) a decisão de órgão fracionário de tribunal que, embora não declare expressamente a inconstitucionalidade de lei ou ato normativo do Poder Público, afasta sua incidência, no todo ou em parte."',
+    lawArticles: ['Art. 97 da CF/88', 'Súmula Vinculante nº 10 do STF', 'Art. 948 do CPC/2015'],
+    cognitiveAnalysis: {
+      commonTrap: 'Achar que apenas a declaração expressa com as palavras "declaro inconstitucional" atrai a nulidade por quebra da reserva de plenário.',
+      keyConcept: 'Afastar a aplicação da lei sob pretexto de interpretação conforme sem remeter ao Pleno equivale a declarar inconstitucionalidade disfarçada.',
+      bancaTendency: 'A FCC cobra com rigor literal o texto de súmulas vinculantes do STF combinadas com artigos do CPC.'
+    }
+  },
+  {
+    id: 'q-9',
+    subjectId: 'sub-dir-penal',
+    subjectName: 'Direito Penal',
+    topicId: 'top-penal-1',
+    topicName: 'Crimes Contra a Administração Pública (Peculato e Corrupção)',
+    banca: 'Cebraspe',
+    year: 2026,
+    institution: 'Polícia Rodoviária Federal - PRF',
+    role: 'Policial Rodoviário Federal',
+    difficulty: 'Média',
+    format: 'certo_errado',
+    statement: 'Julgue o item que se segue acerca dos crimes praticados por funcionário público contra a administração em geral:\n\nNo crime de peculato culposo, a reparação do dano, se precede à sentença irrecorrível, extingue a punibilidade do agente; se lhe é posterior, reduz de metade a pena imposta.',
+    codeCitation: 'Art. 312, § 3º, do Código Penal Brasileiro',
+    options: [
+      {
+        id: 'opt-9-certo',
+        text: 'CERTO',
+        isCorrect: true
+      },
+      {
+        id: 'opt-9-errado',
+        text: 'ERRADO',
+        isCorrect: false,
+        distractorReason: 'O candidato confunde as consequências da reparação no peculato culposo com o arrependimento posterior geral do art. 16 do CP (que apenas reduz a pena e nunca extingue punibilidade).'
+      }
+    ],
+    explanation: 'Dispõe o art. 312, § 3º, do Código Penal: "No caso do parágrafo anterior (peculato culposo), a reparação do dano, se precede à sentença irrecorrível, extingue a punibilidade; se lhe é posterior, reduz de metade a pena imposta." Trata-se de hipótese excepcional de extinção de punibilidade exclusiva da modalidade CULPOSA do peculato.',
+    lawArticles: ['Art. 312, § 2º e § 3º, do Código Penal'],
+    cognitiveAnalysis: {
+      commonTrap: 'Aplicar a regra de extinção de punibilidade ao peculato doloso (no doloso só cabe arrependimento posterior com redução de pena).',
+      keyConcept: 'Peculato Culposo + Reparação antes do trânsito em julgado = Extinção da Punibilidade. Posterior = Reduz 1/2.',
+      bancaTendency: 'O Cebraspe adora trocar "precede à sentença irrecorrível" por "precede ao oferecimento da denúncia" para criar pegadinhas temporais.'
+    }
+  },
+  {
+    id: 'q-10',
+    subjectId: 'sub-dir-adm',
+    subjectName: 'Direito Administrativo',
+    topicId: 'top-adm-5',
+    topicName: 'Nova Lei de Licitações e Contratos (Lei 14.133/2021)',
+    banca: 'Vunesp',
+    year: 2026,
+    institution: 'TJ/SP',
+    role: 'Escrevente Técnico Judiciário',
+    difficulty: 'Fácil',
+    format: 'multipla_escolha',
+    statement: 'Nos termos da Nova Lei de Licitações e Contratos Administrativos (Lei nº 14.133/2021), NÃO constitui modalidade de licitação:',
+    codeCitation: 'Art. 28 da Lei Federal nº 14.133/2021',
+    options: [
+      {
+        id: 'opt-10-a',
+        text: 'Pregão.',
+        isCorrect: false,
+        distractorReason: 'Pregão é modalidade expressa no art. 28, I.'
+      },
+      {
+        id: 'opt-10-b',
+        text: 'Concorrência.',
+        isCorrect: false,
+        distractorReason: 'Concorrência é modalidade expressa no art. 28, II.'
+      },
+      {
+        id: 'opt-10-c',
+        text: 'Tomada de Preços.',
+        isCorrect: true
+      },
+      {
+        id: 'opt-10-d',
+        text: 'Concurso.',
+        isCorrect: false,
+        distractorReason: 'Concurso permanece como modalidade no art. 28, III.'
+      },
+      {
+        id: 'opt-10-e',
+        text: 'Diálogo Competitivo.',
+        isCorrect: false,
+        distractorReason: 'Diálogo Competitivo é a nova modalidade introduzida pelo art. 28, V.'
+      }
+    ],
+    explanation: 'A Lei nº 14.133/2021 estabeleceu em seu Art. 28 que são modalidades de licitação: I - pregão; II - concorrência; III - concurso; IV - leilão; V - diálogo competitivo. As modalidades Convite e Tomada de Preços (presentes na antiga Lei 8.666/93) foram EXTINTAS do direito administrativo brasileiro.',
+    lawArticles: ['Art. 28 da Lei 14.133/2021'],
+    cognitiveAnalysis: {
+      commonTrap: 'Estudar por materiais desatualizados anteriores a 2021 e achar que Tomada de Preços e Convite continuam válidas.',
+      keyConcept: 'Rol taxativo de modalidades da Lei 14.133/21: Pregão, Concorrência, Concurso, Leilão e Diálogo Competitivo.',
+      bancaTendency: 'Vunesp cobra insistentemente a transição das modalidades extintas da antiga lei 8.666/93.'
+    }
+  },
+  {
+    id: 'q-11',
+    subjectId: 'sub-dir-trib',
+    subjectName: 'Direito Tributário',
+    topicId: 'top-trib-1',
+    topicName: 'Princípios Tributários e Anterioridade Nonagesimal',
+    banca: 'FGV',
+    year: 2025,
+    institution: 'Receita Federal',
+    role: 'Auditor-Fiscal da Receita Federal',
+    difficulty: 'Difícil',
+    format: 'multipla_escolha',
+    statement: 'Lei ordinária federal publicada em 15 de dezembro de 2024 majorou a alíquota das Contribuições Sociais destinadas ao custeio da Seguridade Social devidas pelo empregador. Diante das regras constitucionais de eficácia da lei tributária no tempo:\n\nA exigibilidade da nova alíquota poderá ocorrer a partir de:',
+    codeCitation: 'Art. 195, § 6º, da CF/88 (Anterioridade Mitigada / Noventena)',
+    options: [
+      {
+        id: 'opt-11-a',
+        text: '1º de janeiro de 2025, em virtude do princípio da anterioridade do exercício financeiro.',
+        isCorrect: false,
+        distractorReason: 'As contribuições para seguridade social NÃO se sujeitam à anterioridade anual, mas sim à noventena.'
+      },
+      {
+        id: 'opt-11-b',
+        text: 'Decorrido o prazo de 90 dias da data da publicação da lei, sem necessidade de aguardar o exercício financeiro seguinte.',
+        isCorrect: true
+      },
+      {
+        id: 'opt-11-c',
+        text: 'Imediatamente na data de sua publicação, por se tratar de contribuição com finalidade social urgente.',
+        isCorrect: false,
+        distractorReason: 'Apenas situações excepcionais como empréstimos compulsórios por guerra ou calamidade têm eficácia imediata.'
+      },
+      {
+        id: 'opt-11-d',
+        text: '1º de janeiro de 2026, pois deve respeitar cumulativamente o exercício seguinte e o prazo de 90 dias.',
+        isCorrect: false,
+        distractorReason: 'A cumulatividade (art. 150, III, "b" e "c") é a regra geral, mas o art. 195, § 6º é regra especial que afasta o exercício financeiro.'
+      }
+    ],
+    explanation: 'Nos termos do art. 195, § 6º, da CF/88, as contribuições sociais para a seguridade social só poderão ser exigidas após decorridos noventa dias da data da publicação da lei que as houver instituído ou modificado, não se lhes aplicando o princípio da anterioridade anual previsto no art. 150, III, "b".',
+    lawArticles: ['Art. 195, § 6º, da CF/88', 'Art. 150, III, "c", da CF/88'],
+    cognitiveAnalysis: {
+      commonTrap: 'Esquecer que a noventena das contribuições previdenciárias é REGRA ESPECIAL (dispensa esperar o dia 1º de janeiro do ano seguinte).',
+      keyConcept: 'Contribuições Sociais do art. 195: NÃO obedecem anterioridade de exercício, obedecem APENAS noventena (90 dias).',
+      bancaTendency: 'A FGV coloca datas de dezembro para induzir o candidato a marcar 1º de janeiro do ano seguinte.'
+    }
+  },
+  {
+    id: 'q-12',
+    subjectId: 'sub-rlm',
+    subjectName: 'Raciocínio Lógico e Matemática',
+    topicId: 'top-rlm-1',
+    topicName: 'Lógica Proposicional e Negação de Proposições Compostas',
+    banca: 'Cebraspe',
+    year: 2026,
+    institution: 'Polícia Federal',
+    role: 'Escrivão de Polícia Federal',
+    difficulty: 'Fácil',
+    format: 'certo_errado',
+    statement: 'Considere a seguinte proposição lógica: "Se o agente efetuou a prisão em flagrante, então o delegado lavrou o auto de prisão."\n\nA negação lógica dessa proposição é expressa por: "O agente efetuou a prisão em flagrante e o delegado não lavrou o auto de prisão."',
+    codeCitation: 'Leis da Lógica Proposicional - Negação do Condicional (Regra do "MANÉ")',
+    options: [
+      {
+        id: 'opt-12-certo',
+        text: 'CERTO',
+        isCorrect: true
+      },
+      {
+        id: 'opt-12-errado',
+        text: 'ERRADO',
+        isCorrect: false,
+        distractorReason: 'O candidato despreparado tenta negar o condicional "se... então" transformando-o em outro condicional (ex: "se não... então não"), violando as regras da lógica formal.'
+      }
+    ],
+    explanation: 'Para negar uma proposição condicional do tipo (P -> Q), aplica-se a regra do "MANÉ": Mantém a primeira parte E Nega a segunda parte: ~(P -> Q) = P ^ ~Q. Portanto, "O agente efetuou a prisão em flagrante (P mantido) E o delegado não lavrou o auto (~Q negado)" é a negação exata.',
+    lawArticles: ['Fundamentos de Lógica Matemática - Augustus De Morgan'],
+    cognitiveAnalysis: {
+      commonTrap: 'Achar que a negação de "Se P então Q" é "Se não P então não Q". Condicional se nega com conjunção "E".',
+      keyConcept: 'Negação do condicional: Mantém a primeira E Nega a segunda (P ^ ~Q).',
+      bancaTendency: 'O Cebraspe coloca enunciados da rotina policial para testar se a emoção do candidato interfere na álgebra lógica.'
+    }
+  },
+  {
+    id: 'q-13',
+    subjectId: 'sub-dir-prev',
+    subjectName: 'Direito Previdenciário',
+    topicId: 'top-prev-4',
+    topicName: 'Benefícios Previdenciários e Requisitos de Carência',
+    banca: 'FCC',
+    year: 2026,
+    institution: 'TRF 3ª Região',
+    role: 'Técnico Judiciário',
+    difficulty: 'Média',
+    format: 'multipla_escolha',
+    statement: 'Em relação ao benefício de auxílio por incapacidade temporária (antigo auxílio-doença) regulado pela Lei nº 8.213/1991, é correto afirmar que:',
+    codeCitation: 'Art. 25, I e Art. 26, II, da Lei 8.213/91',
+    options: [
+      {
+        id: 'opt-13-a',
+        text: 'Exige período de carência de 24 contribuições mensais para qualquer tipo de patologia.',
+        isCorrect: false,
+        distractorReason: 'O prazo regular de carência é de 12 contribuições, não 24.'
+      },
+      {
+        id: 'opt-13-b',
+        text: 'Independe de carência nos casos de acidente de qualquer natureza ou causa e de doença profissional ou do trabalho.',
+        isCorrect: true
+      },
+      {
+        id: 'opt-13-c',
+        text: 'Pode ser concedido mesmo se a doença ou lesão for pré-existente à filiação, ainda que não tenha ocorrido progressão ou agravamento.',
+        isCorrect: false,
+        distractorReason: 'Doença pré-existente não dá direito ao benefício, salvo se a incapacidade sobrevier por motivo de progressão ou agravamento.'
+      },
+      {
+        id: 'opt-13-d',
+        text: 'É devido a partir do 30º dia de afastamento da atividade para o segurado empregado.',
+        isCorrect: false,
+        distractorReason: 'Para o empregado, a empresa paga os primeiros 15 dias e a Previdência paga a partir do 16º dia.'
+      }
+    ],
+    explanation: 'Nos termos do art. 26, II, da Lei 8.213/91, independe de carência a concessão de auxílio por incapacidade temporária e aposentadoria por incapacidade permanente nos casos de acidente de qualquer natureza ou causa e de doença profissional ou do trabalho, bem como nos casos dos segurados que forem acometidos de alguma das doenças e afecções especificadas em lista elaborada pelos Ministérios da Saúde e da Previdência Social.',
+    lawArticles: ['Art. 25, I, e Art. 26, II, da Lei 8.213/91'],
+    cognitiveAnalysis: {
+      commonTrap: 'Esquecer que acidentes de QUALQUER NATUREZA (mesmo que ocorridos no lazer durante o fim de semana) dispensam carência.',
+      keyConcept: 'Auxílio Incapacidade: Regra geral = 12 contribuições de carência. Acidente de qualquer natureza ou doença ocupacional = ZERO carência.',
+      bancaTendency: 'A FCC explora a contagem dos 15 dias pagos pela empresa e as hipóteses de isenção de carência.'
+    }
+  },
+  {
+    id: 'q-14',
+    subjectId: 'sub-dir-adm',
+    subjectName: 'Direito Administrativo',
+    topicId: 'top-adm-6',
+    topicName: 'Responsabilidade Civil do Estado e Danos a Terceiros',
+    banca: 'Cebraspe',
+    year: 2026,
+    institution: 'Polícia Rodoviária Federal - PRF',
+    role: 'Policial Rodoviário Federal',
+    difficulty: 'Média',
+    format: 'certo_errado',
+    statement: 'No que se refere à responsabilidade civil do Estado no ordenamento pátrio, julgue o item a seguir:\n\nA responsabilidade civil objetiva do Estado, baseada na teoria do risco administrativo, não é absoluta, admitindo a exclusão do dever de indenizar do ente público nas hipóteses de culpa exclusiva da vítima, caso fortuito ou força maior.',
+    codeCitation: 'Art. 37, § 6º, da CF/88 e Doutrina de Direito Administrativo',
+    options: [
+      {
+        id: 'opt-14-certo',
+        text: 'CERTO',
+        isCorrect: true
+      },
+      {
+        id: 'opt-14-errado',
+        text: 'ERRADO',
+        isCorrect: false,
+        distractorReason: 'O candidato confunde a teoria do Risco Administrativo (que admite excludentes) com a teoria do Risco Integral (que não admite excludente alguma, aplicada a dano nuclear e ambiental).'
+      }
+    ],
+    explanation: 'No Brasil, a regra geral adotada pelo art. 37, § 6º, da CF/88 é a Teoria do Risco Administrativo. Ela caracteriza a responsabilidade objetiva (independe de dolo ou culpa do servidor), mas NÃO é integral: admite atenuantes (culpa concorrente) e excludentes do nexo causal (culpa exclusiva da vítima, fato de terceiro, caso fortuito e força maior).',
+    lawArticles: ['Art. 37, § 6º, da CF/88', 'STF - RE 841.526 (Tema 592)'],
+    cognitiveAnalysis: {
+      commonTrap: 'Igualar responsabilidade objetiva à obrigação cega de pagar sem permitir defesa de culpa exclusiva da vítima.',
+      keyConcept: 'Risco Administrativo admite excludentes. Risco Integral (dano nuclear/ambiental) não admite excludentes.',
+      bancaTendency: 'O Cebraspe brinca com a oposição entre Risco Administrativo vs. Risco Integral.'
+    }
+  },
+  {
+    id: 'q-15',
+    subjectId: 'sub-oab-etica',
+    subjectName: 'Ética Profissional',
+    topicId: 'top-etica-2',
+    topicName: 'Publicidade na Advocacia e Provimento 205/2021 do CFOAB',
+    banca: 'FGV',
+    year: 2026,
+    institution: 'OAB Unificado',
+    role: 'Advogado',
+    difficulty: 'Média',
+    format: 'multipla_escolha',
+    statement: 'Dra. Beatriz, advogada recém-aprovada no Exame de Ordem, decide impulsionar publicações nas redes sociais para divulgar seus serviços. À luz do Provimento CFOAB nº 205/2021 e do Código de Ética e Disciplina da OAB, a conduta de Beatriz é permitida desde que:',
+    codeCitation: 'Provimento nº 205/2021 do Conselho Federal da OAB e Arts. 39 a 47 do CED/OAB',
+    options: [
+      {
+        id: 'opt-15-a',
+        text: 'Divulgue expressamente a tabela de honorários e ofereça a primeira consulta jurídica gratuita.',
+        isCorrect: false,
+        distractorReason: 'A mercantilização, divulgação de preços e gratuidade predatória são expressamente vedadas pelo Código de Ética.'
+      },
+      {
+        id: 'opt-15-b',
+        text: 'A publicidade tenha caráter meramente informativo, com discrição e sobriedade, sendo vedado o anúncio de resultados garantidos ou captação indevida de clientela.',
+        isCorrect: true
+      },
+      {
+        id: 'opt-15-c',
+        text: 'Utilize outdoors luminosos em rodovias e envie mensagens em massa não solicitadas por WhatsApp.',
+        isCorrect: false,
+        distractorReason: 'Outdoors e malas diretas indiscriminadas são expressamente proibidos pelo Provimento 205/21.'
+      },
+      {
+        id: 'opt-15-d',
+        text: 'Seja realizada exclusivamente por meio físico impresso, sendo o marketing digital vedado pela OAB.',
+        isCorrect: false,
+        distractorReason: 'O Provimento 205/2021 regulamentou e permitiu o marketing digital e o impulsionamento informativo na advocacia.'
+      }
+    ],
+    explanation: 'O Provimento nº 205/2021 do CFOAB autorizou expressamente o marketing de conteúdos jurídicos e o impulsionamento pago nas redes sociais, desde que preserve o caráter informativo, a discrição, a sobriedade e não induza à mercantilização da profissão nem prometa resultados processuais fáceis ou garantidos.',
+    lawArticles: ['Provimento nº 205/2021 do CFOAB', 'Art. 39 do Código de Ética e Disciplina da OAB'],
+    cognitiveAnalysis: {
+      commonTrap: 'Achar que qualquer impulsionamento nas redes sociais é proibido pela OAB (a regra foi modernizada em 2021).',
+      keyConcept: 'Marketing de Conteúdo Jurídico é VÁLIDO: caráter estritamente informativo + sobriedade + sem mercantilização/preços.',
+      bancaTendency: 'A FGV testa a atualização do candidato quanto às regras modernas de internet do Provimento 205/2021.'
+    }
   }
 ];
 

@@ -167,7 +167,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             Escolha o Plano Ideal para Sua Aprovação
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1">
-            Acesso ilimitado à dissecação de editais, diagnóstico cognitivo de erros e cronogramas dinâmicos.
+            Acesso ilimitado à análise verticalizada de editais, diagnóstico cognitivo de erros e cronogramas dinâmicos.
           </p>
 
           {/* Billing Switch */}
@@ -231,7 +231,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               <ul className="space-y-2.5 text-xs text-slate-700 dark:text-slate-200">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>Dissecação de editais ilimitada com IA Multimodal</span>
+                  <span>Análise e mapeamento de editais ilimitados com IA</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />

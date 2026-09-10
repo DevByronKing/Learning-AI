@@ -42,8 +42,8 @@ export async function generateMetadata({ params }: EditalPageProps): Promise<Met
 
   if (!edital) {
     return {
-      title: 'Edital Verticalizado | AprovaLens AI',
-      description: 'Dissecação cirúrgica de editais com inteligência artificial para concursos públicos.',
+      title: 'Edital Verticalizado | Learning AI',
+      description: 'Análise e mapeamento estratégico de editais com inteligência artificial para concursos públicos.',
     };
   }
 
@@ -59,14 +59,14 @@ export async function generateMetadata({ params }: EditalPageProps): Promise<Met
       `banca ${edital.banca}`,
       'cronograma de estudos',
       'planilha de estudos pdf',
-      'AprovaLens AI'
+      'Learning AI'
     ],
     alternates: {
       canonical: pageUrl,
     },
     openGraph: {
       title: `${edital.title} | Edital Esquematizado por IA`,
-      description: `Dissecação completa do edital ${edital.institution}. Baixe a planilha verticalizada com ciclo de estudos adaptativo.`,
+      description: `Análise e mapeamento completo do edital ${edital.institution}. Baixe a planilha verticalizada com ciclo de estudos adaptativo.`,
       url: pageUrl,
       type: 'article',
       locale: 'pt_BR',
@@ -265,7 +265,7 @@ export default function EditalPublicPage({ params }: EditalPageProps) {
                 <div>
                   <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
                     <BookOpen className="w-5 h-5 text-indigo-400" />
-                    <span>Conteúdo Programático Dissecado por Relevância</span>
+                    <span>Conteúdo Programático Mapeado por Relevância</span>
                   </h2>
                   <p className="text-xs text-slate-400 mt-1">
                     Pesos atribuídos pelo algoritmo da AprovaLens com base no histórico da banca <strong>{edital.banca}</strong>.

@@ -108,7 +108,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
         {/* Subtitle */}
         <p className="mt-6 text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
-          O <strong className="font-bold text-indigo-600 dark:text-indigo-400">Learning AI</strong> disseca o edital do seu concurso em segundos, gera um cronograma dinâmico que não quebra no primeiro imprevisto e diagnostica a causa psicológica exata de cada erro nas questões.
+          O <strong className="font-bold text-indigo-600 dark:text-indigo-400">Learning AI</strong> analisa e mapeia o edital do seu concurso em segundos, gera um cronograma dinâmico que não quebra no primeiro imprevisto e diagnostica a causa psicológica exata de cada erro nas questões.
         </p>
 
         {/* CTA Buttons */}
@@ -118,7 +118,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white font-extrabold text-base tracking-wide shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5 glow-brand"
           >
             <BrainCircuit className="w-5 h-5" />
-            <span>Dissecar Meu Edital com IA</span>
+            <span>Mapear Edital com IA</span>
             <ArrowRight className="w-4 h-4" />
           </button>
           
@@ -234,31 +234,33 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
           {/* Lead Result Card */}
           {leadResult && (
-            <div className="mt-6 p-5 rounded-2xl bg-white dark:bg-dark-surface/90 border border-emerald-500/40 animate-fadeIn">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-300 dark:border-white/10">
-                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+            <div className="mt-6 p-5 sm:p-6 rounded-2xl bg-white dark:bg-dark-surface border border-emerald-500/50 shadow-xl shadow-emerald-500/10 animate-fadeIn">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10">
+                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
                   ✓ Diagnóstico do Edital Gerado
                 </span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Tempo estimado: ~{leadResult.totalHoursNeeded}h de estudo líquido</span>
               </div>
-              <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">Matérias com 80% do Peso no Ponto de Corte:</p>
-                  <ul className="space-y-1">
+                  <p className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-2">Matérias com 80% do Peso no Ponto de Corte:</p>
+                  <ul className="space-y-1.5">
                     {leadResult.topTopics.map((top, i) => (
-                      <li key={i} className="text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                        {top}
+                      <li key={i} className="text-xs text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                        <span>{top}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className="bg-white dark:bg-dark-card/60 p-3 rounded-xl border border-indigo-500/20">
-                  <p className="text-xs font-semibold text-indigo-300">Índice de Pegadinhas da Banca:</p>
-                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">{leadResult.bancaTrapIndex}</p>
+                <div className="bg-slate-50 dark:bg-dark-card p-4 rounded-xl border border-indigo-500/30 flex flex-col justify-between">
+                  <div>
+                    <p className="text-xs font-bold text-indigo-600 dark:text-indigo-300">Índice de Pegadinhas da Banca:</p>
+                    <p className="text-xs text-slate-700 dark:text-slate-200 mt-1">{leadResult.bancaTrapIndex}</p>
+                  </div>
                   <button
                     onClick={onStartEdital}
-                    className="mt-3 w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+                    className="mt-4 w-full py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-md shadow-indigo-600/30"
                   >
                     <span>Abrir Cronograma Completo no App</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -365,13 +367,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <div className="w-12 h-12 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400 mb-4 group-hover:scale-105 transition-transform">
                 <FileText className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-indigo-300 transition-colors">Dissecador de Editais em PDF</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-indigo-300 transition-colors">Analisador Inteligente de Editais</h3>
               <p className="mt-2 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 Faça o upload do edital e receba em segundos a árvore verticalizada, o peso de cada matéria e os artigos de lei mais cobrados.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/5 text-xs text-indigo-400 font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              <span>Dissecar Edital</span>
+              <span>Mapear Edital</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </div>
           </div>

@@ -284,6 +284,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [progressStage, setProgressStage] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedAreaFilter, setSelectedAreaFilter] = useState<string>('todas');
   const [expandedSubject, setExpandedSubject] = useState<string | null>(selectedExam.subjects[0]?.id || null);
   
   // Custom Upload Modal State
@@ -492,7 +493,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
             <span className="text-xs text-slate-500 dark:text-slate-400">PDF RAG Parser v2.4</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
-            Dissecador de Editais & Edital Verticalizado
+            Analisador Inteligente de Editais & Edital Verticalizado
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Carregue qualquer edital em PDF ou selecione um concurso oficial pré-analisado para montar sua rota adaptativa.
@@ -510,50 +511,98 @@ export const EditalParser: React.FC<EditalParserProps> = ({
         </div>
       </div>
 
-      {/* Selector of Pre-Analyzed Editais */}
-      <div className="mt-6 glass-panel p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Editais Cadastrados por Área
-          </span>
+      {/* Selector of Pre-Analyzed Editais - Modern Aligned Card Grid */}
+      <div className="mt-6 glass-panel p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-white/5">
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-indigo-500" />
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+              Editais Disponíveis para Estudo
+            </span>
+          </div>
           <button
             onClick={() => setShowUploadModal(true)}
-            className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center sm:justify-start gap-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 border border-dashed border-indigo-500/40 text-indigo-400 hover:text-indigo-500 dark:text-indigo-300 dark:hover:text-white"
+            className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center sm:justify-start gap-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 border border-dashed border-indigo-500/40 text-indigo-500 dark:text-indigo-300 dark:hover:text-white"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Upload de Novo Edital (PDF)</span>
           </button>
         </div>
 
-        <div className="space-y-5">
-          {Object.entries(examsByArea).map(([area, areaExams]) => (
-            <div key={area}>
-              <h4 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600"></span>
-                {area}
-              </h4>
-              <div className="flex flex-wrap items-center gap-2.5">
-                {areaExams.map((exam) => (
-                  <button
-                    key={exam.id}
-                    onClick={() => onSelectExam(exam)}
-                    className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                      selectedExam.id === exam.id
-                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30 ring-2 ring-indigo-400/40'
-                        : 'bg-slate-50 dark:bg-dark-surface/80 hover:bg-slate-100 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-600'
-                    }`}
-                  >
-                    <span>{exam.title}</span>
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
-                      selectedExam.id === exam.id ? 'bg-black/30 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
-                    }`}>
-                      {exam.banca}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* Segmented Area Filter Pills */}
+        <div className="flex flex-wrap items-center gap-1.5">
+          <button
+            onClick={() => setSelectedAreaFilter('todas')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              selectedAreaFilter === 'todas'
+                ? 'bg-indigo-600 text-white shadow-sm'
+                : 'bg-slate-100 dark:bg-dark-surface text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/5'
+            }`}
+          >
+            Todas as Áreas ({exams.length})
+          </button>
+          {Object.keys(examsByArea).map((area) => (
+            <button
+              key={area}
+              onClick={() => setSelectedAreaFilter(area)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                selectedAreaFilter === area
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'bg-slate-100 dark:bg-dark-surface text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/5'
+              }`}
+            >
+              {area} ({examsByArea[area].length})
+            </button>
           ))}
+        </div>
+
+        {/* Aligned Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
+          {exams
+            .filter(e => selectedAreaFilter === 'todas' || getExamArea(e) === selectedAreaFilter)
+            .map((exam) => {
+              const isSelected = selectedExam.id === exam.id;
+              const area = getExamArea(exam);
+              return (
+                <div
+                  key={exam.id}
+                  onClick={() => onSelectExam(exam)}
+                  className={`p-4 rounded-2xl border cursor-pointer transition-all flex flex-col justify-between gap-3 text-left ${
+                    isSelected
+                      ? 'bg-indigo-50 dark:bg-indigo-500/15 border-indigo-500 shadow-md shadow-indigo-500/10 ring-2 ring-indigo-500/30'
+                      : 'bg-white dark:bg-dark-card hover:bg-slate-50 dark:hover:bg-dark-hover border-slate-200 dark:border-white/10 shadow-sm'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-1.5">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                        {area}
+                      </span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-dark-surface border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 font-bold">
+                        {exam.banca}
+                      </span>
+                    </div>
+                    <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white line-clamp-1">
+                      {exam.title}
+                    </h4>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
+                      {exam.role}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-white/5 text-[11px]">
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                      {exam.salary}
+                    </span>
+                    <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] ${
+                      isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                    }`}>
+                      {isSelected ? 'Selecionado ✓' : 'Selecionar'}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </div>
 
@@ -563,7 +612,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
           <div className="w-16 h-16 mx-auto rounded-2xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 mb-4">
             <Sparkles className="w-8 h-8 animate-spin" style={{ animationDuration: '3s' }} />
           </div>
-          <h3 className="text-lg font-black text-slate-900 dark:text-white">Processamento e Dissecação Analítica do Edital</h3>
+          <h3 className="text-lg font-black text-slate-900 dark:text-white">Processamento e Mapeamento Analítico do Edital</h3>
           <p className="text-xs text-indigo-300 mt-1 font-mono">{stages[progressStage]}</p>
           
           {/* Progress Bar */}
@@ -611,39 +660,39 @@ export const EditalParser: React.FC<EditalParserProps> = ({
 
             {/* Quick Metrics Bar */}
             <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="bg-white dark:bg-dark-card/70 p-3 rounded-2xl border border-slate-200 dark:border-white/5">
-                <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs">
+              <div className="bg-white dark:bg-dark-surface p-3.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+                <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs font-semibold">
                   <Calendar className="w-3.5 h-3.5 text-indigo-400" />
                   <span>Data da Prova</span>
                 </div>
-                <p className="text-sm font-black text-slate-900 dark:text-white mt-1">{selectedExam.examDate}</p>
-                <p className="text-[10px] text-amber-400 font-bold">Faltam {selectedExam.daysRemaining} dias</p>
+                <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white mt-1">{selectedExam.examDate}</p>
+                <p className="text-[10px] text-amber-500 dark:text-amber-400 font-bold">Faltam {selectedExam.daysRemaining} dias</p>
               </div>
 
-              <div className="bg-white dark:bg-dark-card/70 p-3 rounded-2xl border border-slate-200 dark:border-white/5">
-                <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs">
+              <div className="bg-white dark:bg-dark-surface p-3.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+                <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs font-semibold">
                   <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Remuneração</span>
                 </div>
-                <p className="text-sm font-black text-emerald-400 mt-1">{selectedExam.salary}</p>
+                <p className="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400 mt-1">{selectedExam.salary}</p>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400">Inicial Bruto</p>
               </div>
 
-              <div className="bg-white dark:bg-dark-card/70 p-3 rounded-2xl border border-slate-200 dark:border-white/5">
-                <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs">
+              <div className="bg-white dark:bg-dark-surface p-3.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+                <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs font-semibold">
                   <Users className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Vagas</span>
                 </div>
-                <p className="text-sm font-black text-slate-900 dark:text-white mt-1">{selectedExam.vacancies} vagas</p>
+                <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white mt-1">{selectedExam.vacancies} vagas</p>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400">Imediatas + CR</p>
               </div>
 
-              <div className="bg-white dark:bg-dark-card/70 p-3 rounded-2xl border border-slate-200 dark:border-white/5">
-                <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs">
+              <div className="bg-white dark:bg-dark-surface p-3.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+                <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs font-semibold">
                   <Award className="w-3.5 h-3.5 text-purple-400" />
                   <span>Disciplinas</span>
                 </div>
-                <p className="text-sm font-black text-slate-900 dark:text-white mt-1">{selectedExam.subjects.length} Matérias</p>
+                <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white mt-1">{selectedExam.subjects.length} Matérias</p>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400">Ponderadas por peso</p>
               </div>
             </div>
@@ -662,14 +711,18 @@ export const EditalParser: React.FC<EditalParserProps> = ({
               <div className="mt-4 space-y-4 overflow-y-auto max-h-56 pr-2 custom-scrollbar">
                 {selectedExam.subjects.map((sub) => (
                   <div key={sub.id} className="text-xs group">
-                    <div className="flex justify-between text-slate-600 dark:text-slate-300 mb-1.5">
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-slate-900 dark:text-white truncate max-w-[160px]">{sub.name}</span>
-                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono">
+                    <div className="flex items-center justify-between gap-2 text-slate-600 dark:text-slate-300 mb-1.5">
+                      <span className="font-bold text-slate-900 dark:text-white truncate flex-1 min-w-0" title={sub.name}>
+                        {sub.name}
+                      </span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-dark-surface border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 font-mono whitespace-nowrap shrink-0">
                           Peso {sub.weight}
                         </span>
+                        <span className="font-black text-indigo-600 dark:text-indigo-400 min-w-[36px] text-right shrink-0">
+                          {sub.relevancePercentage}%
+                        </span>
                       </div>
-                      <span className="font-black text-indigo-500 dark:text-indigo-400">{sub.relevancePercentage}%</span>
                     </div>
                     
                     <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden mb-1">
@@ -755,25 +808,25 @@ export const EditalParser: React.FC<EditalParserProps> = ({
 
                 {/* Topics Breakdown */}
                 {expandedSubject === sub.id && (
-                  <div className="px-4 sm:px-5 pb-5 pt-1 border-t border-slate-200 dark:border-white/5 bg-white dark:bg-dark-card/30">
-                    <div className="grid grid-cols-1 gap-2.5 mt-3">
+                  <div className="px-4 sm:px-5 pb-5 pt-3 border-t border-slate-200 dark:border-white/10 bg-slate-50/70 dark:bg-dark-surface/50">
+                    <div className="grid grid-cols-1 gap-2.5 mt-2">
                       {sub.topics.map((topic) => (
                         <div
                           key={topic.id}
-                          className="p-3 rounded-xl bg-white dark:bg-dark-surface/60 border border-slate-200 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-600 transition-colors"
+                          className="p-3.5 rounded-xl bg-white dark:bg-dark-card border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-indigo-500/40 transition-colors shadow-sm"
                         >
                           <div className="max-w-xl">
                             <div className="flex items-center gap-2">
-                              <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">{topic.name}</span>
+                              <span className="text-xs font-bold text-slate-800 dark:text-slate-100">{topic.name}</span>
                               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${getStatusColor(topic.status)}`}>
                                 {topic.status}
                               </span>
                             </div>
 
                             {topic.articlesOrLaws && topic.articlesOrLaws.length > 0 && (
-                              <div className="flex flex-wrap gap-1.5 mt-1.5">
+                              <div className="flex flex-wrap gap-1.5 mt-2">
                                 {topic.articlesOrLaws.map((law, idx) => (
-                                  <span key={idx} className="text-[10px] px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-mono">
+                                  <span key={idx} className="text-[10px] px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20 font-mono">
                                     📜 {law}
                                   </span>
                                 ))}
@@ -785,13 +838,13 @@ export const EditalParser: React.FC<EditalParserProps> = ({
                             {topic.accuracyRate !== undefined && (
                               <div className="text-right">
                                 <p className="text-[10px] text-slate-500 dark:text-slate-400">Proficiência</p>
-                                <p className={`text-xs font-bold ${topic.accuracyRate >= 70 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                                <p className={`text-xs font-bold ${topic.accuracyRate >= 70 ? 'text-emerald-500 dark:text-emerald-400' : 'text-rose-500 dark:text-rose-400'}`}>
                                   {topic.accuracyRate}%
                                 </p>
                               </div>
                             )}
                             
-                            <span className="text-[11px] px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-medium">
+                            <span className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-medium whitespace-nowrap">
                               Incidência {topic.frequencyInBanca}
                             </span>
                           </div>
@@ -900,7 +953,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
                           </span>
                         </div>
                         <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                          Tamanho: {formatFileSize(uploadedFile.size)} • Pronto para dissecação
+                          Tamanho: {formatFileSize(uploadedFile.size)} • Pronto para análise com IA
                         </p>
                       </div>
                     </div>
@@ -1044,7 +1097,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
                   className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white text-xs font-extrabold shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all glow-brand"
                 >
                   <Sparkles className="w-4 h-4" />
-                  <span>Dissecar Edital com IA</span>
+                  <span>Mapear Edital com IA</span>
                 </button>
               </div>
 
