@@ -450,6 +450,7 @@ export function AprovaLensApp() {
             onReviewFlashcard={handleReviewFlashcard}
             onAddNewFlashcard={handleAddFlashcard}
             onGoToSimulator={() => setActiveTab('simulator')}
+            onNavigateTab={(tab) => setActiveTab(tab)}
           />
         )}
 

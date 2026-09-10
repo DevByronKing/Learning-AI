@@ -317,3 +317,49 @@ export type MicroSummary = {
   bancaTrapAlert: string;
   mnemonic?: string;
 };
+
+// Gamification, Mascot Companion & Achievements
+export type MascotId = 'coruja' | 'falcao' | 'lobo' | 'leao';
+
+export type MascotCompanion = {
+  id: MascotId;
+  name: string;
+  species: string;
+  title: string;
+  avatarEmoji: string;
+  tagline: string;
+  dailyAdvice: string;
+  encouragement: string;
+  specialty: string;
+  unlockedLevel: number;
+};
+
+export type AchievementTier = 'bronze' | 'silver' | 'gold' | 'diamond';
+export type AchievementCategory = 'todas' | 'bancas' | 'lei_seca' | 'disciplina' | 'elite';
+
+export type Achievement = {
+  id: string;
+  title: string;
+  description: string;
+  category: AchievementCategory;
+  icon: string;
+  tier: AchievementTier;
+  unlocked: boolean;
+  unlockedAt?: string;
+  progress: number; // 0 a 100
+  currentValue: number;
+  targetValue: number;
+  unit: string;
+  xpReward: number;
+};
+
+export type DailyMission = {
+  id: string;
+  title: string;
+  category: string;
+  current: number;
+  target: number;
+  completed: boolean;
+  xpReward: number;
+  actionTab?: string;
+};

@@ -21,7 +21,8 @@ import {
   X,
   ChevronRight,
   ExternalLink,
-  BookCheck
+  BookCheck,
+  Trophy
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
 
@@ -123,10 +124,10 @@ export const Navbar: React.FC<NavbarProps> = ({
     },
     {
       id: 'analytics',
-      label: 'Diagnóstico',
-      shortLabel: 'Diagnóstico',
-      icon: Activity,
-      desc: 'Pontos Cegos & Flashcards SRS',
+      label: 'Jornada & IA',
+      shortLabel: 'Jornada',
+      icon: Trophy,
+      desc: 'Companheiro Animal, Metas & Conquistas',
       badge: null,
     },
   ];

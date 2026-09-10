@@ -16,11 +16,11 @@ export async function POST(req: NextRequest) {
       userName = 'Concurseiro' 
     } = body;
 
-    // Cálculo de preços baseado em ciclo
+    // Cálculo de preços baseado em ciclo (Value-Based Pricing)
     const prices: Record<string, { name: string; monthly: number; annual: number }> = {
       aspirante: { name: 'Aspirante (Gratuito)', monthly: 0, annual: 0 },
-      pro: { name: 'Concurseiro PRO', monthly: 39.90, annual: 297.00 },
-      elite: { name: 'Tribunal & Carreira Elite', monthly: 69.90, annual: 497.00 },
+      pro: { name: 'Concurseiro PRO (Copiloto Cognitivo)', monthly: 69.90, annual: 497.00 },
+      elite: { name: 'Carreiras Elite & Discursivas com IA', monthly: 119.90, annual: 897.00 },
     };
 
     const planConfig = prices[planId] || prices.pro;

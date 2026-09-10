@@ -1,4 +1,4 @@
-import { ExamNotice, Question, UserMetrics, Flashcard, DiscursivePrompt, MockExam, MistakeEntry, VadeMecumArticle, MicroSummary } from './types';
+import { ExamNotice, Question, UserMetrics, Flashcard, DiscursivePrompt, MockExam, MistakeEntry, VadeMecumArticle, MicroSummary, MascotCompanion, Achievement, DailyMission } from './types';
 
 export const INITIAL_EXAMS: ExamNotice[] = [
   {
@@ -1578,3 +1578,273 @@ export const INITIAL_MICRO_SUMMARIES: MicroSummary[] = [
     mnemonic: 'Pagou nem que seja um tostão? Conta do Fato Gerador! Não pagou nada ou foi pilantra? Conta do 1º de Janeiro do ano seguinte!'
   }
 ];
+
+export const MASCOTS_DATA: MascotCompanion[] = [
+  {
+    id: 'coruja',
+    name: 'Atena',
+    species: 'Coruja Estrategista',
+    title: 'Guardiã da Sabedoria & Foco Noturno',
+    avatarEmoji: '🦉',
+    tagline: 'Visão 360° para enxergar as pegadinhas invisíveis da banca.',
+    dailyAdvice: 'Não tente devorar todo o edital de uma vez só. O segredo da aprovação está em dominar com precisão cirúrgica os 20% que representam 80% da prova.',
+    encouragement: 'Você já eliminou 15 questões difíceis hoje! A vaga no Diário Oficial está mais perto do que parece.',
+    specialty: 'Detecção de armadilhas Cebraspe & FGV',
+    unlockedLevel: 1
+  },
+  {
+    id: 'falcao',
+    name: 'Áquila',
+    species: 'Falcão Sniper',
+    title: 'Mestre da Velocidade & Rota 80/20',
+    avatarEmoji: '🦅',
+    tagline: 'Mira implacável nos tópicos de maior peso da nota de corte.',
+    dailyAdvice: 'Atenção ao tempo de resolução por questão: mantenha a média de 2 minutos para sobrar fôlego para a redação.',
+    encouragement: 'Sua taxa de acerto em Direito Administrativo subiu para 78%. Mirou, acertou!',
+    specialty: 'Resolução rápida & Priorização de tópicos de peso 3',
+    unlockedLevel: 2
+  },
+  {
+    id: 'lobo',
+    name: 'Fenrir',
+    species: 'Lobo da Constância',
+    title: 'Líder da Disciplina & Resiliência',
+    avatarEmoji: '🐺',
+    tagline: 'A constância diária vence o talento sem rotina.',
+    dailyAdvice: 'Perdeu o estudo ontem por imprevisto? Sem culpa! A matilha se reorganiza no ciclo de hoje sem quebrar o ritmo.',
+    encouragement: '14 dias consecutivos de streak! Poucos candidatos têm essa disciplina de aço.',
+    specialty: 'Proteção contra o desânimo & Repetição Espaçada',
+    unlockedLevel: 3
+  },
+  {
+    id: 'leao',
+    name: 'Apolo',
+    species: 'Leão da Posse',
+    title: 'Soberano das Discursivas & Peças OAB',
+    avatarEmoji: '🦁',
+    tagline: 'Coragem para enfrentar qualquer banca na folha de resposta.',
+    dailyAdvice: 'Na redação discursiva, divida o espaço rigorosamente: 5 linhas de introdução, 20 de fundamentação legal e 5 de conclusão.',
+    encouragement: 'Sua última peça atingiu nota 8.8 na régua oficial. É nota de posse no tribunal!',
+    specialty: 'Domínio do Estúdio de Discursivas & Jurisprudência',
+    unlockedLevel: 4
+  }
+];
+
+export const INITIAL_ACHIEVEMENTS: Achievement[] = [
+  {
+    id: 'ach-1',
+    title: 'Primeiro Voo na Arena',
+    description: 'Resolva sua primeira bateria de questões no Simulador ou Banco.',
+    category: 'bancas',
+    icon: '🎯',
+    tier: 'bronze',
+    unlocked: true,
+    unlockedAt: '2026-08-25',
+    progress: 100,
+    currentValue: 1,
+    targetValue: 1,
+    unit: 'bateria',
+    xpReward: 150
+  },
+  {
+    id: 'ach-2',
+    title: 'Sniper do 80/20',
+    description: 'Alcance proficiência superior a 75% nos 3 tópicos de maior peso da prova.',
+    category: 'bancas',
+    icon: '🔭',
+    tier: 'gold',
+    unlocked: false,
+    progress: 66,
+    currentValue: 2,
+    targetValue: 3,
+    unit: 'tópicos dominados',
+    xpReward: 600
+  },
+  {
+    id: 'ach-3',
+    title: 'Imune a Pegadinhas Cebraspe',
+    description: 'Acerte 15 questões consecutivas com distratores de alta malícia da banca.',
+    category: 'bancas',
+    icon: '🛡️',
+    tier: 'gold',
+    unlocked: false,
+    progress: 80,
+    currentValue: 12,
+    targetValue: 15,
+    unit: 'acertos seguidos',
+    xpReward: 750
+  },
+  {
+    id: 'ach-4',
+    title: 'Muralha do Artigo 5º',
+    description: 'Acerte 20 questões sobre Direitos e Garantias Fundamentais da CF/88.',
+    category: 'lei_seca',
+    icon: '⚖️',
+    tier: 'silver',
+    unlocked: true,
+    unlockedAt: '2026-09-02',
+    progress: 100,
+    currentValue: 20,
+    targetValue: 20,
+    unit: 'questões da CF',
+    xpReward: 400
+  },
+  {
+    id: 'ach-5',
+    title: 'Chama de Ferro (7 Dias)',
+    description: 'Mantenha 7 dias consecutivos de estudo ativo sem quebrar o streak.',
+    category: 'disciplina',
+    icon: '🔥',
+    tier: 'silver',
+    unlocked: true,
+    unlockedAt: '2026-09-03',
+    progress: 100,
+    currentValue: 7,
+    targetValue: 7,
+    unit: 'dias seguidos',
+    xpReward: 350
+  },
+  {
+    id: 'ach-6',
+    title: 'Guerreiro Implacável (30 Dias)',
+    description: 'Conquiste um mês completo de constância inabalável de estudos.',
+    category: 'disciplina',
+    icon: '⚡',
+    tier: 'diamond',
+    unlocked: false,
+    progress: 46,
+    currentValue: 14,
+    targetValue: 30,
+    unit: 'dias seguidos',
+    xpReward: 1500
+  },
+  {
+    id: 'ach-7',
+    title: 'Caneta de Ouro no Tribunal',
+    description: 'Conclua uma redação ou peça jurídica com nota superior a 8.5 na régua oficial.',
+    category: 'elite',
+    icon: '✒️',
+    tier: 'gold',
+    unlocked: false,
+    progress: 85,
+    currentValue: 8.2,
+    targetValue: 8.5,
+    unit: 'pontos na régua',
+    xpReward: 800
+  },
+  {
+    id: 'ach-8',
+    title: 'Memória Fotográfica (SRS)',
+    description: 'Revise 50 flashcards no deck inteligente de repetição espaçada.',
+    category: 'disciplina',
+    icon: '🧠',
+    tier: 'bronze',
+    unlocked: true,
+    unlockedAt: '2026-09-05',
+    progress: 100,
+    currentValue: 50,
+    targetValue: 50,
+    unit: 'flashcards revisados',
+    xpReward: 250
+  },
+  {
+    id: 'ach-9',
+    title: 'Revanche Cirúrgica',
+    description: 'Supere 10 questões que estavam no Caderno de Erros no modo Revanche.',
+    category: 'bancas',
+    icon: '⚔️',
+    tier: 'silver',
+    unlocked: false,
+    progress: 70,
+    currentValue: 7,
+    targetValue: 10,
+    unit: 'erros superados',
+    xpReward: 500
+  },
+  {
+    id: 'ach-10',
+    title: 'Vade Mecum Vivo',
+    description: 'Consulte 30 artigos de lei secos diretamente vinculados a questões de concurso.',
+    category: 'lei_seca',
+    icon: '📜',
+    tier: 'bronze',
+    unlocked: false,
+    progress: 60,
+    currentValue: 18,
+    targetValue: 30,
+    unit: 'artigos lidos',
+    xpReward: 300
+  },
+  {
+    id: 'ach-11',
+    title: 'Velocidade de Posse',
+    description: 'Resolva 10 questões em menos de 8 minutos com taxa de acerto acima de 80%.',
+    category: 'bancas',
+    icon: '⏱️',
+    tier: 'silver',
+    unlocked: false,
+    progress: 40,
+    currentValue: 4,
+    targetValue: 10,
+    unit: 'questões rápidas',
+    xpReward: 450
+  },
+  {
+    id: 'ach-12',
+    title: 'Portas da Nomeação',
+    description: 'Alcance probabilidade estimada superior a 80% no termômetro da nota de corte.',
+    category: 'elite',
+    icon: '👑',
+    tier: 'diamond',
+    unlocked: false,
+    progress: 85,
+    currentValue: 68.0,
+    targetValue: 80.0,
+    unit: '% probabilidade',
+    xpReward: 2000
+  }
+];
+
+export const INITIAL_DAILY_MISSIONS: DailyMission[] = [
+  {
+    id: 'mis-1',
+    title: 'Resolver 15 questões de Direito Previdenciário ou Administrativo',
+    category: 'Simulador',
+    current: 15,
+    target: 15,
+    completed: true,
+    xpReward: 120,
+    actionTab: 'questions'
+  },
+  {
+    id: 'mis-2',
+    title: 'Revisar 10 flashcards no deck de repetição espaçada',
+    category: 'Memória SRS',
+    current: 7,
+    target: 10,
+    completed: false,
+    xpReward: 90,
+    actionTab: 'analytics'
+  },
+  {
+    id: 'mis-3',
+    title: 'Consultar 3 artigos com alta incidência de pegadinha no Vade Mecum',
+    category: 'Lei Seca',
+    current: 2,
+    target: 3,
+    completed: false,
+    xpReward: 70,
+    actionTab: 'vademecum'
+  },
+  {
+    id: 'mis-4',
+    title: 'Treinar 1 redação discursiva ou peça OAB de 30 linhas com IA',
+    category: 'Discursivas',
+    current: 0,
+    target: 1,
+    completed: false,
+    xpReward: 250,
+    actionTab: 'discursivas'
+  }
+];
+

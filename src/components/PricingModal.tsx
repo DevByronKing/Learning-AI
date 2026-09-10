@@ -188,7 +188,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             >
               <span>Anual</span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500 text-black font-extrabold">
-                -38% OFF
+                -40% OFF
               </span>
             </button>
           </div>
@@ -209,7 +209,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30">
-                  PLANO PRO
+                  PLANO PRO • COPILOTO COGNITIVO
                 </span>
                 {selectedPlanToBuy === 'pro' && <CheckCircle2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
               </div>
@@ -217,13 +217,17 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               <div className="mt-4 mb-4">
                 <div className="flex items-baseline gap-1">
                   <span className="text-3xl font-black text-slate-900 dark:text-white">
-                    {billingCycle === 'annual' ? 'R$ 24,75' : 'R$ 39,90'}
+                    {billingCycle === 'annual' ? 'R$ 41,41' : 'R$ 69,90'}
                   </span>
                   <span className="text-xs text-slate-500 dark:text-slate-400"> / mês</span>
                 </div>
-                {billingCycle === 'annual' && (
+                {billingCycle === 'annual' ? (
                   <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
-                    Cobrado anualmente (R$ 297/ano)
+                    Cobrado anualmente (R$ 497/ano no Pix) • Economize R$ 341
+                  </p>
+                ) : (
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                    Cobrança mensal recorrente sem fidelidade
                   </p>
                 )}
               </div>
@@ -231,19 +235,23 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               <ul className="space-y-2.5 text-xs text-slate-700 dark:text-slate-200">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>Análise e mapeamento de editais ilimitados com IA</span>
+                  <span><strong>Editais ilimitados:</strong> Análise verticalizada e rota 80/20 da banca</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>Diagnóstico cognitivo dos 4 tipos de falha</span>
+                  <span><strong>Diagnóstico Cognitivo:</strong> Identifica pegadinha, lacuna ou desatenção</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>Mapeamento analítico de pontos cegos</span>
+                  <span><strong>Ciclos autoajustáveis:</strong> Recalibra carga horária sem quebrar rotina</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>Geração de cards para repetição espaçada (SRS)</span>
+                  <span><strong>Heatmap de pontos cegos</strong> e artigos de lei mais cobrados</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span><strong>Repetição Espaçada (SRS):</strong> Flashcards inteligentes automáticos</span>
                 </li>
               </ul>
             </div>
@@ -265,7 +273,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-purple-50 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30">
-                  PLANO ELITE
+                  PLANO ELITE • CARREIRAS JURÍDICAS & DISCURSIVAS
                 </span>
                 {selectedPlanToBuy === 'elite' && <CheckCircle2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />}
               </div>
@@ -273,13 +281,17 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               <div className="mt-4 mb-4">
                 <div className="flex items-baseline gap-1">
                   <span className="text-3xl font-black text-slate-900 dark:text-white">
-                    {billingCycle === 'annual' ? 'R$ 49,75' : 'R$ 79,90'}
+                    {billingCycle === 'annual' ? 'R$ 74,75' : 'R$ 119,90'}
                   </span>
                   <span className="text-xs text-slate-500 dark:text-slate-400"> / mês</span>
                 </div>
-                {billingCycle === 'annual' && (
+                {billingCycle === 'annual' ? (
                   <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
-                    Cobrado anualmente (R$ 597/ano)
+                    Cobrado anualmente (R$ 897/ano no Pix) • Economize R$ 541
+                  </p>
+                ) : (
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                    Cobrança mensal recorrente sem fidelidade
                   </p>
                 )}
               </div>
@@ -287,19 +299,23 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               <ul className="space-y-2.5 text-xs text-slate-700 dark:text-slate-200">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>Todos os recursos do Plano Pro</span>
+                  <span><strong>Tudo do Plano Pro incluído</strong> com acesso total</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>Correção analítica de redações e peças OAB por IA</span>
+                  <span><strong>Estúdio de Discursivas:</strong> Correção de redações e peças OAB por IA</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>Simulados discursivos com régua de pontuação oficial</span>
+                  <span><strong>Espelho Oficial da Banca:</strong> Critérios Cebraspe, FGV, FCC e Vunesp</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>Estimativa preditiva de nota de corte por microrregião</span>
+                  <span><strong>Previsor de Nota de Corte:</strong> Análise preditiva por microrregião</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span><strong>Acesso Mobile VIP:</strong> Sincronização offline e prioridade no app nativo</span>
                 </li>
               </ul>
             </div>

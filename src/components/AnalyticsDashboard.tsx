@@ -16,11 +16,13 @@ import {
   RotateCcw,
   Zap,
   Award,
-  Calendar
+  Calendar,
+  Trophy
 } from 'lucide-react';
 import { UserMetrics, ExamNotice, Flashcard } from '@/lib/types';
 import { getStatusColor } from '@/lib/utils';
 import { SRSFlashcardPlayer } from './SRSFlashcardPlayer';
+import { StudentAchievements } from './StudentAchievements';
 import { 
   BarChart, 
   Bar, 
@@ -45,6 +47,7 @@ interface AnalyticsDashboardProps {
   onReviewFlashcard: (flashcardId: string, rating: 'facil' | 'bom' | 'dificil' | 'errei') => void;
   onAddNewFlashcard?: (card: Flashcard) => void;
   onGoToSimulator: (subjectId?: string) => void;
+  onNavigateTab?: (tab: string) => void;
 }
 
 export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
@@ -53,8 +56,10 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   flashcards,
   onReviewFlashcard,
   onAddNewFlashcard,
-  onGoToSimulator
+  onGoToSimulator,
+  onNavigateTab
 }) => {
+  const [activeSubTab, setActiveSubTab] = useState<'journey' | 'technical'>('journey');
   const [showSRSPlayer, setShowSRSPlayer] = useState(false);
   const [selectedTopicForFocus, setSelectedTopicForFocus] = useState<string | null>(null);
   const [activeFlashcardIndex, setActiveFlashcardIndex] = useState(0);
@@ -135,8 +140,47 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         </div>
       </div>
 
-      {/* Top 4 KPI Metric Cards */}
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Sub-tab Navigation (Jornada vs Diagnóstico Técnico) */}
+      <div className="mt-6 flex items-center p-1 rounded-2xl bg-slate-100 dark:bg-dark-surface border border-slate-200 dark:border-white/10 w-fit">
+        <button
+          onClick={() => setActiveSubTab('journey')}
+          className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-all ${
+            activeSubTab === 'journey'
+              ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md glow-brand'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Trophy className="w-4 h-4 text-amber-300" />
+          <span>🏆 Jornada, Metas & Conquistas</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSubTab('technical')}
+          className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-all ${
+            activeSubTab === 'technical'
+              ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md glow-brand'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <BarChart3 className="w-4 h-4" />
+          <span>📊 Diagnóstico Técnico & Gráficos</span>
+        </button>
+      </div>
+
+      {/* Condicional: Aba de Jornada & Conquistas */}
+      {activeSubTab === 'journey' ? (
+        <div className="mt-8">
+          <StudentAchievements
+            metrics={metrics}
+            selectedExam={selectedExam}
+            onGoToSimulator={onGoToSimulator}
+            onGoToTab={onNavigateTab}
+          />
+        </div>
+      ) : (
+        <>
+          {/* Top 4 KPI Metric Cards */}
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Card 1: Cutoff Probability */}
         <div className="glass-panel p-5 rounded-3xl border border-indigo-500/30 relative overflow-hidden glow-brand">
@@ -460,6 +504,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           )}
 
         </div>
+      )}
+        </>
       )}
 
     </div>

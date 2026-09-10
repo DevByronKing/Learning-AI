@@ -500,38 +500,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             <div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">Gabarito Pro</h3>
-              <p className="text-xs text-indigo-300 mt-1">O pacote completo de alta performance</p>
+              <p className="text-xs text-indigo-300 mt-1">O Copiloto Cognitivo de Alta Performance</p>
               
               <div className="mt-6 mb-6">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-black text-slate-900 dark:text-white">R$ 39,90</span>
+                  <span className="text-4xl font-black text-slate-900 dark:text-white">R$ 69,90</span>
                   <span className="text-xs text-slate-500 dark:text-slate-400"> / mês</span>
                 </div>
                 <p className="text-[11px] text-emerald-400 font-semibold mt-1">
-                  ou R$ 297/ano (Economize 38%)
+                  ou R$ 497/ano no Pix (Apenas R$ 41,41/mês • -40% OFF)
                 </p>
               </div>
 
               <ul className="space-y-3 text-xs text-slate-700 dark:text-slate-200 border-t border-slate-300 dark:border-white/10 pt-6">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span><strong>Editais ilimitados</strong> com IA</span>
+                  <span><strong>Editais ilimitados:</strong> Análise verticalizada e rota 80/20</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span><strong>Diagnóstico Cognitivo de Erros</strong> em 100% das questões</span>
+                  <span><strong>Diagnóstico Cognitivo:</strong> Classificação dos 4 tipos de falha</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span><strong>Cronograma Dinâmico</strong> com reajuste automático</span>
+                  <span><strong>Cronograma Adaptativo:</strong> Recalibra carga horária sem quebra</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span><strong>Heatmap Completo</strong> de Pontos Cegos</span>
+                  <span><strong>Heatmap Analítico</strong> de pontos cegos e lei seca cobrada</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Exportação instantânea para Flashcards Anki</span>
+                  <span><strong>Flashcards SRS Automáticos</strong> (Repetição Espaçada)</span>
                 </li>
               </ul>
             </div>
@@ -551,29 +551,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="glass-panel p-6 sm:p-8 rounded-3xl flex flex-col justify-between border-slate-200 dark:border-slate-700">
             <div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">Elite & Discursivas</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Para carreiras jurídicas, fiscais e OAB</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Carreiras Jurídicas, Fiscais, OAB e Tribunais</p>
               
               <div className="mt-6 mb-6">
-                <span className="text-4xl font-black text-slate-900 dark:text-white">R$ 79,90</span>
-                <span className="text-xs text-slate-500 dark:text-slate-400"> / mês</span>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-black text-slate-900 dark:text-white">R$ 119,90</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400"> / mês</span>
+                </div>
+                <p className="text-[11px] text-emerald-400 font-semibold mt-1">
+                  ou R$ 897/ano no Pix (R$ 74,75/mês • Economize R$ 541)
+                </p>
               </div>
 
               <ul className="space-y-3 text-xs text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-white/5 pt-6">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Tudo incluído no Plano Pro</span>
+                  <span><strong>Tudo do Plano Pro incluído</strong> com acesso irrestrito</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span><strong>Corretor de Redação e Peças OAB por IA</strong></span>
+                  <span><strong>Estúdio de Discursivas:</strong> Correção de peças e redações por IA</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Simulados discursivos com régua de pontuação da banca</span>
+                  <span><strong>Espelho Oficial da Banca:</strong> Critérios Cebraspe, FGV, FCC e OAB</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Previsor preditivo de nota de corte por microrregião</span>
+                  <span><strong>Previsor Preditivo</strong> de nota de corte por microrregião</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span><strong>Acesso Mobile VIP:</strong> Sincronização offline no app nativo</span>
                 </li>
               </ul>
             </div>
