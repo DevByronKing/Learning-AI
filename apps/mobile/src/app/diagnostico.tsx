@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { MOCK_MOBILE_DISTRACTORS } from '../data/mockData';
 
 export default function DiagnosticoScreen() {
   const insets = useSafeAreaInsets();
@@ -127,6 +128,59 @@ export default function DiagnosticoScreen() {
               </View>
             </View>
           ))}
+        </View>
+
+        {/* Raio-X Psicométrico: Vulnerabilidade a Distratores (TRI) */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name="finger-print" size={16} color="#38BDF8" style={{ marginRight: 6 }} />
+              <Text style={styles.cardTitle}>Vulnerabilidade a Distratores</Text>
+            </View>
+            <Text style={styles.cardTag}>TRI • CEBRASPE</Text>
+          </View>
+          <Text style={styles.cardSubtitle}>
+            Mapeamento da sua suscetibilidade aos arquétipos mentais dos examinadores
+          </Text>
+
+          {MOCK_MOBILE_DISTRACTORS.map((dist, idx) => {
+            const isHigh = dist.userVulnerability >= 60;
+            const isMid = dist.userVulnerability >= 40 && dist.userVulnerability < 60;
+            const barColor = isHigh ? '#EF4444' : isMid ? '#F59E0B' : '#10B981';
+
+            return (
+              <View key={idx} style={styles.distractorItem}>
+                <View style={styles.distractorTopRow}>
+                  <View style={{ flex: 1, marginRight: 8 }}>
+                    <Text style={styles.distractorName}>{dist.name}</Text>
+                    <Text style={styles.distractorFrequency}>
+                      Frequência na banca: <Text style={{ color: '#38BDF8', fontWeight: '700' }}>{dist.frequencyCebraspe}%</Text>
+                    </Text>
+                  </View>
+                  <View style={{ alignItems: 'flex-end' }}>
+                    <Text style={[styles.distractorScore, { color: barColor }]}>
+                      {dist.userVulnerability}% vulnerável
+                    </Text>
+                    <View style={[styles.statusBadge, { backgroundColor: isHigh ? 'rgba(239, 68, 68, 0.15)' : isMid ? 'rgba(245, 158, 11, 0.15)' : 'rgba(16, 185, 129, 0.15)' }]}>
+                      <Text style={[styles.statusBadgeText, { color: barColor }]}>
+                        {dist.status.toUpperCase()}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+
+                {/* Barra de vulnerabilidade */}
+                <View style={styles.distractorTrack}>
+                  <View style={[styles.distractorFill, { width: `${dist.userVulnerability}%`, backgroundColor: barColor }]} />
+                </View>
+
+                <View style={styles.antidoteBox}>
+                  <Ionicons name="shield-checkmark" size={12} color="#38BDF8" style={{ marginRight: 5 }} />
+                  <Text style={styles.antidoteText}>{dist.antidote}</Text>
+                </View>
+              </View>
+            );
+          })}
         </View>
 
         {/* Recomendação da IA */}
@@ -359,6 +413,70 @@ const styles = StyleSheet.create({
   errorFill: {
     height: '100%',
     borderRadius: 3,
+  },
+  distractorItem: {
+    backgroundColor: '#0F172A',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#1E293B',
+  },
+  distractorTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  distractorName: {
+    color: '#F8FAFC',
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  distractorFrequency: {
+    color: '#64748B',
+    fontSize: 11,
+    marginTop: 2,
+  },
+  distractorScore: {
+    fontSize: 12,
+    fontWeight: '800',
+    marginBottom: 3,
+  },
+  statusBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  statusBadgeText: {
+    fontSize: 9,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+  },
+  distractorTrack: {
+    height: 5,
+    backgroundColor: '#1E293B',
+    borderRadius: 3,
+    overflow: 'hidden',
+    marginBottom: 8,
+  },
+  distractorFill: {
+    height: '100%',
+    borderRadius: 3,
+  },
+  antidoteBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#082F49',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+  },
+  antidoteText: {
+    color: '#BAE6FD',
+    fontSize: 11,
+    lineHeight: 15,
+    flex: 1,
   },
   aiRecommendationCard: {
     backgroundColor: '#0F172A',

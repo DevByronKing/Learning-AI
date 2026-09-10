@@ -23,7 +23,8 @@ import {
   ExternalLink,
   BookCheck,
   Trophy,
-  Smartphone
+  Smartphone,
+  Microscope
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
 import { MobileAppModal } from './MobileAppModal';
@@ -132,6 +133,15 @@ export const Navbar: React.FC<NavbarProps> = ({
       icon: Trophy,
       desc: 'Companheiro Animal, Metas & Conquistas',
       badge: null,
+    },
+    {
+      id: 'psychometrics',
+      label: 'Psicometria',
+      shortLabel: 'Psicometria',
+      icon: Microscope,
+      desc: 'Engenharia Reversa de Distratores da Banca',
+      badge: 'TRI',
+      badgeColor: 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30',
     },
   ];
 

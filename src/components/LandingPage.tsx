@@ -20,7 +20,8 @@ import {
   Clock,
   Layers,
   Crown,
-  PenTool
+  PenTool,
+  Microscope
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
 import { INITIAL_EXAMS } from '@/lib/mockData';
@@ -30,13 +31,15 @@ interface LandingPageProps {
   onStartDiscursivas?: () => void;
   onOpenPricing: () => void;
   onSelectPlan: (plan: SubscriptionPlan) => void;
+  onOpenPsychometrics?: () => void;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({
   onStartEdital,
   onStartDiscursivas,
   onOpenPricing,
-  onSelectPlan
+  onSelectPlan,
+  onOpenPsychometrics
 }) => {
   const [leadInput, setLeadInput] = useState('');
   const [selectedPreset, setSelectedPreset] = useState('INSS 2026');
@@ -432,6 +435,113 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* PSICOMETRIA EDUCACIONAL & ENGENHARIA REVERSA DAS BANCAS */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 via-purple-500/5 to-transparent rounded-3xl pointer-events-none -z-10" />
+
+        <div className="text-center mb-14">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold mb-3 shadow-sm backdrop-blur-md">
+            <Microscope className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+            <span className="uppercase tracking-wider">Metodologia Científica • Teoria de Resposta ao Item (TRI)</span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+            Chega de Resolver Questões por Força Bruta.
+          </h2>
+          <p className="mt-3 text-base sm:text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-400">
+            Aprenda a decodificar a mente do examinador com Engenharia Reversa das Bancas.
+          </p>
+          <p className="mt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+            Plataformas convencionais vendem volume de questões. O AprovaLens decifra a <strong className="text-slate-800 dark:text-white">Anatomia dos Distratores</strong>: 
+            nenhuma alternativa errada é criada ao acaso. Mapeamos os 8 arquétipos mentais que os examinadores utilizam para derrubar candidatos preparados.
+          </p>
+        </div>
+
+        {/* 3 Pillars of Educational Psychometrics */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* Pillar 1 */}
+          <div className="glass-card p-6 rounded-2xl border border-indigo-500/20 hover:border-indigo-500/40 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400 mb-4">
+                <BrainCircuit className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">8 Arquétipos de Distratores</h3>
+              <p className="mt-2 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                Generalização indevida, armadilhas semânticas, meias-verdades e inversões de competência. Ao errar, você não vê apenas a resposta certa: você entende <em>por que a banca queria que você errasse</em>.
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 flex items-center gap-2 text-[11px] font-semibold text-indigo-400">
+              <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Anatomia cognitiva completa</span>
+            </div>
+          </div>
+
+          {/* Pillar 2 */}
+          <div className="glass-card p-6 rounded-2xl border border-cyan-500/20 hover:border-cyan-500/40 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400 mb-4">
+                <Target className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">Assinatura das Bancas</h3>
+              <p className="mt-2 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                Descubra a assinatura dos examinadores: <strong>Cebraspe</strong> (42% indução a termos absolutos), <strong>FGV</strong> (44% casos concretos ambíguos), <strong>FCC</strong> (36% prazos em lei seca) e <strong>Vunesp</strong> (38% meias-verdades).
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 flex items-center gap-2 text-[11px] font-semibold text-cyan-400">
+              <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Cebraspe • FGV • FCC • Vunesp</span>
+            </div>
+          </div>
+
+          {/* Pillar 3 */}
+          <div className="glass-card p-6 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400 mb-4">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">Vacinas Cognitivas (Antídotos)</h3>
+              <p className="mt-2 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                Para cada distrator detectado, o sistema aplica um protocolo de defesa mental e gera flashcards adaptativos no algoritmo SRS para você nunca mais cair no mesmo truque.
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 flex items-center gap-2 text-[11px] font-semibold text-emerald-400">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Fixação em memória de longo prazo</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Interactive Showcase Banner */}
+        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-cyan-500/30 bg-gradient-to-r from-slate-900/90 via-indigo-950/50 to-slate-900/90 shadow-2xl relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="space-y-2 text-center sm:text-left">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 text-[11px] font-bold">
+              ★ Módulo Inédito no Brasil
+            </div>
+            <h4 className="text-xl sm:text-2xl font-black text-white">
+              Conheça o Laboratório de Psicometria das Bancas
+            </h4>
+            <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
+              Compare a distribuição dos distratores, visualize sua taxa de vulnerabilidade pessoal e veja os antídotos em ação com análise preditiva.
+            </p>
+            <div className="flex flex-wrap items-center gap-4 pt-2 text-[11px] text-slate-400 justify-center sm:justify-start">
+              <span>🔬 <strong>18.400+</strong> Itens Classificados</span>
+              <span>•</span>
+              <span>⚡ <strong>8</strong> Tipos de Pegadinhas Decodificadas</span>
+              <span>•</span>
+              <span>🛡️ <strong>-34%</strong> Erros por Desatenção</span>
+            </div>
+          </div>
+
+          <button
+            onClick={onOpenPsychometrics || onStartEdital}
+            className="shrink-0 px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-cyan-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Microscope className="w-4 h-4" />
+            <span>Explorar Psicometria</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
         </div>
       </section>
 

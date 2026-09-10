@@ -13,6 +13,7 @@ import { MistakesNotebook } from '@/components/MistakesNotebook';
 import { SmartVadeMecum } from '@/components/SmartVadeMecum';
 import { QuestionBank } from '@/components/QuestionBank';
 import { AICopilotDrawer } from '@/components/AICopilotDrawer';
+import { BancaPsychometrics } from '@/components/BancaPsychometrics';
 import { 
   ExamNotice, 
   QuestionAttempt, 
@@ -383,6 +384,7 @@ export function AprovaLensApp() {
               setPlan(p);
               setIsPricingOpen(true);
             }}
+            onOpenPsychometrics={() => setActiveTab('psychometrics')}
           />
         )}
 
@@ -460,6 +462,15 @@ export function AprovaLensApp() {
             onRecordAttempt={handleRecordAttempt}
             onGoToSimulator={() => setActiveTab('simulator')}
             onGoToMistakes={() => setActiveTab('mistakes')}
+          />
+        )}
+
+        {activeTab === 'psychometrics' && (
+          <BancaPsychometrics
+            onGoToSimulator={(banca) => {
+              setActiveTab('simulator');
+              if (banca) showToast(`Carregando simulado calibrado para a banca: ${banca}`);
+            }}
           />
         )}
       </main>

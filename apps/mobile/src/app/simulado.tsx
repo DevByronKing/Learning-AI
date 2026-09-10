@@ -155,6 +155,21 @@ export default function SimuladoScreen() {
               <Text style={styles.trapText}>{question.trapAlert}</Text>
             </View>
 
+            {/* Análise Psicométrica do Distrator */}
+            {selectedOpt && !selectedOpt.isCorrect && selectedOpt.distractorType && (
+              <View style={styles.psychometricBox}>
+                <View style={styles.psychometricHeader}>
+                  <Ionicons name="finger-print" size={14} color="#38BDF8" />
+                  <Text style={styles.psychometricTag}>
+                    🔬 PSICOMETRIA • {selectedOpt.distractorType.toUpperCase().replace(/_/g, ' ')}
+                  </Text>
+                </View>
+                <Text style={styles.psychometricText}>
+                  {selectedOpt.distractorExplanation || 'Armadilha cognitiva típica da banca elaboradora decodificada por engenharia reversa.'}
+                </Text>
+              </View>
+            )}
+
             {/* Fundamento Legal */}
             <View style={styles.lawBox}>
               <Text style={styles.lawTag}>📖 BASE LEGAL / ARTIGO</Text>
@@ -381,6 +396,31 @@ const styles = StyleSheet.create({
   },
   trapText: {
     color: '#FEF3C7',
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  psychometricBox: {
+    backgroundColor: '#082F49',
+    borderLeftWidth: 3,
+    borderLeftColor: '#38BDF8',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  psychometricHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  psychometricTag: {
+    color: '#38BDF8',
+    fontSize: 11,
+    fontWeight: '800',
+    marginLeft: 6,
+    letterSpacing: 0.3,
+  },
+  psychometricText: {
+    color: '#BAE6FD',
     fontSize: 13,
     lineHeight: 19,
   },

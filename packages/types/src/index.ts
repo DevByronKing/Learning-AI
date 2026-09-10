@@ -88,6 +88,8 @@ export type Question = {
     text: string;
     isCorrect: boolean;
     distractorReason?: string; // Por que essa opção é uma pegadinha
+    distractorType?: PsychometricDistractorType;
+    distractorExplanation?: string;
   }[];
   explanation: string;
   lawArticles: string[];
@@ -363,3 +365,47 @@ export type DailyMission = {
   xpReward: number;
   actionTab?: string;
 };
+
+// Psicometria Educacional & Engenharia Reversa de Distratores das Bancas
+export type PsychometricDistractorType = 
+  | 'generalizacao_indevida'           // Palavras extremas (sempre, nunca, exclusivamente)
+  | 'conceito_correto_contexto_errado' // Tese jurídica verdadeira que não responde ao comando
+  | 'meia_verdade'                     // 80% do texto certo, erro sutil no final
+  | 'senso_comum'                      // Apelo à intuição moral vs rigor da lei seca
+  | 'armadilha_semantica'              // FGV: Dupla negação, vocabulário rebuscado
+  | 'distrator_temporal'               // Troca de prazos ou momentos processuais
+  | 'inversao_competencia'             // Atribuição de poder para órgão errado
+  | 'lei_revogada';                    // Tese anterior/superada para pegar desatualizados
+
+export interface PsychometricDistractorDef {
+  id: PsychometricDistractorType;
+  name: string;
+  shortName: string;
+  icon: string;
+  bancaSpecialty: string;
+  severity: 'Crítica' | 'Alta' | 'Moderada';
+  description: string;
+  examinerLogic: string;
+  antidoteStrategy: string;
+  exampleSnippet: string;
+}
+
+export interface BancaPsychometricProfile {
+  banca: 'Cebraspe' | 'FGV' | 'FCC' | 'Vunesp';
+  title: string;
+  tagline: string;
+  totalQuestionsMapped: number;
+  discriminationEfficiency: number; // ex: 94%
+  primaryDistractor: PsychometricDistractorType;
+  secondaryDistractor: PsychometricDistractorType;
+  distractorDistribution: {
+    type: PsychometricDistractorType;
+    name: string;
+    percentage: number;
+    color: string;
+  }[];
+  examinerPsychologicalProfile: string;
+  antidoteGoldenRule: string;
+  studentVulnerabilityRate: number; // taxa de erro do aluno nessa banca
+}
+

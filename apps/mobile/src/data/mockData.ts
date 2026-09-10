@@ -52,6 +52,14 @@ export const MASCOTS: Mascot[] = [
   },
 ];
 
+export interface MobileOption {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+  distractorType?: string;
+  distractorExplanation?: string;
+}
+
 export interface MobileQuestion {
   id: string;
   banca: 'Cebraspe' | 'FGV' | 'FCC';
@@ -60,15 +68,85 @@ export interface MobileQuestion {
   topic: string;
   statement: string;
   format: 'certo_errado' | 'multipla_escolha';
-  options: {
-    id: string;
-    text: string;
-    isCorrect: boolean;
-  }[];
+  options: MobileOption[];
   explanation: string;
   lawArticle: string;
   trapAlert: string;
 }
+
+export interface MobilePsychometricDistractor {
+  id: string;
+  name: string;
+  frequencyCebraspe: number;
+  frequencyFGV: number;
+  frequencyFCC: number;
+  userVulnerability: number; // percentage
+  status: 'crítico' | 'alerta' | 'seguro';
+  antidote: string;
+}
+
+export const MOCK_MOBILE_DISTRACTORS: MobilePsychometricDistractor[] = [
+  {
+    id: 'generalizacao_indevida',
+    name: 'Generalização Indevida',
+    frequencyCebraspe: 42,
+    frequencyFGV: 24,
+    frequencyFCC: 18,
+    userVulnerability: 68,
+    status: 'crítico',
+    antidote: 'Desconfie de "sempre", "nunca", "em qualquer hipótese". Busque a exceção da regra geral.',
+  },
+  {
+    id: 'armadilha_semantica',
+    name: 'Armadilha Semântica',
+    frequencyCebraspe: 22,
+    frequencyFGV: 44,
+    frequencyFCC: 15,
+    userVulnerability: 74,
+    status: 'crítico',
+    antidote: 'Isole os termos técnicos dos qualificadores coloquiais em casos hipotéticos longos.',
+  },
+  {
+    id: 'distrator_temporal',
+    name: 'Distrator Temporal / Prazos',
+    frequencyCebraspe: 18,
+    frequencyFGV: 16,
+    frequencyFCC: 36,
+    userVulnerability: 52,
+    status: 'alerta',
+    antidote: 'Crie tabelas de prazos e marcos iniciais (dia vs noite, publicação vs trânsito em julgado).',
+  },
+  {
+    id: 'meia_verdade',
+    name: 'Meia-Verdade Estrutural',
+    frequencyCebraspe: 28,
+    frequencyFGV: 30,
+    frequencyFCC: 22,
+    userVulnerability: 41,
+    status: 'alerta',
+    antidote: 'Divida a oração em blocos lógicos. A primeira metade correta não valida a segunda.',
+  },
+  {
+    id: 'conceito_correto_contexto_errado',
+    name: 'Conceito Correto, Contexto Errado',
+    frequencyCebraspe: 19,
+    frequencyFGV: 26,
+    frequencyFCC: 28,
+    userVulnerability: 35,
+    status: 'seguro',
+    antidote: 'Cheque se o instituto invocado responde diretamente à pergunta do comando.',
+  },
+  {
+    id: 'inversao_competencia',
+    name: 'Inversão de Competência',
+    frequencyCebraspe: 15,
+    frequencyFGV: 20,
+    frequencyFCC: 31,
+    userVulnerability: 29,
+    status: 'seguro',
+    antidote: 'Mapeie quem executa vs quem julga vs quem legisla (ex: TCU julga contas, não as pessoas).',
+  },
+];
 
 export const MOCK_QUESTIONS: MobileQuestion[] = [
   {
@@ -81,7 +159,13 @@ export const MOCK_QUESTIONS: MobileQuestion[] = [
     format: 'certo_errado',
     options: [
       { id: 'opt-c', text: 'CERTO', isCorrect: true },
-      { id: 'opt-e', text: 'ERRADO', isCorrect: false },
+      { 
+        id: 'opt-e', 
+        text: 'ERRADO', 
+        isCorrect: false,
+        distractorType: 'senso_comum',
+        distractorExplanation: 'Examinador Cebraspe explorou a intuição errônea de que servidor comissionado possuiria regime próprio ou seria autônomo. Ele é expressamente empregado do RGPS.'
+      },
     ],
     explanation: 'Correto. Conforme o Art. 12, I, "g" da Lei 8.212/91 e o Art. 40, § 13 da CF/88, o servidor exclusivamente comissionado vincula-se obrigatoriamente ao Regime Geral de Previdência Social (RGPS) na qualidade de empregado.',
     lawArticle: 'Art. 40, § 13 da CF/88 e Art. 12, I, "g" da Lei 8.212/91',
@@ -96,7 +180,13 @@ export const MOCK_QUESTIONS: MobileQuestion[] = [
     statement: 'A casa é asilo inviolável do indivíduo, ninguém nela podendo penetrar sem consentimento do morador, salvo em caso de flagrante delito ou desastre, ou para prestar socorro, ou, durante a noite, por determinação judicial.',
     format: 'certo_errado',
     options: [
-      { id: 'opt-c', text: 'CERTO', isCorrect: false },
+      { 
+        id: 'opt-c', 
+        text: 'CERTO', 
+        isCorrect: false,
+        distractorType: 'distrator_temporal',
+        distractorExplanation: 'Distrator Temporal da Cebraspe: o examinador trocou cirurgicamente "durante o dia" por "durante a noite" para pegar candidatos em leitura veloz.'
+      },
       { id: 'opt-e', text: 'ERRADO', isCorrect: true },
     ],
     explanation: 'Errado! Por determinação judicial, a entrada só pode ocorrer DURANTE O DIA. A banca trocou "durante o dia" por "durante a noite", que é a pegadinha mais clássica da história dos concursos.',
@@ -112,11 +202,35 @@ export const MOCK_QUESTIONS: MobileQuestion[] = [
     statement: 'A respeito dos atributos dos atos administrativos, assinale a opção que indica o atributo que consiste na presunção de que os atos foram editados em conformidade com a lei:',
     format: 'multipla_escolha',
     options: [
-      { id: 'a', text: 'Imperatividade', isCorrect: false },
-      { id: 'b', text: 'Autoexecutoriedade', isCorrect: false },
+      { 
+        id: 'a', 
+        text: 'Imperatividade', 
+        isCorrect: false,
+        distractorType: 'conceito_correto_contexto_errado',
+        distractorExplanation: 'Imperatividade é um atributo verídico do ato, mas refere-se à imposição de obrigações a terceiros, não à presunção de validade jurídica.'
+      },
+      { 
+        id: 'b', 
+        text: 'Autoexecutoriedade', 
+        isCorrect: false,
+        distractorType: 'conceito_correto_contexto_errado',
+        distractorExplanation: 'Autoexecutoriedade trata da possibilidade de execução direta sem mandado judicial, não de presunção legal.'
+      },
       { id: 'c', text: 'Presunção de Legitimidade e Veracidade', isCorrect: true },
-      { id: 'd', text: 'Tipicidade', isCorrect: false },
-      { id: 'e', text: 'Exigibilidade', isCorrect: false },
+      { 
+        id: 'd', 
+        text: 'Tipicidade', 
+        isCorrect: false,
+        distractorType: 'conceito_correto_contexto_errado',
+        distractorExplanation: 'Tipicidade decorre da legalidade estrita, mas não é a presunção de conformidade normativa.'
+      },
+      { 
+        id: 'e', 
+        text: 'Exigibilidade', 
+        isCorrect: false,
+        distractorType: 'armadilha_semantica',
+        distractorExplanation: 'Exigibilidade é meio indireto de coação e atributo subsidiário, utilizado pela FGV para confundir candidatos desatentos.'
+      },
     ],
     explanation: 'A presunção de legitimidade diz respeito à conformidade do ato com a lei, enquanto a veracidade refere-se aos fatos alegados pela Administração Pública.',
     lawArticle: 'Doutrina Majoritária de Direito Administrativo (Hely Lopes Meirelles / Maria Sylvia Di Pietro)',
