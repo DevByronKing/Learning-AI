@@ -23,6 +23,7 @@ import { UserMetrics, ExamNotice, Flashcard } from '@/lib/types';
 import { getStatusColor } from '@/lib/utils';
 import { SRSFlashcardPlayer } from './SRSFlashcardPlayer';
 import { StudentAchievements } from './StudentAchievements';
+import { RetentionFunnelDashboard } from './RetentionFunnelDashboard';
 import { 
   BarChart, 
   Bar, 
@@ -59,7 +60,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   onGoToSimulator,
   onNavigateTab
 }) => {
-  const [activeSubTab, setActiveSubTab] = useState<'journey' | 'technical'>('journey');
+  const [activeSubTab, setActiveSubTab] = useState<'journey' | 'technical' | 'retention'>('journey');
   const [showSRSPlayer, setShowSRSPlayer] = useState(false);
   const [selectedTopicForFocus, setSelectedTopicForFocus] = useState<string | null>(null);
   const [activeFlashcardIndex, setActiveFlashcardIndex] = useState(0);
@@ -165,9 +166,21 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <BarChart3 className="w-4 h-4" />
           <span>📊 Diagnóstico Técnico & Gráficos</span>
         </button>
+
+        <button
+          onClick={() => setActiveSubTab('retention')}
+          className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-all ${
+            activeSubTab === 'retention'
+              ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md glow-brand'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <TrendingUp className="w-4 h-4 text-emerald-400" />
+          <span>📈 Funil & Retenção B2C</span>
+        </button>
       </div>
 
-      {/* Condicional: Aba de Jornada & Conquistas */}
+      {/* Condicional: Abas */}
       {activeSubTab === 'journey' ? (
         <div className="mt-8">
           <StudentAchievements
@@ -176,6 +189,10 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             onGoToSimulator={onGoToSimulator}
             onGoToTab={onNavigateTab}
           />
+        </div>
+      ) : activeSubTab === 'retention' ? (
+        <div className="mt-8">
+          <RetentionFunnelDashboard />
         </div>
       ) : (
         <>

@@ -1,35 +1,35 @@
 import { NextResponse } from 'next/server';
+import { AIEngine, LegalDiagnosticRequest } from '@/lib/aiEngine';
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { questionStatement, selectedOption, correctOption, confidence } = body;
 
-    // AI Cognitive Classification Logic
-    let errorType = 'pegadinha_banca';
-    let feedback = 'A banca explorou um distrator semântico sutil.';
+    const diagnosticReq: LegalDiagnosticRequest = {
+      questionId: body.questionId,
+      statement: body.questionStatement || body.statement || '',
+      banca: body.banca || 'Cebraspe',
+      subject: body.subject || 'Direito',
+      topic: body.topic || 'Geral',
+      selectedOptionText: body.selectedOptionText || body.selectedOption || '',
+      isCorrect: Boolean(body.isCorrect),
+      confidenceLevel: body.confidenceLevel || body.confidence || 'media',
+      knownLawArticle: body.knownLawArticle || body.codeCitation,
+      knownExplanation: body.knownExplanation || body.explanation,
+      knownTrap: body.knownTrap || body.trapAlert,
+    };
 
-    if (confidence === 'alta') {
-      errorType = 'pegadinha_banca';
-      feedback = 'Você tinha certeza, indicando que o distrator da banca funcionou com precisão cirúrgica.';
-    } else if (confidence === 'chute') {
-      errorType = 'curva_esquecimento';
-      feedback = 'A ausência de confiança aponta para enfraquecimento na memória de trabalho de longo prazo.';
-    } else {
-      errorType = 'lacuna_teorica';
-      feedback = 'Necessidade de aprofundamento na base teórica e nos artigos de lei correlatos.';
-    }
+    const result = await AIEngine.generateDiagnostic(diagnosticReq);
 
     return NextResponse.json({
       success: true,
-      data: {
-        errorType,
-        feedback,
-        actionableAdvice: 'Revise o artigo específico nas próximas 24 horas usando o flashcard gerado.',
-        reviewIntervalDays: 1
-      }
+      data: result,
     });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    console.error('API Diagnosis Error:', error);
+    return NextResponse.json(
+      { success: false, error: error.message || 'Erro interno no diagnóstico cognitivo' },
+      { status: 500 }
+    );
   }
 }

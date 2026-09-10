@@ -22,9 +22,11 @@ import {
   ChevronRight,
   ExternalLink,
   BookCheck,
-  Trophy
+  Trophy,
+  Smartphone
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
+import { MobileAppModal } from './MobileAppModal';
 
 interface NavbarProps {
   activeTab: string;
@@ -54,6 +56,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleTheme,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
 
   // Módulos com Rótulos Inteligentes e Responsivos sem quebra de layout
   const navTabs = [
@@ -275,6 +278,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500/30 animate-bounce" />
                 <span className="whitespace-nowrap">{streakDays}d</span>
               </div>
+
+              {/* Mobile App Button (Onboarding Multimodal) */}
+              <button
+                onClick={() => setIsMobileModalOpen(true)}
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-bold transition-all shadow-sm ${
+                  isLight 
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-800 hover:bg-emerald-100' 
+                    : 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400 hover:bg-emerald-500/20'
+                }`}
+                title="Abrir ou Sincronizar com App Mobile (iOS / Android)"
+              >
+                <Smartphone className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="hidden lg:inline whitespace-nowrap">App Mobile</span>
+              </button>
 
               {/* Plan Button */}
               {plan === 'aspirante' ? (
@@ -565,6 +582,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span className="text-[10px]">Mais</span>
         </button>
       </nav>
+
+      {/* Modal de Onboarding Multimodal (Continuar no Celular) */}
+      <MobileAppModal 
+        isOpen={isMobileModalOpen} 
+        onClose={() => setIsMobileModalOpen(false)} 
+      />
     </>
   );
 };

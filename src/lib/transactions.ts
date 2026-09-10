@@ -23,8 +23,16 @@ export interface Transaction {
 
 // In-memory store para persistência rápida em runtime
 const globalTransactions = new Map<string, Transaction>();
+const processedWebhookEvents = new Set<string>();
 
 export class TransactionManager {
+  static isEventProcessed(eventId: string): boolean {
+    return processedWebhookEvents.has(eventId);
+  }
+
+  static markEventProcessed(eventId: string): void {
+    processedWebhookEvents.add(eventId);
+  }
   static create(tx: Transaction): Transaction {
     globalTransactions.set(tx.id, tx);
 
