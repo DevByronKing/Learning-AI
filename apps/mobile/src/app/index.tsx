@@ -5,28 +5,29 @@ import {
   Text, 
   ScrollView, 
   TouchableOpacity, 
-  SafeAreaView, 
   StatusBar 
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { MASCOTS, Mascot } from '../data/mockData';
 
 export default function MobileHomeScreen() {
-  const [selectedMascot, setSelectedMascot] = useState({
-    name: 'Atena',
-    species: 'Coruja Estrategista',
-    emoji: '🦉',
-    title: 'Guardiã da Sabedoria & Foco Noturno',
-    advice: 'Não tente devorar todo o edital de uma vez só. O segredo da aprovação está em dominar com precisão cirúrgica os 20% que representam 80% da prova.'
-  });
+  const insets = useSafeAreaInsets();
+  const router = useRouter();
+
+  const [selectedMascotIndex, setSelectedMascotIndex] = useState(0);
+  const mascot: Mascot = MASCOTS[selectedMascotIndex];
 
   const [xp, setXp] = useState(2450);
   const [level, setLevel] = useState(4);
   const [streakDays, setStreakDays] = useState(14);
 
   const [missions, setMissions] = useState([
-    { id: '1', title: 'Resolver 15 questões de Direito Previdenciário', xp: 120, done: true },
-    { id: '2', title: 'Revisar 10 flashcards no deck inteligente', xp: 90, done: false },
-    { id: '3', title: 'Ler 3 artigos com pegadinhas da banca Cebraspe', xp: 70, done: false },
-    { id: '4', title: 'Treinar 1 redação discursiva de 30 linhas', xp: 250, done: false }
+    { id: '1', title: 'Resolver 15 questões de Direito Previdenciário', xp: 120, done: true, route: '/simulado' },
+    { id: '2', title: 'Revisar 10 flashcards no deck inteligente', xp: 90, done: false, route: '/flashcards' },
+    { id: '3', title: 'Ler 3 artigos com pegadinhas da banca Cebraspe', xp: 70, done: false, route: '/simulado' },
+    { id: '4', title: 'Checar evolução no diagnóstico de erros', xp: 150, done: false, route: '/diagnostico' }
   ]);
 
   const toggleMission = (id: string) => {
@@ -34,41 +35,54 @@ export default function MobileHomeScreen() {
       if (m.id === id) {
         const nextDone = !m.done;
         if (nextDone) setXp(x => x + m.xp);
+        else setXp(x => Math.max(0, x - m.xp));
         return { ...m, done: nextDone };
       }
       return m;
     }));
   };
 
+  const completedCount = missions.filter(m => m.done).length;
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={[styles.container, { paddingTop: Math.max(insets.top, 24), paddingBottom: insets.bottom }]}>
       <StatusBar barStyle="light-content" backgroundColor="#0B0F19" />
-      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        
-        {/* Header Superior: Nome do App + Streak */}
-        <View style={styles.headerRow}>
-          <View>
-            <Text style={styles.brandTitle}>Learning AI</Text>
-            <Text style={styles.brandSubtitle}>Copiloto Cognitivo • Concursos & OAB</Text>
+      
+      {/* Header Superior com Inset de Segurança e Streak */}
+      <View style={styles.headerRow}>
+        <View>
+          <View style={styles.brandBadgeRow}>
+            <View style={styles.proTag}>
+              <Text style={styles.proTagText}>PRO IA</Text>
+            </View>
+            <Text style={styles.brandSubtitle}>Concursos & OAB</Text>
           </View>
-          <View style={styles.streakBadge}>
-            <Text style={styles.streakEmoji}>🔥</Text>
-            <Text style={styles.streakText}>{streakDays} dias</Text>
-          </View>
+          <Text style={styles.brandTitle}>Learning AI</Text>
         </View>
 
-        {/* Card do Mascote Companheiro Animal */}
+        <View style={styles.streakBadge}>
+          <Text style={styles.streakEmoji}>🔥</Text>
+          <View style={{ marginLeft: 6 }}>
+            <Text style={styles.streakText}>{streakDays} dias</Text>
+            <Text style={styles.streakSub}>Foco Total</Text>
+          </View>
+        </View>
+      </View>
+
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+        
+        {/* Card do Mascote Companheiro Animal com Seletor Interativo */}
         <View style={styles.mascotCard}>
           <View style={styles.mascotRow}>
             <View style={styles.mascotAvatarBox}>
-              <Text style={styles.mascotEmoji}>{selectedMascot.emoji}</Text>
+              <Text style={styles.mascotEmoji}>{mascot.emoji}</Text>
             </View>
             <View style={styles.mascotInfo}>
               <View style={styles.mascotTagRow}>
-                <Text style={styles.mascotTag}>NÍVEL {level} • {selectedMascot.species.toUpperCase()}</Text>
+                <Text style={styles.mascotTag}>NÍVEL {level} • {mascot.species.toUpperCase()}</Text>
               </View>
-              <Text style={styles.mascotName}>{selectedMascot.name}</Text>
-              <Text style={styles.mascotTitle}>{selectedMascot.title}</Text>
+              <Text style={styles.mascotName}>{mascot.name}</Text>
+              <Text style={styles.mascotTitle}>{mascot.title}</Text>
               
               {/* Barra de XP */}
               <View style={styles.xpRow}>
@@ -80,17 +94,50 @@ export default function MobileHomeScreen() {
             </View>
           </View>
 
-          {/* Balão de Fala Acolhedor */}
+          {/* Balão de Fala Acolhedor do Copiloto */}
           <View style={styles.speechBubble}>
-            <Text style={styles.speechTag}>🧭 DIREÇÃO DO DIA • SEM ANSIEDADE</Text>
-            <Text style={styles.speechText}>"{selectedMascot.advice}"</Text>
+            <View style={styles.speechHeader}>
+              <Ionicons name="compass" size={14} color="#818CF8" />
+              <Text style={styles.speechTag}>DIREÇÃO DO DIA • SEM ANSIEDADE</Text>
+            </View>
+            <Text style={styles.speechText}>"{mascot.advice}"</Text>
+          </View>
+
+          {/* Carrossel Seletor de Mascotes */}
+          <View style={styles.mascotSelectorContainer}>
+            <Text style={styles.selectorPrompt}>ESCOLHA SEU COMPANHEIRO ESTRATÉGICO:</Text>
+            <View style={styles.selectorRow}>
+              {MASCOTS.map((m, idx) => {
+                const isSelected = selectedMascotIndex === idx;
+                return (
+                  <TouchableOpacity
+                    key={m.id}
+                    style={[styles.selectorBtn, isSelected && styles.selectorBtnActive]}
+                    onPress={() => setSelectedMascotIndex(idx)}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.selectorEmoji}>{m.emoji}</Text>
+                    <Text style={[styles.selectorName, isSelected && styles.selectorNameActive]}>
+                      {m.name}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
           </View>
         </View>
 
         {/* Card do Termômetro da Nota de Corte */}
-        <View style={styles.card}>
+        <TouchableOpacity 
+          style={styles.card} 
+          activeOpacity={0.85}
+          onPress={() => router.push('/diagnostico')}
+        >
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>🎯 Termômetro da Nota de Corte</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name="analytics" size={18} color="#38BDF8" />
+              <Text style={[styles.cardTitle, { marginLeft: 8 }]}>Termômetro da Nota de Corte</Text>
+            </View>
             <Text style={styles.cardBadge}>INSS 2026</Text>
           </View>
 
@@ -99,150 +146,213 @@ export default function MobileHomeScreen() {
               <Text style={styles.cutoffLabel}>Seu Rendimento Estimado</Text>
               <Text style={styles.cutoffBigScore}>68.0%</Text>
             </View>
-            <View style={styles.cutoffDivider} />
-            <View>
+            <View style={{ alignItems: 'flex-end' }}>
               <Text style={styles.cutoffLabel}>Ponto de Corte Necessário</Text>
-              <Text style={[styles.cutoffBigScore, { color: '#F43F5E' }]}>78.5%</Text>
+              <Text style={styles.cutoffTargetScore}>78.5%</Text>
             </View>
           </View>
 
-          <View style={styles.thermometerTrack}>
-            <View style={[styles.thermometerFill, { width: '68%' }]} />
-            <View style={[styles.cutoffPin, { left: '78.5%' }]} />
+          {/* Barra Visual de Proximidade */}
+          <View style={styles.gaugeTrack}>
+            <View style={[styles.gaugeFill, { width: '68%' }]} />
+            <View style={[styles.cutoffMarker, { left: '78.5%' }]} />
           </View>
 
-          <Text style={styles.cutoffDistanceText}>
-            ⚡ Faltam apenas <Text style={{ color: '#F59E0B', fontWeight: 'bold' }}>10.5%</Text> para você cruzar a nota de corte para as vagas imediatas.
-          </Text>
-        </View>
+          <View style={styles.statusAdviceRow}>
+            <Ionicons name="flash" size={16} color="#F59E0B" />
+            <Text style={styles.statusAdviceText}>
+              Faltam apenas <Text style={{ color: '#F59E0B', fontWeight: '800' }}>10.5%</Text> para você cruzar a nota de corte para as vagas imediatas.
+            </Text>
+            <Ionicons name="chevron-forward" size={16} color="#64748B" />
+          </View>
+        </TouchableOpacity>
 
-        {/* Metas de Hoje com Dopamina */}
+        {/* Card de Metas Diárias Interativas com XP */}
         <View style={styles.card}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>⭐ Metas de Hoje (Recompensa em XP)</Text>
-            <Text style={styles.cardBadge}>
-              {missions.filter(m => m.done).length}/{missions.length} Feitas
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name="star" size={18} color="#F59E0B" />
+              <Text style={[styles.cardTitle, { marginLeft: 8 }]}>Metas de Hoje (Recompensa em XP)</Text>
+            </View>
+            <Text style={styles.missionsCounter}>{completedCount}/{missions.length} Feitas</Text>
           </View>
 
-          <View style={styles.missionsList}>
-            {missions.map(mission => (
+          {missions.map(mission => (
+            <TouchableOpacity
+              key={mission.id}
+              style={[styles.missionItem, mission.done && styles.missionItemDone]}
+              onPress={() => toggleMission(mission.id)}
+              activeOpacity={0.8}
+            >
+              <View style={[styles.checkbox, mission.done && styles.checkboxDone]}>
+                {mission.done && <Ionicons name="checkmark" size={16} color="#10B981" />}
+              </View>
+              
+              <View style={styles.missionTextContainer}>
+                <Text style={[styles.missionTitle, mission.done && styles.missionTitleDone]}>
+                  {mission.title}
+                </Text>
+                <Text style={styles.missionXpText}>+{mission.xp} XP para subir de nível</Text>
+              </View>
+
               <TouchableOpacity 
-                key={mission.id}
-                onPress={() => toggleMission(mission.id)}
-                activeOpacity={0.8}
-                style={[styles.missionItem, mission.done && styles.missionItemDone]}
+                style={styles.missionActionBtn} 
+                onPress={() => router.push(mission.route as any)}
               >
-                <View style={[styles.checkbox, mission.done && styles.checkboxDone]}>
-                  {mission.done && <Text style={styles.checkIcon}>✓</Text>}
-                </View>
-                <View style={styles.missionTextCol}>
-                  <Text style={[styles.missionTitle, mission.done && styles.missionTitleDone]}>
-                    {mission.title}
-                  </Text>
-                  <Text style={styles.missionXpText}>+{mission.xp} XP para subir de nível</Text>
-                </View>
+                <Ionicons name="arrow-forward-circle" size={20} color="#6366F1" />
               </TouchableOpacity>
-            ))}
-          </View>
+            </TouchableOpacity>
+          ))}
         </View>
 
-        {/* Ações Rápidas de Estudo */}
-        <Text style={styles.sectionHeader}>AÇÕES RÁPIDAS NO CELULAR</Text>
-        <View style={styles.quickActionsGrid}>
-          <TouchableOpacity style={[styles.quickActionBtn, { borderColor: '#6366F1' }]} activeOpacity={0.8}>
-            <Text style={styles.quickActionEmoji}>📝</Text>
-            <Text style={styles.quickActionLabel}>Simulado Rápido</Text>
-            <Text style={styles.quickActionSub}>10 Questões</Text>
+        {/* Grade de Atalhos Rápidos para Todas as Funções */}
+        <Text style={styles.sectionHeader}>FUNCIONALIDADES DO APP</Text>
+        <View style={styles.gridNav}>
+          <TouchableOpacity 
+            style={[styles.navCard, { borderColor: '#38BDF8' }]} 
+            onPress={() => router.push('/simulado')}
+            activeOpacity={0.8}
+          >
+            <View style={[styles.navIconBox, { backgroundColor: '#082F49' }]}>
+              <Ionicons name="document-text" size={24} color="#38BDF8" />
+            </View>
+            <Text style={styles.navTitle}>Simulados</Text>
+            <Text style={styles.navSub}>Cebraspe & FGV</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.quickActionBtn, { borderColor: '#10B981' }]} activeOpacity={0.8}>
-            <Text style={styles.quickActionEmoji}>🧠</Text>
-            <Text style={styles.quickActionLabel}>Flashcards SRS</Text>
-            <Text style={styles.quickActionSub}>Repetição Espaçada</Text>
+          <TouchableOpacity 
+            style={[styles.navCard, { borderColor: '#818CF8' }]} 
+            onPress={() => router.push('/flashcards')}
+            activeOpacity={0.8}
+          >
+            <View style={[styles.navIconBox, { backgroundColor: '#1E1B4B' }]}>
+              <Ionicons name="bulb" size={24} color="#818CF8" />
+            </View>
+            <Text style={styles.navTitle}>Flashcards</Text>
+            <Text style={styles.navSub}>Repetição SRS</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.quickActionBtn, { borderColor: '#F59E0B' }]} activeOpacity={0.8}>
-            <Text style={styles.quickActionEmoji}>📜</Text>
-            <Text style={styles.quickActionLabel}>Lei Seca</Text>
-            <Text style={styles.quickActionSub}>Artigos Quentes</Text>
+          <TouchableOpacity 
+            style={[styles.navCard, { borderColor: '#F59E0B' }]} 
+            onPress={() => router.push('/conquistas')}
+            activeOpacity={0.8}
+          >
+            <View style={[styles.navIconBox, { backgroundColor: '#451A03' }]}>
+              <Ionicons name="trophy" size={24} color="#F59E0B" />
+            </View>
+            <Text style={styles.navTitle}>Troféus</Text>
+            <Text style={styles.navSub}>12 Medalhas</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={[styles.navCard, { borderColor: '#10B981' }]} 
+            onPress={() => router.push('/diagnostico')}
+            activeOpacity={0.8}
+          >
+            <View style={[styles.navIconBox, { backgroundColor: '#064E3B' }]}>
+              <Ionicons name="bar-chart" size={24} color="#10B981" />
+            </View>
+            <Text style={styles.navTitle}>Diagnóstico</Text>
+            <Text style={styles.navSub}>4 Tipos de Erro</Text>
           </TouchableOpacity>
         </View>
 
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
+  container: {
     flex: 1,
     backgroundColor: '#0B0F19',
-  },
-  scrollContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 40,
-    gap: 16,
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 4,
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1E293B',
   },
-  brandTitle: {
-    fontSize: 22,
-    fontWeight: '900',
+  brandBadgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 2,
+  },
+  proTag: {
+    backgroundColor: '#6366F1',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    marginRight: 6,
+  },
+  proTagText: {
     color: '#FFFFFF',
-    letterSpacing: -0.5,
+    fontSize: 9,
+    fontWeight: '800',
   },
   brandSubtitle: {
-    fontSize: 11,
     color: '#94A3B8',
-    marginTop: 2,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  brandTitle: {
+    color: '#F8FAFC',
+    fontSize: 22,
+    fontWeight: '800',
   },
   streakBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    backgroundColor: 'rgba(249, 115, 22, 0.15)',
-    borderColor: 'rgba(249, 115, 22, 0.3)',
-    borderWidth: 1,
+    backgroundColor: '#1E293B',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#334155',
   },
   streakEmoji: {
-    fontSize: 14,
+    fontSize: 20,
   },
   streakText: {
-    fontSize: 12,
+    color: '#F59E0B',
+    fontSize: 13,
     fontWeight: '800',
-    color: '#FB923C',
+  },
+  streakSub: {
+    color: '#64748B',
+    fontSize: 9,
+    fontWeight: '600',
+  },
+  scrollContainer: {
+    padding: 20,
+    paddingBottom: 40,
   },
   mascotCard: {
-    backgroundColor: 'rgba(30, 41, 59, 0.7)',
-    borderRadius: 24,
-    borderColor: 'rgba(99, 102, 241, 0.35)',
-    borderWidth: 1,
+    backgroundColor: '#111827',
+    borderWidth: 1.5,
+    borderColor: '#374151',
+    borderRadius: 20,
     padding: 18,
-    gap: 14,
+    marginBottom: 20,
   },
   mascotRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
+    marginBottom: 16,
   },
   mascotAvatarBox: {
     width: 64,
     height: 64,
-    borderRadius: 20,
-    backgroundColor: '#0F172A',
+    borderRadius: 32,
+    backgroundColor: '#1E1B4B',
+    borderWidth: 2,
+    borderColor: '#6366F1',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: '#6366F1',
-    borderWidth: 1.5,
+    marginRight: 14,
   },
   mascotEmoji: {
     fontSize: 34,
@@ -252,227 +362,290 @@ const styles = StyleSheet.create({
   },
   mascotTagRow: {
     flexDirection: 'row',
-    alignItems: 'center',
   },
   mascotTag: {
-    fontSize: 9,
-    fontWeight: '800',
     color: '#FBBF24',
-    backgroundColor: 'rgba(245, 158, 11, 0.15)',
-    paddingHorizontal: 8,
+    fontSize: 10,
+    fontWeight: '800',
+    backgroundColor: '#451A03',
+    paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 10,
+    borderRadius: 4,
+    marginBottom: 4,
   },
   mascotName: {
+    color: '#F8FAFC',
     fontSize: 18,
-    fontWeight: '900',
-    color: '#FFFFFF',
-    marginTop: 2,
+    fontWeight: '800',
   },
   mascotTitle: {
-    fontSize: 10,
     color: '#94A3B8',
+    fontSize: 11,
+    marginBottom: 6,
   },
   xpRow: {
-    marginTop: 6,
-    gap: 3,
+    marginTop: 2,
   },
   xpText: {
-    fontSize: 10,
+    color: '#818CF8',
+    fontSize: 11,
     fontWeight: '700',
-    color: '#A5B4FC',
+    marginBottom: 4,
   },
   xpBarTrack: {
     height: 6,
-    backgroundColor: '#0F172A',
-    borderRadius: 6,
+    backgroundColor: '#1E293B',
+    borderRadius: 3,
     overflow: 'hidden',
   },
   xpBarFill: {
     height: '100%',
     backgroundColor: '#6366F1',
-    borderRadius: 6,
+    borderRadius: 3,
   },
   speechBubble: {
-    backgroundColor: 'rgba(99, 102, 241, 0.1)',
-    borderRadius: 16,
-    borderColor: 'rgba(99, 102, 241, 0.25)',
-    borderWidth: 1,
+    backgroundColor: '#0F172A',
+    borderLeftWidth: 3,
+    borderLeftColor: '#6366F1',
     padding: 12,
+    borderRadius: 10,
+    marginBottom: 16,
   },
-  speechTag: {
-    fontSize: 9,
-    fontWeight: '800',
-    color: '#818CF8',
+  speechHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 4,
   },
+  speechTag: {
+    color: '#818CF8',
+    fontSize: 10,
+    fontWeight: '800',
+    marginLeft: 6,
+  },
   speechText: {
-    fontSize: 12,
-    fontStyle: 'italic',
     color: '#E2E8F0',
-    lineHeight: 17,
+    fontSize: 13,
+    lineHeight: 20,
+    fontStyle: 'italic',
+  },
+  mascotSelectorContainer: {
+    borderTopWidth: 1,
+    borderTopColor: '#1F2937',
+    paddingTop: 12,
+  },
+  selectorPrompt: {
+    color: '#64748B',
+    fontSize: 10,
+    fontWeight: '800',
+    marginBottom: 10,
+  },
+  selectorRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  selectorBtn: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#1E293B',
+    paddingVertical: 8,
+    marginHorizontal: 3,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  selectorBtnActive: {
+    borderColor: '#6366F1',
+    backgroundColor: '#1E1B4B',
+  },
+  selectorEmoji: {
+    fontSize: 18,
+    marginBottom: 2,
+  },
+  selectorName: {
+    color: '#94A3B8',
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  selectorNameActive: {
+    color: '#818CF8',
   },
   card: {
-    backgroundColor: '#1E293B',
-    borderRadius: 20,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: '#111827',
     borderWidth: 1,
-    padding: 16,
-    gap: 12,
+    borderColor: '#1F2937',
+    borderRadius: 18,
+    padding: 18,
+    marginBottom: 20,
   },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 14,
   },
   cardTitle: {
-    fontSize: 14,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    color: '#F8FAFC',
+    fontSize: 15,
+    fontWeight: '700',
   },
   cardBadge: {
-    fontSize: 10,
-    fontWeight: '800',
+    backgroundColor: '#1E293B',
     color: '#38BDF8',
-    backgroundColor: 'rgba(56, 189, 248, 0.15)',
+    fontSize: 11,
+    fontWeight: '700',
     paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 12,
+    paddingVertical: 2,
+    borderRadius: 6,
   },
   cutoffMetricRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 6,
+    justifyContent: 'space-between',
+    marginBottom: 10,
   },
   cutoffLabel: {
-    fontSize: 10,
     color: '#94A3B8',
-    fontWeight: '600',
+    fontSize: 11,
   },
   cutoffBigScore: {
-    fontSize: 22,
-    fontWeight: '900',
     color: '#38BDF8',
-    marginTop: 2,
+    fontSize: 24,
+    fontWeight: '800',
   },
-  cutoffDivider: {
-    width: 1,
-    height: 30,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  cutoffTargetScore: {
+    color: '#EF4444',
+    fontSize: 24,
+    fontWeight: '800',
   },
-  thermometerTrack: {
-    height: 12,
-    backgroundColor: '#0F172A',
-    borderRadius: 10,
+  gaugeTrack: {
+    height: 10,
+    backgroundColor: '#1E293B',
+    borderRadius: 5,
     position: 'relative',
-    overflow: 'visible',
-    marginTop: 4,
+    marginBottom: 12,
   },
-  thermometerFill: {
+  gaugeFill: {
     height: '100%',
     backgroundColor: '#6366F1',
-    borderRadius: 10,
+    borderRadius: 5,
   },
-  cutoffPin: {
+  cutoffMarker: {
     position: 'absolute',
     top: -3,
     bottom: -3,
-    width: 3,
-    backgroundColor: '#F43F5E',
+    width: 4,
+    backgroundColor: '#EF4444',
     borderRadius: 2,
   },
-  cutoffDistanceText: {
-    fontSize: 11,
-    color: '#CBD5E1',
-    lineHeight: 16,
-    marginTop: 2,
+  statusAdviceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#0F172A',
+    padding: 10,
+    borderRadius: 10,
   },
-  missionsList: {
-    gap: 10,
+  statusAdviceText: {
+    color: '#CBD5E1',
+    fontSize: 12,
+    marginLeft: 8,
+    flex: 1,
+    lineHeight: 18,
+  },
+  missionsCounter: {
+    color: '#38BDF8',
+    fontSize: 11,
+    fontWeight: '700',
+    backgroundColor: '#082F49',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
   },
   missionItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    backgroundColor: '#0F172A',
-    padding: 12,
-    borderRadius: 14,
-    borderColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: '#1E293B',
     borderWidth: 1,
+    borderColor: '#334155',
+    borderRadius: 14,
+    padding: 14,
+    marginBottom: 10,
   },
   missionItemDone: {
-    backgroundColor: 'rgba(16, 185, 129, 0.08)',
-    borderColor: 'rgba(16, 185, 129, 0.3)',
+    borderColor: '#065F46',
+    backgroundColor: '#064E3B20',
   },
   checkbox: {
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 24,
     borderRadius: 6,
-    borderColor: '#64748B',
     borderWidth: 2,
+    borderColor: '#64748B',
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 12,
   },
   checkboxDone: {
-    backgroundColor: '#10B981',
     borderColor: '#10B981',
+    backgroundColor: '#064E3B',
   },
-  checkIcon: {
-    color: '#0F172A',
-    fontSize: 12,
-    fontWeight: '900',
-  },
-  missionTextCol: {
+  missionTextContainer: {
     flex: 1,
   },
   missionTitle: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#F1F5F9',
+    color: '#F8FAFC',
+    fontSize: 13,
+    fontWeight: '600',
+    lineHeight: 18,
   },
   missionTitleDone: {
-    textDecorationLine: 'line-through',
     color: '#64748B',
+    textDecorationLine: 'line-through',
   },
   missionXpText: {
-    fontSize: 10,
-    color: '#FBBF24',
-    fontWeight: '600',
+    color: '#F59E0B',
+    fontSize: 11,
+    fontWeight: '700',
     marginTop: 2,
   },
+  missionActionBtn: {
+    padding: 4,
+    marginLeft: 6,
+  },
   sectionHeader: {
-    fontSize: 11,
-    fontWeight: '900',
-    letterSpacing: 1,
     color: '#64748B',
-    marginTop: 4,
-  },
-  quickActionsGrid: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  quickActionBtn: {
-    flex: 1,
-    backgroundColor: '#1E293B',
-    borderRadius: 16,
-    padding: 14,
-    alignItems: 'center',
-    borderWidth: 1,
-    gap: 4,
-  },
-  quickActionEmoji: {
-    fontSize: 22,
-  },
-  quickActionLabel: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#FFFFFF',
-    textAlign: 'center',
+    letterSpacing: 1,
+    marginBottom: 12,
   },
-  quickActionSub: {
-    fontSize: 9,
+  gridNav: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  navCard: {
+    width: '48%',
+    backgroundColor: '#111827',
+    borderWidth: 1.5,
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 12,
+  },
+  navIconBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  navTitle: {
+    color: '#F8FAFC',
+    fontSize: 14,
+    fontWeight: '700',
+    marginBottom: 2,
+  },
+  navSub: {
     color: '#94A3B8',
-    textAlign: 'center',
+    fontSize: 11,
   },
 });
