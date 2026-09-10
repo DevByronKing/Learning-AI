@@ -111,14 +111,6 @@ export default function RootLayout() {
             ),
           }}
         />
-
-        {/* Ocultar página boilerplate da barra inferior */}
-        <Tabs.Screen
-          name="explore"
-          options={{
-            href: null,
-          }}
-        />
       </Tabs>
     </SafeAreaProvider>
   );

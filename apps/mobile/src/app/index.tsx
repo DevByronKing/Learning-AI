@@ -66,7 +66,7 @@ export default function MobileHomeScreen() {
             </View>
             <Text style={styles.brandSubtitle}>{isProUser ? 'Acesso Ilimitado' : 'Concursos & OAB'}</Text>
           </TouchableOpacity>
-          <Text style={styles.brandTitle}>Learning AI</Text>
+          <Text style={styles.brandTitle}>AprovaLens AI</Text>
         </View>
 
         <View style={styles.streakBadge}>

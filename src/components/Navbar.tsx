@@ -201,7 +201,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* Desktop Navigation Tabs (Responsive sizing, no cutting off) */}
-            <nav className={`hidden lg:flex items-center justify-center gap-0.5 xl:gap-1 p-1 rounded-2xl border shadow-inner flex-1 max-w-4xl xl:max-w-5xl transition-colors ${
+            <nav className={`hidden lg:flex items-center justify-start xl:justify-center gap-0.5 xl:gap-1 p-1 rounded-2xl border shadow-inner flex-1 max-w-4xl xl:max-w-5xl transition-colors overflow-x-auto no-scrollbar ${
               isLight 
                 ? 'bg-slate-100/95 border-slate-200/90' 
                 : 'bg-slate-900/80 dark:bg-dark-surface/90 border-slate-700/60 dark:border-white/10'
