@@ -415,3 +415,22 @@ html.light .bg-slate-900 {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Otimização de Impressão e PDF do Cronograma de Estudos */
+@media print {
+  header, nav, footer, .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+    background-image: none !important;
+  }
+  .glass-panel {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+}
+

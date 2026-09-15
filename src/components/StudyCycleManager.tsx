@@ -16,7 +16,8 @@ import {
   Play, 
   RefreshCw,
   Sliders,
-  Award
+  Award,
+  Printer
 } from 'lucide-react';
 import { ExamNotice, StudyMethodology, DailyScheduleItem } from '@/lib/types';
 import confetti from 'canvas-confetti';
@@ -179,6 +180,12 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
     }, 1200);
   };
 
+  const handlePrintCycle = () => {
+    if (typeof window !== 'undefined') {
+      window.print();
+    }
+  };
+
   const totalTodayBlocks = schedule[0]?.blocks.length || 0;
   const completedTodayBlocks = schedule[0]?.blocks.filter((b) => b.status === 'concluido').length || 0;
   const todayProgressPercentage = totalTodayBlocks > 0 ? Math.round((completedTodayBlocks / totalTodayBlocks) * 100) : 0;
@@ -193,17 +200,28 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold">
               Metodologia de Alta Performance
             </span>
-            <span className="text-xs text-slate-500 dark:text-slate-400">Edital Ativo: {selectedExam.title}</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              Edital: <strong className="text-slate-700 dark:text-slate-200">{selectedExam?.title || 'INSS'}</strong>
+            </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
-            Ciclo de Estudos Inteligente & Dinâmico
+            Ciclo de Estudos Adaptativo (Meirelles 2.0)
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Balanceamento adaptativo de carga horária baseado no peso do edital e nos seus pontos cegos diagnosticados.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={handlePrintCycle}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs transition-all shadow-md active:scale-95"
+            title="Imprimir ciclo de estudos ou salvar em PDF para estudo analógico com checklists"
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>Imprimir Ciclo / PDF</span>
+          </button>
+
           <button
             onClick={handleAutoRebalance}
             disabled={isRebalancing}

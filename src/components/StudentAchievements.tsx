@@ -197,14 +197,14 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
                 <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed italic">
                   "{currentMascot.dailyAdvice}"
                 </p>
-                <div className="mt-3 flex items-center justify-between gap-2 border-t border-indigo-400/20 pt-2.5">
+                <div className="mt-3 border-t border-indigo-400/20 pt-2.5">
                   <span className="text-[11px] font-semibold text-emerald-500 dark:text-emerald-400">✨ {currentMascot.encouragement}</span>
                   <button
                     onClick={() => setIsChatModalOpen(true)}
-                    className="shrink-0 px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold flex items-center gap-1.5 transition-all shadow-sm shadow-indigo-600/30 active:scale-95"
+                    className="w-full py-2.5 rounded-xl bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-500/20 dark:hover:bg-indigo-500/30 text-indigo-700 dark:text-indigo-300 text-sm font-bold transition-colors flex items-center justify-center gap-2 mt-4"
                   >
-                    <MessageSquare className="w-3 h-3" />
-                    <span>Conversar</span>
+                    <MessageSquare className="w-4 h-4" />
+                    <span>Conversar com {currentMascot.name}</span>
                   </button>
                 </div>
               </div>
@@ -558,6 +558,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
 
       </div>
 
+      {/* Modal de Conversa com o Mascote */}
       <MascotChatModal
         isOpen={isChatModalOpen}
         onClose={() => setIsChatModalOpen(false)}

@@ -19,24 +19,39 @@ import {
   ShieldAlert, 
   BookOpen,
   Filter,
-  Check
+  Check,
+  Lock,
+  Crown,
+  Award,
+  History,
+  Calendar,
+  GraduationCap
 } from 'lucide-react';
-import { MockExam, MockExamAnswer, MockExamResult, MockExamSubjectBreakdown, Question, Flashcard } from '@/lib/types';
+import { MockExam, MockExamAnswer, MockExamResult, MockExamSubjectBreakdown, Question, Flashcard, SubscriptionPlan } from '@/lib/types';
 import { MOCK_FULL_EXAMS } from '@/lib/mockData';
 import confetti from 'canvas-confetti';
 
 interface FullMockExamSimulatorProps {
   onAddFlashcardsBatch?: (flashcards: Flashcard[]) => void;
   onGoBackToQuickQuiz?: () => void;
+  userPlan?: SubscriptionPlan;
+  onOpenPricing?: () => void;
 }
 
 export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
   onAddFlashcardsBatch,
-  onGoBackToQuickQuiz
+  onGoBackToQuickQuiz,
+  userPlan = 'aspirante',
+  onOpenPricing
 }) => {
   const [exams] = useState<MockExam[]>(MOCK_FULL_EXAMS);
   const [selectedExam, setSelectedExam] = useState<MockExam>(exams[0]);
   const [viewMode, setViewMode] = useState<'select' | 'in_progress' | 'result'>('select');
+
+  // Filters for official past exams and mock exams
+  const [examTab, setExamTab] = useState<'all' | 'past_exams' | 'simulados'>('past_exams');
+  const [careerFilter, setCareerFilter] = useState<string>('all');
+  const [bancaFilter, setBancaFilter] = useState<string>('all');
 
   // Exam execution state
   const [answers, setAnswers] = useState<Record<string, MockExamAnswer>>({});
@@ -48,6 +63,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
 
   // Result filter state
   const [resultFilter, setResultFilter] = useState<'all' | 'wrong' | 'blank' | 'correct'>('all');
+  const [visibleResultsCount, setVisibleResultsCount] = useState<number>(15);
   const [addedToSRS, setAddedToSRS] = useState<boolean>(false);
 
   // Timer countdown
@@ -286,27 +302,30 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
         <div className="space-y-8">
           
           {/* Header */}
+          {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-300 dark:border-white/10">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold flex items-center gap-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-500 dark:text-amber-400 border border-amber-500/30 text-xs font-bold flex items-center gap-1">
                   <Trophy className="w-3.5 h-3.5" />
-                  Simulados Oficiais de Prova Real
+                  Acervo de Provas Anteriores & Simulados Oficiais
                 </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">Padrão Cebraspe • FGV • FCC</span>
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-bold">
+                  Cebraspe • FGV • Vunesp • FCC
+                </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
-                Central de Simulados Cronometrados & Ranking
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1.5">
+                Provas Anteriores Oficiais & Simulados Cronometrados
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-                Simule a pressão real do dia da prova com cartão-resposta digital, anulação de questões e apuração de nota líquida oficial.
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-3xl">
+                Treine com as <strong>provas reais dos concursos anteriores na íntegra</strong> sob condições de prova (tempo oficial e regra da banca). Compare seu resultado líquido com a <strong>nota de corte histórica que realmente aprovou</strong>.
               </p>
             </div>
 
             {onGoBackToQuickQuiz && (
               <button
                 onClick={onGoBackToQuickQuiz}
-                className="px-4 py-2.5 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold transition-all flex items-center gap-2 self-start md:self-auto"
+                className="px-4 py-2.5 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold transition-all flex items-center gap-2 self-start md:self-auto shrink-0 shadow-sm"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Voltar ao Treino Avulso</span>
@@ -314,78 +333,221 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             )}
           </div>
 
+          {/* Type Switcher Tabs (Provas Anteriores Oficiais vs Simulados) */}
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="inline-flex p-1 rounded-2xl bg-slate-100 dark:bg-dark-surface border border-slate-200 dark:border-white/10">
+              <button
+                onClick={() => setExamTab('past_exams')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  examTab === 'past_exams'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-black shadow-md font-black'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <History className="w-3.5 h-3.5" />
+                <span>Provas Anteriores Oficiais ({exams.filter((e) => e.isOfficialPastExam).length})</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-black/20 text-black font-extrabold ml-1">
+                  PRO & ELITE
+                </span>
+              </button>
+
+              <button
+                onClick={() => setExamTab('simulados')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  examTab === 'simulados'
+                    ? 'bg-indigo-600 text-white shadow-md font-black'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Simulados Inéditos ({exams.filter((e) => !e.isOfficialPastExam).length})</span>
+              </button>
+
+              <button
+                onClick={() => setExamTab('all')}
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                  examTab === 'all'
+                    ? 'bg-slate-300 dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                Todas ({exams.length})
+              </button>
+            </div>
+
+            {/* Sub-Filters: Carreira e Banca */}
+            <div className="flex flex-wrap items-center gap-2.5 text-xs">
+              <div className="flex items-center gap-1 bg-white dark:bg-dark-surface px-3 py-1.5 rounded-xl border border-slate-200 dark:border-white/10">
+                <span className="text-slate-400 text-[11px] font-bold">Carreira:</span>
+                <select
+                  value={careerFilter}
+                  onChange={(e) => setCareerFilter(e.target.value)}
+                  className="bg-transparent text-slate-800 dark:text-slate-200 font-bold focus:outline-none cursor-pointer"
+                >
+                  <option value="all">Todas as Carreiras</option>
+                  <option value="policial">Policial (PF, PRF)</option>
+                  <option value="fiscal">Fiscal (Receita Federal)</option>
+                  <option value="tribunais">Tribunais (TJ-SP)</option>
+                  <option value="administrativa">Administrativa (INSS)</option>
+                  <option value="juridica">Jurídica (OAB)</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-1 bg-white dark:bg-dark-surface px-3 py-1.5 rounded-xl border border-slate-200 dark:border-white/10">
+                <span className="text-slate-400 text-[11px] font-bold">Banca:</span>
+                <select
+                  value={bancaFilter}
+                  onChange={(e) => setBancaFilter(e.target.value)}
+                  className="bg-transparent text-slate-800 dark:text-slate-200 font-bold focus:outline-none cursor-pointer"
+                >
+                  <option value="all">Todas as Bancas</option>
+                  <option value="Cebraspe">Cebraspe</option>
+                  <option value="FGV">FGV</option>
+                  <option value="Vunesp">Vunesp</option>
+                  <option value="FCC">FCC</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           {/* Exam Presets Cards */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {exams.map((exam) => (
-              <div
-                key={exam.id}
-                className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10 hover:border-indigo-500/40 transition-all flex flex-col justify-between group"
-              >
-                <div>
-                  
-                  {/* Meta Badges */}
-                  <div className="flex items-center justify-between pb-4 border-b border-slate-300 dark:border-white/10 text-xs">
-                    <span className="px-3 py-1 rounded-xl bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">
-                      Banca {exam.banca}
-                    </span>
-                    <span className="text-slate-500 dark:text-slate-400 font-mono flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-amber-400" />
-                      {exam.durationMinutes} minutos
-                    </span>
-                  </div>
+            {exams
+              .filter((exam) => {
+                if (examTab === 'past_exams' && !exam.isOfficialPastExam) return false;
+                if (examTab === 'simulados' && exam.isOfficialPastExam) return false;
+                if (careerFilter !== 'all' && exam.careerCategory !== careerFilter) return false;
+                if (bancaFilter !== 'all' && exam.banca !== bancaFilter) return false;
+                return true;
+              })
+              .map((exam) => {
+                const isLocked = userPlan === 'aspirante' && !exam.isFreeDemo;
 
-                  <h2 className="text-xl font-black text-slate-900 dark:text-white mt-4 group-hover:text-indigo-300 transition-colors">
-                    {exam.title}
-                  </h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    {exam.institution} • Cargo: <strong>{exam.role}</strong>
-                  </p>
-
-                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-4 leading-relaxed">
-                    {exam.description}
-                  </p>
-
-                  {/* Highlights Grid */}
-                  <div className="grid grid-cols-3 gap-3 mt-6 p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 text-center text-xs">
-                    <div>
-                      <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">Questões</span>
-                      <p className="text-base font-black text-slate-900 dark:text-white font-mono mt-0.5">{exam.totalQuestions}</p>
-                    </div>
-                    <div>
-                      <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">Regra</span>
-                      <p className="text-xs font-bold text-amber-400 mt-1">
-                        {exam.scoringRule === 'cebraspe_uma_anula_uma' ? '1 Errada Anula 1' : 'Ponderada'}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">Corte Estimado</span>
-                      <p className="text-base font-black text-emerald-400 font-mono mt-0.5">{exam.estimatedCutoffScore}%</p>
-                    </div>
-                  </div>
-
-                  {/* Scoring Alert */}
-                  {exam.scoringRule === 'cebraspe_uma_anula_uma' && (
-                    <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-300/90 flex items-start gap-2">
-                      <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                      <span><strong>Estratégia Cebraspe:</strong> Cada resposta errada desconta 1 ponto positivo. Respostas em branco não pontuam nem anulam.</span>
-                    </div>
-                  )}
-
-                </div>
-
-                {/* Start Button */}
-                <div className="mt-8 pt-4 border-t border-slate-300 dark:border-white/10">
-                  <button
-                    onClick={() => handleStartExam(exam)}
-                    className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30"
+                return (
+                  <div
+                    key={exam.id}
+                    className={`glass-panel p-6 sm:p-8 rounded-3xl border transition-all flex flex-col justify-between group relative overflow-hidden ${
+                      isLocked
+                        ? 'border-amber-500/30 bg-amber-500/5 hover:border-amber-500/50'
+                        : 'border-slate-300 dark:border-white/10 hover:border-indigo-500/40'
+                    }`}
                   >
-                    <span>Iniciar Prova Simulada</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
+                    <div>
+                      
+                      {/* Meta Badges */}
+                      <div className="flex items-center justify-between pb-4 border-b border-slate-300 dark:border-white/10 text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="px-3 py-1 rounded-xl bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">
+                            Banca {exam.banca}
+                          </span>
+                          {exam.isOfficialPastExam ? (
+                            <span className="px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-400 font-black border border-amber-500/30 flex items-center gap-1">
+                              <History className="w-3 h-3" />
+                              PROVA OFICIAL {exam.examYear || ''}
+                            </span>
+                          ) : (
+                            <span className="px-2.5 py-1 rounded-xl bg-purple-500/20 text-purple-300 font-bold border border-purple-500/30">
+                              SIMULADO INÉDITO
+                            </span>
+                          )}
+                        </div>
 
-              </div>
-            ))}
+                        <span className="text-slate-500 dark:text-slate-400 font-mono flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-amber-400" />
+                          {exam.durationMinutes} minutos
+                        </span>
+                      </div>
+
+                      {/* Title & Organization */}
+                      <div className="mt-4">
+                        <div className="flex items-start justify-between gap-2">
+                          <h2 className="text-xl font-black text-slate-900 dark:text-white group-hover:text-indigo-300 transition-colors">
+                            {exam.title}
+                          </h2>
+                          {isLocked && (
+                            <span className="p-1.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0" title="Exclusivo Pro e Elite">
+                              <Lock className="w-4 h-4" />
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                          {exam.institution} • Cargo: <strong>{exam.role}</strong>
+                        </p>
+                      </div>
+
+                      <p className="text-xs text-slate-600 dark:text-slate-300 mt-4 leading-relaxed">
+                        {exam.description}
+                      </p>
+
+                      {/* Highlights Grid */}
+                      <div className="grid grid-cols-3 gap-3 mt-6 p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 text-center text-xs">
+                        <div>
+                          <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">Questões</span>
+                          <p className="text-base font-black text-slate-900 dark:text-white font-mono mt-0.5">{exam.totalQuestions}</p>
+                        </div>
+                        <div>
+                          <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">Regra</span>
+                          <p className="text-xs font-bold text-amber-400 mt-1">
+                            {exam.scoringRule === 'cebraspe_uma_anula_uma' ? '1 Errada Anula 1' : 'Ponderada'}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">
+                            {exam.isOfficialPastExam ? 'Corte Histórico' : 'Corte Estimado'}
+                          </span>
+                          <p className="text-base font-black text-emerald-400 font-mono mt-0.5">
+                            {exam.historicalCutoffScore ? `${exam.historicalCutoffScore} pts` : `${exam.estimatedCutoffScore}%`}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Historical Real Cutoff Information Alert */}
+                      {exam.isOfficialPastExam && exam.historicalCutoffDescription && (
+                        <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-300 flex items-start gap-2">
+                          <Crown className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                          <span><strong>Referência Real da Banca:</strong> {exam.historicalCutoffDescription}</span>
+                        </div>
+                      )}
+
+                      {/* Free Demo Badge for Aspirante */}
+                      {exam.isFreeDemo && userPlan === 'aspirante' && (
+                        <div className="mt-3 p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[11px] text-emerald-400 font-bold flex items-center gap-1.5">
+                          <span>🎁</span>
+                          <span>Degustação Gratuita Liberada para o Plano Aspirante!</span>
+                        </div>
+                      )}
+
+                    </div>
+
+                    {/* Start or Unlock Button */}
+                    <div className="mt-8 pt-4 border-t border-slate-300 dark:border-white/10">
+                      {isLocked ? (
+                        <div className="space-y-2">
+                          <button
+                            onClick={onOpenPricing}
+                            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-500 text-black font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/30"
+                          >
+                            <Lock className="w-4 h-4" />
+                            <span>Desbloquear Prova Oficial (Assine PRO)</span>
+                          </button>
+                          <p className="text-[10px] text-center text-slate-500 dark:text-slate-400">
+                            Exclusivo para assinantes Concurseiro PRO e Carreiras Elite.
+                          </p>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleStartExam(exam)}
+                          className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30"
+                        >
+                          <span>{exam.isOfficialPastExam ? 'Iniciar Caderno de Prova Oficial' : 'Iniciar Prova Simulada'}</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+
+                  </div>
+                );
+              })}
           </div>
 
         </div>
@@ -789,6 +951,67 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
               </div>
             </div>
 
+            {/* Comparador de Nota de Corte Real da Prova Oficial */}
+            {selectedExam.isOfficialPastExam && selectedExam.historicalCutoffScore && (
+              <div className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-indigo-950/40 via-dark-surface to-purple-950/40 border border-indigo-500/30 shadow-xl">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shrink-0">
+                      <History className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-indigo-400 flex items-center gap-1">
+                          <Crown className="w-3.5 h-3.5 text-amber-400" />
+                          Comparador Histórico Oficial • Concurso Real {selectedExam.examYear}
+                        </span>
+                        {userPlan === 'elite' ? (
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-black border border-amber-500/30">
+                            ANÁLISE ELITE ATIVA
+                          </span>
+                        ) : (
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 font-mono">
+                            Referência Oficial
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="text-base sm:text-lg font-black text-slate-900 dark:text-white mt-1">
+                        Sua Nota Líquida: <span className="font-mono text-indigo-400">{result.netScore.toFixed(1)} pts</span> | Corte Oficial Real da Época: <span className="font-mono text-amber-400">{selectedExam.historicalCutoffScore.toFixed(1)} pts</span>
+                      </h4>
+                      <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                        {selectedExam.historicalCutoffDescription}
+                      </p>
+                      
+                      {result.netScore >= selectedExam.historicalCutoffScore ? (
+                        <div className="mt-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+                          <CheckCircle2 className="w-4 h-4 shrink-0" />
+                          <span>Parabéns! Sua nota nesta prova teria garantido convocação oficial para as próximas fases no concurso real!</span>
+                        </div>
+                      ) : (
+                        <div className="mt-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold">
+                          <AlertTriangle className="w-4 h-4 shrink-0" />
+                          <span>Você ficou a {(selectedExam.historicalCutoffScore - result.netScore).toFixed(1)} pontos do corte oficial real. Revise os pontos cegos no Caderno de Erros!</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {userPlan !== 'elite' && (
+                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center shrink-0 self-start md:self-center">
+                      <span className="text-[10px] text-slate-400 block mb-1.5 font-bold">Quer diagnóstico cognitivo de cada erro?</span>
+                      <button
+                        onClick={onOpenPricing}
+                        className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-black text-xs transition-all flex items-center gap-1.5 shadow-md shadow-amber-500/20"
+                      >
+                        <Crown className="w-3.5 h-3.5" />
+                        <span>Desbloquear no Elite</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Quick Metrics Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 text-xs text-center">
               <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5">
@@ -864,7 +1087,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
               {/* Filter Tabs */}
               <div className="flex items-center p-1 rounded-2xl bg-white dark:bg-dark-surface border border-slate-300 dark:border-white/10 text-xs">
                 <button
-                  onClick={() => setResultFilter('all')}
+                  onClick={() => { setResultFilter('all'); setVisibleResultsCount(15); }}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
                     resultFilter === 'all' ? 'bg-indigo-600 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-white'
                   }`}
@@ -872,7 +1095,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                   Todas ({result.totalQuestions})
                 </button>
                 <button
-                  onClick={() => setResultFilter('wrong')}
+                  onClick={() => { setResultFilter('wrong'); setVisibleResultsCount(15); }}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
                     resultFilter === 'wrong' ? 'bg-rose-600 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-white'
                   }`}
@@ -880,7 +1103,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                   Erros ({result.wrongCount})
                 </button>
                 <button
-                  onClick={() => setResultFilter('blank')}
+                  onClick={() => { setResultFilter('blank'); setVisibleResultsCount(15); }}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
                     resultFilter === 'blank' ? 'bg-amber-600 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-white'
                   }`}
@@ -914,94 +1137,125 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
               </div>
             )}
 
-            {/* Questions List */}
-            <div className="space-y-6">
-              {selectedExam.questions
-                .filter((q) => {
-                  const ans = answers[q.id];
-                  const correctOpt = q.options.find((o) => o.isCorrect);
-                  const isCorrect = ans && ans.selectedOptionId === correctOpt?.id;
-                  const isBlank = !ans || ans.selectedOptionId === null;
+            {/* Questions List with Lazy-Loading Pagination */}
+            {(() => {
+              const filteredQuestions = selectedExam.questions.filter((q) => {
+                const ans = answers[q.id];
+                const correctOpt = q.options.find((o) => o.isCorrect);
+                const isCorrect = ans && ans.selectedOptionId === correctOpt?.id;
+                const isBlank = !ans || ans.selectedOptionId === null;
 
-                  if (resultFilter === 'wrong') return !isBlank && !isCorrect;
-                  if (resultFilter === 'blank') return isBlank;
-                  if (resultFilter === 'correct') return isCorrect;
-                  return true;
-                })
-                .map((q, idx) => {
-                  const ans = answers[q.id];
-                  const correctOpt = q.options.find((o) => o.isCorrect);
-                  const selectedOpt = q.options.find((o) => o.id === ans?.selectedOptionId);
-                  const isCorrect = ans && ans.selectedOptionId === correctOpt?.id;
-                  const isBlank = !ans || ans.selectedOptionId === null;
+                if (resultFilter === 'wrong') return !isBlank && !isCorrect;
+                if (resultFilter === 'blank') return isBlank;
+                if (resultFilter === 'correct') return isCorrect;
+                return true;
+              });
 
-                  return (
-                    <div
-                      key={q.id}
-                      className={`p-6 rounded-2xl border text-xs sm:text-sm transition-all ${
-                        isCorrect
-                          ? 'bg-emerald-950/20 border-emerald-500/30'
-                          : isBlank
-                          ? 'bg-amber-950/20 border-amber-500/30'
-                          : 'bg-rose-950/20 border-rose-500/30'
-                      }`}
-                    >
-                      {/* Meta header */}
-                      <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/5 text-xs">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-slate-900 dark:text-white">Questão #{selectedExam.questions.indexOf(q) + 1}</span>
-                          <span className="text-slate-500 dark:text-slate-400">• {q.subjectName}</span>
-                        </div>
-                        <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+              const displayedQuestions = filteredQuestions.slice(0, visibleResultsCount);
+
+              return (
+                <div className="space-y-6">
+                  {displayedQuestions.map((q) => {
+                    const ans = answers[q.id];
+                    const correctOpt = q.options.find((o) => o.isCorrect);
+                    const selectedOpt = q.options.find((o) => o.id === ans?.selectedOptionId);
+                    const isCorrect = ans && ans.selectedOptionId === correctOpt?.id;
+                    const isBlank = !ans || ans.selectedOptionId === null;
+
+                    return (
+                      <div
+                        key={q.id}
+                        className={`p-6 rounded-2xl border text-xs sm:text-sm transition-all ${
                           isCorrect
-                            ? 'bg-emerald-500/20 text-emerald-400'
+                            ? 'bg-emerald-950/20 border-emerald-500/30'
                             : isBlank
-                            ? 'bg-amber-500/20 text-amber-400'
-                            : 'bg-rose-500/20 text-rose-400'
-                        }`}>
-                          {isCorrect ? '✓ Acerto (+1 pt)' : isBlank ? '○ Em Branco (0 pt)' : '✗ Erro (-1 pt no Cebraspe)'}
-                        </span>
-                      </div>
-
-                      {/* Statement */}
-                      <p className="mt-3 text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
-                        {q.statement}
-                      </p>
-
-                      {/* Comparison of Selected vs Correct */}
-                      <div className="mt-4 p-3.5 rounded-xl bg-dark-bg/70 border border-slate-200 dark:border-white/5 space-y-1.5 text-xs font-mono">
-                        <div className="flex items-center gap-2">
-                          <span className="text-slate-500 dark:text-slate-400">Sua Marcação:</span>
-                          <strong className={isCorrect ? 'text-emerald-400' : isBlank ? 'text-amber-400' : 'text-rose-400'}>
-                            {isBlank ? 'EM BRANCO' : selectedOpt?.text}
-                          </strong>
+                            ? 'bg-amber-950/20 border-amber-500/30'
+                            : 'bg-rose-950/20 border-rose-500/30'
+                        }`}
+                      >
+                        {/* Meta header */}
+                        <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/5 text-xs">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-slate-900 dark:text-white">Questão #{selectedExam.questions.indexOf(q) + 1}</span>
+                            <span className="text-slate-500 dark:text-slate-400">• {q.subjectName}</span>
+                          </div>
+                          <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+                            isCorrect
+                              ? 'bg-emerald-500/20 text-emerald-400'
+                              : isBlank
+                              ? 'bg-amber-500/20 text-amber-400'
+                              : 'bg-rose-500/20 text-rose-400'
+                          }`}>
+                            {isCorrect ? '✓ Acerto (+1 pt)' : isBlank ? '○ Em Branco (0 pt)' : '✗ Erro (-1 pt no Cebraspe)'}
+                          </span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-slate-500 dark:text-slate-400">Gabarito Oficial:</span>
-                          <strong className="text-emerald-400">{correctOpt?.text}</strong>
-                        </div>
-                      </div>
 
-                      {/* Explanation */}
-                      <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                        <strong className="text-indigo-300">Fundamentação: </strong>
-                        {q.explanation}
-                      </div>
+                        {/* Statement */}
+                        <p className="mt-3 text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
+                          {q.statement}
+                        </p>
 
-                      {/* Legal references */}
-                      {q.lawArticles && (
-                        <div className="mt-3 flex flex-wrap gap-1.5">
-                          {q.lawArticles.map((art, aIdx) => (
-                            <span key={aIdx} className="px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 text-[10px] font-semibold">
-                              {art}
-                            </span>
-                          ))}
+                        {/* Comparison of Selected vs Correct */}
+                        <div className="mt-4 p-3.5 rounded-xl bg-dark-bg/70 border border-slate-200 dark:border-white/5 space-y-1.5 text-xs font-mono">
+                          <div className="flex items-center gap-2">
+                            <span className="text-slate-500 dark:text-slate-400">Sua Marcação:</span>
+                            <strong className={isCorrect ? 'text-emerald-400' : isBlank ? 'text-amber-400' : 'text-rose-400'}>
+                              {isBlank ? 'EM BRANCO' : selectedOpt?.text}
+                            </strong>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-slate-500 dark:text-slate-400">Gabarito Oficial:</span>
+                            <strong className="text-emerald-400">{correctOpt?.text}</strong>
+                          </div>
                         </div>
-                      )}
+
+                        {/* Explanation */}
+                        <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                          <strong className="text-indigo-300">Fundamentação: </strong>
+                          {q.explanation}
+                        </div>
+
+                        {/* Legal references */}
+                        {q.lawArticles && (
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {q.lawArticles.map((art, aIdx) => (
+                              <span key={aIdx} className="px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 text-[10px] font-semibold">
+                                {art}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  {/* Lazy Load Controls */}
+                  {filteredQuestions.length > visibleResultsCount && (
+                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                      <span className="text-slate-500 dark:text-slate-400">
+                        Exibindo <strong>{displayedQuestions.length}</strong> de <strong>{filteredQuestions.length}</strong> questões filtradas.
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setVisibleResultsCount((prev) => prev + 15)}
+                          className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-all shadow-md"
+                        >
+                          Carregar Mais 15
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setVisibleResultsCount(filteredQuestions.length)}
+                          className="px-3 py-2 rounded-xl bg-white dark:bg-dark-surface hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-bold transition-all"
+                        >
+                          Ver Todas
+                        </button>
+                      </div>
                     </div>
-                  );
-                })}
-            </div>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Bottom Actions */}
             <div className="pt-6 border-t border-slate-300 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">

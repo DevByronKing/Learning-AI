@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BrainCircuit, 
   X, 
@@ -18,7 +18,9 @@ import {
   MessageSquare,
   FileText,
   Clock,
-  ShieldAlert
+  ShieldAlert,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import { UserMetrics, ExamNotice, MicroSummary, CopilotMessage } from '@/lib/types';
 import { INITIAL_MICRO_SUMMARIES } from '@/lib/mockData';
@@ -53,6 +55,44 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
   ]);
   const [inputQuery, setInputQuery] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+
+  // Audio playback state
+  const [speakingId, setSpeakingId] = useState<string | null>(null);
+
+  // Stop audio on unmount
+  useEffect(() => {
+    return () => {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  const handleToggleSpeech = (targetId: string, textToSpeak: string) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      alert('Síntese de voz nativa não disponível neste navegador.');
+      return;
+    }
+
+    if (speakingId === targetId) {
+      window.speechSynthesis.cancel();
+      setSpeakingId(null);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    const cleanText = textToSpeak.replace(/[*#_`]/g, '');
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'pt-BR';
+    utterance.rate = 1.05;
+    utterance.pitch = 1.0;
+
+    utterance.onend = () => setSpeakingId(null);
+    utterance.onerror = () => setSpeakingId(null);
+
+    setSpeakingId(targetId);
+    window.speechSynthesis.speak(utterance);
+  };
 
   // Micro-summaries state
   const [summaries] = useState<MicroSummary[]>(INITIAL_MICRO_SUMMARIES);
@@ -362,18 +402,33 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                         {m.text}
                       </div>
 
-                      {m.quickAction && (
-                        <div className="mt-3 pt-2 border-t border-slate-300 dark:border-white/10 flex justify-end">
+                      {m.sender === 'assistant' && (
+                        <div className="mt-2.5 pt-2 border-t border-slate-200 dark:border-white/5 flex items-center justify-between gap-2">
                           <button
-                            onClick={() => {
-                              onClose();
-                              onNavigateTab(m.quickAction!.actionTab);
-                            }}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-indigo-300 text-[11px] font-bold"
+                            onClick={() => handleToggleSpeech(m.id, m.text)}
+                            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all ${
+                              speakingId === m.id
+                                ? 'bg-indigo-600 text-white border-indigo-500 animate-pulse shadow-sm shadow-indigo-600/30'
+                                : 'bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
+                            }`}
+                            title={speakingId === m.id ? 'Pausar áudio' : 'Ouvir resposta com o Copiloto'}
                           >
-                            <span>{m.quickAction.label}</span>
-                            <ArrowRight className="w-3 h-3" />
+                            {speakingId === m.id ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
+                            <span>{speakingId === m.id ? 'Pausar Áudio' : 'Ouvir Resposta'}</span>
                           </button>
+
+                          {m.quickAction && (
+                            <button
+                              onClick={() => {
+                                onClose();
+                                onNavigateTab(m.quickAction!.actionTab);
+                              }}
+                              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-indigo-300 text-[10px] font-bold"
+                            >
+                              <span>{m.quickAction.label}</span>
+                              <ArrowRight className="w-3 h-3" />
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>
@@ -426,9 +481,23 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
               {/* Selected Summary Card */}
               {selectedSummary && (
                 <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface border border-indigo-500/20 space-y-3">
-                  <h4 className="text-sm font-black text-slate-900 dark:text-white">
-                    {selectedSummary.title}
-                  </h4>
+                  <div className="flex items-center justify-between gap-2 border-b border-indigo-500/20 pb-2">
+                    <h4 className="text-sm font-black text-slate-900 dark:text-white">
+                      {selectedSummary.title}
+                    </h4>
+                    <button
+                      onClick={() => handleToggleSpeech(selectedSummary.id, `${selectedSummary.title}. Disciplina: ${selectedSummary.subjectName}. Banca: ${selectedSummary.banca}. Pontos chave: ${selectedSummary.keyPoints.join('. ')}. Alerta de armadilha: ${selectedSummary.bancaTrapAlert}. Mnemônico: ${selectedSummary.mnemonic || ''}`)}
+                      className={`flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[10px] font-bold transition-all shrink-0 ${
+                        speakingId === selectedSummary.id
+                          ? 'bg-indigo-600 text-white border-indigo-500 animate-pulse shadow-sm shadow-indigo-600/30'
+                          : 'bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
+                      }`}
+                      title={speakingId === selectedSummary.id ? 'Pausar áudio' : 'Ouvir resumo completo'}
+                    >
+                      {speakingId === selectedSummary.id ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
+                      <span>{speakingId === selectedSummary.id ? 'Pausar' : 'Ouvir Resumo'}</span>
+                    </button>
+                  </div>
 
                   <div className="space-y-2">
                     <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">Pontos Chave:</span>

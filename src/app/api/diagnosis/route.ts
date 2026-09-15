@@ -17,6 +17,8 @@ export async function POST(req: Request) {
       knownLawArticle: body.knownLawArticle || body.codeCitation,
       knownExplanation: body.knownExplanation || body.explanation,
       knownTrap: body.knownTrap || body.trapAlert,
+      userPlan: body.userPlan || 'aspirante',
+      userDailyAiCount: Number(body.userDailyAiCount) || 0,
     };
 
     const result = await AIEngine.generateDiagnostic(diagnosticReq);

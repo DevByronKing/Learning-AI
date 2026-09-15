@@ -1,5 +1,5 @@
 import { getSupabase, isSupabaseConfigured } from './supabase';
-import { MistakeEntry, Flashcard, UserMetrics, QuestionAttempt, ExamNotice } from './types';
+import { MistakeEntry, Flashcard, UserMetrics, QuestionAttempt, ExamNotice, StudentProfile } from './types';
 
 export class SupabaseService {
   /**
@@ -133,6 +133,38 @@ export class SupabaseService {
       return { success: true };
     } catch (err: any) {
       console.warn('Erro ao sincronizar perfil com Supabase:', err?.message || err);
+      return { success: false, error: err?.message };
+    }
+  }
+
+  /**
+   * Sincroniza o Passaporte Cognitivo e Animal Guardião no perfil do Supabase.
+   */
+  static async syncStudentProfile(userId: string, profile: StudentProfile): Promise<{ success: boolean; error?: string }> {
+    if (!isSupabaseConfigured()) {
+      return { success: true };
+    }
+
+    try {
+      const client = getSupabase();
+      if (!client) return { success: false, error: 'Cliente Supabase indisponível' };
+
+      const { error } = await client
+        .from('profiles')
+        .update({
+          full_name: profile.name,
+          target_exam: profile.targetExamTitle || profile.targetCareer,
+          daily_hours_goal: profile.dailyHoursGoal,
+          avatar_animal: profile.guardianAnimalId,
+          war_name: profile.warName,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', userId);
+
+      if (error) throw error;
+      return { success: true };
+    } catch (err: any) {
+      console.warn('Erro ao sincronizar perfil do estudante com Supabase:', err?.message || err);
       return { success: false, error: err?.message };
     }
   }

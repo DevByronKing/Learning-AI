@@ -20,7 +20,7 @@ import { Question, QuestionAttempt, Flashcard, UserMetrics } from '@/lib/types';
 import { MOCK_QUESTIONS } from '@/lib/mockData';
 import { CognitiveDiagnosisCard } from './CognitiveDiagnosisCard';
 import { FullMockExamSimulator } from './FullMockExamSimulator';
-import { ExamNotice } from '@/lib/types';
+import { ExamNotice, SubscriptionPlan } from '@/lib/types';
 
 interface QuizSimulatorProps {
   onAddFlashcard: (flashcard: Flashcard) => void;
@@ -30,6 +30,9 @@ interface QuizSimulatorProps {
   exams?: ExamNotice[];
   selectedExam?: ExamNotice;
   onSelectExam?: (exam: ExamNotice) => void;
+  userPlan?: SubscriptionPlan;
+  dailyAiCount?: number;
+  onOpenPricing?: () => void;
 }
 
 export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
@@ -39,9 +42,13 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
   metrics,
   exams = [],
   selectedExam,
-  onSelectExam
+  onSelectExam,
+  userPlan = 'aspirante',
+  dailyAiCount = 0,
+  onOpenPricing
 }) => {
   const [simulatorMode, setSimulatorMode] = useState<'quick' | 'full_mock' | 'ai_generator'>('quick');
+  const [bonusAiCredits, setBonusAiCredits] = useState<number>(0);
   const [questions, setQuestions] = useState<Question[]>(MOCK_QUESTIONS);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
@@ -286,7 +293,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
             }`}
           >
             <Trophy className="w-4 h-4" />
-            <span>Simulado Oficial (Modo Prova & Ranking)</span>
+            <span>Provas Anteriores & Simulados Oficiais</span>
           </button>
         </div>
       </div>
@@ -295,6 +302,8 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
         <FullMockExamSimulator
           onAddFlashcardsBatch={onAddFlashcardsBatch}
           onGoBackToQuickQuiz={() => setSimulatorMode('quick')}
+          userPlan={userPlan}
+          onOpenPricing={onOpenPricing}
         />
       ) : simulatorMode === 'ai_generator' ? (
         /* AI GENERATOR VIEW */
@@ -693,6 +702,10 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
               confidence={confidence}
               onAddFlashcard={onAddFlashcard}
               onNextQuestion={handleNext}
+              userPlan={userPlan}
+              quotaExceeded={userPlan === 'aspirante' && (dailyAiCount - bonusAiCredits) >= 5}
+              onOpenPricing={onOpenPricing}
+              onRewardGranted={(bonus) => setBonusAiCredits((prev) => prev + bonus)}
             />
           )}
 

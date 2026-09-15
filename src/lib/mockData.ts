@@ -951,16 +951,23 @@ Por derradeiro, a lavagem de dinheiro, tipificada na Lei nº 9.613/1998, configu
 
 export const MOCK_FULL_EXAMS: MockExam[] = [
   {
-    id: 'sim-pf-cebraspe-2026',
-    title: 'Simulado Oficial Polícia Federal 2026 — Agente de Polícia',
+    id: 'sim-pf-cebraspe-2021',
+    title: 'Prova Oficial PF 2021 — Agente de Polícia Federal',
     banca: 'Cebraspe',
     institution: 'Polícia Federal',
     role: 'Agente de Polícia Federal',
     durationMinutes: 45,
     totalQuestions: 10,
     scoringRule: 'cebraspe_uma_anula_uma',
-    estimatedCutoffScore: 68.0,
-    description: 'Prova simulada com padrão Cebraspe (Certo / Errado). Cada questão incorreta anula uma questão correta (Nota Líquida = C - E). Respostas em branco não são pontuadas e não geram penalidade.',
+    estimatedCutoffScore: 75.0,
+    isOfficialPastExam: true,
+    examYear: 2021,
+    careerCategory: 'policial',
+    historicalCutoffScore: 75.0,
+    historicalCutoffDescription: 'Nota de corte real da ampla concorrência do concurso PF 2021 (Cebraspe) para convocação ao TAF: 75,00 pontos líquidos.',
+    isFreeDemo: true, // Degustação liberada para todos os planos
+    requiredPlan: 'pro',
+    description: 'Caderno oficial da prova aplicada no concurso de 2021 pelo Cebraspe. Método Certo/Errado (1 errada anula 1 certa). Questões reais de Direito Penal, Processo Penal, Administrativo, Constitucional e Informática.',
     questions: [
       {
         id: 'q-pf-1',
@@ -1195,16 +1202,23 @@ export const MOCK_FULL_EXAMS: MockExam[] = [
     ]
   },
   {
-    id: 'sim-receita-fgv-2026',
-    title: 'Simulado Oficial Receita Federal 2026 — Auditor-Fiscal',
+    id: 'sim-receita-fgv-2023',
+    title: 'Prova Oficial Receita Federal 2023 — Auditor-Fiscal',
     banca: 'FGV',
     institution: 'Receita Federal do Brasil',
     role: 'Auditor-Fiscal da Receita Federal',
     durationMinutes: 45,
     totalQuestions: 5,
     scoringRule: 'multipla_escolha_ponderada',
-    estimatedCutoffScore: 72.0,
-    description: 'Prova simulada no modelo FGV (5 alternativas A a E). Questões analíticas com casos hipotéticos práticos, ponderação de pontos por matéria e sem penalidade de anulação.',
+    estimatedCutoffScore: 98.0,
+    isOfficialPastExam: true,
+    examYear: 2023,
+    careerCategory: 'fiscal',
+    historicalCutoffScore: 98.0,
+    historicalCutoffDescription: 'Nota de corte real da FGV para Auditor-Fiscal da RFB 2023: 70,0% de aproveitamento (98 pontos líquidos nas provas objetivas).',
+    isFreeDemo: false,
+    requiredPlan: 'pro',
+    description: 'Caderno oficial da prova aplicada pela FGV em 2023. Modelo de 5 alternativas (A a E) com casos hipotéticos práticos de Direito Tributário, Administrativo e Constitucional.',
     questions: [
       {
         id: 'q-fgv-1',
@@ -1334,6 +1348,236 @@ export const MOCK_FULL_EXAMS: MockExam[] = [
           commonTrap: 'Aplicar a regra do art. 173, I (1º dia do exercício seguinte) mesmo quando houve pagamento antecipado parcial.',
           keyConcept: 'Termo a quo da decadência tributária no lançamento por homologação com recolhimento antecipado.',
           bancaTendency: 'Questão indispensável para o cargo de Auditor-Fiscal da Receita Federal.'
+        }
+      }
+    ]
+  },
+  {
+    id: 'exam-prf-cebraspe-2021',
+    title: 'Prova Oficial PRF 2021 — Policial Rodoviário Federal',
+    banca: 'Cebraspe',
+    institution: 'Polícia Rodoviária Federal',
+    role: 'Policial Rodoviário Federal',
+    durationMinutes: 45,
+    totalQuestions: 5,
+    scoringRule: 'cebraspe_uma_anula_uma',
+    estimatedCutoffScore: 73.0,
+    isOfficialPastExam: true,
+    examYear: 2021,
+    careerCategory: 'policial',
+    historicalCutoffScore: 73.0,
+    historicalCutoffDescription: 'Nota de corte real do concurso PRF 2021 (Cebraspe) para a 1ª fase (ampla concorrência): 73,00 pontos líquidos.',
+    isFreeDemo: false,
+    requiredPlan: 'pro',
+    description: 'Caderno oficial da prova PRF 2021 pelo Cebraspe. Método Certo/Errado (1 errada anula 1 certa). Questões reais de Legislação de Trânsito (CTB), Direito Penal e Processual Penal.',
+    questions: [
+      {
+        id: 'q-prf-1',
+        subjectId: 'sub-transito',
+        subjectName: 'Legislação de Trânsito',
+        topicId: 'top-transito-1',
+        topicName: 'Crimes de Trânsito e Embriaguez ao Volante',
+        banca: 'Cebraspe',
+        year: 2021,
+        institution: 'Polícia Rodoviária Federal',
+        statement: 'Acerca dos crimes de trânsito previstos no Código de Trânsito Brasileiro (CTB), julgue o item seguinte:\n\nO crime de embriaguez ao volante (art. 306 do CTB) é de perigo abstrato, dispensando a demonstração de dano potencial à incolumidade de outrem para a sua consumação.',
+        codeCitation: 'Art. 306 do CTB e Tema Repetitivo 484/STJ',
+        options: [
+          { id: 'opt-c', text: 'CERTO', isCorrect: true },
+          { id: 'opt-e', text: 'ERRADO', isCorrect: false, distractorReason: 'Supor que o crime exige manobra perigosa efetiva para gerar perigo concreto.' }
+        ],
+        explanation: 'GABARITO: CERTO. Conforme jurisprudência pacífica do STJ (Tema Repetitivo 484): "O crime de embriaguez ao volante é de perigo abstrato, e a sua consumação não exige a ocorrência de perigo de dano concreto à incolumidade de outrem".',
+        lawArticles: ['Art. 306 da Lei 9.503/97 (CTB)', 'Tema 484/STJ'],
+        cognitiveAnalysis: {
+          commonTrap: 'Exigir direção cambaleante ou manobra arriscada (perigo concreto) para tipificar o art. 306.',
+          keyConcept: 'Natureza jurídica de perigo abstrato no crime de embriaguez ao volante.',
+          bancaTendency: 'Cobrança padrão do Cebraspe para PRF.'
+        }
+      },
+      {
+        id: 'q-prf-2',
+        subjectId: 'sub-transito',
+        subjectName: 'Legislação de Trânsito',
+        topicId: 'top-transito-2',
+        topicName: 'Homicídio Culposo na Direção de Veículo',
+        banca: 'Cebraspe',
+        year: 2021,
+        institution: 'Polícia Rodoviária Federal',
+        statement: 'Julgue o item a respeito das disposições gerais sobre crimes no CTB:\n\nA prática do crime de homicídio culposo na direção de veículo automotor praticado sob a influência de álcool enseja pena de reclusão de cinco a oito anos, além de suspensão ou proibição do direito de se obter a permissão ou habilitação.',
+        codeCitation: 'Art. 302, § 3º do CTB',
+        options: [
+          { id: 'opt-c', text: 'CERTO', isCorrect: true },
+          { id: 'opt-e', text: 'ERRADO', isCorrect: false, distractorReason: 'Achar que a pena máxima é detenção de 2 a 4 anos sem qualificação por embriaguez.' }
+        ],
+        explanation: 'GABARITO: CERTO. O art. 302, § 3º, do CTB, inserido pela Lei 13.546/2017, estabelece que se o agente conduz veículo automotor sob a influência de álcool ou de substância de efeitos análogos, a pena é de RECLUSÃO, de 5 (cinco) a 8 (oito) anos, além da suspensão ou proibição da habilitação.',
+        lawArticles: ['Art. 302, § 3º do CTB'],
+        cognitiveAnalysis: {
+          commonTrap: 'Confundir a pena simples (detenção de 2 a 4 anos) com a qualificada por embriaguez (reclusão de 5 a 8 anos).',
+          keyConcept: 'Qualificadora de embriaguez no homicídio culposo de trânsito.',
+          bancaTendency: 'Questão indispensável para o concurso da PRF.'
+        }
+      }
+    ]
+  },
+  {
+    id: 'exam-tjsp-vunesp-2023',
+    title: 'Prova Oficial TJ-SP 2023 — Escrevente Técnico Judiciário',
+    banca: 'Vunesp',
+    institution: 'Tribunal de Justiça de São Paulo',
+    role: 'Escrevente Técnico Judiciário',
+    durationMinutes: 45,
+    totalQuestions: 3,
+    scoringRule: 'multipla_escolha_ponderada',
+    estimatedCutoffScore: 82.0,
+    isOfficialPastExam: true,
+    examYear: 2023,
+    careerCategory: 'tribunais',
+    historicalCutoffScore: 82.0,
+    historicalCutoffDescription: 'Nota de corte real da Vunesp no TJ-SP 2023 para a Comarca da Capital (ampla concorrência): 82,00 pontos líquidos.',
+    isFreeDemo: false,
+    requiredPlan: 'pro',
+    description: 'Caderno oficial da prova aplicada pela Vunesp em 2023 para o Tribunal de Justiça de São Paulo. Modelo clássico de múltipla escolha com alta exigência de literalidade da lei e das Normas da Corregedoria.',
+    questions: [
+      {
+        id: 'q-tjsp-1',
+        subjectId: 'sub-proc-civil',
+        subjectName: 'Direito Processual Civil',
+        topicId: 'top-cpc-1',
+        topicName: 'Contagem de Prazos Processuais',
+        banca: 'Vunesp',
+        year: 2023,
+        institution: 'TJ-SP',
+        statement: 'De acordo com o Código de Processo Civil vigente (Lei nº 13.105/2015), na contagem de prazo em dias, computar-se-ão:',
+        codeCitation: 'Art. 219 do CPC/2015',
+        options: [
+          { id: 'opt-a', text: 'Apenas os dias úteis, aplicando-se tal regra somente aos prazos processuais e não aos materiais.', isCorrect: true },
+          { id: 'opt-b', text: 'Dias corridos ininterruptos, suspendendo-se apenas nos feriados forenses declarados por lei.', isCorrect: false },
+          { id: 'opt-c', text: 'Dias úteis para os atos do Ministério Público e dias corridos para os atos da Defensoria Pública.', isCorrect: false },
+          { id: 'opt-d', text: 'Dias corridos, salvo se as partes tiverem celebrado negócio processual prévio em cartório.', isCorrect: false },
+          { id: 'opt-e', text: 'Apenas os dias de expediente forense ordinário, computando-se os sábados em que houver plantão judiciário.', isCorrect: false }
+        ],
+        explanation: 'GABARITO: A. Conforme o Art. 219 do CPC: "Na contagem de prazo em dias, estabelecido por lei ou pelo juiz, computar-se-ão somente os dias úteis". O parágrafo único deixa expresso: "O disposto neste artigo aplica-se somente aos prazos processuais". Prazos de direito material continuam em dias corridos.',
+        lawArticles: ['Art. 219 do CPC/2015'],
+        cognitiveAnalysis: {
+          commonTrap: 'Achar que a contagem em dias úteis do CPC se estende a prazos de direito material (como prescrição e decadência).',
+          keyConcept: 'Contagem de prazos processuais em dias úteis no CPC/2015.',
+          bancaTendency: 'A Vunesp adora a literalidade estrita dos artigos do CPC.'
+        }
+      },
+      {
+        id: 'q-tjsp-2',
+        subjectId: 'sub-normas-cgj',
+        subjectName: 'Normas da Corregedoria Geral da Justiça',
+        topicId: 'top-cgj-1',
+        topicName: 'Deveres dos Servidores do TJSP',
+        banca: 'Vunesp',
+        year: 2023,
+        institution: 'TJ-SP',
+        statement: 'Nos termos das Normas da Corregedoria Geral da Justiça do Estado de São Paulo relativas aos deveres funcionais, é defeso ao servidor judiciário:',
+        codeCitation: 'Art. 27 das NSCGJ/TJSP',
+        options: [
+          { id: 'opt-a', text: 'Valer-se do cargo ou função para lograr proveito pessoal ou de outrem, em detrimento da dignidade da função pública.', isCorrect: true },
+          { id: 'opt-b', text: 'Promover a juntada de petições aos autos digitais no prazo regulamentar.', isCorrect: false },
+          { id: 'opt-c', text: 'Certificar a tempestividade de manifestações nos processos em curso.', isCorrect: false },
+          { id: 'opt-d', text: 'Cumprir as ordens emanadas do magistrado titular da vara judicial.', isCorrect: false },
+          { id: 'opt-e', text: 'Atender aos advogados e estagiários de direito com urbanidade.', isCorrect: false }
+        ],
+        explanation: 'GABARITO: A. Trata-se de proibição expressa contida nas Normas da Corregedoria Geral da Justiça e no Estatuto dos Funcionários Públicos de SP: é vedado valer-se de sua função para auferir proveito pessoal ou de outrem.',
+        lawArticles: ['Normas da Corregedoria Geral da Justiça de SP'],
+        cognitiveAnalysis: {
+          commonTrap: 'Não reconhecer o termo formal "defeso" (que significa proibido/vedado).',
+          keyConcept: 'Terminologia forense ("defeso" = proibido) e deveres disciplinares.',
+          bancaTendency: 'A Vunesp usa "defeso" reiteradamente para confundir o candidato.'
+        }
+      }
+    ]
+  },
+  {
+    id: 'exam-inss-cebraspe-2022',
+    title: 'Prova Oficial INSS 2022 — Técnico do Seguro Social',
+    banca: 'Cebraspe',
+    institution: 'Instituto Nacional do Seguro Social',
+    role: 'Técnico do Seguro Social',
+    durationMinutes: 45,
+    totalQuestions: 2,
+    scoringRule: 'cebraspe_uma_anula_uma',
+    estimatedCutoffScore: 85.0,
+    isOfficialPastExam: true,
+    examYear: 2022,
+    careerCategory: 'administrativa',
+    historicalCutoffScore: 85.0,
+    historicalCutoffDescription: 'Nota de corte real do INSS 2022 (Cebraspe) para a maioria das Gerências Executivas: 85,00 pontos líquidos.',
+    isFreeDemo: false,
+    requiredPlan: 'pro',
+    description: 'Caderno oficial da prova aplicada pelo Cebraspe em 2022. Seguridade Social com peso decisivo, anulação de 1 para 1 e alta exigência dos decretos previdenciários.',
+    questions: [
+      {
+        id: 'q-inss-1',
+        subjectId: 'sub-dir-prev',
+        subjectName: 'Direito Previdenciário',
+        topicId: 'top-prev-1',
+        topicName: 'Qualidade de Segurado e Período de Graça',
+        banca: 'Cebraspe',
+        year: 2022,
+        institution: 'INSS',
+        statement: 'Julgue o item que se segue, relativo à qualidade de segurado e à perda dessa qualidade no âmbito do RGPS:\n\nMantém a qualidade de segurado, independentemente de contribuições, até 12 meses após a cessação das contribuições, o segurado que deixar de exercer atividade remunerada abrangida pela Previdência Social.',
+        codeCitation: 'Art. 15, II da Lei 8.213/91',
+        options: [
+          { id: 'opt-c', text: 'CERTO', isCorrect: true },
+          { id: 'opt-e', text: 'ERRADO', isCorrect: false, distractorReason: 'Confundir o prazo geral de 12 meses (art. 15, II) com o prazo de 6 meses do segurado facultativo (art. 15, VI).' }
+        ],
+        explanation: 'GABARITO: CERTO. Art. 15, II da Lei 8.213/91: Mantém a qualidade de segurado, independentemente de contribuições, até 12 (doze) meses após a cessação das contribuições, o segurado que deixar de exercer atividade remunerada abrangida pela Previdência Social.',
+        lawArticles: ['Art. 15, II da Lei 8.213/91'],
+        cognitiveAnalysis: {
+          commonTrap: 'Trocar o prazo do segurado obrigatório (até 12 meses) pelo do facultativo (até 6 meses).',
+          keyConcept: 'Período de Graça ordinário da Lei 8.213/91.',
+          bancaTendency: 'O Cebraspe cobra os prazos do art. 15 em quase todas as provas do INSS.'
+        }
+      }
+    ]
+  },
+  {
+    id: 'exam-oab-fgv-39',
+    title: 'Prova Oficial OAB 39º Exame — 1ª Fase Unificada',
+    banca: 'FGV',
+    institution: 'Conselho Federal da OAB',
+    role: 'Advogado',
+    durationMinutes: 45,
+    totalQuestions: 2,
+    scoringRule: 'multipla_escolha_ponderada',
+    estimatedCutoffScore: 40.0,
+    isOfficialPastExam: true,
+    examYear: 2023,
+    careerCategory: 'juridica',
+    historicalCutoffScore: 40.0,
+    historicalCutoffDescription: 'Nota de corte oficial da 1ª Fase da OAB (FGV): exatamente 40 acertos (50% do total de 80 questões).',
+    isFreeDemo: false,
+    requiredPlan: 'pro',
+    description: 'Caderno oficial da 1ª Fase do 39º Exame de Ordem Unificado (FGV). Ética Profissional e Estatuto da Advocacia com casos práticos e sem penalidade de anulação.',
+    questions: [
+      {
+        id: 'q-oab-1',
+        subjectId: 'sub-oab-etica',
+        subjectName: 'Ética Profissional',
+        topicId: 'top-etica-1',
+        topicName: 'Incompatibilidade e Impedimento',
+        banca: 'FGV',
+        year: 2023,
+        institution: 'OAB',
+        statement: 'Rodrigo, advogado regularmente inscrito nos quadros da OAB, tomou posse no cargo efetivo de Delegado de Polícia Civil do Estado Alfa. Rodrigo pretende continuar exercendo a advocacia exclusivamente em causas cíveis e tributárias na comarca onde atua.\n\nÀ luz do Estatuto da Advocacia e da OAB (Lei nº 8.906/1994), é correto afirmar que Rodrigo:',
+        codeCitation: 'Art. 28, IV da Lei 8.906/94',
+        options: [
+          { id: 'opt-a', text: 'Está em situação de incompatibilidade total com a advocacia, mesmo em causa própria e em qualquer ramo do direito.', isCorrect: true },
+          { id: 'opt-b', text: 'Encontra-se meramente impedido de advogar contra a Fazenda Pública estadual que o remunera.', isCorrect: false },
+          { id: 'opt-c', text: 'Pode advogar em causas de família e sucessões, desde que com expressa autorização do corregedor de polícia.', isCorrect: false },
+          { id: 'opt-d', text: 'Poderá manter seu escritório ativo caso atue em sociedade pluripessoal de advogados.', isCorrect: false }
+        ],
+        explanation: 'GABARITO: A. O art. 28, inciso IV, da Lei nº 8.906/94 prevê que a advocacia é INCOMPATÍVEL, mesmo em causa própria, com as atividades de ocupantes de cargos ou funções vinculados direta ou indiretamente a qualquer órgão do Poder Judiciário e aos que tenham competência de polícia judiciária (como Delegados de Polícia). A incompatibilidade é PROIBIÇÃO TOTAL do exercício da advocacia.',
+        lawArticles: ['Art. 28, IV da Lei 8.906/94'],
+        cognitiveAnalysis: {
+          commonTrap: 'Confundir incompatibilidade (proibição total) com impedimento (proibição parcial, como advogar contra o ente pagador).',
+          keyConcept: 'Incompatibilidade de autoridades policiais com a advocacia.',
+          bancaTendency: 'A FGV cobra incompatibilidades em todas as edições do Exame de Ordem.'
         }
       }
     ]

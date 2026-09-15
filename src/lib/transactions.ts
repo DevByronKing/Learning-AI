@@ -68,6 +68,49 @@ export class TransactionManager {
     return globalTransactions.get(id);
   }
 
+  static async getAsync(id: string): Promise<Transaction | undefined> {
+    const memoryTx = globalTransactions.get(id);
+    if (memoryTx) return memoryTx;
+
+    if (isSupabaseConfigured()) {
+      const client = getSupabase();
+      if (client) {
+        try {
+          const { data, error } = await client
+            .from('transactions')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+          if (!error && data) {
+            const tx: Transaction = {
+              id: data.id,
+              planId: data.plan_id as SubscriptionPlan,
+              billingCycle: data.billing_cycle,
+              amount: Number(data.amount),
+              paymentMethod: data.payment_method,
+              status: data.status,
+              pixCode: data.pix_code,
+              provider: data.provider,
+              userEmail: data.user_email,
+              userName: 'Concurseiro',
+              createdAt: data.created_at,
+              confirmedAt: data.confirmed_at,
+              expiresAt: data.expires_at,
+              externalId: data.external_id,
+            };
+            globalTransactions.set(id, tx);
+            return tx;
+          }
+        } catch (err) {
+          console.warn('[TransactionManager] Erro ao buscar transação no Supabase:', err);
+        }
+      }
+    }
+
+    return undefined;
+  }
+
   static confirm(id: string, provider: 'asaas' | 'stripe' | 'simulated' = 'simulated', externalId?: string): Transaction | null {
     const tx = globalTransactions.get(id);
     if (!tx) {
@@ -113,6 +156,64 @@ export class TransactionManager {
           .then(({ error }: any) => {
             if (error) console.warn('Aviso Supabase (confirm transaction):', error.message);
           });
+      }
+    }
+
+    return tx;
+  }
+
+  static async confirmAsync(id: string, provider: 'asaas' | 'stripe' | 'simulated' = 'simulated', externalId?: string): Promise<Transaction | null> {
+    let tx = await this.getAsync(id);
+    
+    if (!tx) {
+      // Fallback seguro se não encontrada no Supabase
+      const newTx: Transaction = {
+        id,
+        planId: 'pro',
+        billingCycle: 'annual',
+        amount: 297,
+        paymentMethod: 'pix',
+        status: 'confirmed',
+        provider,
+        externalId,
+        userEmail: 'aluno@aprovalens.ai',
+        userName: 'Concurseiro',
+        createdAt: new Date().toISOString(),
+        confirmedAt: new Date().toISOString(),
+        expiresAt: new Date().toISOString(),
+      };
+      globalTransactions.set(id, newTx);
+      tx = newTx;
+    } else {
+      tx.status = 'confirmed';
+      tx.confirmedAt = new Date().toISOString();
+      if (externalId) tx.externalId = externalId;
+      tx.provider = provider;
+      globalTransactions.set(id, tx);
+    }
+
+    if (isSupabaseConfigured()) {
+      const client = getSupabase();
+      if (client) {
+        try {
+          await client
+            .from('transactions')
+            .upsert({
+              id: tx.id,
+              plan_id: tx.planId,
+              billing_cycle: tx.billingCycle,
+              amount: tx.amount,
+              payment_method: tx.paymentMethod,
+              status: tx.status,
+              provider: tx.provider,
+              user_email: tx.userEmail,
+              confirmed_at: tx.confirmedAt,
+              external_id: tx.externalId,
+              expires_at: tx.expiresAt,
+            });
+        } catch (error: any) {
+          console.warn('[TransactionManager] Erro ao sincronizar confirmação no Supabase:', error.message);
+        }
       }
     }
 

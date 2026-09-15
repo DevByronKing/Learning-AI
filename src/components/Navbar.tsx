@@ -24,9 +24,13 @@ import {
   BookCheck,
   Trophy,
   Smartphone,
-  Microscope
+  Microscope,
+  ChevronDown,
+  Layers,
+  Database
 } from 'lucide-react';
-import { SubscriptionPlan } from '@/lib/types';
+import { SubscriptionPlan, StudentProfile } from '@/lib/types';
+import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
 import { MobileAppModal } from './MobileAppModal';
 
 interface NavbarProps {
@@ -41,6 +45,9 @@ interface NavbarProps {
   isSupabaseConfigured?: boolean;
   theme?: 'dark' | 'light';
   onToggleTheme?: () => void;
+  studentProfile?: StudentProfile;
+  onOpenProfile?: () => void;
+  onOpenAdminIngest?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -55,9 +62,17 @@ export const Navbar: React.FC<NavbarProps> = ({
   isSupabaseConfigured = false,
   theme = 'dark',
   onToggleTheme,
+  studentProfile,
+  onOpenProfile,
+  onOpenAdminIngest,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
+
+  const [isToolsDropdownOpen, setIsToolsDropdownOpen] = useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  const currentGuardian = GUARDIAN_ANIMALS.find((a) => a.id === studentProfile?.guardianAnimalId) || GUARDIAN_ANIMALS[0];
 
   // Módulos com Rótulos Inteligentes e Responsivos sem quebra de layout
   const navTabs = [
@@ -115,7 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       label: 'Lei Seca',
       shortLabel: 'Leis',
       icon: Scale,
-      desc: 'Vade Mecum com Incidência Real',
+      desc: 'Vade Mecum com Incidência Real de Artigos',
       badge: null,
     },
     {
@@ -123,7 +138,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       label: 'Discursivas',
       shortLabel: 'Redação',
       icon: Feather,
-      desc: 'Correção de Redações & Peças OAB',
+      desc: 'Correção de Redações & Peças OAB com IA',
       badge: null,
     },
     {
@@ -137,7 +152,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     {
       id: 'psychometrics',
       label: 'Psicometria',
-      shortLabel: 'Psicometria',
+      shortLabel: 'Psico',
       icon: Microscope,
       desc: 'Engenharia Reversa de Distratores da Banca',
       badge: 'TRI',
@@ -145,9 +160,41 @@ export const Navbar: React.FC<NavbarProps> = ({
     },
   ];
 
+  // Divisão Inteligente: 6 Módulos Diários Fixos + Módulos Especializados no Dropdown
+  const primaryTabs = navTabs.slice(0, 6);
+  const secondaryTabs = navTabs.slice(6);
+
+  // Detecta se a aba ativa atual é uma das ferramentas do dropdown
+  const activeSecondaryTab = secondaryTabs.find((t) => t.id === activeTab);
+  const isSecondaryActive = Boolean(activeSecondaryTab);
+
+  // Fechar dropdown ao clicar fora ou ao pressionar Escape
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsToolsDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsToolsDropdownOpen(false);
+      }
+    };
+
+    if (isToolsDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isToolsDropdownOpen]);
+
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
     setIsMobileMenuOpen(false);
+    setIsToolsDropdownOpen(false);
   };
 
   const isLight = theme === 'light';
@@ -159,10 +206,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           ? 'bg-white/90 border-slate-200 backdrop-blur-xl shadow-sm' 
           : 'bg-[#090D16]/95 border-slate-800 dark:border-white/10 backdrop-blur-2xl'
       }`}>
-        <div className="max-w-7xl mx-auto px-3 sm:px-5 lg:px-6">
+        <div className="w-full max-w-[1700px] mx-auto px-3 sm:px-5 lg:px-6">
           
           {/* Top Bar Row */}
-          <div className="flex items-center justify-between h-16 gap-2 xl:gap-3">
+          <div className="flex items-center justify-between h-20 gap-2 sm:gap-3 xl:gap-4">
             
             {/* Logo: Learning AI */}
             <div 
@@ -170,21 +217,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => handleTabClick('landing')}
               title="Ir para o início"
             >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-600 to-cyan-400 p-[1.5px] glow-brand shadow-md">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-600 to-cyan-400 p-[1.5px] glow-brand shadow-md">
                 <div className={`w-full h-full rounded-[10px] flex items-center justify-center transition-colors ${
                   isLight ? 'bg-white' : 'bg-[#0d1322]'
                 }`}>
-                  <BrainCircuit className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-500" />
+                  <BrainCircuit className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-500" />
                 </div>
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className={`text-base sm:text-lg xl:text-xl font-black tracking-tight transition-colors ${
+                  <span className={`text-lg sm:text-xl xl:text-2xl font-black tracking-tight transition-colors ${
                     isLight ? 'text-slate-900' : 'text-white'
                   }`}>
                     Learning <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-400">AI</span>
                   </span>
-                  <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded border transition-colors ${
+                  <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded border transition-colors ${
                     isLight 
                       ? 'bg-indigo-50 text-indigo-600 border-indigo-200' 
                       : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
@@ -192,7 +239,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     PRO
                   </span>
                 </div>
-                <p className={`text-[10px] -mt-0.5 hidden 2xl:block transition-colors ${
+                <p className={`text-xs -mt-0.5 hidden 2xl:block transition-colors ${
                   isLight ? 'text-slate-500' : 'text-slate-400'
                 }`}>
                   Copiloto Cognitivo de Concursos
@@ -200,13 +247,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             </div>
 
-            {/* Desktop Navigation Tabs (Responsive sizing, no cutting off) */}
-            <nav className={`hidden lg:flex items-center justify-start xl:justify-center gap-0.5 xl:gap-1 p-1 rounded-2xl border shadow-inner flex-1 max-w-4xl xl:max-w-5xl transition-colors overflow-x-auto no-scrollbar ${
-              isLight 
-                ? 'bg-slate-100/95 border-slate-200/90' 
-                : 'bg-slate-900/80 dark:bg-dark-surface/90 border-slate-700/60 dark:border-white/10'
-            }`}>
-              {navTabs.map((tab) => {
+            {/* Desktop Navigation Tabs: 6 Core Modules + Smart Dropdown for Specialized Tools */}
+            <nav 
+              ref={dropdownRef}
+              className={`hidden lg:flex items-center gap-0.5 xl:gap-1 p-1 rounded-2xl border shadow-inner transition-colors relative shrink-0 ${
+                isLight 
+                  ? 'bg-slate-100/95 border-slate-200/90' 
+                  : 'bg-slate-900/80 dark:bg-dark-surface/90 border-slate-700/60 dark:border-white/10'
+              }`}
+            >
+              {/* 6 Primary Daily Study Modules */}
+              {primaryTabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
                 return (
@@ -214,7 +265,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     key={tab.id}
                     onClick={() => handleTabClick(tab.id)}
                     title={tab.desc}
-                    className={`flex items-center gap-1 xl:gap-1.5 px-2 xl:px-2.5 2xl:px-3 py-1.5 rounded-xl text-[11px] xl:text-xs font-bold transition-all whitespace-nowrap shrink-0 select-none ${
+                    className={`flex items-center gap-1.5 px-2 xl:px-2.5 py-1.5 rounded-xl text-xs xl:text-sm font-bold transition-all whitespace-nowrap shrink-0 select-none ${
                       isActive
                         ? isLight
                           ? 'bg-white text-indigo-700 shadow-sm border border-indigo-200 font-extrabold'
@@ -224,27 +275,173 @@ export const Navbar: React.FC<NavbarProps> = ({
                           : 'text-slate-300 hover:text-white hover:bg-white/10'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? (isLight ? 'text-indigo-600' : 'text-white') : (isLight ? 'text-slate-500' : 'text-slate-400')}`} />
-                    <span className="hidden xl:inline">{tab.label}</span>
-                    <span className="inline xl:hidden">{tab.shortLabel}</span>
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? (isLight ? 'text-indigo-600' : 'text-white') : (isLight ? 'text-slate-500' : 'text-slate-400')}`} />
+                    <span className="hidden 2xl:inline">{tab.label}</span>
+                    <span className="inline 2xl:hidden">{tab.shortLabel}</span>
                     {tab.badge && (
-                      <span className={`w-4 h-4 rounded-full text-[10px] font-black flex items-center justify-center shrink-0 ${tab.badgeColor || 'bg-rose-500 text-white'}`}>
+                      <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-black flex items-center justify-center shrink-0 ml-0.5 ${tab.badgeColor || 'bg-rose-500 text-white'}`}>
                         {tab.badge}
                       </span>
                     )}
                   </button>
                 );
               })}
+
+              {/* Smart Dropdown for 4 Specialized Modules (Lei Seca, Discursivas, Jornada, Psicometria) */}
+              <div className="relative shrink-0">
+                <button
+                  onClick={() => setIsToolsDropdownOpen(!isToolsDropdownOpen)}
+                  title="Acessar Lei Seca, Discursivas, Jornada & Psicometria TRI"
+                  className={`flex items-center gap-1.5 px-2 xl:px-2.5 py-1.5 rounded-xl text-xs xl:text-sm font-bold transition-all whitespace-nowrap select-none ${
+                    isSecondaryActive
+                      ? isLight
+                        ? 'bg-white text-indigo-700 shadow-sm border border-indigo-200 font-extrabold'
+                        : 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/30 font-extrabold ring-1 ring-indigo-400/40'
+                      : isLight
+                        ? 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
+                        : 'text-slate-300 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  {isSecondaryActive && activeSecondaryTab ? (
+                    <>
+                      <activeSecondaryTab.icon className={`w-4 h-4 shrink-0 ${isLight ? 'text-indigo-600' : 'text-white'}`} />
+                      <span className="hidden 2xl:inline">{activeSecondaryTab.label}</span>
+                      <span className="inline 2xl:hidden">{activeSecondaryTab.shortLabel}</span>
+                      {activeSecondaryTab.badge && (
+                        <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black shrink-0 ml-0.5 ${activeSecondaryTab.badgeColor || 'bg-cyan-500/20 text-cyan-300'}`}>
+                          {activeSecondaryTab.badge}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <Layers className="w-4 h-4 shrink-0 text-indigo-400" />
+                      <span className="hidden 2xl:inline">Ferramentas</span>
+                      <span className="inline 2xl:hidden">Mais</span>
+                    </>
+                  )}
+                  <ChevronDown className={`w-3.5 h-3.5 shrink-0 transition-transform duration-200 ${isToolsDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Dropdown Menu Flutuante Ultra-Premium */}
+                {isToolsDropdownOpen && (
+                  <div 
+                    className={`absolute top-full right-0 mt-2.5 w-80 sm:w-88 rounded-2xl border p-2 z-50 shadow-2xl backdrop-blur-2xl transition-all ${
+                      isLight 
+                        ? 'bg-white/95 border-slate-200 shadow-slate-300/60 text-slate-900' 
+                        : 'bg-[#0c1322]/95 border-slate-700/80 dark:border-white/15 shadow-black/80 text-white'
+                    }`}
+                  >
+                    {/* Header do Menu */}
+                    <div className={`px-3 py-2 text-[10px] font-black uppercase tracking-wider flex items-center justify-between border-b mb-1 ${
+                      isLight ? 'text-slate-400 border-slate-100' : 'text-slate-400 border-white/10'
+                    }`}>
+                      <span className="flex items-center gap-1.5">
+                        <Layers className="w-3.5 h-3.5 text-indigo-400" />
+                        Módulos Especializados
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                        4 Ferramentas
+                      </span>
+                    </div>
+
+                    {/* Lista dos 4 Módulos Especializados */}
+                    <div className="space-y-1">
+                      {secondaryTabs.map((tab) => {
+                        const Icon = tab.icon;
+                        const isItemActive = activeTab === tab.id;
+                        return (
+                          <button
+                            key={tab.id}
+                            onClick={() => {
+                              handleTabClick(tab.id);
+                              setIsToolsDropdownOpen(false);
+                            }}
+                            className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-all group ${
+                              isItemActive
+                                ? isLight
+                                  ? 'bg-indigo-50/90 border border-indigo-200 text-indigo-900'
+                                  : 'bg-indigo-600/20 border border-indigo-500/40 text-white'
+                                : isLight
+                                  ? 'hover:bg-slate-100/90 border border-transparent text-slate-700'
+                                  : 'hover:bg-white/10 border border-transparent text-slate-200'
+                            }`}
+                          >
+                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border transition-transform group-hover:scale-105 ${
+                              isItemActive
+                                ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-600/30'
+                                : isLight
+                                  ? 'bg-slate-100 text-indigo-600 border-slate-200'
+                                  : 'bg-white/5 text-indigo-300 border-white/10'
+                            }`}>
+                              <Icon className="w-4 h-4" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className={`text-xs font-bold truncate ${isItemActive ? (isLight ? 'text-indigo-900 font-extrabold' : 'text-white font-extrabold') : ''}`}>
+                                  {tab.label}
+                                </span>
+                                {tab.badge && (
+                                  <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase shrink-0 ${tab.badgeColor || 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'}`}>
+                                    {tab.badge}
+                                  </span>
+                                )}
+                              </div>
+                              <p className={`text-[11px] truncate leading-tight mt-0.5 ${
+                                isLight ? 'text-slate-500' : 'text-slate-400'
+                              }`}>
+                                {tab.desc}
+                              </p>
+                            </div>
+                            {isItemActive && (
+                              <div className="w-2 h-2 rounded-full bg-indigo-500 shrink-0 shadow-sm shadow-indigo-500" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {onOpenAdminIngest && (
+                      <div className="p-2 border-t border-slate-700/60 dark:border-white/10 bg-slate-950/40">
+                        <button
+                          onClick={() => {
+                            setIsToolsDropdownOpen(false);
+                            onOpenAdminIngest();
+                          }}
+                          className="w-full flex items-center gap-3 p-2.5 rounded-xl text-left bg-gradient-to-r from-indigo-500/15 to-purple-500/15 hover:from-indigo-500/25 hover:to-purple-500/25 border border-indigo-500/30 transition-all group"
+                        >
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 group-hover:scale-105 transition-transform">
+                            <Database className="w-4 h-4 text-indigo-400" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-white group-hover:text-indigo-200 transition-colors">
+                                Extrator de Provas (Admin)
+                              </span>
+                              <span className="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                R$ 0,00
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-slate-400 truncate leading-tight mt-0.5">
+                              Ingestão Oficial no Supabase via IA & Gabarito
+                            </p>
+                          </div>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </nav>
 
-            {/* Right Side Utility Controls */}
-            <div className="flex items-center gap-1 sm:gap-1.5 xl:gap-2 shrink-0">
+            {/* Right Side Utility Controls: Totalmente Responsivos */}
+            <div className="flex items-center gap-1 sm:gap-1.5 xl:gap-2 shrink-0 ml-auto">
               
               {/* Theme Toggle Button (Modo Claro / Modo Escuro) */}
               {onToggleTheme && (
                 <button
                   onClick={onToggleTheme}
-                  className={`p-2 rounded-xl border transition-all flex items-center justify-center ${
+                  className={`p-1.5 xl:p-2 rounded-xl border transition-all flex items-center justify-center shrink-0 ${
                     isLight 
                       ? 'bg-slate-100 hover:bg-slate-200 text-amber-600 border-slate-200 shadow-sm' 
                       : 'bg-white dark:bg-[#11182c] hover:bg-[#18223d] text-amber-400 border-slate-300 dark:border-white/10'
@@ -264,21 +461,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               {onOpenCopilot && (
                 <button
                   onClick={onOpenCopilot}
-                  className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-bold transition-all shadow-sm ${
+                  className={`flex items-center gap-1.5 px-2 xl:px-2.5 py-1.5 rounded-xl border text-xs xl:text-sm font-bold transition-all shadow-sm shrink-0 ${
                     isLight 
-                      ? 'bg-indigo-50 border-indigo-200 hover:bg-indigo-100' 
+                      ? 'bg-indigo-50 border-indigo-200 hover:bg-indigo-100 text-indigo-700' 
                       : 'bg-gradient-to-r from-indigo-500/15 via-purple-500/15 to-cyan-500/15 border-indigo-400/35 text-indigo-200 hover:border-indigo-400 hover:bg-indigo-500/25'
                   }`}
                   title="Abrir Copiloto Cognitivo Waze dos Estudos"
                 >
                   <Sparkles className={`w-3.5 h-3.5 ${isLight ? 'text-indigo-600' : 'text-cyan-400'} animate-pulse`} />
-                  <span className={`hidden md:inline whitespace-nowrap ${isLight ? 'text-indigo-700 font-black' : 'text-indigo-200'}`}>Copiloto</span>
+                  <span className="hidden 2xl:inline whitespace-nowrap">Copiloto</span>
                 </button>
               )}
 
               {/* Streak Badge */}
               <div 
-                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl border text-xs font-extrabold ${
+                className={`flex items-center gap-1 px-2 py-1 xl:px-2.5 xl:py-1.5 rounded-xl border text-xs font-extrabold shrink-0 ${
                   isLight 
                     ? 'bg-amber-50 border-amber-200 text-amber-800' 
                     : 'bg-amber-500/10 border-amber-500/25 text-amber-400'
@@ -292,7 +489,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* Mobile App Button (Onboarding Multimodal) */}
               <button
                 onClick={() => setIsMobileModalOpen(true)}
-                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-bold transition-all shadow-sm ${
+                className={`hidden xl:flex items-center gap-1.5 px-2 py-1.5 rounded-xl border text-xs font-bold transition-all shadow-sm shrink-0 ${
                   isLight 
                     ? 'bg-emerald-50 border-emerald-200 text-emerald-800 hover:bg-emerald-100' 
                     : 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400 hover:bg-emerald-500/20'
@@ -300,29 +497,56 @@ export const Navbar: React.FC<NavbarProps> = ({
                 title="Abrir ou Sincronizar com App Mobile (iOS / Android)"
               >
                 <Smartphone className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="hidden lg:inline whitespace-nowrap">App Mobile</span>
+                <span className="hidden 2xl:inline whitespace-nowrap">App</span>
               </button>
+
+              {/* Student Guardian Animal Profile Badge */}
+              {onOpenProfile && (
+                <button
+                  onClick={onOpenProfile}
+                  className={`flex items-center gap-1 px-1.5 sm:px-2 py-1.5 rounded-xl border text-xs font-bold transition-all shadow-sm group shrink-0 ${
+                    isLight
+                      ? 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'
+                      : 'bg-white/5 hover:bg-white/10 border-white/10 text-white'
+                  }`}
+                  title={`Passaporte Cognitivo: ${studentProfile?.name || 'Estudante'} (${currentGuardian.name}) - Clique para personalizar seu perfil`}
+                >
+                  <span className="text-base select-none transition-transform group-hover:scale-110">
+                    {currentGuardian.emoji}
+                  </span>
+                  <div className="hidden 2xl:flex flex-col text-left leading-none ml-1">
+                    <span className="text-[11px] font-black truncate max-w-[85px]">
+                      {studentProfile?.warName || studentProfile?.name || 'Concurseiro'}
+                    </span>
+                    <span className="text-[9px] text-indigo-400 font-semibold truncate max-w-[85px]">
+                      {currentGuardian.archetype}
+                    </span>
+                  </div>
+                </button>
+              )}
 
               {/* Plan Button */}
               {plan === 'aspirante' ? (
                 <button
                   onClick={onOpenPricing}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black text-xs font-black tracking-wide transition-all shadow-md shadow-amber-500/20 whitespace-nowrap"
+                  className="flex items-center gap-1.5 px-2.5 xl:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black text-xs font-black tracking-wide transition-all shadow-md shadow-amber-500/20 whitespace-nowrap shrink-0"
+                  title="Conhecer Planos e Preços"
                 >
                   <Crown className="w-3.5 h-3.5 fill-black" />
-                  <span>ASSINAR PRO</span>
+                  <span className="hidden 2xl:inline">ASSINAR PRO</span>
+                  <span className="inline 2xl:hidden">PRO</span>
                 </button>
               ) : (
                 <button
                   onClick={onOpenPricing}
-                  className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-extrabold whitespace-nowrap ${
+                  className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 rounded-xl border text-xs font-extrabold whitespace-nowrap shrink-0 ${
                     isLight 
-                      ? 'bg-purple-50 border-purple-200 hover:bg-purple-100' 
+                      ? 'bg-purple-50 border-purple-200 hover:bg-purple-100 text-purple-800' 
                       : 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300'
                   }`}
                 >
                   <Zap className={`w-3.5 h-3.5 ${isLight ? 'text-purple-600 fill-purple-600/40' : 'text-indigo-500 fill-indigo-500/40'}`} />
-                  <span className={isLight ? 'text-purple-800 font-black' : 'text-indigo-300'}>{plan.toUpperCase()}</span>
+                  <span>{plan.toUpperCase()}</span>
                 </button>
               )}
 
@@ -429,6 +653,36 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </button>
                 </div>
               </div>
+
+              {/* Mobile Student Profile Card */}
+              {onOpenProfile && (
+                <div 
+                  onClick={() => { setIsMobileMenuOpen(false); onOpenProfile(); }}
+                  className={`p-3.5 mb-4 rounded-2xl border cursor-pointer transition-all flex items-center justify-between gap-3 ${
+                    isLight 
+                      ? 'bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200 hover:border-indigo-300' 
+                      : 'bg-gradient-to-r from-indigo-950/40 to-purple-950/30 border-indigo-500/30 hover:border-indigo-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl p-1 rounded-xl bg-black/20">
+                      {currentGuardian.emoji}
+                    </span>
+                    <div>
+                      <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider block">
+                        Passaporte Cognitivo
+                      </span>
+                      <h4 className="text-xs font-black text-slate-900 dark:text-white truncate">
+                        {studentProfile?.name || 'Concurseiro'}
+                      </h4>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                        {currentGuardian.name} • {currentGuardian.archetype}
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-indigo-400 shrink-0" />
+                </div>
+              )}
 
               {/* Active Exam Pill */}
               {selectedExamTitle && (

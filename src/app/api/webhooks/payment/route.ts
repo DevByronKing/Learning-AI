@@ -8,6 +8,13 @@ export async function POST(req: NextRequest) {
 
     // 1. Simulação para Teste Instantâneo de Desenvolvimento
     if (body.action === 'simulate_confirmation' && body.transactionId) {
+      if (process.env.NODE_ENV === 'production') {
+        return NextResponse.json({
+          success: false,
+          error: 'Simulações de pagamento desativadas em ambiente de produção por segurança.',
+        }, { status: 403 });
+      }
+
       const eventId = `sim_${body.transactionId}`;
       
       if (TransactionManager.isEventProcessed(eventId)) {
@@ -19,7 +26,7 @@ export async function POST(req: NextRequest) {
       }
 
       TransactionManager.markEventProcessed(eventId);
-      const confirmedTx = TransactionManager.confirm(body.transactionId, 'simulated');
+      const confirmedTx = await TransactionManager.confirmAsync(body.transactionId, 'simulated');
       analytics.track('subscription_activated', { provider: 'simulated', plan: confirmedTx?.planId });
 
       return NextResponse.json({
@@ -47,7 +54,7 @@ export async function POST(req: NextRequest) {
       TransactionManager.markEventProcessed(eventId);
 
       if (event === 'PAYMENT_RECEIVED' || event === 'PAYMENT_CONFIRMED') {
-        const confirmedTx = TransactionManager.confirm(payment.id, 'asaas', payment.id);
+        const confirmedTx = await TransactionManager.confirmAsync(payment.id, 'asaas', payment.id);
         analytics.track('subscription_activated', { provider: 'asaas', plan: confirmedTx?.planId });
         
         return NextResponse.json({
@@ -80,7 +87,7 @@ export async function POST(req: NextRequest) {
 
       if (eventType === 'checkout.session.completed' || eventType === 'payment_intent.succeeded') {
         const txId = session.client_reference_id || session.id;
-        const confirmedTx = TransactionManager.confirm(txId, 'stripe', session.id);
+        const confirmedTx = await TransactionManager.confirmAsync(txId, 'stripe', session.id);
         analytics.track('subscription_activated', { provider: 'stripe', plan: confirmedTx?.planId });
 
         return NextResponse.json({

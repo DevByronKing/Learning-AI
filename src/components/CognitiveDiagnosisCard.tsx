@@ -14,9 +14,11 @@ import {
   HelpCircle,
   Lightbulb,
   Share2,
-  Bookmark
+  Bookmark,
+  PlayCircle
 } from 'lucide-react';
-import { Question, ErrorType, Flashcard } from '@/lib/types';
+import { Question, ErrorType, Flashcard, SubscriptionPlan } from '@/lib/types';
+import { RewardedAdModal } from './RewardedAdModal';
 import confetti from 'canvas-confetti';
 
 interface CognitiveDiagnosisCardProps {
@@ -26,6 +28,10 @@ interface CognitiveDiagnosisCardProps {
   confidence: 'alta' | 'media' | 'chute';
   onAddFlashcard: (flashcard: Flashcard) => void;
   onNextQuestion: () => void;
+  userPlan?: SubscriptionPlan;
+  quotaExceeded?: boolean;
+  onOpenPricing?: () => void;
+  onRewardGranted?: (bonusCount: number) => void;
 }
 
 export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
@@ -34,9 +40,14 @@ export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
   isCorrect,
   confidence,
   onAddFlashcard,
-  onNextQuestion
+  onNextQuestion,
+  userPlan = 'aspirante',
+  quotaExceeded = false,
+  onOpenPricing,
+  onRewardGranted
 }) => {
   const [flashcardAdded, setFlashcardAdded] = useState(false);
+  const [isRewardedAdOpen, setIsRewardedAdOpen] = useState(false);
 
   const selectedOption = question.options.find((o) => o.id === selectedOptionId);
   const correctOption = question.options.find((o) => o.isCorrect);
@@ -129,6 +140,53 @@ export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
           <span>→</span>
         </button>
       </div>
+
+      {/* Opção A: Alerta Sutil de Cota Diária Atingida no Freemium (Fallback Determinístico) */}
+      {quotaExceeded && userPlan === 'aspirante' && (
+        <div className="mt-5 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs animate-fadeIn">
+          <div className="flex items-center gap-2.5 text-amber-300">
+            <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+            <div>
+              <p className="font-bold text-amber-200">
+                ⚡ Modo Resolução Contínua (Cota de IA Diária Utilizada: 5/5)
+              </p>
+              <p className="text-slate-300 text-[11px] mt-0.5">
+                Você continua resolvendo questões normalmente com <strong>gabarito oficial e fundamentação em lei seca</strong> (Custo R$ 0,00). Assine o PRO para análises cognitivas ilimitadas.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
+            <button
+              type="button"
+              onClick={() => setIsRewardedAdOpen(true)}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-black flex items-center gap-1.5 shadow-md shadow-purple-600/30 transition-all shrink-0"
+              title="Assista a um vídeo curto de patrocinador para liberar +2 diagnósticos de IA"
+            >
+              <PlayCircle className="w-4 h-4 text-amber-300 animate-pulse" />
+              <span>Ver Vídeo (+2 IAs)</span>
+            </button>
+            {onOpenPricing && (
+              <button
+                type="button"
+                onClick={onOpenPricing}
+                className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-black shrink-0 hover:opacity-95 transition-opacity shadow-md shadow-amber-500/20"
+              >
+                Assinar Pro
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Rewarded Ad Modal */}
+      <RewardedAdModal
+        isOpen={isRewardedAdOpen}
+        onClose={() => setIsRewardedAdOpen(false)}
+        onRewardGranted={(bonus) => {
+          if (onRewardGranted) onRewardGranted(bonus);
+        }}
+        onOpenPricing={onOpenPricing}
+      />
 
       {/* AI Cognitive Breakdown */}
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">

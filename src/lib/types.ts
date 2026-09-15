@@ -69,6 +69,15 @@ export type QuestionBankFilter = {
   status: 'todas' | 'nao_resolvidas' | 'acertos' | 'erros';
 };
 
+export type QuestionOption = {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+  distractorReason?: string; // Por que essa opção é uma pegadinha
+  distractorType?: PsychometricDistractorType;
+  distractorExplanation?: string;
+};
+
 export type Question = {
   id: string;
   subjectId: string;
@@ -83,14 +92,7 @@ export type Question = {
   format?: QuestionFormat;
   statement: string; // Enunciado
   codeCitation?: string; // Ex: Art. 37, CF/88
-  options: {
-    id: string;
-    text: string;
-    isCorrect: boolean;
-    distractorReason?: string; // Por que essa opção é uma pegadinha
-    distractorType?: PsychometricDistractorType;
-    distractorExplanation?: string;
-  }[];
+  options: QuestionOption[];
   explanation: string;
   lawArticles: string[];
   cognitiveAnalysis: {
@@ -98,6 +100,9 @@ export type Question = {
     keyConcept: string;
     bancaTendency: string;
   };
+  isOfficialAudited?: boolean;
+  auditSource?: string;
+  legalStatus?: 'atualizada' | 'alterada_pela_lei' | 'anulada_oficial';
 };
 
 export type QuestionAttempt = {
@@ -228,6 +233,13 @@ export type MockExam = {
   estimatedCutoffScore: number;
   description: string;
   questions: Question[];
+  isOfficialPastExam?: boolean;
+  examYear?: number;
+  careerCategory?: 'policial' | 'fiscal' | 'tribunais' | 'juridica' | 'administrativa' | 'bancaria';
+  historicalCutoffScore?: number;
+  historicalCutoffDescription?: string;
+  isFreeDemo?: boolean;
+  requiredPlan?: 'pro' | 'elite';
 };
 
 export type MockExamAnswer = {
@@ -407,4 +419,91 @@ export interface BancaPsychometricProfile {
   examinerPsychologicalProfile: string;
   antidoteGoldenRule: string;
   studentVulnerabilityRate: number; // taxa de erro do aluno nessa banca
+}
+
+export type GuardianAnimalId = 'coruja' | 'lobo' | 'gaviao' | 'leao' | 'raposa' | 'onca';
+
+export interface GuardianAnimal {
+  id: GuardianAnimalId;
+  name: string;
+  title: string;
+  emoji: string;
+  archetype: string;
+  superpower: string;
+  cognitiveStyle: string;
+  motto: string;
+  colorGradient: string;
+  glowColor: string;
+  bestForCareers: string[];
+  stats: {
+    foco: number;
+    velocidade: number;
+    resiliencia: number;
+    estrategia: number;
+  };
+}
+
+export interface StudentProfile {
+  name: string;
+  warName?: string;
+  targetCareer: 'policial' | 'fiscal' | 'tribunais' | 'administrativa' | 'juridica' | 'controle' | 'outra';
+  targetExamTitle?: string;
+  dailyHoursGoal: number;
+  experienceLevel: 'iniciante' | 'intermediario' | 'veterano';
+  guardianAnimalId: GuardianAnimalId;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ==============================================================================
+// TIPAGENS DO PIPELINE DE INGESTÃO E AUDITORIA DE PROVAS
+// ==============================================================================
+
+export interface ExamIngestionMetadata {
+  title: string;
+  banca: 'Cebraspe' | 'FGV' | 'FCC' | 'Vunesp' | 'Outra';
+  institution: string; // Ex: Polícia Federal, Receita Federal
+  role: string; // Ex: Agente, Auditor-Fiscal
+  year: number;
+  bookletColorOrCode?: string; // Ex: Caderno Branco, Caderno 1
+  sourceUrl?: string; // Link oficial da banca examinadora
+  careerCategory: 'policial' | 'fiscal' | 'tribunais' | 'juridica' | 'administrativa' | 'bancaria';
+}
+
+export interface AnswerKeyEntry {
+  questionNumber: number;
+  officialAnswer: string; // 'A' | 'B' | 'C' | 'D' | 'E' | 'CERTO' | 'ERRADO' | 'C' | 'E' | 'X' | 'ANULADA'
+  status: 'valida' | 'anulada' | 'alterada';
+  note?: string;
+}
+
+export interface ParsedExamQuestion extends Question {
+  questionNumber: number;
+  officialAnswerKey: string;
+  isAnnulledByBanca: boolean;
+  legalUpdateWarning?: string;
+  confidenceScore?: number; // 0 a 100
+  auditDetails: {
+    bancaOfficialDocument: string;
+    verifiedAt: string;
+    humanAudited: boolean;
+  };
+}
+
+export interface IngestionAuditSummary {
+  totalQuestionsExtracted: number;
+  validQuestionsCount: number;
+  annulledQuestionsCount: number;
+  alteredLegalNormsCount: number;
+  averageConfidence: number;
+  bancaDetected: string;
+  examTitle: string;
+}
+
+export interface ExamIngestionResult {
+  metadata: ExamIngestionMetadata;
+  summary: IngestionAuditSummary;
+  questions: ParsedExamQuestion[];
+  sqlInsertScript: string;
+  warnings: string[];
 }

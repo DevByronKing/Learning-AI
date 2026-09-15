@@ -94,7 +94,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'txId é obrigatório' }, { status: 400 });
     }
 
-    const tx = TransactionManager.get(txId);
+    const tx = await TransactionManager.getAsync(txId);
     if (!tx) {
       return NextResponse.json({
         success: true,

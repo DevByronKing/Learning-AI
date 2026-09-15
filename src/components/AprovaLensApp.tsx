@@ -14,21 +14,27 @@ import { SmartVadeMecum } from '@/components/SmartVadeMecum';
 import { QuestionBank } from '@/components/QuestionBank';
 import { AICopilotDrawer } from '@/components/AICopilotDrawer';
 import { BancaPsychometrics } from '@/components/BancaPsychometrics';
+import { StudentProfileModal } from '@/components/StudentProfileModal';
+import { AdminQuestionIngestModal } from '@/components/AdminQuestionIngestModal';
+import { NarrativeOnboardingTerminal } from '@/components/NarrativeOnboardingTerminal';
 import { 
   ExamNotice, 
   QuestionAttempt, 
-  Flashcard, 
   UserMetrics, 
+  Flashcard, 
   SubscriptionPlan,
-  MistakeEntry 
+  MistakeEntry,
+  StudentProfile,
+  ParsedExamQuestion
 } from '@/lib/types';
+import { GUARDIAN_ANIMALS, DEFAULT_STUDENT_PROFILE } from '@/lib/guardianAnimals';
 import { SupabaseService } from '@/lib/supabaseService';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { 
   INITIAL_EXAMS, 
   INITIAL_METRICS, 
   INITIAL_FLASHCARDS,
-  INITIAL_MISTAKES,
+  INITIAL_MISTAKES, 
   MOCK_QUESTIONS 
 } from '@/lib/mockData';
 
@@ -43,7 +49,14 @@ export function AprovaLensApp() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [isPricingOpen, setIsPricingOpen] = useState(false);
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+  const [isAdminIngestOpen, setIsAdminIngestOpen] = useState(false);
+  const [isOnboardingTerminalOpen, setIsOnboardingTerminalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Student Profile & Daily AI Quota tracking
+  const [studentProfile, setStudentProfile] = useState<StudentProfile>(DEFAULT_STUDENT_PROFILE);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [dailyAiCount, setDailyAiCount] = useState<number>(0);
 
   // Load from LocalStorage if available
   useEffect(() => {
@@ -56,6 +69,21 @@ export function AprovaLensApp() {
 
       const savedMistakes = localStorage.getItem('aprovalens_mistakes');
       if (savedMistakes) setMistakes(JSON.parse(savedMistakes));
+
+      // Carregar Passaporte Cognitivo do Estudante
+      const savedProfile = localStorage.getItem('aprovalens_student_profile');
+      if (savedProfile) {
+        try {
+          setStudentProfile(JSON.parse(savedProfile));
+        } catch {}
+      }
+
+      // Carregar cota de IA diária utilizada hoje
+      const todayKey = `aprovalens_ai_count_${new Date().toISOString().split('T')[0]}`;
+      const savedCount = localStorage.getItem(todayKey);
+      if (savedCount) {
+        setDailyAiCount(parseInt(savedCount, 10) || 0);
+      }
 
       // Carregar preferência de tema (Claro / Escuro)
       const savedTheme = (localStorage.getItem('learning_ai_theme') as 'dark' | 'light') || 'dark';
@@ -189,8 +217,43 @@ export function AprovaLensApp() {
     }
   };
 
+  const handleSaveProfile = (updated: StudentProfile) => {
+    setStudentProfile(updated);
+    try {
+      localStorage.setItem('aprovalens_student_profile', JSON.stringify(updated));
+    } catch {}
+    SupabaseService.syncStudentProfile('user-demo', updated);
+    showToast(`Passaporte Cognitivo atualizado: Guardião ${GUARDIAN_ANIMALS.find(a => a.id === updated.guardianAnimalId)?.name}!`);
+  };
+
+  const handleOnboardingComplete = (data: Partial<StudentProfile>) => {
+    const updated: StudentProfile = {
+      ...studentProfile,
+      ...data,
+      updatedAt: new Date().toISOString(),
+    };
+    setStudentProfile(updated);
+    try {
+      localStorage.setItem('aprovalens_student_profile', JSON.stringify(updated));
+    } catch {}
+    SupabaseService.syncStudentProfile('user-demo', updated);
+    showToast(`⚡ Deploy do ciclo de estudos de ${data.targetExamTitle || 'concurso'} realizado com sucesso!`);
+    setActiveTab('cycle');
+  };
+
   const handleRecordAttempt = (attempt: QuestionAttempt) => {
     SupabaseService.recordAttempt('user-demo', attempt);
+
+    // Track daily AI request count
+    const todayKey = `aprovalens_ai_count_${new Date().toISOString().split('T')[0]}`;
+    setDailyAiCount((prev) => {
+      const next = prev + 1;
+      try {
+        localStorage.setItem(todayKey, String(next));
+      } catch {}
+      return next;
+    });
+
     setMetrics((prev) => {
       const newTotal = prev.totalAnswered + 1;
       const newCorrect = attempt.isCorrect ? prev.totalCorrect + 1 : prev.totalCorrect;
@@ -325,12 +388,12 @@ export function AprovaLensApp() {
   const pendingMistakesCount = mistakes.filter((m) => !m.isOvercome).length;
 
   return (
-    <div className={`min-h-screen flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200 transition-colors duration-300 relative ${
+    <div className={`min-h-screen flex flex-col items-center w-full selection:bg-indigo-500/30 selection:text-indigo-200 transition-colors duration-300 relative overflow-x-hidden ${
       theme === 'light' ? 'app-bg-light text-slate-900 light' : 'app-bg-dark text-slate-800 dark:text-slate-100 dark'
     }`}>
       
       {/* Ambient Background Glow Mesh Layer (Visível em ambos os modos) */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden w-full h-full">
         {theme === 'dark' ? (
           <>
             <div className="absolute -top-32 -left-32 w-[650px] h-[650px] rounded-full bg-indigo-600/25 blur-[140px] animate-pulse-slow" />
@@ -347,6 +410,9 @@ export function AprovaLensApp() {
           </>
         )}
       </div>
+
+      {/* Wrapper Constraint for Ultra-wide screens */}
+      <div className="w-full max-w-[1920px] mx-auto flex flex-col flex-1 relative z-10">
 
       {/* Toast Notification */}
       {toastMessage && (
@@ -370,6 +436,9 @@ export function AprovaLensApp() {
           isSupabaseConfigured={isSupabaseConfigured()}
           theme={theme}
           onToggleTheme={handleToggleTheme}
+          studentProfile={studentProfile}
+          onOpenProfile={() => setIsProfileModalOpen(true)}
+          onOpenAdminIngest={() => setIsAdminIngestOpen(true)}
         />
       </div>
 
@@ -377,7 +446,7 @@ export function AprovaLensApp() {
       <main className="flex-1 pb-20 sm:pb-8 relative z-10">
         {activeTab === 'landing' && (
           <LandingPage
-            onStartEdital={() => setActiveTab('edital')}
+            onStartEdital={() => setIsOnboardingTerminalOpen(true)}
             onStartDiscursivas={() => setActiveTab('discursivas')}
             onOpenPricing={() => setIsPricingOpen(true)}
             onSelectPlan={(p) => {
@@ -414,6 +483,9 @@ export function AprovaLensApp() {
             exams={exams}
             selectedExam={selectedExam}
             onSelectExam={handleSelectExam}
+            userPlan={plan}
+            dailyAiCount={dailyAiCount}
+            onOpenPricing={() => setIsPricingOpen(true)}
           />
         )}
 
@@ -438,6 +510,8 @@ export function AprovaLensApp() {
 
         {activeTab === 'discursivas' && (
           <DiscursiveStudio
+            userPlan={plan}
+            onOpenPricing={() => setIsPricingOpen(true)}
             onRecordSubmission={(sub) => {
               showToast(`Redação avaliada! Nota: ${sub.evaluation.finalScore.toFixed(1)} pts`);
             }}
@@ -493,6 +567,33 @@ export function AprovaLensApp() {
         onUpgradePlan={handleUpgradePlan}
       />
 
+      {/* Student Profile & Guardian Animal Modal */}
+      <StudentProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        profile={studentProfile}
+        onSaveProfile={handleSaveProfile}
+        userPlan={plan}
+        onOpenPricing={() => setIsPricingOpen(true)}
+      />
+
+      {/* Admin Question Ingestion & Audit Pipeline Modal */}
+      <AdminQuestionIngestModal
+        isOpen={isAdminIngestOpen}
+        onClose={() => setIsAdminIngestOpen(false)}
+        onQuestionsIngested={(newQuestions) => {
+          showToast(`🚀 ${newQuestions.length} questões auditadas carregadas com sucesso!`);
+        }}
+      />
+
+      {/* Narrative Onboarding Terminal (Hacker Tech Style) */}
+      <NarrativeOnboardingTerminal
+        isOpen={isOnboardingTerminalOpen}
+        onClose={() => setIsOnboardingTerminalOpen(false)}
+        onComplete={handleOnboardingComplete}
+      />
+
+      </div>
     </div>
   );
 }

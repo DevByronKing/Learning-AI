@@ -23,17 +23,25 @@ import {
   FileCheck,
   Zap,
   Filter,
-  Upload
+  Upload,
+  Crown,
+  Lock
 } from 'lucide-react';
-import { DiscursivePrompt, DiscursiveEvaluation, DiscursiveSubmission } from '@/lib/types';
+import { DiscursivePrompt, DiscursiveEvaluation, DiscursiveSubmission, SubscriptionPlan } from '@/lib/types';
 import { MOCK_DISCURSIVE_PROMPTS } from '@/lib/mockData';
 import confetti from 'canvas-confetti';
 
 interface DiscursiveStudioProps {
   onRecordSubmission?: (submission: DiscursiveSubmission) => void;
+  userPlan?: SubscriptionPlan;
+  onOpenPricing?: () => void;
 }
 
-export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({ onRecordSubmission }) => {
+export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({ 
+  onRecordSubmission,
+  userPlan = 'aspirante',
+  onOpenPricing
+}) => {
   const [prompts] = useState<DiscursivePrompt[]>(MOCK_DISCURSIVE_PROMPTS);
   const [selectedPromptId, setSelectedPromptId] = useState<string>(prompts[0].id);
   const [selectedAreaFilter, setSelectedAreaFilter] = useState<string>('todas');
@@ -99,6 +107,11 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({ onRecordSubm
   ];
 
   const handleGradeEssay = () => {
+    if (userPlan === 'aspirante') {
+      onOpenPricing?.();
+      return;
+    }
+
     if (essayText.trim().length < 50) return;
 
     setIsProcessing(true);
@@ -237,8 +250,34 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fadeIn">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fadeIn space-y-6">
       
+      {/* Banner de Gating Freemium se plano for Aspirante */}
+      {userPlan === 'aspirante' && (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-500/15 via-indigo-500/10 to-transparent border border-purple-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs animate-fadeIn">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-600 dark:text-purple-300 flex items-center justify-center shrink-0">
+              <Crown className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="font-bold text-slate-900 dark:text-white">
+                Recurso Exclusivo dos Planos Pro e Elite
+              </p>
+              <p className="text-slate-600 dark:text-slate-300 text-[11px]">
+                Você está no <strong>Plano Aspirante (Gratuito)</strong> em modo demonstração. Faça upgrade para enviar suas redações para correção analítica oficial com IA.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onOpenPricing}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs shadow-md shadow-purple-600/30 transition-all shrink-0 flex items-center gap-1.5"
+          >
+            <Lock className="w-3.5 h-3.5" />
+            <span>Desbloquear Discursivas</span>
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-300 dark:border-white/10">
         <div>
@@ -548,15 +587,28 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
 
               <button
                 onClick={handleGradeEssay}
-                disabled={isProcessing || essayText.trim().length < 50}
+                disabled={isProcessing || (userPlan !== 'aspirante' && essayText.trim().length < 50)}
                 className={`px-8 py-3.5 rounded-xl font-extrabold text-xs tracking-wider transition-all flex items-center justify-center gap-2 ${
-                  isProcessing || essayText.trim().length < 50
+                  isProcessing
+                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-200 dark:border-slate-700'
+                    : userPlan === 'aspirante'
+                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-xl shadow-purple-600/30 glow-brand cursor-pointer'
+                    : essayText.trim().length < 50
                     ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-200 dark:border-slate-700'
                     : 'bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white shadow-xl shadow-indigo-600/30 glow-brand'
                 }`}
               >
-                <Sparkles className={`w-4 h-4 ${isProcessing ? 'animate-spin' : ''}`} />
-                <span>{isProcessing ? 'Avaliando com IA...' : 'Corrigir Redação com IA da Banca'}</span>
+                {userPlan === 'aspirante' ? (
+                  <>
+                    <Lock className="w-4 h-4" />
+                    <span>Desbloquear Correção com IA (Exclusivo Pro/Elite)</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className={`w-4 h-4 ${isProcessing ? 'animate-spin' : ''}`} />
+                    <span>{isProcessing ? 'Avaliando com IA...' : 'Corrigir Redação com IA da Banca'}</span>
+                  </>
+                )}
               </button>
             </div>
 

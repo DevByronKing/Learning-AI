@@ -415,29 +415,53 @@ export const EditalParser: React.FC<EditalParserProps> = ({
     setShowUploadModal(false);
     setProgressStage(0);
 
+    // Processamento estruturado no Backend (Edge/Serverless)
+    const backendPromise = fetch('/api/edital', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        examTitle: finalTitle,
+        role: finalRole,
+        banca: finalBanca,
+        salary: finalSalary,
+        vacancies: finalVacancies,
+        editalText: uploadText,
+        pdfFileName: finalFileName
+      })
+    })
+      .then((res) => res.json())
+      .catch((err) => {
+        console.warn('Fallback local para edital:', err);
+        return null;
+      });
+
     const interval = setInterval(() => {
       setProgressStage((prev) => {
         if (prev >= 3) {
           clearInterval(interval);
-          setTimeout(() => {
+          backendPromise.then((apiResponse) => {
             setIsProcessing(false);
 
-            const dynamicSubjects = generateSyllabusByArea(finalTitle, finalRole, uploadText);
-
-            const newExam: ExamNotice = {
-              id: `custom-exam-${Date.now()}`,
-              title: finalTitle,
-              institution: finalTitle.split(' - ')[0] || 'Órgão Concursal',
-              banca: finalBanca,
-              role: finalRole,
-              salary: finalSalary,
-              vacancies: finalVacancies,
-              examDate: '2026-12-15',
-              daysRemaining: 105,
-              pdfFileName: finalFileName,
-              uploadedAt: new Date().toISOString().split('T')[0],
-              subjects: dynamicSubjects
-            };
+            let newExam: ExamNotice;
+            if (apiResponse && apiResponse.success && apiResponse.data) {
+              newExam = apiResponse.data;
+            } else {
+              const dynamicSubjects = generateSyllabusByArea(finalTitle, finalRole, uploadText);
+              newExam = {
+                id: `custom-exam-${Date.now()}`,
+                title: finalTitle,
+                institution: finalTitle.split(' - ')[0] || 'Órgão Concursal',
+                banca: finalBanca,
+                role: finalRole,
+                salary: finalSalary,
+                vacancies: finalVacancies,
+                examDate: '2026-12-15',
+                daysRemaining: 105,
+                pdfFileName: finalFileName,
+                uploadedAt: new Date().toISOString().split('T')[0],
+                subjects: dynamicSubjects
+              };
+            }
 
             onAddCustomExam(newExam);
             onSelectExam(newExam);
@@ -447,12 +471,12 @@ export const EditalParser: React.FC<EditalParserProps> = ({
             setExamTitleInput('');
             setRoleInput('');
             setUploadText('');
-          }, 600);
+          });
           return 3;
         }
         return prev + 1;
       });
-    }, 700);
+    }, 600);
   };
 
   const getExamArea = (exam: ExamNotice): string => {
