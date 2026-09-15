@@ -147,8 +147,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           onClick={() => setActiveSubTab('journey')}
           className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-all ${
             activeSubTab === 'journey'
-              ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md glow-brand'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-dark-bg hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Trophy className="w-4 h-4 text-amber-300" />
@@ -159,8 +159,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           onClick={() => setActiveSubTab('technical')}
           className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-all ${
             activeSubTab === 'technical'
-              ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md glow-brand'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-dark-bg hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <BarChart3 className="w-4 h-4" />
@@ -171,8 +171,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           onClick={() => setActiveSubTab('retention')}
           className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-all ${
             activeSubTab === 'retention'
-              ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md glow-brand'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-dark-bg hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <TrendingUp className="w-4 h-4 text-emerald-400" />
@@ -200,7 +200,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Card 1: Cutoff Probability */}
-        <div className="glass-panel p-5 rounded-3xl border border-indigo-500/30 relative overflow-hidden glow-brand">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-5 rounded-3xl border border-indigo-500/30 relative overflow-hidden glow-brand shadow-sm">
           <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
             <span className="font-bold uppercase tracking-wider">Probabilidade de Aprovação</span>
             <Target className="w-4 h-4 text-indigo-400" />
@@ -216,7 +216,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         </div>
 
         {/* Card 2: Streak */}
-        <div className="glass-panel p-5 rounded-3xl border border-slate-300 dark:border-white/10">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-5 rounded-3xl border border-slate-200/80 dark:border-white/10 shadow-sm">
           <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
             <span className="font-bold uppercase tracking-wider">Constância de Estudos</span>
             <Flame className="w-4 h-4 text-amber-400" />
@@ -229,7 +229,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         </div>
 
         {/* Card 3: Total Questions Answered */}
-        <div className="glass-panel p-5 rounded-3xl border border-slate-300 dark:border-white/10">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-5 rounded-3xl border border-slate-200/80 dark:border-white/10 shadow-sm">
           <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
             <span className="font-bold uppercase tracking-wider">Questões Realizadas</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -242,13 +242,13 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         </div>
 
         {/* Card 4: SRS Flashcards Deck */}
-        <div className="glass-panel p-5 rounded-3xl border border-slate-300 dark:border-white/10">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-5 rounded-3xl border border-slate-200/80 dark:border-white/10 shadow-sm">
           <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
             <span className="font-bold uppercase tracking-wider">Deck de Repetição Espaçada</span>
-            <Sparkles className="w-4 h-4 text-purple-400" />
+            <Sparkles className="w-4 h-4 text-cyan-400" />
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-purple-400">{flashcards.length} cards</span>
+            <span className="text-3xl font-black text-cyan-600 dark:text-cyan-400">{flashcards.length} cards</span>
             <span className="text-xs text-slate-500 dark:text-slate-400">Agendados p/ revisão</span>
           </div>
           <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Gerados a partir de diagnósticos cognitivos</p>
@@ -257,7 +257,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       </div>
 
       {/* INTERACTIVE TOPIC HEATMAP */}
-      <div className="mt-10 glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10">
+      <div className="mt-10 glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-white/10 shadow-sm">
         
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-300 dark:border-white/10">
           <div>
@@ -352,11 +352,11 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         {/* Error Breakdown (Donut Chart) */}
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10 flex flex-col justify-between">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-white/10 flex flex-col justify-between shadow-sm">
           <div>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <BrainCircuit className="w-5 h-5 text-purple-400" />
+                <BrainCircuit className="w-5 h-5 text-blue-500 dark:text-blue-400" />
                 <span>Distribuição dos Tipos de Erro</span>
               </h3>
             </div>
@@ -403,7 +403,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         </div>
 
         {/* Banca Alignment (Radar/Bar Chart) */}
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10 flex flex-col justify-between">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-white/10 flex flex-col justify-between shadow-sm">
           <div>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -442,7 +442,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
       {/* ACTIVE FLASHCARDS SPACED REPETITION DECK */}
       {currentFlashcard && (
-        <div className="mt-10 glass-panel p-6 sm:p-8 rounded-3xl border border-indigo-500/30 glow-brand">
+        <div className="mt-10 glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-indigo-500/30 glow-brand shadow-sm">
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-300 dark:border-white/10">
             <div>
@@ -460,7 +460,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               <button
                 type="button"
                 onClick={() => setShowSRSPlayer(true)}
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-extrabold text-xs transition-all shadow-md shadow-indigo-600/30 flex items-center gap-1.5"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-extrabold text-xs transition-all shadow-md shadow-blue-600/25 flex items-center gap-1.5"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Abrir Player SRS Completo (Anki)</span>
@@ -495,25 +495,25 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 animate-fadeIn">
               <button
                 onClick={() => handleFlashcardRating('errei')}
-                className="py-2.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 font-bold text-xs transition-colors"
+                className="py-2.5 rounded-xl bg-rose-50 dark:bg-rose-500/20 hover:bg-rose-100 dark:hover:bg-rose-500/30 border border-rose-200 dark:border-rose-500/40 text-rose-700 dark:text-rose-300 font-bold text-xs transition-colors"
               >
                 Errei (Rever Hoje)
               </button>
               <button
                 onClick={() => handleFlashcardRating('dificil')}
-                className="py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs transition-colors"
+                className="py-2.5 rounded-xl bg-amber-50 dark:bg-amber-500/20 hover:bg-amber-100 dark:hover:bg-amber-500/30 border border-amber-200 dark:border-amber-500/40 text-amber-700 dark:text-amber-300 font-bold text-xs transition-colors"
               >
                 Difícil (Rever em 1d)
               </button>
               <button
                 onClick={() => handleFlashcardRating('bom')}
-                className="py-2.5 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-indigo-300 font-bold text-xs transition-colors"
+                className="py-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/20 hover:bg-indigo-100 dark:hover:bg-indigo-500/30 border border-indigo-200 dark:border-indigo-500/40 text-indigo-700 dark:text-indigo-300 font-bold text-xs transition-colors"
               >
                 Bom (Rever em 3d)
               </button>
               <button
                 onClick={() => handleFlashcardRating('facil')}
-                className="py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-bold text-xs transition-colors"
+                className="py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-500/20 hover:bg-emerald-100 dark:hover:bg-emerald-500/30 border border-emerald-200 dark:border-emerald-500/40 text-emerald-700 dark:text-emerald-300 font-bold text-xs transition-colors"
               >
                 Fácil (Rever em 7d)
               </button>

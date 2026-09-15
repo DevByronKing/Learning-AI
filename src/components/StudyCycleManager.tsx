@@ -235,9 +235,9 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
 
       {/* Auto-rebalance Success Alert */}
       {rebalanceMessage && (
-        <div className="mt-6 p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center justify-between animate-fadeIn">
+        <div className="mt-6 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold flex items-center justify-between animate-fadeIn shadow-sm">
           <span>{rebalanceMessage}</span>
-          <button onClick={() => setRebalanceMessage(null)} className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white">✕</button>
+          <button onClick={() => setRebalanceMessage(null)} className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors">✕</button>
         </div>
       )}
 
@@ -254,15 +254,15 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
             onClick={() => setMethodology('ciclo_meirelles')}
             className={`p-4 rounded-2xl cursor-pointer transition-all border ${
               methodology === 'ciclo_meirelles'
-                ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-lg shadow-indigo-600/15 ring-1 ring-indigo-400'
-                : 'glass-panel border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-300 hover:border-slate-600'
+                ? 'bg-indigo-50 dark:bg-indigo-500/20 border-indigo-400 dark:border-indigo-500 shadow-md ring-1 ring-indigo-400'
+                : 'bg-white dark:bg-dark-surface border-slate-200 dark:border-white/5 hover:border-indigo-300 dark:hover:border-slate-600 hover:-translate-y-0.5'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="font-bold text-sm">Ciclo de Meirelles</span>
-              {methodology === 'ciclo_meirelles' && <CheckCircle2 className="w-4 h-4 text-indigo-400" />}
+              <span className={`font-bold text-sm ${methodology === 'ciclo_meirelles' ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-700 dark:text-slate-300'}`}>Ciclo de Meirelles</span>
+              {methodology === 'ciclo_meirelles' && <CheckCircle2 className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />}
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            <p className={`text-xs leading-relaxed ${methodology === 'ciclo_meirelles' ? 'text-indigo-600/80 dark:text-indigo-300/80' : 'text-slate-500 dark:text-slate-400'}`}>
               Intercalação contínua de disciplinas com blocos proporcionais ao peso e relevância no edital.
             </p>
           </div>
@@ -272,15 +272,15 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
             onClick={() => setMethodology('ebbinghaus_srs')}
             className={`p-4 rounded-2xl cursor-pointer transition-all border ${
               methodology === 'ebbinghaus_srs'
-                ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-lg shadow-indigo-600/15 ring-1 ring-indigo-400'
-                : 'glass-panel border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-300 hover:border-slate-600'
+                ? 'bg-indigo-50 dark:bg-indigo-500/20 border-indigo-400 dark:border-indigo-500 shadow-md ring-1 ring-indigo-400'
+                : 'bg-white dark:bg-dark-surface border-slate-200 dark:border-white/5 hover:border-indigo-300 dark:hover:border-slate-600 hover:-translate-y-0.5'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="font-bold text-sm">Curva de Ebbinghaus (SRS)</span>
-              {methodology === 'ebbinghaus_srs' && <CheckCircle2 className="w-4 h-4 text-indigo-400" />}
+              <span className={`font-bold text-sm ${methodology === 'ebbinghaus_srs' ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-700 dark:text-slate-300'}`}>Curva de Ebbinghaus (SRS)</span>
+              {methodology === 'ebbinghaus_srs' && <CheckCircle2 className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />}
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            <p className={`text-xs leading-relaxed ${methodology === 'ebbinghaus_srs' ? 'text-indigo-600/80 dark:text-indigo-300/80' : 'text-slate-500 dark:text-slate-400'}`}>
               Revisões periódicas programadas (24h, 7d, 15d, 30d) para consolidação definitiva na memória de longo prazo.
             </p>
           </div>
@@ -290,15 +290,15 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
             onClick={() => setMethodology('estudo_reverso')}
             className={`p-4 rounded-2xl cursor-pointer transition-all border ${
               methodology === 'estudo_reverso'
-                ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-lg shadow-indigo-600/15 ring-1 ring-indigo-400'
-                : 'glass-panel border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-300 hover:border-slate-600'
+                ? 'bg-indigo-50 dark:bg-indigo-500/20 border-indigo-400 dark:border-indigo-500 shadow-md ring-1 ring-indigo-400'
+                : 'bg-white dark:bg-dark-surface border-slate-200 dark:border-white/5 hover:border-indigo-300 dark:hover:border-slate-600 hover:-translate-y-0.5'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="font-bold text-sm">Estudo Reverso</span>
-              {methodology === 'estudo_reverso' && <CheckCircle2 className="w-4 h-4 text-indigo-400" />}
+              <span className={`font-bold text-sm ${methodology === 'estudo_reverso' ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-700 dark:text-slate-300'}`}>Estudo Reverso</span>
+              {methodology === 'estudo_reverso' && <CheckCircle2 className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />}
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            <p className={`text-xs leading-relaxed ${methodology === 'estudo_reverso' ? 'text-indigo-600/80 dark:text-indigo-300/80' : 'text-slate-500 dark:text-slate-400'}`}>
               Prática guiada por questões da banca $\rightarrow$ Diagnóstico das falhas $\rightarrow$ Teoria focada na raiz do erro.
             </p>
           </div>
@@ -308,15 +308,15 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
             onClick={() => setMethodology('pomodoro_pro')}
             className={`p-4 rounded-2xl cursor-pointer transition-all border ${
               methodology === 'pomodoro_pro'
-                ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-lg shadow-indigo-600/15 ring-1 ring-indigo-400'
-                : 'glass-panel border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-300 hover:border-slate-600'
+                ? 'bg-indigo-50 dark:bg-indigo-500/20 border-indigo-400 dark:border-indigo-500 shadow-md ring-1 ring-indigo-400'
+                : 'bg-white dark:bg-dark-surface border-slate-200 dark:border-white/5 hover:border-indigo-300 dark:hover:border-slate-600 hover:-translate-y-0.5'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="font-bold text-sm">Pomodoro Estruturado (50/10)</span>
-              {methodology === 'pomodoro_pro' && <CheckCircle2 className="w-4 h-4 text-indigo-400" />}
+              <span className={`font-bold text-sm ${methodology === 'pomodoro_pro' ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-700 dark:text-slate-300'}`}>Pomodoro Estruturado (50/10)</span>
+              {methodology === 'pomodoro_pro' && <CheckCircle2 className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />}
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            <p className={`text-xs leading-relaxed ${methodology === 'pomodoro_pro' ? 'text-indigo-600/80 dark:text-indigo-300/80' : 'text-slate-500 dark:text-slate-400'}`}>
               Sessões de 50 minutos de concentração profunda seguidas de 10 minutos para consolidação neural.
             </p>
           </div>
@@ -327,7 +327,7 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
       {/* Daily Target & Progress Tracker */}
       <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
         
-        <div className="glass-panel p-6 rounded-3xl border border-slate-300 dark:border-white/10 lg:col-span-2">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-6 rounded-3xl border border-slate-200/80 dark:border-white/10 lg:col-span-2 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Progresso da Meta de Hoje</span>
@@ -353,7 +353,7 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
         </div>
 
         {/* Daily Hours Slider Configuration */}
-        <div className="glass-panel p-6 rounded-3xl border border-slate-300 dark:border-white/10 flex flex-col justify-between">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-6 rounded-3xl border border-slate-200/80 dark:border-white/10 flex flex-col justify-between shadow-sm">
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Disponibilidade Diária</span>
@@ -377,7 +377,7 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
 
           <button
             onClick={() => onGoToSimulator()}
-            className="mt-4 w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-md glow-brand"
+            className="mt-4 w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-md glow-brand"
           >
             <Play className="w-3.5 h-3.5 fill-white" />
             <span>Iniciar Bloco no Simulador de Questões</span>
@@ -390,7 +390,7 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
       <div className="mt-10 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-indigo-400" />
+            <Calendar className="w-5 h-5 text-blue-500 dark:text-blue-400" />
             <span>Cronograma Dinâmico por Blocos</span>
           </h3>
 
@@ -414,7 +414,7 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {schedule.map((day, dayIndex) => (
-            <div key={day.id} className="glass-panel rounded-3xl border border-slate-300 dark:border-white/10 p-5 flex flex-col justify-between">
+            <div key={day.id} className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md rounded-3xl border border-slate-200/80 dark:border-white/10 p-5 flex flex-col justify-between shadow-sm">
               
               <div>
                 <div className="flex items-center justify-between pb-3 border-b border-slate-300 dark:border-white/10 mb-4">
@@ -434,16 +434,16 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
                       key={block.id}
                       className={`p-3.5 rounded-2xl border transition-all ${
                         block.status === 'concluido'
-                          ? 'bg-emerald-500/10 border-emerald-500/30'
-                          : 'bg-white dark:bg-dark-surface/80 border-slate-200 dark:border-white/5 hover:border-slate-600'
+                          ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/30'
+                          : 'bg-white dark:bg-dark-surface/80 border-slate-200 dark:border-white/5 hover:border-slate-400 dark:hover:border-slate-600'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">
+                          <span className={`text-[10px] font-bold uppercase tracking-wider ${block.status === 'concluido' ? 'text-emerald-600 dark:text-emerald-400' : 'text-indigo-500 dark:text-indigo-400'}`}>
                             {block.subjectName}
                           </span>
-                          <h5 className={`text-xs font-bold mt-0.5 ${block.status === 'concluido' ? 'text-emerald-300 line-through' : 'text-slate-900 dark:text-white'}`}>
+                          <h5 className={`text-xs font-bold mt-0.5 ${block.status === 'concluido' ? 'text-emerald-700 dark:text-emerald-300 line-through' : 'text-slate-900 dark:text-white'}`}>
                             {block.topicName}
                           </h5>
                         </div>

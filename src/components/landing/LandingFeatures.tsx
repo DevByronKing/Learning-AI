@@ -29,17 +29,17 @@ export const LandingFeatures: React.FC<LandingFeaturesProps> = ({
           className="glass-card p-8 rounded-3xl flex flex-col justify-between cursor-pointer hover:border-indigo-500/50 hover:shadow-indigo-500/10 transition-all group shadow-sm"
         >
           <div>
-            <div className="w-14 h-14 rounded-2xl bg-indigo-500/15 flex items-center justify-center text-indigo-500 dark:text-indigo-400 mb-6 group-hover:scale-110 transition-transform">
+            <div className="w-14 h-14 rounded-2xl bg-blue-500/15 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform">
               <FileText className="w-7 h-7" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               Analisador Inteligente de Editais
             </h3>
             <p className="mt-3 text-sm font-medium text-slate-600 dark:text-slate-400 leading-relaxed">
               Faça o upload do edital e receba em segundos a árvore verticalizada, o peso de cada matéria e os artigos de lei mais cobrados.
             </p>
           </div>
-          <div className="mt-8 pt-5 border-t border-slate-200 dark:border-white/5 text-sm font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 group-hover:translate-x-2 transition-transform">
+          <div className="mt-8 pt-5 border-t border-slate-200 dark:border-white/5 text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 group-hover:translate-x-2 transition-transform">
             <span>Mapear Edital</span>
             <ChevronRight className="w-4 h-4" />
           </div>
@@ -68,9 +68,9 @@ export const LandingFeatures: React.FC<LandingFeaturesProps> = ({
         </div>
 
         {/* Card 3: Diagnóstico de Erros */}
-        <div className="glass-card p-8 rounded-3xl flex flex-col justify-between border-purple-500/30 glow-brand shadow-md">
+        <div className="glass-card p-8 rounded-3xl flex flex-col justify-between border-blue-500/30 glow-brand shadow-md">
           <div>
-            <div className="w-14 h-14 rounded-2xl bg-purple-500/15 flex items-center justify-center text-purple-500 dark:text-purple-400 mb-6">
+            <div className="w-14 h-14 rounded-2xl bg-blue-500/15 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6">
               <BrainCircuit className="w-7 h-7" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-white">Diagnóstico Cognitivo de Erro</h3>
@@ -78,7 +78,7 @@ export const LandingFeatures: React.FC<LandingFeaturesProps> = ({
               Ao errar uma questão, a IA analisa os distratores da banca e identifica a raiz da falha: pegadinha, lacuna teórica ou desatenção.
             </p>
           </div>
-          <div className="mt-8 pt-5 border-t border-slate-200 dark:border-white/5 text-sm font-bold text-purple-600 dark:text-purple-400 flex items-center gap-1.5">
+          <div className="mt-8 pt-5 border-t border-slate-200 dark:border-white/5 text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
             <span>Classificação em 4 Tipos</span>
             <ChevronRight className="w-4 h-4" />
           </div>

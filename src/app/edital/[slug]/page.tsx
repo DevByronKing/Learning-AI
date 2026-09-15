@@ -157,13 +157,13 @@ export default function EditalPublicPage({ params }: EditalPageProps) {
       <header className="border-b border-white/5 bg-[#0e1424]/85 backdrop-blur-xl sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-600 to-cyan-400 p-[1.5px] glow-brand">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 p-[1.5px] glow-brand">
               <div className="w-full h-full bg-[#0e1424] rounded-[10px] flex items-center justify-center">
-                <BrainCircuit className="w-4 h-4 text-indigo-400" />
+                <BrainCircuit className="w-4 h-4 text-blue-400" />
               </div>
             </div>
             <span className="font-black text-lg text-white tracking-tight">
-              Aprova<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Lens</span>
+              Aprova<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Lens</span>
             </span>
           </Link>
 

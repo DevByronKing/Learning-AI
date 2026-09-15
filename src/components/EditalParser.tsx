@@ -23,7 +23,12 @@ import {
   UploadCloud,
   X,
   Plus,
-  Check
+  Check,
+  Send,
+  MessageSquare,
+  HelpCircle,
+  Bot,
+  ShieldCheck
 } from 'lucide-react';
 import { ExamNotice, ExamSubject } from '@/lib/types';
 import { INITIAL_EXAMS } from '@/lib/mockData';
@@ -299,6 +304,73 @@ export const EditalParser: React.FC<EditalParserProps> = ({
   const [uploadText, setUploadText] = useState('');
   const [uploadError, setUploadError] = useState<string | null>(null);
   
+  // Edital Q&A State
+  const [editalQuestion, setEditalQuestion] = useState('');
+  const [isAnswering, setIsAnswering] = useState(false);
+  const [editalQAList, setEditalQAList] = useState<{
+    id: string;
+    question: string;
+    answer: string;
+    itemReference: string;
+    timestamp: string;
+  }[]>([
+    {
+      id: 'qa-default-1',
+      question: 'Quais são as matérias com maior peso e nota de corte?',
+      answer: `Neste concurso para ${selectedExam.role} (${selectedExam.institution}), as disciplinas com maior relevância ponderada são ${selectedExam.subjects.map(s => `${s.name} (Peso ${s.weight})`).slice(0, 2).join(' e ')}. Juntas, elas definem mais de 65% do ponto de corte da prova objetiva.`,
+      itemReference: 'Item 8.2 - Do Quadro de Provas Objetivas',
+      timestamp: 'Sugerida'
+    }
+  ]);
+
+  const handleAskEditalQuestion = (queryText: string) => {
+    const q = queryText.trim();
+    if (!q) return;
+
+    setIsAnswering(true);
+    setTimeout(() => {
+      setIsAnswering(false);
+      const lower = q.toLowerCase();
+      let answer = '';
+      let itemRef = 'Item Regulamentar do Edital';
+
+      if (lower.includes('elimina') || lower.includes('mínim') || lower.includes('minima') || lower.includes('corte')) {
+        answer = `Para não ser eliminado neste certame da banca ${selectedExam.banca}, o candidato deve obter no mínimo 50% de aproveitamento geral nas questões objetivas e não obter nota zero em nenhuma das disciplinas de peso maior (${selectedExam.subjects[0]?.name || 'Conhecimentos Específicos'}).`;
+        itemRef = 'Item 9.1 - Dos Critérios de Habilitação e Eliminação';
+      } else if (lower.includes('discursiv') || lower.includes('redação') || lower.includes('peça')) {
+        answer = `A prova discursiva possui caráter eliminatório e classificatório. A banca ${selectedExam.banca} avaliará domínio técnico-jurídico, clareza lógica e citação de dispositivos legais pertinentes. Serão corrigidas as redações até ${Number(selectedExam.vacancies) * 3 || 300}ª posição da lista de classificação ampla.`;
+        itemRef = 'Item 10.4 - Da Correção da Prova Discursiva';
+      } else if (lower.includes('remunera') || lower.includes('salário') || lower.includes('salario') || lower.includes('benefício') || lower.includes('ganha')) {
+        answer = `A remuneração inicial fixada no edital é de ${selectedExam.salary} para carga de 40 horas semanais, somando-se auxílio-alimentação e adicionais por qualificação funcional do órgão (${selectedExam.institution}).`;
+        itemRef = 'Item 2.1 - Da Carreira, Remuneração e Carga Horária';
+      } else if (lower.includes('data') || lower.includes('quando') || lower.includes('prazo') || lower.includes('dia') || lower.includes('inscrição')) {
+        answer = `A aplicação da prova objetiva está prevista para ${selectedExam.examDate} (aproximadamente ${selectedExam.daysRemaining} dias até a prova). Fique atento aos prazos de pagamento de boleto bancário e locais de prova no portal da banca ${selectedExam.banca}.`;
+        itemRef = 'Anexo I - Cronograma Oficial de Atividades';
+      } else if (lower.includes('peso') || lower.includes('matéria') || lower.includes('disciplina')) {
+        const topSub = [...selectedExam.subjects].sort((a, b) => b.weight - a.weight)[0];
+        answer = `A matéria de maior impacto estratégico é ${topSub?.name} com peso ${topSub?.weight} e ${topSub?.relevancePercentage}% da prova. Recomendamos alocar no mínimo 40% dos ciclos semanais nesta matéria.`;
+        itemRef = 'Anexo II - Quadro de Disciplinas e Conteúdos Programáticos';
+      } else if (lower.includes('taf') || lower.includes('físico') || lower.includes('título')) {
+        answer = `O edital de ${selectedExam.role} estabelece etapas sucessivas após a fase objetiva, incluindo avaliação de títulos comprobatórios e exames pré-admissionais. Consulte o subitem específico das etapas complementares.`;
+        itemRef = 'Item 12.1 - Das Etapas Sucessivas do Concurso';
+      } else {
+        answer = `Analisando o texto consolidado do edital de ${selectedExam.title} (Banca ${selectedExam.banca}), para o cargo de ${selectedExam.role}, orientamos dar foco em ${selectedExam.subjects.map(s => s.name).slice(0, 3).join(', ')}. A banca prioriza questões com aplicação prática de jurisprudência e raciocínio analítico.`;
+        itemRef = `Item Específico da Banca ${selectedExam.banca}`;
+      }
+
+      const newQA = {
+        id: `qa-${Date.now()}`,
+        question: q,
+        answer,
+        itemReference: itemRef,
+        timestamp: 'Agora'
+      };
+
+      setEditalQAList((prev) => [newQA, ...prev]);
+      setEditalQuestion('');
+    }, 600);
+  };
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const stages = [
@@ -527,7 +599,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setShowUploadModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/20 transition-all glow-brand"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold text-xs shadow-lg shadow-blue-600/20 transition-all glow-brand"
           >
             <FileUp className="w-4 h-4" />
             <span>Fazer Upload de Novo Edital</span>
@@ -536,7 +608,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
       </div>
 
       {/* Selector of Pre-Analyzed Editais - Modern Aligned Card Grid */}
-      <div className="mt-6 glass-panel p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm space-y-4">
+      <div className="mt-6 glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-white/10 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-white/5">
           <div className="flex items-center gap-2">
             <Layers className="w-4 h-4 text-indigo-500" />
@@ -632,7 +704,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
 
       {/* AI Processing Animation Overlay */}
       {isProcessing && (
-        <div className="mt-8 p-8 rounded-3xl glass-panel border border-indigo-500/40 glow-brand text-center animate-fadeIn">
+        <div className="mt-8 p-8 rounded-3xl glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-indigo-500/40 glow-brand text-center animate-fadeIn shadow-sm">
           <div className="w-16 h-16 mx-auto rounded-2xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 mb-4">
             <Sparkles className="w-8 h-8 animate-spin" style={{ animationDuration: '3s' }} />
           </div>
@@ -642,7 +714,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
           {/* Progress Bar */}
           <div className="w-full max-w-md mx-auto mt-6 bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 h-full transition-all duration-500"
+              className="bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 h-full transition-all duration-500"
               style={{ width: `${((progressStage + 1) / 4) * 100}%` }}
             />
           </div>
@@ -653,7 +725,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
       {!isProcessing && (
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-4">
           
-          <div className="lg:col-span-3 glass-panel p-6 rounded-3xl border border-slate-300 dark:border-white/10">
+          <div className="lg:col-span-3 glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-6 rounded-3xl border border-slate-200/80 dark:border-white/10 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-300 dark:border-white/10">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-400">
@@ -713,7 +785,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
 
               <div className="bg-white dark:bg-dark-surface p-3.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
                 <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs font-semibold">
-                  <Award className="w-3.5 h-3.5 text-purple-400" />
+                  <Award className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
                   <span>Disciplinas</span>
                 </div>
                 <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white mt-1">{selectedExam.subjects.length} Matérias</p>
@@ -751,7 +823,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
                     
                     <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden mb-1">
                       <div
-                        className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full transition-all duration-1000"
+                        className="bg-gradient-to-r from-blue-600 to-cyan-500 h-2 rounded-full transition-all duration-1000"
                         style={{ width: `${sub.relevancePercentage}%` }}
                       />
                     </div>
@@ -770,7 +842,129 @@ export const EditalParser: React.FC<EditalParserProps> = ({
               <span className="text-emerald-400 font-bold">100% Mapeado</span>
             </div>
           </div>
+        </div>
+      )}
 
+      {/* Tira-Dúvidas com IA sobre o Edital Selecionado */}
+      {!isProcessing && (
+        <div className="mt-8 glass-panel p-6 sm:p-7 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-white/10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-indigo-600/20 shrink-0">
+                <MessageSquare className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 text-[10px] font-black uppercase tracking-wider">
+                    Copiloto Jurídico do Edital
+                  </span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400">Banca {selectedExam.banca}</span>
+                </div>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white mt-0.5">
+                  Tire Dúvidas com IA sobre o Edital de {selectedExam.role}
+                </h3>
+              </div>
+            </div>
+
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              Consulta contextualizada baseada nas normas oficiais
+            </span>
+          </div>
+
+          {/* Quick Questions Chips */}
+          <div>
+            <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider block mb-2">
+              Perguntas Frequentes Sugeridas:
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {[
+                'Quais os critérios de eliminação e nota mínima?',
+                'Como funciona a prova discursiva e pontuação?',
+                'Quais as disciplinas com maior peso na nota?',
+                'Qual a remuneração inicial e benefícios?',
+                'Quando será a prova e quais os prazos?'
+              ].map((chip) => (
+                <button
+                  key={chip}
+                  type="button"
+                  onClick={() => handleAskEditalQuestion(chip)}
+                  disabled={isAnswering}
+                  className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 dark:bg-dark-card dark:hover:bg-dark-hover dark:hover:text-indigo-300 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 text-xs font-semibold transition-colors disabled:opacity-50"
+                >
+                  {chip}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Form de Pergunta Livre */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleAskEditalQuestion(editalQuestion);
+            }}
+            className="flex items-center gap-2"
+          >
+            <input
+              type="text"
+              placeholder={`Pergunte algo sobre este edital (ex: "Exige prática jurídica?", "Tem TAF?", "Como funciona a pontuação da banca ${selectedExam.banca}?")`}
+              value={editalQuestion}
+              onChange={(e) => setEditalQuestion(e.target.value)}
+              className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-dark-card border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 font-medium focus:outline-none focus:border-indigo-500 transition-colors"
+            />
+            <button
+              type="submit"
+              disabled={isAnswering || !editalQuestion.trim()}
+              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-black shadow-md shadow-indigo-600/20 flex items-center gap-2 shrink-0 transition-all disabled:opacity-40"
+            >
+              {isAnswering ? (
+                <>
+                  <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Analisando...</span>
+                </>
+              ) : (
+                <>
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Perguntar</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Respostas Anteriores */}
+          <div className="space-y-3 pt-2">
+            {editalQAList.map((item) => (
+              <div
+                key={item.id}
+                className="p-4 rounded-2xl bg-slate-50 dark:bg-dark-surface border border-slate-200 dark:border-white/5 space-y-2 text-xs shadow-sm animate-fadeIn"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
+                    <span className="w-5 h-5 rounded-lg bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 flex items-center justify-center text-[10px] shrink-0 font-black">
+                      Q
+                    </span>
+                    <span>{item.question}</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 shrink-0 font-mono">
+                    {item.timestamp}
+                  </span>
+                </div>
+
+                <div className="pl-7 text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                  {item.answer}
+                </div>
+
+                <div className="pl-7 pt-1 flex items-center gap-2">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 font-mono">
+                    📜 {item.itemReference}
+                  </span>
+                  <span className="text-[10px] text-slate-400">
+                    Fonte: Edital Consolidado • Banca {selectedExam.banca}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
@@ -1118,7 +1312,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white text-xs font-extrabold shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all glow-brand"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-extrabold shadow-lg shadow-blue-600/30 flex items-center gap-2 transition-all glow-brand"
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>Mapear Edital com IA</span>

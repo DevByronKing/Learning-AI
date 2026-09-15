@@ -128,16 +128,16 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
       )}
 
       {/* 1. HERO DO COMPANHEIRO ANIMAL & DIALOGO ACOLHEDOR */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-indigo-500/30 glow-brand relative overflow-hidden">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-blue-500/30 glow-brand relative overflow-hidden">
         {/* Background glow decorativo */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-indigo-500/10 via-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-500/10 via-cyan-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
           
           {/* Avatar Animal & Nível */}
           <div className="flex items-center gap-5">
             <div className="relative group">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-amber-500 p-1 shadow-xl shadow-indigo-600/30 flex items-center justify-center cursor-pointer transition-transform hover:scale-105"
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-tr from-blue-600 via-emerald-500 to-amber-500 p-1 shadow-xl shadow-blue-600/25 flex items-center justify-center cursor-pointer transition-transform hover:scale-105"
                 onClick={() => setIsMascotSelectorOpen(!isMascotSelectorOpen)}
                 title="Clique para escolher seu Mascote Companheiro"
               >
@@ -172,11 +172,11 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
               <div className="mt-2 w-56 sm:w-72">
                 <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">
                   <span>{userXp} XP</span>
-                  <span className="text-indigo-400">Próx. Nível: {nextLevelXp} XP</span>
+                  <span className="text-blue-500 dark:text-blue-400">Próx. Nível: {nextLevelXp} XP</span>
                 </div>
                 <div className="w-full bg-slate-200 dark:bg-dark-surface rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-300 dark:border-white/10">
                   <div 
-                    className="bg-gradient-to-r from-indigo-500 via-purple-500 to-amber-400 h-full rounded-full transition-all duration-500 shadow-sm"
+                    className="bg-gradient-to-r from-blue-600 via-cyan-500 to-amber-400 h-full rounded-full transition-all duration-500 shadow-sm"
                     style={{ width: `${xpProgressPercent}%` }}
                   />
                 </div>
@@ -307,7 +307,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
               {/* Barra de Progresso com Marcador de Corte */}
               <div className="relative w-full bg-slate-200 dark:bg-dark-surface rounded-2xl h-5 p-1 border border-slate-300 dark:border-white/10">
                 <div 
-                  className="h-full rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 transition-all duration-700 shadow-sm"
+                  className="h-full rounded-xl bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 transition-all duration-700 shadow-sm"
                   style={{ width: `${metrics.probabilityOfPassing}%` }}
                 />
 
@@ -352,7 +352,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
             </span>
             <button
               onClick={() => onGoToSimulator()}
-              className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-colors flex items-center gap-1.5 shadow-md shadow-indigo-600/30"
+              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-colors flex items-center gap-1.5 shadow-md shadow-blue-600/25"
             >
               <span>Subir Nota no Simulado</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -365,15 +365,15 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-purple-500/15 text-purple-400">
-                  <Star className="w-5 h-5 fill-purple-400/20" />
+                <div className="p-2 rounded-xl bg-amber-500/15 text-amber-500 dark:text-amber-400">
+                  <Star className="w-5 h-5 fill-amber-400/20" />
                 </div>
                 <div>
                   <h3 className="text-base font-black text-slate-900 dark:text-white">Metas de Hoje</h3>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">Cumpra e ganhe XP para subir de nível</p>
                 </div>
               </div>
-              <span className="text-xs font-bold text-purple-400">
+              <span className="text-xs font-bold text-amber-500 dark:text-amber-400">
                 {missions.filter(m => m.completed).length}/{missions.length} Feitas
               </span>
             </div>
@@ -385,7 +385,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
                   className={`p-3.5 rounded-2xl border transition-all ${
                     mission.completed
                       ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-                      : 'bg-slate-50 dark:bg-dark-surface border-slate-200 dark:border-white/5 hover:border-purple-400/30'
+                      : 'bg-slate-50 dark:bg-dark-surface border-slate-200 dark:border-white/5 hover:border-amber-400/30'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">

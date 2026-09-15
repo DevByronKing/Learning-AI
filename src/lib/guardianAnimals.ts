@@ -10,8 +10,8 @@ export const GUARDIAN_ANIMALS: GuardianAnimal[] = [
     superpower: 'Visão Noturna de Pegadinhas',
     cognitiveStyle: 'Análise minuciosa de lei seca, busca ativa de exceções e memória enciclopédica de jurisprudência.',
     motto: '"Nas entrelinhas da lei reside a chave da posse."',
-    colorGradient: 'from-amber-400 via-indigo-600 to-purple-700',
-    glowColor: 'rgba(99, 102, 241, 0.35)',
+    colorGradient: 'from-amber-400 via-blue-600 to-slate-900',
+    glowColor: 'rgba(37, 99, 235, 0.35)',
     bestForCareers: ['Magistratura', 'Defensoria Pública', 'Analista Judiciário', 'Ministério Público'],
     stats: {
       foco: 98,
@@ -86,7 +86,7 @@ export const GUARDIAN_ANIMALS: GuardianAnimal[] = [
     superpower: 'Desmonte Veloz de Proposições',
     cognitiveStyle: 'Identificação imediata da lógica sentencial, eliminação de alternativas por contradição e gestão impecável do tempo de prova.',
     motto: '"Enquanto outros decoram fórmulas, eu enxergo os padrões invisíveis."',
-    colorGradient: 'from-rose-500 via-pink-600 to-purple-800',
+    colorGradient: 'from-rose-500 via-pink-600 to-slate-900',
     glowColor: 'rgba(236, 72, 153, 0.35)',
     bestForCareers: ['Técnico Judiciário', 'Carreiras Bancárias (BB, Caixa)', 'Analista de Gestão', 'Concursos Gerais'],
     stats: {

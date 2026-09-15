@@ -187,7 +187,84 @@ export async function POST(req: Request) {
       pdfFileName = 'Edital_Processado_Backend.pdf'
     } = body;
 
-    const subjects = generateBackendSyllabus(examTitle, role, banca, editalText);
+    let subjects: ExamSubject[] = [];
+    const apiKey = process.env.GEMINI_API_KEY;
+    const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
+
+    if (apiKey && editalText.trim().length > 100) {
+      try {
+        const prompt = `
+Você é o Analisador de Editais do Learning AI.
+Extraia e estruture o conteúdo programático (edital verticalizado) a partir do texto do edital:
+Título: "${examTitle}" | Cargo: "${role}" | Banca: "${banca}"
+
+TRECHO DO EDITAL:
+"""
+${editalText.slice(0, 10000)}
+"""
+
+Retorne ESTRITAMENTE um array JSON de disciplinas no seguinte formato:
+[
+  {
+    "id": "sub-1",
+    "name": "Nome da Disciplina",
+    "weight": 3, // Peso estimado de 1 a 3
+    "relevancePercentage": 35, // Porcentagem no cômputo da prova (soma total deve ser 100%)
+    "totalTopics": 3,
+    "topics": [
+      {
+        "id": "t-1",
+        "name": "Nome do Tópico",
+        "frequencyInBanca": "Alta" | "Média" | "Baixa",
+        "accuracyRate": 65,
+        "status": "Instável" | "Dominado" | "Ponto Cego",
+        "articlesOrLaws": ["Artigos ou diplomas legais"]
+      }
+    ]
+  }
+]
+`;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            signal: controller.signal,
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: {
+                temperature: 0.1,
+                maxOutputTokens: 2000,
+                responseMimeType: 'application/json',
+              },
+            }),
+          }
+        );
+
+        clearTimeout(timeoutId);
+
+        if (response.ok) {
+          const data = await response.json();
+          const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (rawText) {
+            const parsed = JSON.parse(rawText);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              subjects = parsed;
+            }
+          }
+        }
+      } catch (geminiErr) {
+        console.warn('Fallback para gerador heurístico de edital:', geminiErr);
+      }
+    }
+
+    // Se a IA não gerou ou não havia texto longo, usa o gerador heurístico especializado
+    if (!subjects || subjects.length === 0) {
+      subjects = generateBackendSyllabus(examTitle, role, banca, editalText);
+    }
 
     const parsedNotice: ExamNotice = {
       id: `notice-${Date.now()}`,
@@ -208,6 +285,7 @@ export async function POST(req: Request) {
       success: true, 
       data: parsedNotice,
       processedOnServer: true,
+      source: subjects.length > 0 && apiKey && editalText.length > 100 ? 'gemini_3.6_flash' : 'heuristica_banca',
       message: 'Edital verticalizado com sucesso no backend!'
     });
   } catch (error: any) {

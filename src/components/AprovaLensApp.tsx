@@ -17,6 +17,7 @@ import { BancaPsychometrics } from '@/components/BancaPsychometrics';
 import { StudentProfileModal } from '@/components/StudentProfileModal';
 import { AdminQuestionIngestModal } from '@/components/AdminQuestionIngestModal';
 import { NarrativeOnboardingTerminal } from '@/components/NarrativeOnboardingTerminal';
+import { AvatarOnboardingModal } from '@/components/AvatarOnboardingModal';
 import { 
   ExamNotice, 
   QuestionAttempt, 
@@ -388,24 +389,24 @@ export function AprovaLensApp() {
   const pendingMistakesCount = mistakes.filter((m) => !m.isOvercome).length;
 
   return (
-    <div className={`min-h-screen flex flex-col items-center w-full selection:bg-indigo-500/30 selection:text-indigo-200 transition-colors duration-300 relative overflow-x-hidden ${
-      theme === 'light' ? 'app-bg-light text-slate-900 light' : 'app-bg-dark text-slate-800 dark:text-slate-100 dark'
+    <div className={`min-h-screen flex flex-col items-center w-full selection:bg-blue-500/25 selection:text-blue-900 dark:selection:bg-blue-500/30 dark:selection:text-blue-100 transition-colors duration-300 relative overflow-x-hidden ${
+      theme === 'light' ? 'app-bg-light text-slate-900 light' : 'app-bg-dark text-slate-100 dark'
     }`}>
       
       {/* Ambient Background Glow Mesh Layer (Visível em ambos os modos) */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden w-full h-full">
         {theme === 'dark' ? (
           <>
-            <div className="absolute -top-32 -left-32 w-[650px] h-[650px] rounded-full bg-indigo-600/25 blur-[140px] animate-pulse-slow" />
-            <div className="absolute top-10 -right-32 w-[600px] h-[600px] rounded-full bg-cyan-500/20 blur-[150px]" />
-            <div className="absolute bottom-10 left-1/3 w-[700px] h-[500px] rounded-full bg-purple-600/18 blur-[160px]" />
+            <div className="absolute -top-32 -left-32 w-[650px] h-[650px] rounded-full bg-blue-600/18 blur-[140px] animate-pulse-slow" />
+            <div className="absolute top-10 -right-32 w-[600px] h-[600px] rounded-full bg-cyan-500/12 blur-[150px]" />
+            <div className="absolute bottom-10 left-1/3 w-[700px] h-[500px] rounded-full bg-emerald-600/10 blur-[160px]" />
             <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:24px_24px]" />
           </>
         ) : (
           <>
-            <div className="absolute -top-32 -left-32 w-[650px] h-[650px] rounded-full bg-indigo-400/25 blur-[130px]" />
-            <div className="absolute top-10 -right-32 w-[600px] h-[600px] rounded-full bg-cyan-400/20 blur-[140px]" />
-            <div className="absolute bottom-10 left-1/3 w-[700px] h-[500px] rounded-full bg-purple-300/20 blur-[150px]" />
+            <div className="absolute -top-32 -left-32 w-[650px] h-[650px] rounded-full bg-blue-500/10 blur-[130px]" />
+            <div className="absolute top-10 -right-32 w-[600px] h-[600px] rounded-full bg-cyan-500/08 blur-[140px]" />
+            <div className="absolute bottom-10 left-1/3 w-[700px] h-[500px] rounded-full bg-emerald-500/08 blur-[150px]" />
             <div className="absolute inset-0 bg-[radial-gradient(rgba(15,23,42,0.04)_1px,transparent_1px)] [background-size:24px_24px]" />
           </>
         )}
@@ -416,7 +417,7 @@ export function AprovaLensApp() {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-indigo-600 text-white text-xs font-bold shadow-2xl shadow-indigo-600/40 border border-indigo-400/40 animate-fadeIn flex items-center gap-2">
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-blue-600 text-white text-xs font-bold shadow-2xl shadow-blue-600/30 border border-blue-400/40 animate-fadeIn flex items-center gap-2">
           <span>⚡</span>
           <span>{toastMessage}</span>
         </div>
@@ -556,6 +557,7 @@ export function AprovaLensApp() {
         metrics={metrics}
         selectedExam={selectedExam}
         pendingMistakesCount={pendingMistakesCount}
+        profile={studentProfile}
         onNavigateTab={(tab) => setActiveTab(tab)}
       />
 
@@ -586,11 +588,23 @@ export function AprovaLensApp() {
         }}
       />
 
-      {/* Narrative Onboarding Terminal (Hacker Tech Style) */}
-      <NarrativeOnboardingTerminal
+      {/* Premium Avatar Onboarding Modal */}
+      <AvatarOnboardingModal
         isOpen={isOnboardingTerminalOpen}
-        onClose={() => setIsOnboardingTerminalOpen(false)}
-        onComplete={handleOnboardingComplete}
+        onComplete={(guardianId, warName) => {
+          setIsOnboardingTerminalOpen(false);
+          const newProfile = {
+            ...studentProfile,
+            guardianAnimalId: guardianId as any,
+            warName,
+            updatedAt: new Date().toISOString()
+          };
+          setStudentProfile(newProfile);
+          try {
+            localStorage.setItem('aprovalens_student_profile', JSON.stringify(newProfile));
+          } catch {}
+          showToast(`Bem-vindo, ${warName}! Guardião ativado com sucesso.`);
+        }}
       />
 
       </div>

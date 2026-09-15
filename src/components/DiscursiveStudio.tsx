@@ -106,7 +106,7 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
     'Consolidando espelho de correção analítica, notas por critério e reescrita modelo...'
   ];
 
-  const handleGradeEssay = () => {
+  const handleGradeEssay = async () => {
     if (userPlan === 'aspirante') {
       onOpenPricing?.();
       return;
@@ -121,28 +121,46 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
 
     // Multi-stage animation
     const stageInterval = setInterval(() => {
-      setProgressStage((prev) => {
-        if (prev < 3) {
-          return prev + 1;
-        } else {
-          clearInterval(stageInterval);
-          return 3;
-        }
-      });
+      setProgressStage((prev) => (prev < 3 ? prev + 1 : 3));
     }, 900);
 
-    setTimeout(() => {
-      clearInterval(stageInterval);
-      setIsProcessing(false);
+    let evalResult: DiscursiveEvaluation | null = null;
 
-      // Construct intelligent evaluation
+    try {
+      const response = await fetch('/api/discursive', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          essayText,
+          promptTitle: currentPrompt.title,
+          banca: currentPrompt.banca,
+          motivatingText: currentPrompt.motivatingText,
+          mandatoryTopics: currentPrompt.mandatoryTopics,
+          minLines: currentPrompt.minLines,
+          maxLines: currentPrompt.maxLines,
+          totalLinesUsed: totalLines,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          evalResult = result.data;
+        }
+      }
+    } catch (err) {
+      console.warn('Fallback para corretor determinístico local:', err);
+    }
+
+    // Se a IA não responder ou der erro, usa o fallback determinístico
+    if (!evalResult) {
       const hasLengthWarning = totalLines < currentPrompt.minLines || totalLines > currentPrompt.maxLines;
       const basePoints = hasLengthWarning ? 78 : 91;
       const gramErrorsCount = 2;
-      const finalScore = Math.max(50, Math.min(100, basePoints - (gramErrorsCount * 1.5)));
+      const finalScore = Math.max(50, Math.min(100, basePoints - gramErrorsCount * 1.5));
       const passed = finalScore >= 60;
 
-      const evalResult: DiscursiveEvaluation = {
+      evalResult = {
         finalScore: Math.round(finalScore * 10) / 10,
         passed,
         cutOffScore: 60.0,
@@ -153,7 +171,7 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
             score: 31.5,
             maxScore: 35.0,
             status: 'excelente',
-            feedback: 'Abordou com precisão técnica a legislação aplicável e citou os precedentes necessários.'
+            feedback: 'Abordou com precisão técnica a legislação aplicável e citou os precedentes necessários.',
           },
           {
             name: 'Estrutura Argumentativa & Coesão',
@@ -161,7 +179,7 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
             score: 28.0,
             maxScore: 30.0,
             status: 'excelente',
-            feedback: 'Divisão clara de parágrafos correspondendo a cada um dos tópicos propostos pelo comando da questão.'
+            feedback: 'Divisão clara de parágrafos correspondendo a cada um dos tópicos propostos pelo comando da questão.',
           },
           {
             name: 'Linguagem Técnica & Vocabulário Jurídico',
@@ -169,7 +187,7 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
             score: 18.5,
             maxScore: 20.0,
             status: 'adequado',
-            feedback: 'Excelente formalidade. Recomenda-se apenas evitar a expressão coloquial "no tocante a" reiteradamente.'
+            feedback: 'Excelente formalidade. Recomenda-se apenas evitar a expressão coloquial "no tocante a" reiteradamente.',
           },
           {
             name: 'Correção Gramatical & Ortográfica',
@@ -177,8 +195,8 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
             score: 13.0,
             maxScore: 15.0,
             status: 'adequado',
-            feedback: 'Registrados 2 desvios de pontuação e regência, com dedução aplicada na média de linhas ocupadas.'
-          }
+            feedback: 'Registrados 2 desvios de pontuação e regência, com dedução aplicada na média de linhas ocupadas.',
+          },
         ],
         grammaticalDiscounts: 2.0,
         totalLinesUsed: totalLines,
@@ -188,26 +206,26 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
             originalText: '...e a demonstração cabal que a prova não pode ser obtida...',
             suggestedCorrection: '...e a demonstração cabal de que a prova não pode ser obtida...',
             errorType: 'regência/crase',
-            explanation: 'O substantivo "demonstração", quando seguido de oração completiva nominal, exige a preposição "de".'
+            explanation: 'O substantivo "demonstração", quando seguido de oração completiva nominal, exige a preposição "de".',
           },
           {
             lineNumber: Math.min(totalLines, 12),
             originalText: '...com a autoridade policial prescindindo de autorização...',
             suggestedCorrection: '...com a autoridade policial, prescindindo de autorização...',
             errorType: 'gramatical',
-            explanation: 'Oração subordinada reduzida de gerúndio com valor explicativo intercalada deve ser isolada por vírgula.'
-          }
+            explanation: 'Oração subordinada reduzida de gerúndio com valor explicativo intercalada deve ser isolada por vírgula.',
+          },
         ],
         overallFeedback: 'Texto com excelente rigor técnico e forte aderência ao padrão da banca examinadora. A menção expressa aos diplomas legislativos e à tese fixada pelo STF garantiu a pontuação de corte nos tópicos substantivos.',
         strengths: [
           'Citação precisa das leis de regência e de seus artigos fundamentais.',
           'Correspondência perfeita entre a quantidade de quesitos do edital e os parágrafos de desenvolvimento.',
-          'Vocabulário jurídico maduro e conciso, transmitindo segurança para a banca examinadora.'
+          'Vocabulário jurídico maduro e conciso, transmitindo segurança para a banca examinadora.',
         ],
         improvements: [
           'Atenção à regência nominal em substantivos abstratos ("demonstração de que").',
           'Isolar orações explicativas reduzidas de gerúndio por vírgulas para evitar ambiguidade sintática.',
-          'Distribuir melhor o espaço para aproveitar as 30 linhas sem deixar espaços em branco no final.'
+          'Distribuir melhor o espaço para aproveitar as 30 linhas sem deixar espaços em branco no final.',
         ],
         improvedVersion: `A persecução penal contemporânea no âmbito dos crimes de lavagem de capitais exige a estrita observância das balizas constitucionais e legais que regem a obtenção de elementos probatórios.
 
@@ -216,37 +234,38 @@ Nesse diapasão, a interceptação telefônica, disciplinada pela Lei nº 9.296/
 No tocante à inteligência financeira, o Supremo Tribunal Federal, ao fixar tese no Tema 990 de Repercussão Geral, assentou a legitimidade constitucional do compartilhamento direto de Relatórios de Inteligência Financeira (RIF) emitidos pelo COAF com os órgãos de persecução penal, prescindindo de prévia autorização judicial, desde que resguardado o sigilo mediante procedimento formal e rastreável.
 
 Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo penal autônomo, não demandando a condenação definitiva pelo crime antecedente. Desse modo, autoriza-se a constrição patrimonial assecuratória imediata de bens, direitos e valores para garantir a efetividade da jurisdição e o desmantelamento econômico da organização criminosa.`,
-        evaluatedAt: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+        evaluatedAt: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
       };
+    }
 
-      setEvaluation(evalResult);
+    clearInterval(stageInterval);
+    setIsProcessing(false);
+    setEvaluation(evalResult);
 
-      if (onRecordSubmission) {
-        onRecordSubmission({
-          id: `sub-${Date.now()}`,
-          promptId: currentPrompt.id,
-          text: essayText,
-          submittedAt: new Date().toISOString(),
-          timeSpentSeconds: timerSeconds,
-          evaluation: evalResult
+    if (onRecordSubmission && evalResult) {
+      onRecordSubmission({
+        id: `sub-${Date.now()}`,
+        promptId: currentPrompt.id,
+        text: essayText,
+        submittedAt: new Date().toISOString(),
+        timeSpentSeconds: timerSeconds,
+        evaluation: evalResult,
+      });
+    }
+
+    if (evalResult?.passed) {
+      try {
+        confetti({
+          particleCount: 70,
+          spread: 70,
+          origin: { y: 0.6 },
         });
-      }
+      } catch {}
+    }
 
-      if (passed) {
-        try {
-          confetti({
-            particleCount: 70,
-            spread: 70,
-            origin: { y: 0.6 }
-          });
-        } catch {}
-      }
-
-      // Scroll smoothly to results
-      setTimeout(() => {
-        evaluationRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 200);
-    }, 4000);
+    setTimeout(() => {
+      evaluationRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 200);
   };
 
   return (
@@ -254,9 +273,9 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
       
       {/* Banner de Gating Freemium se plano for Aspirante */}
       {userPlan === 'aspirante' && (
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-500/15 via-indigo-500/10 to-transparent border border-purple-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs animate-fadeIn">
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-500/10 via-slate-500/10 to-transparent border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs animate-fadeIn">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-600 dark:text-purple-300 flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
               <Crown className="w-5 h-5" />
             </div>
             <div>
@@ -270,7 +289,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
           </div>
           <button
             onClick={onOpenPricing}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs shadow-md shadow-purple-600/30 transition-all shrink-0 flex items-center gap-1.5"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-extrabold text-xs shadow-md shadow-blue-600/25 transition-all shrink-0 flex items-center gap-1.5"
           >
             <Lock className="w-3.5 h-3.5" />
             <span>Desbloquear Discursivas</span>
@@ -432,12 +451,12 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
           </div>
 
           {/* Exam Tips Card */}
-          <div className="glass-panel p-5 rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-900/20 to-purple-900/10">
-            <h4 className="text-xs font-bold text-indigo-300 flex items-center gap-1.5 mb-2">
-              <Award className="w-4 h-4 text-amber-400" />
+          <div className="glass-panel p-5 rounded-3xl border border-blue-200 dark:border-blue-500/20 bg-gradient-to-br from-blue-50 to-slate-50 dark:from-blue-900/15 dark:to-slate-900/10 shadow-sm">
+            <h4 className="text-xs font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-1.5 mb-2">
+              <Award className="w-4 h-4 text-amber-500 dark:text-amber-400" />
               <span>Dica da Banca {currentPrompt.banca}:</span>
             </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
               No padrão {currentPrompt.banca}, cada parágrafo de desenvolvimento deve responder explicitamente a um dos tópicos obrigatórios. Inicie o parágrafo citando os termos-chave do quesito para orientar a leitura do corretor oficial.
             </p>
           </div>
@@ -475,7 +494,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
               
               {/* Timer */}
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-dark-surface border border-slate-300 dark:border-white/10 text-xs font-mono font-bold text-slate-700 dark:text-slate-200">
-                <Clock className="w-3.5 h-3.5 text-amber-400" />
+                <Clock className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
                 <span>{formatTime(timerSeconds)}</span>
                 <button
                   type="button"
@@ -483,12 +502,12 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                   className="p-1 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white"
                   title={isTimerRunning ? 'Pausar cronômetro' : 'Iniciar cronômetro'}
                 >
-                  {isTimerRunning ? <Pause className="w-3 h-3 text-amber-400" /> : <Play className="w-3 h-3 text-emerald-400" />}
+                  {isTimerRunning ? <Pause className="w-3 h-3 text-amber-500 dark:text-amber-400" /> : <Play className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />}
                 </button>
               </div>
 
               {/* Upload Photo Button */}
-              <label className="cursor-pointer px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-400 transition-colors flex items-center gap-1" title="Tirou foto do caderno de resposta? Envie para a IA extrair o texto manuscrito.">
+              <label className="cursor-pointer px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-600 dark:text-blue-400 transition-colors flex items-center gap-1" title="Tirou foto do caderno de resposta? Envie para a IA extrair o texto manuscrito.">
                 <Upload className="w-3 h-3" />
                 <span className="hidden sm:inline">Enviar Foto (OCR)</span>
                 <input
@@ -540,14 +559,14 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
             </div>
 
             {/* Lined Sheet Container */}
-            <div className="flex rounded-2xl bg-dark-bg/80 border border-slate-200 dark:border-slate-700/60 overflow-hidden min-h-[460px]">
+            <div className="flex rounded-2xl bg-white dark:bg-dark-bg/80 border border-slate-200 dark:border-slate-700/60 overflow-hidden min-h-[460px] shadow-inner">
               
               {/* Left Line Numbers Gutter */}
               <div className="w-10 sm:w-12 bg-white dark:bg-dark-surface/90 border-r border-slate-200 dark:border-slate-700/60 py-4 select-none font-mono text-[11px] text-slate-500 text-center leading-[26px]">
                 {Array.from({ length: 30 }, (_, i) => (
                   <div
                     key={i + 1}
-                    className={`${i + 1 <= totalLines ? 'text-indigo-400 font-bold' : ''}`}
+                    className={`${i + 1 <= totalLines ? 'text-indigo-600 dark:text-indigo-400 font-bold' : ''}`}
                   >
                     {String(i + 1).padStart(2, '0')}
                   </div>
@@ -573,7 +592,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
 
             {/* Line length warning */}
             {totalLines > 0 && totalLines < currentPrompt.minLines && (
-              <p className="text-[11px] text-amber-400 mt-2 flex items-center gap-1">
+              <p className="text-[11px] text-amber-600 dark:text-amber-400 mt-2 flex items-center gap-1 font-bold">
                 <AlertTriangle className="w-3.5 h-3.5" />
                 <span>Atenção: Seu texto possui {totalLines} linhas. O mínimo exigido pela banca é de {currentPrompt.minLines} linhas para evitar anulação ou descontos.</span>
               </p>
@@ -592,10 +611,10 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                   isProcessing
                     ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-200 dark:border-slate-700'
                     : userPlan === 'aspirante'
-                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-xl shadow-purple-600/30 glow-brand cursor-pointer'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white shadow-xl shadow-blue-600/30 glow-brand cursor-pointer'
                     : essayText.trim().length < 50
                     ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-200 dark:border-slate-700'
-                    : 'bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white shadow-xl shadow-indigo-600/30 glow-brand'
+                    : 'bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-xl shadow-blue-600/30 glow-brand'
                 }`}
               >
                 {userPlan === 'aspirante' ? (
@@ -633,7 +652,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
 
           <div className="w-full max-w-md mx-auto mt-6 bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 h-full transition-all duration-500"
+              className="bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 h-full transition-all duration-500"
               style={{ width: `${((progressStage + 1) / 4) * 100}%` }}
             />
           </div>
@@ -759,20 +778,20 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
               </h3>
               <div className="space-y-3">
                 {evaluation.lineErrors.map((err, idx) => (
-                  <div key={idx} className="p-4 rounded-2xl bg-dark-bg/80 border border-rose-500/20 text-xs text-slate-700 dark:text-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div key={idx} className="p-4 rounded-2xl bg-white dark:bg-dark-bg/80 border border-rose-200 dark:border-rose-500/20 text-xs text-slate-700 dark:text-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono font-bold">
+                        <span className="px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300 font-mono font-bold border border-rose-200 dark:border-transparent">
                           Linha {err.lineNumber}
                         </span>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 uppercase">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 uppercase font-bold">
                           {err.errorType}
                         </span>
                       </div>
-                      <p className="line-through text-rose-300/80 italic mt-1 font-mono">
+                      <p className="line-through text-rose-600/80 dark:text-rose-300/80 italic mt-1 font-mono">
                         "{err.originalText}"
                       </p>
-                      <p className="text-emerald-300 font-semibold font-mono mt-0.5">
+                      <p className="text-emerald-600 dark:text-emerald-300 font-semibold font-mono mt-0.5">
                         Sugestão: "{err.suggestedCorrection}"
                       </p>
                     </div>
@@ -803,7 +822,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                 <button
                   onClick={() => setActiveTabComparison('meu_texto')}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
-                    activeTabComparison === 'meu_texto' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-white'
+                    activeTabComparison === 'meu_texto' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Sua Redação
@@ -811,7 +830,7 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
                 <button
                   onClick={() => setActiveTabComparison('espelho')}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
-                    activeTabComparison === 'espelho' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-white'
+                    activeTabComparison === 'espelho' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Espelho da Banca

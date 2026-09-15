@@ -22,8 +22,9 @@ import {
   Volume2,
   VolumeX
 } from 'lucide-react';
-import { UserMetrics, ExamNotice, MicroSummary, CopilotMessage } from '@/lib/types';
+import { UserMetrics, ExamNotice, MicroSummary, CopilotMessage, StudentProfile } from '@/lib/types';
 import { INITIAL_MICRO_SUMMARIES } from '@/lib/mockData';
+import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
 
 interface AICopilotDrawerProps {
   isOpen: boolean;
@@ -31,6 +32,7 @@ interface AICopilotDrawerProps {
   metrics: UserMetrics;
   selectedExam?: ExamNotice;
   pendingMistakesCount: number;
+  profile?: StudentProfile;
   onNavigateTab: (tab: string) => void;
 }
 
@@ -40,16 +42,22 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
   metrics,
   selectedExam,
   pendingMistakesCount,
+  profile,
   onNavigateTab
 }) => {
   const [activeSubTab, setActiveSubTab] = useState<'mission' | 'chat' | 'summaries'>('mission');
+
+  const guardian = GUARDIAN_ANIMALS.find((a) => a.id === profile?.guardianAnimalId) || GUARDIAN_ANIMALS[0];
+  const copilotName = guardian.name;
+  const copilotTitle = guardian.title;
+  const copilotEmoji = guardian.emoji;
   
   // Chat state
   const [messages, setMessages] = useState<CopilotMessage[]>([
     {
       id: 'msg-welcome',
       sender: 'assistant',
-      text: `Olá, futuro servidor! Sou o **Nexus AI**, seu Copiloto Cognitivo. Analisei seu padrão de desempenho e estou monitorando as tendências da banca **${selectedExam?.banca || 'Cebraspe'}**.\n\nComo posso acelerar sua aprovação hoje? Você pode me pedir análises de pegadinhas, mnemônicos ou estratégias para o edital **${selectedExam?.title || 'INSS'}**.`,
+      text: `Olá, ${profile?.name || 'futuro servidor'}! Sou a mentora **${copilotName}** (${copilotTitle}), seu Copiloto Cognitivo. Analisei seu padrão de desempenho e estou monitorando as tendências da banca **${selectedExam?.banca || 'Cebraspe'}**.\n\nComo posso acelerar sua aprovação hoje? Você pode me pedir análises de pegadinhas, mnemônicos ou estratégias para o edital **${selectedExam?.title || 'INSS'}**.`,
       timestamp: 'Agora'
     }
   ]);
@@ -185,20 +193,20 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
         {/* Drawer Header */}
         <div className="p-5 border-b border-slate-300 dark:border-white/10 flex items-center justify-between bg-gradient-to-r from-indigo-950/40 via-dark-surface to-dark-bg">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-600 to-cyan-400 p-[1.5px] glow-brand">
-              <div className="w-full h-full bg-white dark:bg-dark-surface rounded-[10px] flex items-center justify-center">
-                <BrainCircuit className="w-5 h-5 text-indigo-400" />
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-600 via-blue-500 to-cyan-400 p-[1.5px] glow-brand shrink-0">
+              <div className="w-full h-full bg-white dark:bg-dark-surface rounded-[14px] flex items-center justify-center text-2xl">
+                {copilotEmoji}
               </div>
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <h2 className="text-base font-black text-slate-900 dark:text-white">Nexus AI</h2>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                <h2 className="text-base font-black text-slate-900 dark:text-white">{copilotName}</h2>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30">
                   COPILOTO 2.0
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Waze dos Estudos & Análise Preditiva
+              <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">
+                {copilotTitle} • Waze dos Estudos
               </p>
             </div>
           </div>
@@ -258,7 +266,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
             <div className="space-y-5 animate-fadeIn">
               
               {/* Mission Hero Card */}
-              <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-900/30 via-dark-surface to-purple-900/20 border border-indigo-500/30 space-y-3">
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-blue-950/30 via-dark-surface to-slate-900/40 border border-blue-500/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">
                     <Flame className="w-4 h-4 text-amber-400 fill-amber-400" />
@@ -297,7 +305,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                     onClose();
                     onNavigateTab('simulator');
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs tracking-wide shadow-lg shadow-indigo-600/30 transition-all"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold text-xs tracking-wide shadow-lg shadow-blue-600/30 transition-all"
                 >
                   <Target className="w-4 h-4" />
                   <span>INICIAR MISSÃO NO SIMULADOR</span>
@@ -441,7 +449,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                 {isTyping && (
                   <div className="flex items-center gap-2 text-xs text-indigo-400 p-2">
                     <Sparkles className="w-3.5 h-3.5 animate-spin" />
-                    <span>Nexus AI analisando jurisprudência e banca...</span>
+                    <span>{copilotName} analisando jurisprudência e banca...</span>
                   </div>
                 )}
               </div>

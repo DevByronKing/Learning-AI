@@ -252,7 +252,7 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
                   placeholder="(11) 99999-9999"
                   value={phone}
                   onChange={handlePhoneChange}
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#090D16] border border-slate-300 dark:border-white/10 text-xs text-slate-900 dark:text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors font-mono"
+                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#090D16] border border-slate-300 dark:border-white/10 text-xs text-slate-900 dark:text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500 transition-colors font-mono"
                 />
               </div>
             </div>
@@ -260,7 +260,7 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 mt-2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 hover:from-indigo-400 hover:to-cyan-400 text-white font-black text-xs tracking-wider uppercase shadow-xl shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="w-full py-3.5 mt-2 rounded-xl bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-black text-xs tracking-wider uppercase shadow-xl shadow-blue-600/25 flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               {isSubmitting ? (
                 <>

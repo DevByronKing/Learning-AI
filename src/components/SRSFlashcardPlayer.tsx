@@ -340,7 +340,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
                 type="button"
                 onClick={() => handleStartSession(dueCards.length > 0 ? dueCards : filteredCards)}
                 disabled={filteredCards.length === 0}
-                className="px-6 py-2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 disabled:opacity-40 text-white font-extrabold text-xs tracking-wider transition-all shadow-lg shadow-indigo-600/30 flex items-center gap-2"
+                className="px-6 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:opacity-40 text-white font-extrabold text-xs tracking-wider transition-all shadow-lg shadow-blue-600/25 flex items-center gap-2"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>
@@ -426,7 +426,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
           {/* Progress bar */}
           <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-indigo-500 to-purple-500 h-full transition-all duration-300"
+              className="bg-gradient-to-r from-blue-600 to-emerald-500 h-full transition-all duration-300"
               style={{ width: `${((currentQueueIndex + 1) / sessionQueue.length) * 100}%` }}
             />
           </div>

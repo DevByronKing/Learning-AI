@@ -335,7 +335,7 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
 
         {/* Resumo de Desempenho Rápido */}
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-2xl bg-white dark:bg-dark-card border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-3">
+          <div className="p-3 rounded-2xl glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-sm flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center font-bold">
               <CheckCircle2 className="w-5 h-5" />
             </div>
@@ -345,7 +345,7 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
             </div>
           </div>
 
-          <div className="p-3 rounded-2xl bg-white dark:bg-dark-card border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-3">
+          <div className="p-3 rounded-2xl glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-sm flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-500 flex items-center justify-center font-bold">
               <Layers className="w-5 h-5" />
             </div>
@@ -358,7 +358,7 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
       </div>
 
       {/* Barra de Busca e Filtros Multicritério */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-dark-card border border-slate-200 dark:border-white/10 shadow-sm space-y-4">
+      <div className="p-4 sm:p-5 rounded-2xl glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-sm space-y-4">
         
         {/* Campo de Busca Livre */}
         <div className="relative">
@@ -496,7 +496,7 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
       {/* Lista de Questões */}
       <div className="space-y-5">
         {paginatedQuestions.length === 0 ? (
-          <div className="p-12 text-center rounded-2xl bg-white dark:bg-dark-card border border-slate-200 dark:border-white/10 space-y-3">
+          <div className="p-12 text-center rounded-2xl glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 space-y-3">
             <AlertCircle className="w-10 h-10 text-amber-500 mx-auto" />
             <h3 className="text-base font-bold text-slate-900 dark:text-white">Nenhuma questão encontrada</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
@@ -520,7 +520,7 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
             return (
               <div 
                 key={q.id}
-                className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-dark-card border border-slate-200 dark:border-white/10 shadow-sm space-y-4 transition-all"
+                className="p-5 sm:p-6 rounded-2xl glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-sm space-y-4 transition-all"
               >
                 {/* Metadados Superiores com Termômetro de Pegadinha */}
                 <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-white/5 text-xs">
@@ -564,7 +564,7 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
                     </span>
 
                     {/* Psicometria TRI Compacta */}
-                    <span className="px-2 py-0.5 rounded bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 text-purple-700 dark:text-purple-300 font-mono text-[10px] hidden md:inline-flex items-center gap-1">
+                    <span className="px-2 py-0.5 rounded bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-200 dark:border-cyan-500/20 text-cyan-700 dark:text-cyan-300 font-mono text-[10px] hidden md:inline-flex items-center gap-1">
                       <Gauge className="w-3 h-3" />
                       TRI b={psy.triDifficulty} | a={psy.triDiscrimination}
                     </span>
@@ -666,7 +666,7 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
                         <div className="flex-1">
                           <p>{opt.text}</p>
                           {isConfirmed && opt.distractorReason && !isCorrect && (
-                            <div className="mt-2 p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-300 text-[11px] space-y-1 animate-fadeIn">
+                            <div className="mt-2 p-2.5 rounded-xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-700 dark:text-rose-300 text-[11px] space-y-1 animate-fadeIn">
                               <div className="flex items-center gap-1.5 font-bold">
                                 <ShieldAlert className="w-3.5 h-3.5 text-rose-500 shrink-0" />
                                 <span>Distrator Psicométrico da Banca: <strong>{psy.distractorDef.shortName}</strong></span>
@@ -699,8 +699,8 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
                       <div className="flex flex-wrap items-center gap-2">
                         <span className={`px-3 py-1 rounded-xl text-xs font-bold flex items-center gap-1.5 ${
                           answerState.isCorrect 
-                            ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' 
-                            : 'bg-rose-500/10 text-rose-500 border border-rose-500/20'
+                            ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 border border-emerald-200 dark:border-emerald-500/20' 
+                            : 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-500 border border-rose-200 dark:border-rose-500/20'
                         }`}>
                           {answerState.isCorrect ? (
                             <>
@@ -726,8 +726,8 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
                           onClick={() => setShowTriDetails(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
                           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${
                             isTriOpen
-                              ? 'bg-purple-600 text-white border-purple-500 shadow-md shadow-purple-600/20'
-                              : 'bg-purple-50 hover:bg-purple-100 dark:bg-purple-500/10 dark:hover:bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-500/30'
+                              ? 'bg-cyan-600 text-white border-cyan-500 shadow-md shadow-cyan-600/20'
+                              : 'bg-cyan-50 hover:bg-cyan-100 dark:bg-cyan-500/10 dark:hover:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-500/30'
                           }`}
                         >
                           <Activity className="w-3.5 h-3.5" />
@@ -752,79 +752,79 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
 
                 {/* Painel Psicométrico TRI Expandido */}
                 {isConfirmed && isTriOpen && (
-                  <div className="p-4 sm:p-5 rounded-2xl bg-purple-950/20 border border-purple-500/30 space-y-4 animate-fadeIn">
+                  <div className="p-4 sm:p-5 rounded-2xl bg-cyan-50 dark:bg-cyan-950/20 border border-cyan-200 dark:border-cyan-500/30 space-y-4 animate-fadeIn">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-purple-400">
+                      <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400">
                         <Activity className="w-4 h-4" />
                         <h4 className="text-xs font-black uppercase tracking-wider">
                           Parâmetros Psicométricos TRI (Item Response Theory)
                         </h4>
                       </div>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-100 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 font-mono">
                         Modelo 3PL (Lord & Birnbaum)
                       </span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       {/* Parâmetro b: Dificuldade */}
-                      <div className="p-3 rounded-xl bg-white/5 border border-purple-500/20 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-400">
+                      <div className="p-3 rounded-xl bg-white dark:bg-white/5 border border-cyan-200 dark:border-cyan-500/20 space-y-1">
+                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-600 dark:text-slate-400">
                           <span>Parâmetro b (Dificuldade)</span>
-                          <span className="text-purple-400 font-mono font-black">{psy.triDifficulty} / 1000</span>
+                          <span className="text-cyan-600 dark:text-cyan-400 font-mono font-black">{psy.triDifficulty} / 1000</span>
                         </div>
-                        <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                        <div className="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
                           <div 
-                            className="h-full bg-purple-500 rounded-full transition-all duration-500" 
+                            className="h-full bg-cyan-500 rounded-full transition-all duration-500" 
                             style={{ width: `${(psy.triDifficulty / 1000) * 100}%` }}
                           />
                         </div>
-                        <p className="text-[10px] text-slate-400">
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400">
                           {psy.triDifficulty >= 800 ? 'Item de topo de corte: define os primeiros colocados.' : psy.triDifficulty >= 600 ? 'Item calibrado para média dos aprovados.' : 'Item base: errar derruba a nota pela TRI.'}
                         </p>
                       </div>
 
                       {/* Parâmetro a: Discriminação */}
-                      <div className="p-3 rounded-xl bg-white/5 border border-purple-500/20 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-400">
+                      <div className="p-3 rounded-xl bg-white dark:bg-white/5 border border-cyan-200 dark:border-cyan-500/20 space-y-1">
+                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-600 dark:text-slate-400">
                           <span>Parâmetro a (Discriminação)</span>
-                          <span className="text-cyan-400 font-mono font-black">{psy.triDiscrimination.toFixed(2)}</span>
+                          <span className="text-cyan-600 dark:text-cyan-400 font-mono font-black">{psy.triDiscrimination.toFixed(2)}</span>
                         </div>
-                        <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                        <div className="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
                           <div 
                             className="h-full bg-cyan-500 rounded-full transition-all duration-500" 
                             style={{ width: `${Math.min(100, (psy.triDiscrimination / 2.5) * 100)}%` }}
                           />
                         </div>
-                        <p className="text-[10px] text-slate-400">
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400">
                           {psy.triDiscrimination >= 2.0 ? 'Discriminação Muito Alta: separa candidatos preparados dos desatentos.' : 'Discriminação Moderada: item homogêneo.'}
                         </p>
                       </div>
 
                       {/* Parâmetro c: Acerto Casual */}
-                      <div className="p-3 rounded-xl bg-white/5 border border-purple-500/20 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-400">
+                      <div className="p-3 rounded-xl bg-white dark:bg-white/5 border border-cyan-200 dark:border-cyan-500/20 space-y-1">
+                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-600 dark:text-slate-400">
                           <span>Parâmetro c (Chute Casual)</span>
-                          <span className="text-amber-400 font-mono font-black">{(psy.triGuessing * 100).toFixed(0)}%</span>
+                          <span className="text-amber-600 dark:text-amber-400 font-mono font-black">{(psy.triGuessing * 100).toFixed(0)}%</span>
                         </div>
-                        <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                        <div className="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
                           <div 
                             className="h-full bg-amber-500 rounded-full transition-all duration-500" 
                             style={{ width: `${(psy.triGuessing / 0.3) * 100}%` }}
                           />
                         </div>
-                        <p className="text-[10px] text-slate-400">
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400">
                           {q.banca === 'Cebraspe' ? 'Cebraspe (1 errada anula 1 certa): penalidade inibe o chute aleatório.' : 'Múltipla escolha tradicional com 5 alternativas equiprováveis.'}
                         </p>
                       </div>
                     </div>
 
                     {/* Lógica Psicológica do Examinador */}
-                    <div className="p-3 rounded-xl bg-white/5 border border-purple-500/20 text-xs text-slate-300 space-y-1.5">
-                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-purple-300">
-                        <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
+                    <div className="p-3 rounded-xl bg-white dark:bg-white/5 border border-cyan-200 dark:border-cyan-500/20 text-xs text-slate-700 dark:text-slate-300 space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-cyan-600 dark:text-cyan-300">
+                        <Lightbulb className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
                         <span>Mecanismo Psicológico Empregado pelo Examinador ({psy.distractorDef.name}):</span>
                       </div>
-                      <p className="text-[11px] leading-relaxed text-slate-300">
+                      <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
                         {psy.distractorDef.examinerLogic}
                       </p>
                     </div>
@@ -833,9 +833,9 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
 
                 {/* Caixa de Diagnóstico Cognitivo da Banca (Expandida após resposta ou clique) */}
                 {isConfirmed && isDetailsOpen && (
-                  <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-dark-surface/90 border border-indigo-500/30 space-y-3.5 animate-fadeIn">
+                  <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-dark-surface/90 border border-indigo-200 dark:border-indigo-500/30 space-y-3.5 animate-fadeIn">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-indigo-500 dark:text-indigo-400">
+                      <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
                         <BrainCircuit className="w-4 h-4" />
                         <h4 className="text-xs font-black uppercase tracking-wider">
                           Gabarito Comentado & Análise Cognitiva da Banca
@@ -871,8 +871,8 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
                     </div>
 
                     {/* Dica Relâmpago de Atena (Mascote Guardiã) */}
-                    <div className="p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-indigo-500/10 to-transparent border border-amber-500/30 flex items-start gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-xl flex items-center justify-center shrink-0 shadow-sm">
+                    <div className="p-3.5 rounded-xl bg-gradient-to-r from-amber-50 to-indigo-50 dark:from-amber-500/10 dark:via-indigo-500/10 dark:to-transparent border border-amber-200 dark:border-amber-500/30 flex items-start gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-500/20 text-xl flex items-center justify-center shrink-0 shadow-sm">
                         🦉
                       </div>
                       <div className="space-y-1 text-xs">
@@ -914,15 +914,15 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
 
                     {/* Pegadinha e Tendência da Banca */}
                     <div className="pt-2 border-t border-slate-200 dark:border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                      <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-900 dark:text-amber-300">
-                        <p className="font-extrabold flex items-center gap-1 text-[11px] uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-1">
+                      <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-900 dark:text-amber-300">
+                        <p className="font-extrabold flex items-center gap-1 text-[11px] uppercase tracking-wider text-amber-700 dark:text-amber-400 mb-1">
                           <Flame className="w-3.5 h-3.5" /> Pegadinha Mapeada
                         </p>
                         <p className="text-[11px] leading-snug">{q.cognitiveAnalysis.commonTrap}</p>
                       </div>
 
-                      <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-900 dark:text-cyan-300">
-                        <p className="font-extrabold flex items-center gap-1 text-[11px] uppercase tracking-wider text-cyan-600 dark:text-cyan-400 mb-1">
+                      <div className="p-3 rounded-xl bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-200 dark:border-cyan-500/20 text-cyan-900 dark:text-cyan-300">
+                        <p className="font-extrabold flex items-center gap-1 text-[11px] uppercase tracking-wider text-cyan-700 dark:text-cyan-400 mb-1">
                           <Award className="w-3.5 h-3.5" /> Tendência {q.banca}
                         </p>
                         <p className="text-[11px] leading-snug">{q.cognitiveAnalysis.bancaTendency}</p>

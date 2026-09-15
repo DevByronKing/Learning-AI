@@ -270,7 +270,7 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 text-indigo-400">
+            <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 text-blue-400">
               <UploadCloud className="w-5 h-5" />
             </div>
             <div>
@@ -674,7 +674,7 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
                 <button
                   onClick={handleProcessExtraction}
                   disabled={isProcessing}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm shadow-lg shadow-indigo-500/25 flex items-center gap-2 transition-all disabled:opacity-50"
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold text-sm shadow-lg shadow-blue-600/25 flex items-center gap-2 transition-all disabled:opacity-50"
                 >
                   {isProcessing ? (
                     <>
@@ -709,9 +709,9 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
                   <span className="text-[11px] text-amber-400 block">Anuladas Oficialmente</span>
                   <span className="text-xl font-bold text-amber-300">{result.summary.annulledQuestionsCount}</span>
                 </div>
-                <div className="p-3.5 bg-purple-950/30 rounded-xl border border-purple-500/30">
-                  <span className="text-[11px] text-purple-400 block">Confiabilidade Média</span>
-                  <span className="text-xl font-bold text-purple-300">{result.summary.averageConfidence}%</span>
+                <div className="p-3.5 bg-cyan-950/30 rounded-xl border border-cyan-500/30">
+                  <span className="text-[11px] text-cyan-400 block">Confiabilidade Média</span>
+                  <span className="text-xl font-bold text-cyan-300">{result.summary.averageConfidence}%</span>
                 </div>
               </div>
 

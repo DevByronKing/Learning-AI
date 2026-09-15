@@ -159,7 +159,7 @@ export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
             <button
               type="button"
               onClick={() => setIsRewardedAdOpen(true)}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-black flex items-center gap-1.5 shadow-md shadow-purple-600/30 transition-all shrink-0"
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white text-xs font-black flex items-center gap-1.5 shadow-md shadow-blue-600/25 transition-all shrink-0"
               title="Assista a um vídeo curto de patrocinador para liberar +2 diagnósticos de IA"
             >
               <PlayCircle className="w-4 h-4 text-amber-300 animate-pulse" />

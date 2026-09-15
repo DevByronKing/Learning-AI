@@ -9,9 +9,9 @@ import {
   Check, 
   Copy, 
   ExternalLink,
-  ShieldCheck,
-  Zap,
-  Flame,
+  ShieldCheck, 
+  Zap, 
+  Flame, 
   ArrowRight
 } from 'lucide-react';
 import { analytics } from '@/lib/analytics';
@@ -39,30 +39,30 @@ export const MobileAppModal: React.FC<MobileAppModalProps> = ({ isOpen, onClose 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/40 dark:bg-black/80 backdrop-blur-xl animate-fadeIn">
+      <div className="relative w-full max-w-xl glass-panel bg-white/80 dark:bg-dark-surface/80 border border-slate-200/80 dark:border-white/10 rounded-[2rem] shadow-2xl overflow-hidden transition-all">
         
         {/* Glow de fundo */}
         <div className="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 -mb-12 -ml-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-800">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <Smartphone className="w-5 h-5 text-white" />
+        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-white/10">
+          <div className="flex items-center space-x-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center shadow-md shadow-indigo-500/20 text-white shrink-0">
+              <Smartphone className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <span className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider bg-indigo-500/20 text-indigo-400 rounded border border-indigo-500/30">
+                <span className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 rounded-md border border-indigo-200 dark:border-indigo-500/30">
                   Onboarding Multimodal
                 </span>
-                <span className="flex items-center text-xs text-emerald-400 font-semibold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5" />
+                <span className="flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-1.5" />
                   Sincronização Ativa
                 </span>
               </div>
-              <h2 className="text-lg font-bold text-white mt-0.5">
+              <h2 className="text-xl font-black text-slate-900 dark:text-white mt-0.5 tracking-tight">
                 Continuar Estudos no Celular
               </h2>
             </div>
@@ -70,7 +70,7 @@ export const MobileAppModal: React.FC<MobileAppModalProps> = ({ isOpen, onClose 
 
           <button 
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors"
+            className="text-slate-400 hover:text-slate-800 dark:hover:text-white p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -80,23 +80,23 @@ export const MobileAppModal: React.FC<MobileAppModalProps> = ({ isOpen, onClose 
         <div className="p-6 space-y-6">
           
           {/* Seletor de Plataforma */}
-          <div className="flex bg-slate-800/80 p-1 rounded-xl border border-slate-700/60">
+          <div className="flex bg-slate-100 dark:bg-dark-card p-1 rounded-2xl border border-slate-200 dark:border-white/5">
             <button
               onClick={() => setActivePlatform('android')}
-              className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 ${
+              className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 ${
                 activePlatform === 'android'
-                  ? 'bg-indigo-600 text-white shadow'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-indigo-600 text-white shadow-md'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <span>Android (Samsung / Motorola / Xiaomi)</span>
             </button>
             <button
               onClick={() => setActivePlatform('ios')}
-              className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 ${
+              className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 ${
                 activePlatform === 'ios'
-                  ? 'bg-indigo-600 text-white shadow'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-indigo-600 text-white shadow-md'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <span>iOS (iPhone / iPad)</span>
@@ -106,8 +106,8 @@ export const MobileAppModal: React.FC<MobileAppModalProps> = ({ isOpen, onClose 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
             
             {/* Box do QR Code Estilizado */}
-            <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 flex flex-col items-center justify-center text-center group">
-              <div className="relative p-3 bg-white rounded-xl shadow-inner mb-3">
+            <div className="bg-slate-50 dark:bg-slate-900/90 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center shadow-inner">
+              <div className="relative p-3 bg-white rounded-2xl shadow-md border border-slate-200 dark:border-transparent mb-3">
                 {/* QR Code SVG Vetorial Limpo */}
                 <svg className="w-36 h-36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                   {/* Padrão de QR Code Simulado e Legível */}
@@ -150,52 +150,52 @@ export const MobileAppModal: React.FC<MobileAppModalProps> = ({ isOpen, onClose 
                 </svg>
               </div>
 
-              <div className="flex items-center space-x-1 text-slate-400 text-xs font-medium">
-                <QrCode className="w-3.5 h-3.5 text-indigo-400" />
+              <div className="flex items-center space-x-1.5 text-slate-500 dark:text-slate-400 text-xs font-semibold">
+                <QrCode className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                 <span>Aponte a câmera ou Expo Go</span>
               </div>
             </div>
 
             {/* Passos do Onboarding */}
-            <div className="space-y-3.5">
+            <div className="space-y-4">
               <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 border border-indigo-500/30">
+                <div className="w-6 h-6 rounded-full bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 border border-indigo-200 dark:border-indigo-500/30">
                   1
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-200">
+                  <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200">
                     Instale o Expo Go (Gratuito)
                   </h4>
-                  <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
                     Disponível diretamente na Google Play Store ou App Store da Apple.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 border border-indigo-500/30">
+                <div className="w-6 h-6 rounded-full bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 border border-indigo-200 dark:border-indigo-500/30">
                   2
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-200">
+                  <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200">
                     Escaneie o QR Code
                   </h4>
-                  <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
                     Abra o app Expo Go e aponte para o código ao lado.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 border border-emerald-500/30">
+                <div className="w-6 h-6 rounded-full bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 border border-emerald-200 dark:border-emerald-500/30">
                   3
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-200">
+                  <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200">
                     Sincronização 100% Automática
                   </h4>
-                  <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
-                    Seus simulados, streak diário e mascote continuam do ponto exato onde você parou.
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
+                    Seus simulados, streak diário e progresso continuam exatamente de onde parou.
                   </p>
                 </div>
               </div>
@@ -204,14 +204,14 @@ export const MobileAppModal: React.FC<MobileAppModalProps> = ({ isOpen, onClose 
           </div>
 
           {/* Link Manual / Copiar */}
-          <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-            <span className="font-mono text-[11px] bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 text-slate-300 truncate max-w-[280px]">
+          <div className="pt-3 border-t border-slate-200 dark:border-white/10 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 gap-2">
+            <span className="font-mono text-[11px] bg-slate-100 dark:bg-dark-card px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 truncate max-w-[280px]">
               {mobileUrl}
             </span>
 
             <button
               onClick={handleCopyLink}
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition-colors font-medium"
+              className="flex items-center space-x-1.5 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white dark:bg-dark-card dark:hover:bg-dark-hover dark:text-slate-200 border border-slate-800 dark:border-white/10 rounded-xl transition-colors font-bold shadow-sm"
             >
               {copied ? (
                 <>
@@ -230,10 +230,10 @@ export const MobileAppModal: React.FC<MobileAppModalProps> = ({ isOpen, onClose 
         </div>
 
         {/* Footer com Selo de Performance Nativa */}
-        <div className="bg-slate-950/60 p-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+        <div className="bg-slate-50 dark:bg-dark-card/50 p-4 border-t border-slate-200 dark:border-white/10 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
           <div className="flex items-center space-x-2">
-            <ShieldCheck className="w-4 h-4 text-indigo-400" />
-            <span>Código Nativo Puro • Sem WebViews • 120 FPS</span>
+            <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <span className="font-medium">Código Nativo Puro • Sem WebViews • 120 FPS</span>
           </div>
 
           <button
@@ -241,7 +241,7 @@ export const MobileAppModal: React.FC<MobileAppModalProps> = ({ isOpen, onClose 
               window.open(mobileUrl, '_blank');
               analytics.track('mascot_strategy_interacted', { action: 'open_mobile_web_preview' });
             }}
-            className="flex items-center space-x-1 text-indigo-400 hover:text-indigo-300 font-bold transition-colors"
+            className="flex items-center space-x-1 text-indigo-600 dark:text-indigo-400 hover:underline font-bold transition-colors"
           >
             <span>Abrir Preview Web</span>
             <ExternalLink className="w-3.5 h-3.5" />

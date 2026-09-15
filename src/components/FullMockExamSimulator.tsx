@@ -446,7 +446,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                               PROVA OFICIAL {exam.examYear || ''}
                             </span>
                           ) : (
-                            <span className="px-2.5 py-1 rounded-xl bg-purple-500/20 text-purple-300 font-bold border border-purple-500/30">
+                            <span className="px-2.5 py-1 rounded-xl bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 font-bold border border-cyan-500/30">
                               SIMULADO INÉDITO
                             </span>
                           )}
@@ -537,7 +537,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                       ) : (
                         <button
                           onClick={() => handleStartExam(exam)}
-                          className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30"
+                          className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:from-blue-500 hover:to-blue-600 text-white font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30"
                         >
                           <span>{exam.isOfficialPastExam ? 'Iniciar Caderno de Prova Oficial' : 'Iniciar Prova Simulada'}</span>
                           <ArrowRight className="w-4 h-4" />
@@ -921,7 +921,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             </div>
 
             {/* Simulated Ranking Banner */}
-            <div className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-amber-500/15 via-indigo-500/15 to-purple-500/15 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-amber-500/15 via-blue-500/10 to-emerald-500/15 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
                   <Trophy className="w-6 h-6" />
@@ -953,7 +953,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
 
             {/* Comparador de Nota de Corte Real da Prova Oficial */}
             {selectedExam.isOfficialPastExam && selectedExam.historicalCutoffScore && (
-              <div className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-indigo-950/40 via-dark-surface to-purple-950/40 border border-indigo-500/30 shadow-xl">
+              <div className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-blue-950/40 via-dark-surface to-slate-900/60 border border-blue-500/30 shadow-xl">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex items-start gap-3.5">
                     <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shrink-0">

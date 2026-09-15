@@ -73,8 +73,8 @@ export const RetentionFunnelDashboard: React.FC = () => {
       desc: 'Interagiu com o Copiloto (Atena/Áquila/Fenrir/Apolo)',
       count: eventCounts.mascot_strategy_interacted,
       percent: '84.2%',
-      color: 'from-indigo-500 to-purple-600',
-      badgeColor: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
+      color: 'from-blue-600 to-cyan-500',
+      badgeColor: 'bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30',
       insight: 'Acolhimento diário reduz a ansiedade de desistência pós-simulado em 68%.',
     },
     {
@@ -115,73 +115,73 @@ export const RetentionFunnelDashboard: React.FC = () => {
       {/* Top Banner de Métricas do Cohort Beta */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <div className="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl relative overflow-hidden">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 p-5 rounded-2xl relative overflow-hidden shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cohort Retenção D7</span>
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cohort Retenção D7</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping" />
           </div>
           <div className="flex items-baseline space-x-2 mt-2">
-            <span className="text-3xl font-black text-white">68.4%</span>
-            <span className="text-xs text-emerald-400 font-bold">+14.2% vs EdTech B2C</span>
+            <span className="text-3xl font-black text-slate-900 dark:text-white">68.4%</span>
+            <span className="text-xs text-emerald-600 dark:text-emerald-400 font-bold">+14.2% vs EdTech B2C</span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">Alunos ativos no 7º dia consecutivo</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Alunos ativos no 7º dia consecutivo</p>
         </div>
 
-        <div className="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl relative overflow-hidden">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 p-5 rounded-2xl relative overflow-hidden shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">PMF Score (Sean Ellis)</span>
-            <Sparkles className="w-4 h-4 text-indigo-400" />
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">PMF Score (Sean Ellis)</span>
+            <Sparkles className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
           </div>
           <div className="flex items-baseline space-x-2 mt-2">
-            <span className="text-3xl font-black text-indigo-400">74.2%</span>
-            <span className="text-xs text-indigo-300 font-bold">Meta &gt; 40%</span>
+            <span className="text-3xl font-black text-indigo-600 dark:text-indigo-400">74.2%</span>
+            <span className="text-xs text-indigo-500 dark:text-indigo-300 font-bold">Meta &gt; 40%</span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">"Ficaria muito desapontado sem o app"</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">"Ficaria muito desapontado sem o app"</p>
         </div>
 
-        <div className="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl relative overflow-hidden">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 p-5 rounded-2xl relative overflow-hidden shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Net Promoter Score (NPS)</span>
-            <Award className="w-4 h-4 text-amber-400" />
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Net Promoter Score (NPS)</span>
+            <Award className="w-4 h-4 text-amber-500 dark:text-amber-400" />
           </div>
           <div className="flex items-baseline space-x-2 mt-2">
-            <span className="text-3xl font-black text-amber-400">+68</span>
-            <span className="text-xs text-amber-300 font-bold">Zona de Excelência</span>
+            <span className="text-3xl font-black text-amber-500 dark:text-amber-400">+68</span>
+            <span className="text-xs text-amber-500/80 dark:text-amber-300 font-bold">Zona de Excelência</span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">Baseado em 86 avaliações de usuários</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Baseado em 86 avaliações de usuários</p>
         </div>
 
-        <div className="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl relative overflow-hidden">
+        <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 p-5 rounded-2xl relative overflow-hidden shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Tempo Médio / Dia</span>
-            <Clock className="w-4 h-4 text-cyan-400" />
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tempo Médio / Dia</span>
+            <Clock className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
           </div>
           <div className="flex items-baseline space-x-2 mt-2">
-            <span className="text-3xl font-black text-cyan-400">28 min</span>
-            <span className="text-xs text-cyan-300 font-bold">Mobile + Web</span>
+            <span className="text-3xl font-black text-cyan-600 dark:text-cyan-400">28 min</span>
+            <span className="text-xs text-cyan-600/80 dark:text-cyan-300 font-bold">Mobile + Web</span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">Sessões de alta intensidade cognitiva</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Sessões de alta intensidade cognitiva</p>
         </div>
 
       </div>
 
       {/* Funil Visual dos 5 Eventos Core de Retenção */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+      <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/10">
           <div>
-            <div className="flex items-center space-x-2">
-              <span className="px-2.5 py-0.5 rounded-md bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-xs font-black uppercase tracking-wider">
+            <div className="flex items-center space-x-3">
+              <span className="px-3 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 text-xs font-black uppercase tracking-wider shadow-sm">
                 Product Analytics B2C
               </span>
-              <span className="text-xs text-slate-400">Funil de Ativação & Retenção do Concurseiro</span>
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Funil de Ativação & Retenção do Concurseiro</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2">
               Os 5 Eventos Core de Retenção da Metodologia
             </h2>
           </div>
 
-          <div className="flex items-center space-x-2 text-xs text-slate-400">
-            <Activity className="w-4 h-4 text-emerald-400 animate-pulse" />
+          <div className="flex items-center space-x-2 text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-dark-bg px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm">
+            <Activity className="w-4 h-4 text-emerald-500 dark:text-emerald-400 animate-pulse" />
             <span>Mapeamento em Tempo Real</span>
           </div>
         </div>
@@ -189,39 +189,39 @@ export const RetentionFunnelDashboard: React.FC = () => {
         {/* Etapas do Funil */}
         <div className="mt-8 space-y-5">
           {funnelSteps.map((step, idx) => (
-            <div key={step.id} className="bg-slate-950/60 border border-slate-800/80 rounded-xl p-5 hover:border-slate-700 transition-all">
+            <div key={step.id} className="bg-white dark:bg-dark-surface/60 border border-slate-200 dark:border-white/10 rounded-2xl p-5 hover:border-indigo-300 dark:hover:border-slate-700 transition-all shadow-sm">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 
                 <div className="space-y-1 md:max-w-md">
                   <div className="flex items-center space-x-2">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase border ${step.badgeColor}`}>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase border shadow-sm ${step.badgeColor}`}>
                       Etapa {idx + 1}
                     </span>
-                    <h3 className="text-sm sm:text-base font-bold text-white">
+                    <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
                       {step.label}
                     </h3>
                   </div>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
                     {step.desc}
                   </p>
                 </div>
 
                 <div className="flex items-center space-x-6">
                   <div className="text-right">
-                    <span className="text-xl sm:text-2xl font-black text-white">{step.count}</span>
-                    <span className="block text-[11px] text-slate-500 font-medium">ocorrências</span>
+                    <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">{step.count}</span>
+                    <span className="block text-[11px] text-slate-500 dark:text-slate-400 font-medium">ocorrências</span>
                   </div>
 
                   <div className="w-20 sm:w-24 text-right">
-                    <span className="text-base sm:text-lg font-black text-indigo-400">{step.percent}</span>
-                    <span className="block text-[10px] text-slate-500">conversão</span>
+                    <span className="text-base sm:text-lg font-black text-indigo-600 dark:text-indigo-400">{step.percent}</span>
+                    <span className="block text-[10px] text-slate-500 dark:text-slate-400">conversão</span>
                   </div>
                 </div>
 
               </div>
 
               {/* Barra de Progresso Visual */}
-              <div className="mt-4 h-2 bg-slate-900 rounded-full overflow-hidden">
+              <div className="mt-4 h-2 bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden border border-slate-200 dark:border-slate-800">
                 <div 
                   className={`h-full bg-gradient-to-r ${step.color} rounded-full transition-all duration-1000`}
                   style={{ width: step.percent }}
@@ -229,9 +229,9 @@ export const RetentionFunnelDashboard: React.FC = () => {
               </div>
 
               {/* Insight de Produto */}
-              <div className="mt-3 flex items-center space-x-2 text-xs text-slate-400 bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-800">
-                <Zap className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
-                <span className="text-[11px]"><strong className="text-slate-300">Insight de PM:</strong> {step.insight}</span>
+              <div className="mt-4 flex items-center space-x-2 text-xs text-slate-700 dark:text-slate-300 bg-amber-50 dark:bg-amber-500/10 px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-500/20">
+                <Zap className="w-4 h-4 text-amber-500 shrink-0" />
+                <span className="text-[11px]"><strong className="text-amber-800 dark:text-amber-300 font-bold uppercase tracking-wider">Insight de PM:</strong> {step.insight}</span>
               </div>
             </div>
           ))}
@@ -240,28 +240,28 @@ export const RetentionFunnelDashboard: React.FC = () => {
       </div>
 
       {/* Feed de Eventos Recentes em Tempo Real */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+      <div className="glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 rounded-[2rem] p-6 shadow-xl">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-white/10">
           <div className="flex items-center space-x-2">
-            <BarChart2 className="w-4 h-4 text-indigo-400" />
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+            <BarChart2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
               Log de Disparos de Eventos Recentes
             </h3>
           </div>
-          <span className="text-xs text-slate-500">Últimas ações capturadas</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400">Últimas ações capturadas</span>
         </div>
 
-        <div className="mt-4 divide-y divide-slate-800/60">
+        <div className="mt-4 divide-y divide-slate-200 dark:divide-slate-800/60">
           {recentEvents.length === 0 ? (
             <div className="py-6 text-center text-xs text-slate-500">
               Nenhum evento recente registrado nesta sessão. Interaja com o app para ver os disparos em tempo real!
             </div>
           ) : (
             recentEvents.map((e, idx) => (
-              <div key={idx} className="py-2.5 flex items-center justify-between text-xs">
-                <div className="flex items-center space-x-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
-                  <span className="font-mono text-indigo-300 font-semibold">{e.event}</span>
+              <div key={idx} className="py-3 flex items-center justify-between text-xs">
+                <div className="flex items-center space-x-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-indigo-400" />
+                  <span className="font-mono text-indigo-700 dark:text-indigo-300 font-bold">{e.event}</span>
                 </div>
                 <span className="text-slate-500 font-mono text-[11px]">
                   {e.timestamp ? new Date(e.timestamp).toLocaleTimeString() : 'agora'}
