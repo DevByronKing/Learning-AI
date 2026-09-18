@@ -155,7 +155,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
       // Clean up text and replace tabs with spaces
       const frontSanitized = fc.front.replace(/\t/g, ' ').replace(/\n/g, '<br>');
       const backSanitized = fc.back.replace(/\t/g, ' ').replace(/\n/g, '<br>');
-      const tags = `${fc.subjectName.replace(/\s+/g, '_')} ${fc.topicName.replace(/\s+/g, '_')} AprovaLens_SRS`;
+      const tags = `${fc.subjectName.replace(/\s+/g, '_')} ${fc.topicName.replace(/\s+/g, '_')} LearningAI_SRS`;
       return `${frontSanitized}\t${backSanitized}\t${tags}`;
     }).join('\n');
 
@@ -164,7 +164,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `AprovaLens_Anki_Deck_${todayStr}.txt`;
+    link.download = `LearningAI_Anki_Deck_${todayStr}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -431,119 +431,151 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
             />
           </div>
 
-          {/* The Flashcard (Interactive Flip Box) */}
+          {/* The Flashcard (Interactive 3D Flip Card - <= 250ms) */}
           <div
             onClick={() => setIsFlipped(!isFlipped)}
-            className="cursor-pointer min-h-[360px] glass-panel p-8 sm:p-10 rounded-3xl border border-indigo-500/30 hover:border-indigo-400/50 glow-brand transition-all flex flex-col justify-between select-none relative group"
+            className="cursor-pointer min-h-[420px] w-full [perspective:1200px] select-none group"
           >
-            
-            {/* Top metadata */}
-            <div className="flex items-center justify-between text-xs pb-4 border-b border-slate-300 dark:border-white/10">
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold">
-                  {currentCard.subjectName}
-                </span>
-                <span className="text-slate-500 dark:text-slate-400">
-                  {currentCard.topicName}
-                </span>
-              </div>
-              
-              <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                <RotateCw className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-500 text-indigo-400" />
-                <span>{isFlipped ? 'VERSO' : 'FRENTE'}</span>
-              </span>
-            </div>
-
-            {/* Card Content: Front vs Back */}
-            <div className="my-auto py-6">
-              {!isFlipped ? (
-                <div className="space-y-4">
-                  <span className="text-xs uppercase tracking-widest text-indigo-400 font-black">
-                    Pergunta / Enunciado
+            <div
+              className="relative w-full h-full min-h-[420px] rounded-3xl transition-transform duration-200 [transform-style:preserve-3d]"
+              style={{ transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
+            >
+              {/* FRONT FACE */}
+              <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] glass-panel p-8 sm:p-10 rounded-3xl border border-indigo-500/30 hover:border-indigo-400/50 glow-brand flex flex-col justify-between bg-white/90 dark:bg-dark-card/90 shadow-2xl">
+                {/* Top metadata */}
+                <div className="flex items-center justify-between text-xs pb-4 border-b border-slate-200 dark:border-white/10">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-500 dark:text-indigo-400 font-bold border border-indigo-500/30">
+                      {currentCard.subjectName}
+                    </span>
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">
+                      {currentCard.topicName}
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 px-2.5 py-1 rounded-lg">
+                    <RotateCw className="w-3.5 h-3.5 text-indigo-400 group-hover:rotate-180 transition-transform duration-300" />
+                    <span>FRENTE</span>
                   </span>
-                  <p className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white leading-relaxed whitespace-pre-line">
+                </div>
+
+                {/* Question content */}
+                <div className="my-auto py-6 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-indigo-500 animate-ping" />
+                    <span className="text-xs uppercase tracking-widest text-indigo-500 dark:text-indigo-400 font-black">
+                      Pergunta / Enunciado Ativo
+                    </span>
+                  </div>
+                  <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-relaxed whitespace-pre-line font-sans">
                     {currentCard.front}
                   </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 italic pt-4">
-                    Pense na resposta e clique no cartão (ou aperte Espaço) para conferir...
+                  <p className="text-xs text-slate-500 dark:text-slate-400 italic pt-2">
+                    Invoque a resposta na mente antes de virar. Clique no cartão ou pressione <kbd className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-dark-surface border border-slate-300 dark:border-slate-700 text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300">Espaço</kbd>.
                   </p>
                 </div>
-              ) : (
-                <div className="space-y-4 animate-fadeIn">
-                  <span className="text-xs uppercase tracking-widest text-emerald-400 font-black flex items-center gap-1">
-                    <Check className="w-4 h-4" />
-                    <span>Resposta & Fundamentação</span>
+
+                {/* Bottom hint */}
+                <div className="pt-4 border-t border-slate-200 dark:border-white/10 text-center text-xs text-slate-500 dark:text-slate-400 flex items-center justify-center gap-1.5">
+                  <RotateCw className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Clique no card ou aperte Espaço para virar (Flip 3D)</span>
+                </div>
+              </div>
+
+              {/* BACK FACE */}
+              <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] glass-panel p-8 sm:p-10 rounded-3xl border border-emerald-500/30 hover:border-emerald-400/50 glow-brand flex flex-col justify-between bg-white/95 dark:bg-[#0f141c] shadow-2xl">
+                {/* Top metadata */}
+                <div className="flex items-center justify-between text-xs pb-4 border-b border-slate-200 dark:border-white/10">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/30">
+                      {currentCard.subjectName}
+                    </span>
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">
+                      Gabarito Comentado
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
+                    <Check className="w-3.5 h-3.5" />
+                    <span>VERSO</span>
                   </span>
-                  <div className="text-sm sm:text-base text-slate-800 dark:text-slate-100 font-medium leading-relaxed whitespace-pre-line bg-dark-bg/60 p-5 rounded-2xl border border-slate-200 dark:border-white/5">
+                </div>
+
+                {/* Answer content */}
+                <div className="my-auto py-4 space-y-3">
+                  <span className="text-xs uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-black flex items-center gap-1.5">
+                    <Check className="w-4 h-4 text-emerald-500" />
+                    <span>Resposta & Fundamentação Jurídica</span>
+                  </span>
+                  <div className="text-sm sm:text-base text-slate-800 dark:text-zinc-200 font-serif leading-[1.6] whitespace-pre-line bg-slate-50 dark:bg-[#151922] p-6 rounded-2xl border border-slate-200 dark:border-white/5 shadow-inner">
                     {currentCard.back}
                   </div>
                 </div>
-              )}
-            </div>
 
-            {/* Bottom prompt indicator */}
-            <div className="pt-4 border-t border-slate-300 dark:border-white/10 text-center text-xs text-slate-500 dark:text-slate-400">
-              {!isFlipped ? (
-                <span>Clique para virar o card</span>
-              ) : (
-                <span>Como foi a facilidade de recordação?</span>
-              )}
+                {/* Bottom prompt indicator */}
+                <div className="pt-4 border-t border-slate-200 dark:border-white/10 text-center text-xs text-slate-500 dark:text-slate-400 font-medium">
+                  Selecione o nível de esforço cognitivo abaixo [1 - 4]:
+                </div>
+              </div>
             </div>
-
           </div>
 
-          {/* SM-2 Rating Controls (Only active when flipped) */}
-          {isFlipped && (
+          {/* SM-2 Rating Controls (Active when flipped) */}
+          {isFlipped ? (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 animate-fadeIn">
               
               <button
                 type="button"
                 onClick={() => handleRate('errei')}
-                className="p-3.5 rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 font-bold text-xs transition-all flex flex-col items-center gap-1"
+                className="p-4 rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/40 text-rose-500 dark:text-rose-400 font-bold text-xs transition-all flex flex-col items-center gap-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98]"
               >
-                <div className="flex items-center gap-1">
-                  <kbd className="px-1.5 py-0.5 rounded bg-black/40 text-[10px]">1</kbd>
-                  <span>Errei</span>
+                <div className="flex items-center gap-1.5">
+                  <kbd className="px-2 py-0.5 rounded bg-black/40 text-white text-[11px] font-mono font-bold">[1]</kbd>
+                  <span className="text-sm font-black">Errei</span>
                 </div>
-                <span className="text-[10px] text-rose-400/80 font-mono">1 dia</span>
+                <span className="text-[11px] text-rose-400 font-semibold">Repetir em 1m</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleRate('dificil')}
-                className="p-3.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 font-bold text-xs transition-all flex flex-col items-center gap-1"
+                className="p-4 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/40 text-amber-500 dark:text-amber-400 font-bold text-xs transition-all flex flex-col items-center gap-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98]"
               >
-                <div className="flex items-center gap-1">
-                  <kbd className="px-1.5 py-0.5 rounded bg-black/40 text-[10px]">2</kbd>
-                  <span>Difícil</span>
+                <div className="flex items-center gap-1.5">
+                  <kbd className="px-2 py-0.5 rounded bg-black/40 text-white text-[11px] font-mono font-bold">[2]</kbd>
+                  <span className="text-sm font-black">Difícil</span>
                 </div>
-                <span className="text-[10px] text-amber-400/80 font-mono">2 a 3 dias</span>
+                <span className="text-[11px] text-amber-400 font-semibold">Repetir em 10m</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleRate('bom')}
-                className="p-3.5 rounded-2xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 font-bold text-xs transition-all flex flex-col items-center gap-1"
+                className="p-4 rounded-2xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/40 text-blue-500 dark:text-blue-400 font-bold text-xs transition-all flex flex-col items-center gap-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98]"
               >
-                <div className="flex items-center gap-1">
-                  <kbd className="px-1.5 py-0.5 rounded bg-black/40 text-[10px]">3</kbd>
-                  <span>Bom</span>
+                <div className="flex items-center gap-1.5">
+                  <kbd className="px-2 py-0.5 rounded bg-black/40 text-white text-[11px] font-mono font-bold">[3]</kbd>
+                  <span className="text-sm font-black">Bom</span>
                 </div>
-                <span className="text-[10px] text-indigo-400/80 font-mono">5 a 7 dias</span>
+                <span className="text-[11px] text-blue-400 font-semibold">Repetir em 1 dia</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleRate('facil')}
-                className="p-3.5 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-bold text-xs transition-all flex flex-col items-center gap-1"
+                className="p-4 rounded-2xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/60 text-emerald-500 dark:text-emerald-400 font-bold text-xs transition-all flex flex-col items-center gap-1.5 shadow-[0_0_15px_rgba(52,211,153,0.15)] hover:scale-[1.02] active:scale-[0.98]"
               >
-                <div className="flex items-center gap-1">
-                  <kbd className="px-1.5 py-0.5 rounded bg-black/40 text-[10px]">4</kbd>
-                  <span>Fácil</span>
+                <div className="flex items-center gap-1.5">
+                  <kbd className="px-2 py-0.5 rounded bg-black/40 text-white text-[11px] font-mono font-bold">[4]</kbd>
+                  <span className="text-sm font-black">Fácil</span>
                 </div>
-                <span className="text-[10px] text-emerald-400/80 font-mono">14+ dias</span>
+                <span className="text-[11px] text-emerald-400 font-semibold">Repetir em 4 dias</span>
               </button>
 
+            </div>
+          ) : (
+            <div className="text-center py-2">
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                Pressione <kbd className="px-2 py-0.5 rounded bg-slate-200 dark:bg-dark-surface border border-slate-300 dark:border-slate-700 text-[11px] font-mono font-bold">Espaço</kbd> para virar o cartão e desbloquear os botões de resposta
+              </span>
             </div>
           )}
 
@@ -552,40 +584,42 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
 
       {/* VIEW MODE 3: SESSION COMPLETE */}
       {viewMode === 'complete' && (
-        <div className="max-w-xl mx-auto glass-panel p-8 sm:p-10 rounded-3xl border border-indigo-500/40 glow-brand text-center space-y-6 animate-fadeIn">
-          
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-3xl font-black">
+        <div className="max-w-xl mx-auto glass-panel p-8 sm:p-10 rounded-3xl border border-indigo-500/40 glow-brand text-center space-y-6 animate-fadeIn relative overflow-hidden">
+          {/* Subtle victory screen pulse halo */}
+          <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 via-emerald-500/5 to-transparent animate-pulse pointer-events-none" />
+
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-3xl font-black shadow-[0_0_25px_rgba(52,211,153,0.3)]">
             ✓
           </div>
 
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-              Sessão Diária Finalizada!
+          <div className="relative space-y-2">
+            <span className="text-xs font-bold uppercase tracking-widest text-emerald-500 dark:text-emerald-400">
+              Sessão de Repetição Espaçada Concluída
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
-              Curva de Retenção Calibrada
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              Ciclo de esquecimento quebrado. Memória consolidada.
             </h2>
-            <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
-              Você revisou <strong>{sessionStats.reviewed} cards</strong> hoje com base no algoritmo SM-2. A memória de longo prazo foi fortalecida contra o decaimento natural.
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
+              Você completou todos os <strong>{sessionStats.reviewed} cards</strong> agendados para hoje. A curva de esquecimento de Ebbinghaus foi interceptada e as sinapses foram fortalecidas para o dia da prova.
             </p>
           </div>
 
           {/* Session breakdown */}
           <div className="grid grid-cols-4 gap-2 p-4 rounded-2xl bg-white dark:bg-dark-surface/90 border border-slate-200 dark:border-white/5 text-xs font-mono">
             <div>
-              <span className="text-slate-500 dark:text-slate-400 text-[10px] block">Errei</span>
+              <span className="text-slate-500 dark:text-slate-400 text-[10px] block font-bold">Errei (1m)</span>
               <strong className="text-rose-400 text-sm">{sessionStats.errei}</strong>
             </div>
             <div>
-              <span className="text-slate-500 dark:text-slate-400 text-[10px] block">Difícil</span>
+              <span className="text-slate-500 dark:text-slate-400 text-[10px] block font-bold">Difícil (10m)</span>
               <strong className="text-amber-400 text-sm">{sessionStats.dificil}</strong>
             </div>
             <div>
-              <span className="text-slate-500 dark:text-slate-400 text-[10px] block">Bom</span>
-              <strong className="text-indigo-400 text-sm">{sessionStats.bom}</strong>
+              <span className="text-slate-500 dark:text-slate-400 text-[10px] block font-bold">Bom (1d)</span>
+              <strong className="text-blue-400 text-sm">{sessionStats.bom}</strong>
             </div>
             <div>
-              <span className="text-slate-500 dark:text-slate-400 text-[10px] block">Fácil</span>
+              <span className="text-slate-500 dark:text-slate-400 text-[10px] block font-bold">Fácil (4d)</span>
               <strong className="text-emerald-400 text-sm">{sessionStats.facil}</strong>
             </div>
           </div>

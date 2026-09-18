@@ -168,4 +168,97 @@ export class SupabaseService {
       return { success: false, error: err?.message };
     }
   }
+
+  /**
+   * Autentica o usuário no Supabase com email e senha.
+   */
+  static async signIn(email: string, password: string): Promise<{ success: boolean; user?: any; token?: string; error?: string }> {
+    if (!isSupabaseConfigured()) {
+      const mockToken = `jwt_mock_${Date.now()}`;
+      return {
+        success: true,
+        user: { id: 'usr_offline', email, name: email.split('@')[0] },
+        token: mockToken,
+      };
+    }
+
+    try {
+      const client = getSupabase();
+      if (!client) return { success: false, error: 'Cliente Supabase indisponível' };
+
+      const { data, error } = await client.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+
+      return {
+        success: true,
+        user: data.user,
+        token: data.session?.access_token,
+      };
+    } catch (err: any) {
+      return { success: false, error: err?.message || 'Falha ao autenticar' };
+    }
+  }
+
+  /**
+   * Registra um novo usuário com perfil inicial.
+   */
+  static async signUp(email: string, password: string, fullName: string): Promise<{ success: boolean; user?: any; error?: string }> {
+    if (!isSupabaseConfigured()) {
+      return {
+        success: true,
+        user: { id: 'usr_offline', email, name: fullName },
+      };
+    }
+
+    try {
+      const client = getSupabase();
+      if (!client) return { success: false, error: 'Cliente Supabase indisponível' };
+
+      const { data, error } = await client.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: fullName } },
+      });
+      if (error) throw error;
+
+      return { success: true, user: data.user };
+    } catch (err: any) {
+      return { success: false, error: err?.message || 'Falha ao registrar' };
+    }
+  }
+
+  /**
+   * Encerra a sessão ativa.
+   */
+  static async signOut(): Promise<{ success: boolean }> {
+    if (!isSupabaseConfigured()) return { success: true };
+    try {
+      const client = getSupabase();
+      if (client) await client.auth.signOut();
+      return { success: true };
+    } catch (err) {
+      return { success: true };
+    }
+  }
+
+  /**
+   * Recupera a sessão atual ou valida token JWT.
+   */
+  static async getSession(): Promise<{ user: any | null; token: string | null }> {
+    if (!isSupabaseConfigured()) {
+      return { user: null, token: null };
+    }
+    try {
+      const client = getSupabase();
+      if (!client) return { user: null, token: null };
+      const { data } = await client.auth.getSession();
+      return {
+        user: data.session?.user || null,
+        token: data.session?.access_token || null,
+      };
+    } catch {
+      return { user: null, token: null };
+    }
+  }
 }
+

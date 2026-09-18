@@ -110,6 +110,146 @@ const TRAP_CHALLENGES: TrapChallenge[] = [
   }
 ];
 
+export interface ArticleMissedQuestion {
+  id: string;
+  banca: 'FGV' | 'Cebraspe' | 'FCC' | 'Vunesp';
+  exam: string;
+  year: number;
+  snippet: string;
+  userChose: string;
+  correctAnswer: string;
+  distractorType: string;
+  explanation: string;
+}
+
+const SAMPLE_MISSED_QUESTIONS: Record<string, ArticleMissedQuestion[]> = {
+  'vade-1': [ // Art. 5º CF/88 - 12 Questões Mapeadas
+    {
+      id: 'mq-5-1',
+      banca: 'FGV',
+      exam: 'Exame de Ordem OAB 40º',
+      year: 2024,
+      snippet: 'Sobre a dissolução compulsória de associações, a assertiva afirmava ser bastante decisão administrativa fundamentada.',
+      userChose: 'Opção B (Basta ato administrativo com contraditório)',
+      correctAnswer: 'Opção D (Exige decisão judicial transitada em julgado - Art. 5º, XIX)',
+      distractorType: 'Inversão de Requisito Constitucional',
+      explanation: 'A FGV frequentemente testa a diferença entre suspensão (decisão judicial simples) e dissolução compulsória (somente com trânsito em julgado).'
+    },
+    {
+      id: 'mq-5-2',
+      banca: 'Cebraspe',
+      exam: 'Polícia Rodoviária Federal (PRF)',
+      year: 2023,
+      snippet: 'Ingresso forçado em domicílio durante o período noturno em hipótese de flagrante delito sem mandado.',
+      userChose: 'Errado (Marcou que à noite exige sempre mandado judicial)',
+      correctAnswer: 'Certo (Em caso de flagrante ou desastre, pode entrar de dia ou de noite - Art. 5º, XI)',
+      distractorType: 'Generalização Indevida de Horário',
+      explanation: 'A regra do mandado judicial é apenas durante o dia. Em flagrante delito, desastre ou socorro, o ingresso independe do consentimento a qualquer hora.'
+    },
+    {
+      id: 'mq-5-3',
+      banca: 'FGV',
+      exam: 'Auditor Fiscal da Receita Estadual',
+      year: 2023,
+      snippet: 'Direito de reunião pacífica em locais abertos ao público e a exigência de aviso prévio.',
+      userChose: 'Opção A (Exige autorização prévia da autoridade competente)',
+      correctAnswer: 'Opção C (Independe de autorização, exigindo apenas prévio aviso - Art. 5º, XVI)',
+      distractorType: 'Troca de Vocabulário Normativo (Autorização x Aviso)',
+      explanation: 'O STF pacificou que o aviso prévio não é condição de validade absoluta quando a autoridade já tiver conhecimento por outros meios.'
+    },
+    {
+      id: 'mq-5-4',
+      banca: 'Cebraspe',
+      exam: 'Auditor Federal de Controle Externo (TCU)',
+      year: 2023,
+      snippet: 'Imprescritibilidade e inafiançabilidade da prática do racismo e ação de grupos armados.',
+      userChose: 'Errado (Confundiu prescrição com graça/anistia)',
+      correctAnswer: 'Certo (Racismo é inafiançável e imprescritível - Art. 5º, XLII)',
+      distractorType: 'Armadilha de Rótulos Penais',
+      explanation: 'Memorize o mnemônico RA-GA: Racismo e Ação de Grupos Armados são os únicos IMPRESCRITÍVEIS.'
+    }
+  ],
+  'vade-2': [ // Lei 8.112 Art. 13
+    {
+      id: 'mq-8112-1',
+      banca: 'FGV',
+      exam: 'Analista Judiciário - TRT',
+      year: 2024,
+      snippet: 'Prazos legais para posse e entrada em exercício após nomeação em cargo público efetivo.',
+      userChose: 'Opção C (Posse em 15 dias e exercício em 30 dias)',
+      correctAnswer: 'Opção A (Posse em até 30 dias da publicação; exercício em até 15 dias da posse)',
+      distractorType: 'Inversão Numérica de Prazos',
+      explanation: 'Pegadinha clássica da FGV invertendo os números 30 e 15 da Lei 8.112/90.'
+    },
+    {
+      id: 'mq-8112-2',
+      banca: 'Cebraspe',
+      exam: 'Técnico Administrativo - INSS',
+      year: 2022,
+      snippet: 'Consequência jurídica quando o candidato nomeado não toma posse no prazo legal.',
+      userChose: 'Certo (Marcou que o servidor será exonerado do cargo)',
+      correctAnswer: 'Errado (O ato de provimento é tornado SEM EFEITO, pois posse ainda não ocorreu)',
+      distractorType: 'Falsa Equivalência de Institutos',
+      explanation: 'Só há exoneração se houve posse mas não houve exercício. Se nem tomou posse, o ato é tornado sem efeito.'
+    }
+  ],
+  'vade-3': [ // CF/88 Art. 37
+    {
+      id: 'mq-37-1',
+      banca: 'FGV',
+      exam: 'TJ-SP - Escrevente Técnico Judiciário',
+      year: 2023,
+      snippet: 'Hipóteses constitucionais permitidas de acumulação remunerada de cargos públicos.',
+      userChose: 'Opção B (Dois cargos técnicos se houver compatibilidade)',
+      correctAnswer: 'Opção D (Dois de professor, um de professor com outro técnico/científico, ou dois da saúde - Art. 37, XVI)',
+      distractorType: 'Adição de Exceção Não Prevista',
+      explanation: 'Não existe permissão para dois cargos técnicos puros; exige-se professor + técnico/científico.'
+    },
+    {
+      id: 'mq-37-2',
+      banca: 'FCC',
+      exam: 'Analista Judiciário - TRF',
+      year: 2023,
+      snippet: 'Teto remuneratório constitucional e incidência sobre acumulações lícitas.',
+      userChose: 'Opção A (Aplica-se sobre a soma total das duas remunerações)',
+      correctAnswer: 'Opção C (O teto incide isoladamente sobre cada um dos vínculos - Tema 377 STF)',
+      distractorType: 'Jurisprudência Superada',
+      explanation: 'Nas acumulações lícitas, a remuneração de cada cargo é considerada isoladamente para fins de teto.'
+    }
+  ]
+};
+
+function getMissedQuestionsForArticle(art: VadeMecumArticle): ArticleMissedQuestion[] {
+  if (SAMPLE_MISSED_QUESTIONS[art.id]) {
+    return SAMPLE_MISSED_QUESTIONS[art.id];
+  }
+  // Generic high-yield generator per article
+  return [
+    {
+      id: `mq-${art.id}-1`,
+      banca: 'FGV',
+      exam: 'Concurso Nacional Unificado (CNU)',
+      year: 2024,
+      snippet: `Aplicação prática dos preceitos do ${art.numberStr} (${art.diploma}) em caso hipotético de atuação administrativa.`,
+      userChose: 'Opção A (Induzido por exceção aparente)',
+      correctAnswer: `Opção C (Aplicação literal do ${art.numberStr})`,
+      distractorType: 'Distorção da Literalidade Legal',
+      explanation: `A FGV cobrou a regra expressa de ${art.title}, testando se o candidato conhecia as restrições normativas do dispositivo.`
+    },
+    {
+      id: `mq-${art.id}-2`,
+      banca: 'Cebraspe',
+      exam: 'Polícia Federal (Escrivão)',
+      year: 2023,
+      snippet: `Interpretação restritiva versus extensiva dos efeitos do ${art.numberStr} da ${art.diploma}.`,
+      userChose: 'Certo (Considerou a interpretação extensiva válida)',
+      correctAnswer: 'Errado (O dispositivo exige interpretação estrita conforme a banca)',
+      distractorType: 'Interpretação Hermenêutica Indevida',
+      explanation: 'O Cebraspe explorou a literalidade estrita da norma para derrubar os candidatos que extrapolaram o texto da lei.'
+    }
+  ];
+}
+
 export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
   onGoToQuestion,
   onGoToSimulator
@@ -122,6 +262,9 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
 
   // Audio Speech state
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
+
+  // Backlinks Bidirecionais Drawer State (Obsidian / Notion style)
+  const [selectedBacklinkArticle, setSelectedBacklinkArticle] = useState<VadeMecumArticle | null>(null);
 
   // Gamification Trap Hunter Mode
   const [isTrapModeActive, setIsTrapModeActive] = useState<boolean>(false);
@@ -471,7 +614,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
             className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
               selectedDiploma === d.id
                 ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20'
-                : 'bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white/5'
+                : 'bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 shadow-sm'
             }`}
           >
             {d.name}
@@ -480,7 +623,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
       </div>
 
       {/* Search & Filters */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-white dark:bg-dark-surface/70 border border-slate-200 dark:border-white/5 p-4 rounded-2xl backdrop-blur-xl">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-white dark:bg-dark-surface/70 border border-slate-200 dark:border-white/5 p-4 rounded-2xl backdrop-blur-xl shadow-sm">
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-slate-500 dark:text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -488,7 +631,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Pesquise por artigo (ex: Art. 5º, Art. 37) ou palavra-chave..."
-            className="w-full bg-white dark:bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-amber-500"
+            className="w-full bg-white dark:bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500 shadow-sm"
           />
         </div>
 
@@ -497,7 +640,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
           <select
             value={selectedIncidence}
             onChange={(e) => setSelectedIncidence(e.target.value)}
-            className="bg-white dark:bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-amber-500"
+            className="bg-white dark:bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500 shadow-sm cursor-pointer"
           >
             <option value="all">Todas as Frequências</option>
             <option value="Alta">🔥 Alta Incidência</option>
@@ -538,7 +681,19 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* Bidirectional Backlink Badge (Notion / Obsidian style) */}
+                    <button
+                      type="button"
+                      onClick={() => setSelectedBacklinkArticle(art)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-600 dark:text-rose-400 transition-all hover:scale-105 active:scale-95 shadow-sm group"
+                      title="Abrir Caderno de Erros vinculado a este artigo"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+                      <span className="font-mono font-bold">[ {getMissedQuestionsForArticle(art).length} Questões Erradas ]</span>
+                      <ChevronRight className="w-3.5 h-3.5 text-rose-500 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-50 dark:bg-rose-500/15 border border-rose-200 dark:border-rose-500/30 text-rose-700 dark:text-rose-300">
                       🔥 {art.incidence.toUpperCase()} INCIDÊNCIA
                     </span>
@@ -568,9 +723,9 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
                   </div>
                 </div>
 
-                {/* Literal Text with Automatic Highlights */}
-                <div className="bg-slate-50 dark:bg-dark-bg/80 border border-slate-200 dark:border-white/5 rounded-xl p-4 sm:p-5 shadow-inner">
-                  <p className="text-sm sm:text-base text-slate-800 dark:text-slate-100 font-serif leading-relaxed">
+                {/* Literal Text with Hybrid Typography (font-serif, line-height 1.6, reduced eye-strain contrast) */}
+                <div className="bg-slate-50 dark:bg-[#111318] border border-slate-200 dark:border-white/5 rounded-2xl p-5 sm:p-6 shadow-inner">
+                  <p className="text-base sm:text-[17px] font-serif leading-[1.6] text-slate-700 dark:text-zinc-300 antialiased selection:bg-amber-400/30">
                     {renderHighlightedText(art.text, art.trapKeywords)}
                   </p>
                 </div>
@@ -614,6 +769,118 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
           })
         )}
       </div>
+
+      {/* SLIDE-OVER DRAWER DE BACKLINKS BIDIRECIONAIS (ESTILO OBSIDIAN / NOTION) */}
+      {selectedBacklinkArticle && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm animate-fadeIn">
+          <div className="w-full max-w-xl bg-white dark:bg-[#0e1117] h-full shadow-2xl border-l border-slate-200 dark:border-rose-500/30 flex flex-col justify-between overflow-hidden animate-slideInRight">
+            
+            {/* Drawer Header */}
+            <div className="p-6 border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-dark-card/50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400 font-black text-xs border border-rose-500/30">
+                    Backlink Bidirecional
+                  </span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
+                    Caderno de Erros ↔ Vade Mecum
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedBacklinkArticle(null)}
+                  className="p-2 rounded-xl bg-slate-200 dark:bg-white/5 hover:bg-slate-300 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <h2 className="text-xl font-black text-slate-900 dark:text-white mt-3">
+                {selectedBacklinkArticle.diploma} — {selectedBacklinkArticle.numberStr}
+              </h2>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                Questões reais das bancas examinadoras onde você errou a aplicação prática deste dispositivo legal. A união entre a lei seca e o Caderno de Erros.
+              </p>
+            </div>
+
+            {/* Missed Questions List */}
+            <div className="flex-1 p-6 overflow-y-auto space-y-4">
+              {getMissedQuestionsForArticle(selectedBacklinkArticle).map((mq) => (
+                <div
+                  key={mq.id}
+                  className="p-5 rounded-2xl bg-slate-50 dark:bg-dark-card border border-rose-200 dark:border-rose-500/20 space-y-3.5 shadow-sm"
+                >
+                  {/* Meta */}
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-bold border border-indigo-500/30">
+                      {mq.banca} • {mq.year}
+                    </span>
+                    <span className="text-slate-500 dark:text-slate-400 font-medium text-[11px]">
+                      {mq.exam}
+                    </span>
+                  </div>
+
+                  {/* Statement Snippet */}
+                  <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-medium leading-relaxed bg-white dark:bg-black/30 p-3.5 rounded-xl border border-slate-200 dark:border-white/5">
+                    "{mq.snippet}"
+                  </p>
+
+                  {/* Mistake Comparison */}
+                  <div className="space-y-1.5 text-xs">
+                    <div className="flex items-start gap-2 text-rose-600 dark:text-rose-400">
+                      <X className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                      <span><strong>Você marcou:</strong> {mq.userChose}</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-emerald-600 dark:text-emerald-400">
+                      <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                      <span><strong>Gabarito oficial:</strong> {mq.correctAnswer}</span>
+                    </div>
+                  </div>
+
+                  {/* Trap Explanation */}
+                  <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-500/20 text-xs space-y-1 text-slate-700 dark:text-amber-200/90">
+                    <div className="flex items-center gap-1.5 text-amber-700 dark:text-amber-400 font-bold text-[11px] uppercase">
+                      <ShieldAlert className="w-3.5 h-3.5" />
+                      <span>Armadilha: {mq.distractorType}</span>
+                    </div>
+                    <p className="leading-relaxed text-[11px]">{mq.explanation}</p>
+                  </div>
+
+                  {/* Action */}
+                  <div className="flex justify-end pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedBacklinkArticle(null);
+                        onGoToSimulator();
+                      }}
+                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs flex items-center gap-1.5 shadow-md transition-all active:scale-95"
+                    >
+                      <Zap className="w-3.5 h-3.5" />
+                      <span>Revanche Imediata</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Drawer Footer */}
+            <div className="p-4 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-dark-card/50 flex items-center justify-between">
+              <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                Total: {getMissedQuestionsForArticle(selectedBacklinkArticle).length} erros mapeados
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedBacklinkArticle(null)}
+                className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-300 dark:hover:bg-white/20 transition-all"
+              >
+                Fechar Painel
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   );

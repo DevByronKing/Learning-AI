@@ -43,7 +43,7 @@ export const LandingMethodology: React.FC = () => {
           </ul>
         </div>
 
-        {/* O Método AprovaLens */}
+        {/* O Método Learning AI */}
         <div className="glass-panel p-8 sm:p-10 rounded-3xl border border-emerald-500/40 relative glow-emerald shadow-xl shadow-emerald-500/5 md:-translate-y-2 transition-transform">
           <div className="flex items-center gap-4 mb-8">
             <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 flex items-center justify-center text-emerald-500 dark:text-emerald-400 shrink-0">

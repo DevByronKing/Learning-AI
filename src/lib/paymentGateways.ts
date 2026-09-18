@@ -89,7 +89,7 @@ export class PaymentGateway {
     // 2. Gerador Nativo de Pix (BACEN EMVCo BR Code padrão)
     const txId = `tx_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
-    const pixCopyPaste = `00020126580014br.gov.bcb.pix0136aprovalens-payments-${txId}520400005303986540${params.amount.toFixed(2)}5802BR5913AprovaLens AI6009Sao Paulo62070503***6304E8A9`;
+    const pixCopyPaste = `00020126580014br.gov.bcb.pix0136learning-ai-payments-${txId}520400005303986540${params.amount.toFixed(2)}5802BR5914Learning AI6009Sao Paulo62070503***6304E8A9`;
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCopyPaste)}`;
 
     return {

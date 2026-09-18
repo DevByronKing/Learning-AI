@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
 import confetti from 'canvas-confetti';
+import { trackConversion } from '@/components/TrackingScripts';
 
 interface PricingModalProps {
   isOpen: boolean;
@@ -41,8 +42,8 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [transactionId, setTransactionId] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<'pending_payment' | 'confirmed'>('pending_payment');
-  const [pixCode, setPixCode] = useState("00020126580014br.gov.bcb.pix0136aprovalens-ia-concursos-pix-key520400005303986540539.905802BR5925APROVALENS TECNOLOGIA LTDA6009SAO PAULO62070503***6304E8A9");
-  const [qrCodeImg, setQrCodeImg] = useState<string | null>("https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020126580014br.gov.bcb.pix0136aprovalens-ia-concursos-pix-key520400005303986540539.905802BR5925APROVALENS");
+  const [pixCode, setPixCode] = useState("00020126580014br.gov.bcb.pix0136learning-ai-concursos-pix-key520400005303986540539.905802BR5925LEARNING AI TECNOLOGIA LTDA6009SAO PAULO62070503***6304E8A9");
+  const [qrCodeImg, setQrCodeImg] = useState<string | null>("https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020126580014br.gov.bcb.pix0136learning-ai-concursos-pix-key520400005303986540539.905802BR5925LEARNINGAI");
 
   // Buscar / Criar cobrança ao abrir ou alternar parâmetros
   useEffect(() => {
@@ -64,6 +65,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         if (isMounted && data.success) {
           setTransactionId(data.transactionId);
           setPaymentStatus('pending_payment');
+          trackConversion.initiateCheckout(selectedPlanToBuy, data.amount || (selectedPlanToBuy === 'pro' ? 29.90 : 49.90));
           if (data.pix) {
             setPixCode(data.pix.copyPasteCode);
             setQrCodeImg(data.pix.qrCodeUrl);
@@ -89,6 +91,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         if (data.success && data.status === 'confirmed') {
           setPaymentStatus('confirmed');
           clearInterval(interval);
+          trackConversion.purchase(transactionId, data.amount || 29.90, selectedPlanToBuy);
           onUpgradePlan(selectedPlanToBuy);
           try {
             confetti({
@@ -157,17 +160,22 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     }
   };
 
-  const planPrices = {
+  const planPrices: Record<SubscriptionPlan, { price: string; period: string; annualTotal: string }> = {
     aspirante: { price: 'R$ 0', period: '/ sempre', annualTotal: 'Totalmente gratuito' },
     pro: {
-      price: billingCycle === 'annual' ? 'R$ 41,41' : 'R$ 69,90',
+      price: billingCycle === 'annual' ? 'R$ 39,90' : 'R$ 59,90',
       period: '/ mês',
-      annualTotal: billingCycle === 'annual' ? 'R$ 497/ano no Pix (Economia de R$ 341)' : 'Cobrança mensal sem fidelidade'
+      annualTotal: billingCycle === 'annual' ? 'R$ 478,80/ano no Pix/Cartão' : 'Cobrança mensal sem fidelidade'
     },
     elite: {
-      price: billingCycle === 'annual' ? 'R$ 74,75' : 'R$ 119,90',
+      price: billingCycle === 'annual' ? 'R$ 89,90' : 'R$ 129,90',
       period: '/ mês',
-      annualTotal: billingCycle === 'annual' ? 'R$ 897/ano no Pix (Economia de R$ 541)' : 'Cobrança mensal sem fidelidade'
+      annualTotal: billingCycle === 'annual' ? 'R$ 1.078,80/ano no Pix/Cartão' : 'Cobrança mensal sem fidelidade'
+    },
+    black: {
+      price: 'R$ 1.497',
+      period: 'único',
+      annualTotal: 'Acesso Vitalício até a posse (12x R$ 149,70 ou R$ 197/mês)'
     }
   };
 

@@ -14,10 +14,21 @@ import { SmartVadeMecum } from '@/components/SmartVadeMecum';
 import { QuestionBank } from '@/components/QuestionBank';
 import { AICopilotDrawer } from '@/components/AICopilotDrawer';
 import { BancaPsychometrics } from '@/components/BancaPsychometrics';
+import { SRSFlashcardPlayer } from '@/components/SRSFlashcardPlayer';
 import { StudentProfileModal } from '@/components/StudentProfileModal';
 import { AdminQuestionIngestModal } from '@/components/AdminQuestionIngestModal';
 import { NarrativeOnboardingTerminal } from '@/components/NarrativeOnboardingTerminal';
 import { AvatarOnboardingModal } from '@/components/AvatarOnboardingModal';
+import { ScrollToTop } from '@/components/ScrollToTop';
+import { UserSettingsTab } from '@/components/UserSettingsTab';
+import { SidebarNavigation } from '@/components/SidebarNavigation';
+import { FloatingDockNavigation } from '@/components/FloatingDockNavigation';
+import { CheckoutCartTab } from '@/components/CheckoutCartTab';
+import { SubscriptionManagementTab } from '@/components/SubscriptionManagementTab';
+import { ConcursosRadarTab } from '@/components/ConcursosRadarTab';
+import { PlatformGuideTab } from '@/components/PlatformGuideTab';
+import { HelpAndAboutTab } from '@/components/HelpAndAboutTab';
+import { PricingPlansTab } from '@/components/PricingPlansTab';
 import { 
   ExamNotice, 
   QuestionAttempt, 
@@ -58,6 +69,9 @@ export function AprovaLensApp() {
   const [studentProfile, setStudentProfile] = useState<StudentProfile>(DEFAULT_STUDENT_PROFILE);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [dailyAiCount, setDailyAiCount] = useState<number>(0);
+  // Navigation Style Mode: 'sidebar' (Opção 1) | 'megamenu' (Opção 2) | 'dock' (Opção 3)
+  const [navMode, setNavMode] = useState<'sidebar' | 'megamenu' | 'dock'>('sidebar');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   // Load from LocalStorage if available
   useEffect(() => {
@@ -96,6 +110,10 @@ export function AprovaLensApp() {
         document.body.classList.add(savedTheme);
       }
 
+      // Carregar preferência de estilo de navegação
+      const savedNavMode = localStorage.getItem('learning_ai_nav_mode') as 'sidebar' | 'megamenu' | 'dock';
+      if (savedNavMode) setNavMode(savedNavMode);
+
       // Captura de parâmetros de URL originados de Landing Pages de SEO (?edital=...&tab=...)
       if (typeof window !== 'undefined') {
         const params = new URLSearchParams(window.location.search);
@@ -119,6 +137,26 @@ export function AprovaLensApp() {
       }
     } catch {}
   }, []);
+
+  const handleSetNavMode = (mode: 'sidebar' | 'megamenu' | 'dock') => {
+    setNavMode(mode);
+    try {
+      localStorage.setItem('learning_ai_nav_mode', mode);
+    } catch {}
+    const label = mode === 'sidebar' ? 'Sidebar Lateral (Opção 1)' : mode === 'megamenu' ? 'Mega-Menu Topo (Opção 2)' : 'Dock Flutuante (Opção 3)';
+    showToast(`Estilo alterado para: ${label}`);
+  };
+
+  // Transição de abas: Rolagem suave automática para o topo ao trocar de módulo
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
+  }, [activeTab]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -413,39 +451,53 @@ export function AprovaLensApp() {
       </div>
 
       {/* Wrapper Constraint for Ultra-wide screens */}
-      <div className="w-full max-w-[1920px] mx-auto flex flex-col flex-1 relative z-10">
+      <div className="w-full max-w-[1920px] mx-auto flex flex-row flex-1 relative z-10 min-w-0">
 
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-blue-600 text-white text-xs font-bold shadow-2xl shadow-blue-600/30 border border-blue-400/40 animate-fadeIn flex items-center gap-2">
-          <span>⚡</span>
-          <span>{toastMessage}</span>
-        </div>
-      )}
+        {/* Sidebar Lateral Retrátil (Opção 1) */}
+        {navMode === 'sidebar' && (
+          <SidebarNavigation
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            theme={theme}
+            pendingMistakesCount={pendingMistakesCount}
+            studentProfile={studentProfile}
+            streakDays={metrics.streakDays}
+            plan={plan}
+            onOpenPricing={() => setActiveTab('pricing-plans')}
+            onOpenProfile={() => setIsProfileModalOpen(true)}
+            isCollapsed={isSidebarCollapsed}
+            onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          />
+        )}
 
-      {/* Global Navbar com alternância de tema */}
-      <div className="relative z-20">
-        <Navbar
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          streakDays={metrics.streakDays}
-          plan={plan}
-          onOpenPricing={() => setIsPricingOpen(true)}
-          selectedExamTitle={selectedExam?.title}
-          pendingMistakesCount={pendingMistakesCount}
-          onOpenCopilot={() => setIsCopilotOpen(true)}
-          isSupabaseConfigured={isSupabaseConfigured()}
-          theme={theme}
-          onToggleTheme={handleToggleTheme}
-          studentProfile={studentProfile}
-          onOpenProfile={() => setIsProfileModalOpen(true)}
-          onOpenAdminIngest={() => setIsAdminIngestOpen(true)}
-        />
-      </div>
+        <div className="flex-1 flex flex-col min-w-0 relative">
+          {/* Global Navbar com alternância de tema e seletor de estilo */}
+          <div className="relative z-20">
+            <Navbar
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              streakDays={metrics.streakDays}
+              plan={plan}
+              onOpenPricing={() => setActiveTab('pricing-plans')}
+              selectedExamTitle={selectedExam?.title}
+              pendingMistakesCount={pendingMistakesCount}
+              onOpenCopilot={() => setIsCopilotOpen(true)}
+              isSupabaseConfigured={isSupabaseConfigured()}
+              theme={theme}
+              onToggleTheme={handleToggleTheme}
+              studentProfile={studentProfile}
+              onOpenProfile={() => setIsProfileModalOpen(true)}
+              onOpenSettings={() => setActiveTab('settings')}
+              onOpenAdminIngest={() => setIsAdminIngestOpen(true)}
+              navMode={navMode}
+              setNavMode={handleSetNavMode}
+            />
+          </div>
 
-      {/* Main Content Area */}
-      <main className="flex-1 pb-20 sm:pb-8 relative z-10">
-        {activeTab === 'landing' && (
+      {/* Main Content Area com Transição Suave */}
+      <main className={`flex-1 relative z-10 ${navMode === 'dock' ? 'pb-28 sm:pb-32' : 'pb-20 sm:pb-8'}`}>
+        <div key={activeTab} className="tab-page-wrapper">
+          {activeTab === 'landing' && (
           <LandingPage
             onStartEdital={() => setIsOnboardingTerminalOpen(true)}
             onStartDiscursivas={() => setActiveTab('discursivas')}
@@ -455,6 +507,7 @@ export function AprovaLensApp() {
               setIsPricingOpen(true);
             }}
             onOpenPsychometrics={() => setActiveTab('psychometrics')}
+            onNavigateTab={(tab) => setActiveTab(tab)}
           />
         )}
 
@@ -490,6 +543,16 @@ export function AprovaLensApp() {
           />
         )}
 
+        {activeTab === 'flashcards' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fadeIn">
+            <SRSFlashcardPlayer
+              flashcards={flashcards}
+              onReviewCard={handleReviewFlashcard}
+              onAddNewCard={handleAddFlashcard}
+            />
+          </div>
+        )}
+
         {activeTab === 'mistakes' && (
           <MistakesNotebook
             mistakes={mistakes}
@@ -519,7 +582,7 @@ export function AprovaLensApp() {
           />
         )}
 
-        {activeTab === 'analytics' && (
+        {(activeTab === 'analytics' || activeTab === 'dashboard') && (
           <AnalyticsDashboard
             metrics={metrics}
             selectedExam={selectedExam}
@@ -540,14 +603,94 @@ export function AprovaLensApp() {
           />
         )}
 
-        {activeTab === 'psychometrics' && (
-          <BancaPsychometrics
-            onGoToSimulator={(banca) => {
-              setActiveTab('simulator');
-              if (banca) showToast(`Carregando simulado calibrado para a banca: ${banca}`);
-            }}
-          />
-        )}
+          {activeTab === 'psychometrics' && (
+            <BancaPsychometrics
+              onGoToSimulator={(banca) => {
+                setActiveTab('simulator');
+                if (banca) showToast(`Carregando simulado calibrado para a banca: ${banca}`);
+              }}
+            />
+          )}
+
+          {activeTab === 'radar' && (
+            <ConcursosRadarTab
+              onSelectExamNotice={(noticeId) => {
+                const matched = exams.find((e) => e.id === noticeId);
+                if (matched) {
+                  setSelectedExam(matched);
+                  setActiveTab('edital');
+                  showToast(`Edital ${matched.title} carregado na Matriz de Pesos!`);
+                } else {
+                  setActiveTab('edital');
+                }
+              }}
+              onGoToDiscursivas={() => setActiveTab('discursivas')}
+              showToast={showToast}
+            />
+          )}
+
+          {activeTab === 'settings' && (
+            <UserSettingsTab
+              studentProfile={studentProfile}
+              onSaveProfile={handleSaveProfile}
+              currentPlan={plan}
+              onOpenPricing={() => setActiveTab('pricing-plans')}
+              onOpenCheckout={(p) => {
+                setPlan(p);
+                setActiveTab('checkout');
+              }}
+              showToast={showToast}
+            />
+          )}
+
+          {activeTab === 'checkout' && (
+            <CheckoutCartTab
+              initialPlan={plan}
+              onPaymentSuccess={(newPlan) => {
+                setPlan(newPlan);
+                setActiveTab('subscription');
+              }}
+              onGoBack={() => setActiveTab('pricing-plans')}
+              showToast={showToast}
+            />
+          )}
+
+          {activeTab === 'subscription' && (
+            <SubscriptionManagementTab
+              currentPlan={plan}
+              onUpgradePlan={(newPlan) => {
+                setPlan(newPlan);
+                setActiveTab('checkout');
+              }}
+              onOpenPricing={() => setActiveTab('pricing-plans')}
+              showToast={showToast}
+            />
+          )}
+
+          {activeTab === 'guide' && (
+            <PlatformGuideTab
+              onGoToTab={(tab) => setActiveTab(tab)}
+              showToast={showToast}
+            />
+          )}
+
+          {activeTab === 'help' && (
+            <HelpAndAboutTab
+              showToast={showToast}
+            />
+          )}
+
+          {activeTab === 'pricing-plans' && (
+            <PricingPlansTab
+              currentPlan={plan}
+              onSelectPlanForCheckout={(selected) => {
+                setPlan(selected);
+                setActiveTab('checkout');
+              }}
+              showToast={showToast}
+            />
+          )}
+        </div>
       </main>
 
       {/* Omnipresent AI Copilot Drawer */}
@@ -607,6 +750,20 @@ export function AprovaLensApp() {
         }}
       />
 
+      {/* Botão Flutuante de Rolagem Suave para o Topo */}
+      <ScrollToTop />
+
+      {/* Dock Flutuante Inferior (Opção 3) */}
+      {navMode === 'dock' && (
+        <FloatingDockNavigation
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          theme={theme}
+          pendingMistakesCount={pendingMistakesCount}
+        />
+      )}
+
+        </div>
       </div>
     </div>
   );

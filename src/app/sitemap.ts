@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { getAllEditalSlugs } from '@/lib/editaisCatalog';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://aprovalens.ai';
+  const baseUrl = 'https://learningai.app';
   const now = new Date();
 
   // Rotas estáticas

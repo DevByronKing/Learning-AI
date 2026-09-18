@@ -265,24 +265,24 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto animate-fadeIn">
-      <div className="relative w-full max-w-5xl bg-slate-900/95 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto animate-fadeIn">
+      <div className="relative w-full max-w-5xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between">
+        <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 text-blue-400">
+            <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500/15 to-cyan-500/15 border border-blue-500/30 text-blue-600 dark:text-blue-400">
               <UploadCloud className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold text-white tracking-wide">
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-wide">
                   Upload & Ingestão de PDFs de Provas Oficiais
                 </h2>
-                <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30">
                   Upload Direto de PDF
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 Arraste os PDFs oficiais da prova e do gabarito definitivo. O Gemini 1.5 Flash extrai e audita tudo automaticamente.
               </p>
             </div>
@@ -290,21 +290,21 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
 
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+            className="p-1.5 text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Sub-bar de navegação de abas */}
-        <div className="flex items-center justify-between px-6 py-2.5 bg-slate-900 border-b border-slate-800/80 text-xs">
+        <div className="flex items-center justify-between px-6 py-2.5 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800/80 text-xs">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setActiveTab('input')}
               className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
                 activeTab === 'input'
                   ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800/60'
               }`}
             >
               1. Upload dos PDFs (Prova + Gabarito)
@@ -316,13 +316,13 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
                 activeTab === 'audit_preview'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : result
-                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                  : 'text-slate-600 cursor-not-allowed'
+                  ? 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800/60'
+                  : 'text-slate-400 dark:text-slate-600 cursor-not-allowed'
               }`}
             >
               <span>2. Auditoria & Conferência</span>
               {result && (
-                <span className="px-1.5 py-0.2 bg-indigo-900/60 text-indigo-300 rounded text-[10px] font-bold">
+                <span className="px-1.5 py-0.2 bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 rounded text-[10px] font-bold">
                   {result.questions.length}
                 </span>
               )}
@@ -334,8 +334,8 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
                 activeTab === 'sql_export'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : result
-                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                  : 'text-slate-600 cursor-not-allowed'
+                  ? 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800/60'
+                  : 'text-slate-400 dark:text-slate-600 cursor-not-allowed'
               }`}
             >
               3. Script SQL Supabase
@@ -344,16 +344,16 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
 
           {/* Atalhos de Demonstração com 1 clique */}
           <div className="hidden sm:flex items-center gap-2">
-            <span className="text-[11px] text-slate-500">PDFs de Exemplo:</span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400">PDFs de Exemplo:</span>
             <button
               onClick={loadSampleCebraspe}
-              className="text-[11px] px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/60 transition-colors"
+              className="text-[11px] px-2.5 py-1 rounded bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700/60 transition-colors shadow-sm"
             >
               📄 PF 2021 (Cebraspe)
             </button>
             <button
               onClick={loadSampleFgv}
-              className="text-[11px] px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/60 transition-colors"
+              className="text-[11px] px-2.5 py-1 rounded bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700/60 transition-colors shadow-sm"
             >
               📄 Receita 2023 (FGV)
             </button>
@@ -363,14 +363,14 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
         {/* Conteúdo Principal */}
         <div className="p-6 overflow-y-auto flex-1 space-y-6">
           {successMessage && (
-            <div className="p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-sm flex items-center justify-between animate-fadeIn">
+            <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-300 text-sm flex items-center justify-between animate-fadeIn shadow-sm">
               <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
                 <span>{successMessage}</span>
               </div>
               <button
                 onClick={() => setSuccessMessage(null)}
-                className="text-xs text-emerald-400 hover:underline"
+                className="text-xs text-emerald-700 dark:text-emerald-400 hover:underline"
               >
                 Dispensar
               </button>
@@ -381,18 +381,18 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
           {activeTab === 'input' && (
             <div className="space-y-6">
               {/* Metadados do Concurso */}
-              <div className="bg-slate-950/40 p-4 rounded-xl border border-slate-800 space-y-3">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                  <Building2 className="w-4 h-4 text-indigo-400" />
+              <div className="bg-slate-50 dark:bg-slate-950/40 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                  <Building2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                   Metadados do Concurso Oficial
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
                   <div>
-                    <label className="block text-slate-400 mb-1">Banca Examinadora</label>
+                    <label className="block text-slate-600 dark:text-slate-400 mb-1 font-medium">Banca Examinadora</label>
                     <select
                       value={metadata.banca}
                       onChange={(e) => setMetadata({ ...metadata, banca: e.target.value as any })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white focus:border-indigo-500 outline-none"
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white focus:border-indigo-500 outline-none shadow-sm"
                     >
                       <option value="Cebraspe">Cebraspe (Certo / Errado)</option>
                       <option value="FGV">FGV (Múltipla Escolha 5 Alt.)</option>
@@ -402,43 +402,43 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
                     </select>
                   </div>
                   <div>
-                    <label className="block text-slate-400 mb-1">Órgão / Instituição</label>
+                    <label className="block text-slate-600 dark:text-slate-400 mb-1 font-medium">Órgão / Instituição</label>
                     <input
                       type="text"
                       value={metadata.institution}
                       onChange={(e) => setMetadata({ ...metadata, institution: e.target.value })}
                       placeholder="Ex: Polícia Federal"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white focus:border-indigo-500 outline-none"
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white focus:border-indigo-500 outline-none shadow-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-400 mb-1">Cargo</label>
+                    <label className="block text-slate-600 dark:text-slate-400 mb-1 font-medium">Cargo</label>
                     <input
                       type="text"
                       value={metadata.role}
                       onChange={(e) => setMetadata({ ...metadata, role: e.target.value })}
                       placeholder="Ex: Agente"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white focus:border-indigo-500 outline-none"
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white focus:border-indigo-500 outline-none shadow-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-400 mb-1">Ano da Prova</label>
+                    <label className="block text-slate-600 dark:text-slate-400 mb-1 font-medium">Ano da Prova</label>
                     <input
                       type="number"
                       value={metadata.year}
                       onChange={(e) => setMetadata({ ...metadata, year: parseInt(e.target.value, 10) || 2024 })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white focus:border-indigo-500 outline-none"
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white focus:border-indigo-500 outline-none shadow-sm"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
                   <div>
-                    <label className="block text-slate-400 mb-1">Carreira</label>
+                    <label className="block text-slate-600 dark:text-slate-400 mb-1 font-medium">Carreira</label>
                     <select
                       value={metadata.careerCategory}
                       onChange={(e) => setMetadata({ ...metadata, careerCategory: e.target.value as any })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white focus:border-indigo-500 outline-none"
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white focus:border-indigo-500 outline-none shadow-sm"
                     >
                       <option value="policial">Carreira Policial</option>
                       <option value="fiscal">Carreira Fiscal / Tributária</option>

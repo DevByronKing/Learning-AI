@@ -114,6 +114,25 @@ export const GUARDIAN_ANIMALS: GuardianAnimal[] = [
       resiliencia: 100,
       estrategia: 90
     }
+  },
+  {
+    id: 'fenix',
+    name: 'Fênix Dourada',
+    title: 'A Guardiã Mítica do Acesso Vitalício (Black VIP)',
+    emoji: '🔥',
+    archetype: 'Imortal da Posse',
+    superpower: 'Ressurreição de Desempenho & Inteligência Suprema',
+    cognitiveStyle: 'Domínio holístico de todas as bancas e carreiras públicas, absorção acelerada de conteúdo e superação de qualquer reprovação até a nomeação.',
+    motto: '"Das cinzas de cada erro renasce a certeza da nomeação no Diário Oficial."',
+    colorGradient: 'from-amber-400 via-yellow-500 to-amber-700',
+    glowColor: 'rgba(245, 158, 11, 0.45)',
+    bestForCareers: ['Todas as Carreiras', 'Magistratura & MP', 'Auditores Fiscais', 'Diplomacia & Alta Gestão'],
+    stats: {
+      foco: 100,
+      velocidade: 100,
+      resiliencia: 100,
+      estrategia: 100
+    }
   }
 ];
 

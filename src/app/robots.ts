@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/checkout', '/api/webhooks'],
     },
-    sitemap: 'https://aprovalens.ai/sitemap.xml',
+    sitemap: 'https://learningai.app/sitemap.xml',
   };
 }

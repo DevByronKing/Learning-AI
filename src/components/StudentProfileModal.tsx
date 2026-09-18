@@ -18,6 +18,8 @@ import {
 } from 'lucide-react';
 import { StudentProfile, GuardianAnimalId, SubscriptionPlan } from '@/lib/types';
 import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
+import { useAuthStore } from '@/store/useAuthStore';
+import { SupabaseService } from '@/lib/supabaseService';
 import confetti from 'canvas-confetti';
 
 interface StudentProfileModalProps {
@@ -43,7 +45,8 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
   const [dailyHoursGoal, setDailyHoursGoal] = useState<number>(profile.dailyHoursGoal || 4);
   const [experienceLevel, setExperienceLevel] = useState(profile.experienceLevel || 'intermediario');
   const [selectedAnimalId, setSelectedAnimalId] = useState<GuardianAnimalId>(profile.guardianAnimalId || 'coruja');
-  const [activeSubTab, setActiveSubTab] = useState<'animal' | 'dados'>('animal');
+  const [activeSubTab, setActiveSubTab] = useState<'animal' | 'dados' | 'conta'>('animal');
+  const { user, token, logout, updateProfile: updateAuthProfile } = useAuthStore();
 
   if (!isOpen) return null;
 
@@ -63,6 +66,10 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
     };
 
     onSaveProfile(updated);
+    updateAuthProfile(updated);
+    if (user?.id) {
+      SupabaseService.syncStudentProfile(user.id, updated);
+    }
 
     try {
       confetti({
@@ -147,7 +154,18 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/5'
               }`}
             >
-              <span>🎯 Carreira, Carga & Metas</span>
+              <span>🎯 Carreira & Metas</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('conta')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                activeSubTab === 'conta'
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/5'
+              }`}
+            >
+              <span>🔑 Sessão & JWT</span>
             </button>
           </div>
 
@@ -366,6 +384,74 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                     Mudar de Plano
                   </button>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* SubTab 3: Conta & Sessão JWT */}
+          {activeSubTab === 'conta' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                      Status da Autenticação & Sessão
+                    </h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      Gerenciamento de sessão com tokens de autenticação criptografados.
+                    </p>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 text-[11px] font-bold">
+                    Sessão Ativa
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                    <span className="text-[10px] uppercase font-bold text-slate-400">Email Autenticado</span>
+                    <p className="font-mono font-semibold text-slate-800 dark:text-slate-200 mt-1 truncate">
+                      {user?.email || 'aluno@learningai.com.br'}
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                    <span className="text-[10px] uppercase font-bold text-slate-400">Identificador do Aluno</span>
+                    <p className="font-mono text-slate-800 dark:text-slate-200 mt-1 truncate">
+                      {user?.id || 'usr_default_demo'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[10px] uppercase font-bold text-slate-400">Token JWT de Sessão</span>
+                    <span className="text-[10px] text-indigo-500 font-semibold">Criptografia RSA / JWT</span>
+                  </div>
+                  <p className="font-mono text-[11px] text-slate-600 dark:text-slate-400 break-all bg-slate-50 dark:bg-slate-950 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                    {token ? `${token.slice(0, 45)}...` : 'jwt_mock_active_session_learning_ai'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 flex items-center justify-between gap-3 text-xs">
+                <div>
+                  <p className="font-bold text-slate-800 dark:text-amber-300">Desconectar Dispositivo</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-[11px] mt-0.5">
+                    Encerra a sessão atual e limpa os tokens de autenticação deste navegador.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    SupabaseService.signOut();
+                    onClose();
+                  }}
+                  className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md shrink-0 transition-colors"
+                >
+                  Sair da Conta
+                </button>
               </div>
             </div>
           )}

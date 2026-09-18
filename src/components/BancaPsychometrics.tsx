@@ -39,6 +39,8 @@ interface BancaPsychometricsProps {
 export const BancaPsychometrics: React.FC<BancaPsychometricsProps> = ({ onGoToSimulator }) => {
   const [selectedBancaName, setSelectedBancaName] = useState<'Cebraspe' | 'FGV' | 'FCC' | 'Vunesp'>('Cebraspe');
   const [selectedDistractorId, setSelectedDistractorId] = useState<PsychometricDistractorType>('generalizacao_indevida');
+  const [isDiagnosing, setIsDiagnosing] = useState<boolean>(false);
+  const [narrativeText, setNarrativeText] = useState<string>('A ler histórico de questões...');
 
   const bancaProfile: BancaPsychometricProfile = 
     BANCA_PSYCHOMETRIC_PROFILES.find(b => b.banca === selectedBancaName) || BANCA_PSYCHOMETRIC_PROFILES[0];
@@ -46,9 +48,27 @@ export const BancaPsychometrics: React.FC<BancaPsychometricsProps> = ({ onGoToSi
   const activeDistractor: PsychometricDistractorDef = 
     PSYCHOMETRIC_DISTRACTORS.find(d => d.id === selectedDistractorId) || PSYCHOMETRIC_DISTRACTORS[0];
 
-  const handleSelectBanca = (banca: 'Cebraspe' | 'FGV' | 'FCC' | 'Vunesp') => {
+  const runDiagnosticWithNarrative = (banca: 'Cebraspe' | 'FGV' | 'FCC' | 'Vunesp') => {
     setSelectedBancaName(banca);
+    setIsDiagnosing(true);
+    setNarrativeText('A ler histórico de questões...');
     analytics.track('mascot_strategy_interacted', { action: 'select_psychometric_banca', banca });
+
+    setTimeout(() => {
+      setNarrativeText(`A aplicar engenharia reversa no ${banca}...`);
+    }, 1000);
+
+    setTimeout(() => {
+      setNarrativeText('A classificar distratores e armadilhas...');
+    }, 2500);
+
+    setTimeout(() => {
+      setIsDiagnosing(false);
+    }, 3800);
+  };
+
+  const handleSelectBanca = (banca: 'Cebraspe' | 'FGV' | 'FCC' | 'Vunesp') => {
+    runDiagnosticWithNarrative(banca);
   };
 
   const renderIcon = (iconName: string, className: string = 'w-5 h-5') => {
@@ -69,39 +89,51 @@ export const BancaPsychometrics: React.FC<BancaPsychometricsProps> = ({ onGoToSi
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fadeIn">
       
       {/* Top Banner de Apresentação */}
-      <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-950 border border-indigo-500/30 p-8 sm:p-10 shadow-2xl text-white">
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
-        <div className="absolute bottom-0 left-0 -mb-12 -ml-12 w-96 h-96 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-indigo-50/90 via-slate-50/60 to-white dark:from-indigo-950 dark:via-slate-900 dark:to-indigo-950 border border-indigo-200/80 dark:border-indigo-500/30 p-8 sm:p-10 shadow-sm dark:shadow-2xl text-slate-900 dark:text-white">
+        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-cyan-500/10 dark:bg-cyan-500/15 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
+        <div className="absolute bottom-0 left-0 -mb-12 -ml-12 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div className="space-y-4 max-w-3xl">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="px-4 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-black tracking-wider uppercase flex items-center gap-2 shadow-sm">
-                <Microscope className="w-4 h-4 text-cyan-300" />
+              <span className="px-4 py-1.5 rounded-full bg-cyan-100 text-cyan-800 border border-cyan-200 dark:bg-cyan-500/20 dark:text-cyan-300 dark:border-cyan-500/40 text-xs font-black tracking-wider uppercase flex items-center gap-2 shadow-sm">
+                <Microscope className="w-4 h-4 text-cyan-600 dark:text-cyan-300" />
                 Psicometria Educacional & TRI
               </span>
-              <span className="px-4 py-1.5 rounded-full bg-blue-500/20 text-blue-200 border border-blue-500/40 text-xs font-bold shadow-sm">
+              <span className="px-4 py-1.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200 dark:bg-blue-500/20 dark:text-blue-200 dark:border-blue-500/40 text-xs font-bold shadow-sm">
                 Engenharia Reversa de Distratores
               </span>
-              <span className="px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold shadow-sm">
+              <span className="px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40 text-xs font-bold shadow-sm">
                 45.720 Questões Mapeadas
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
               A Mente do Examinador Decodificada
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-200/90 leading-relaxed max-w-2xl">
-              As bancas não criam alternativas erradas ao acaso. Em psicometria, cada erro é um <strong className="text-cyan-300 font-bold">distrator intencional</strong> calibrado para explorar uma armadilha cognitiva específica. Aprenda a desarmar os 8 arquétipos favoritos de cada banca.
+            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-200/90 leading-relaxed max-w-2xl">
+              As bancas não criam alternativas erradas ao acaso. Em psicometria, cada erro é um <strong className="text-cyan-600 dark:text-cyan-300 font-bold">distrator intencional</strong> calibrado para explorar uma armadilha cognitiva específica. Aprenda a desarmar os 8 arquétipos favoritos de cada banca.
             </p>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => runDiagnosticWithNarrative(selectedBancaName)}
+                disabled={isDiagnosing}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-blue-600/25 transition-all active:scale-95"
+              >
+                <Sparkles className="w-4 h-4 text-cyan-300" />
+                <span>Executar Diagnóstico Profundo por IA</span>
+              </button>
+            </div>
           </div>
 
           <div className="flex sm:flex-col gap-4 shrink-0">
-            <div className="bg-slate-900/60 backdrop-blur-md border border-indigo-400/40 p-5 rounded-3xl text-center shadow-xl flex flex-col items-center justify-center">
-              <span className="text-xs text-slate-400 block font-bold uppercase tracking-widest mb-2">Discriminação (A)</span>
-              <span className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">{bancaProfile.discriminationEfficiency}%</span>
-              <span className="text-[11px] text-cyan-300 block mt-2 font-medium bg-cyan-500/10 px-2 py-1 rounded-md border border-cyan-500/20">Alta Previsibilidade</span>
+            <div className="bg-white/90 dark:bg-slate-900/60 backdrop-blur-md border border-indigo-200 dark:border-indigo-400/40 p-5 rounded-3xl text-center shadow-sm dark:shadow-xl flex flex-col items-center justify-center">
+              <span className="text-xs text-slate-500 dark:text-slate-400 block font-bold uppercase tracking-widest mb-2">Discriminação (A)</span>
+              <span className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400">{bancaProfile.discriminationEfficiency}%</span>
+              <span className="text-[11px] text-cyan-700 dark:text-cyan-300 block mt-2 font-medium bg-cyan-50 dark:bg-cyan-500/10 px-2 py-1 rounded-md border border-cyan-200 dark:border-cyan-500/20">Alta Previsibilidade</span>
             </div>
           </div>
         </div>
@@ -148,6 +180,58 @@ export const BancaPsychometrics: React.FC<BancaPsychometricsProps> = ({ onGoToSi
         </div>
       </div>
 
+      {/* NARRATIVE SKELETON LOADER (A PSICOLOGIA DA IA) */}
+      {isDiagnosing ? (
+        <div className="space-y-6 py-4 animate-fadeIn">
+          {/* Narrative HUD Banner */}
+          <div className="glass-panel p-8 sm:p-10 rounded-[2rem] border border-indigo-500/40 bg-white/90 dark:bg-[#0c1017] text-center space-y-4 shadow-2xl relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-indigo-500/10 to-purple-500/10 animate-pulse pointer-events-none" />
+            
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center shadow-[0_0_20px_rgba(99,102,241,0.25)]">
+              <Brain className="w-8 h-8 animate-pulse text-cyan-400" />
+            </div>
+
+            <div className="space-y-2">
+              <span className="text-[11px] font-mono font-bold tracking-widest text-cyan-500 dark:text-cyan-400 uppercase flex items-center justify-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                MOTOR DE PSICOMETRIA COGNITIVA & TRI
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white transition-all duration-300">
+                {narrativeText}
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                Engenharia reversa em tempo real dos distratores e padrões semânticos da banca examinadora.
+              </p>
+            </div>
+
+            {/* Shimmering Progress Bar */}
+            <div className="w-full max-w-md mx-auto h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 rounded-full animate-pulse" style={{ width: '85%' }} />
+            </div>
+          </div>
+
+          {/* Shimmering Skeleton Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-pulse">
+            <div className="lg:col-span-7 glass-panel p-8 rounded-[2rem] border border-slate-200 dark:border-white/5 bg-white/40 dark:bg-dark-card/40 space-y-4">
+              <div className="h-6 w-1/3 bg-slate-200 dark:bg-white/10 rounded-xl" />
+              <div className="h-4 w-2/3 bg-slate-200 dark:bg-white/5 rounded-lg" />
+              <div className="h-24 bg-slate-100 dark:bg-white/5 rounded-2xl mt-4" />
+              <div className="space-y-3 pt-4">
+                <div className="h-3 w-full bg-slate-200 dark:bg-white/10 rounded-full" />
+                <div className="h-3 w-4/5 bg-slate-200 dark:bg-white/10 rounded-full" />
+                <div className="h-3 w-3/5 bg-slate-200 dark:bg-white/10 rounded-full" />
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 glass-panel p-8 rounded-[2rem] border border-slate-200 dark:border-white/5 bg-white/40 dark:bg-dark-card/40 space-y-4">
+              <div className="h-6 w-1/2 bg-slate-200 dark:bg-white/10 rounded-xl" />
+              <div className="h-32 bg-slate-100 dark:bg-white/5 rounded-2xl" />
+              <div className="h-12 bg-slate-200 dark:bg-white/10 rounded-xl" />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
       {/* Seção 1: Anatomia dos Distratores da Banca Selecionada */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         
@@ -231,8 +315,8 @@ export const BancaPsychometrics: React.FC<BancaPsychometricsProps> = ({ onGoToSi
               <ShieldAlert className="w-6 h-6 text-rose-500" />
             </div>
 
-            <div className="mt-6 text-center bg-rose-50/50 dark:bg-dark-surface border border-rose-100 dark:border-white/5 p-5 rounded-2xl">
-              <span className="text-xs text-slate-600 dark:text-slate-400 block font-bold">Taxa de Vulnerabilidade a Pegadinhas</span>
+            <div className="mt-6 text-center bg-rose-50 dark:bg-dark-surface border border-rose-200 dark:border-white/5 p-5 rounded-2xl shadow-sm">
+              <span className="text-xs text-slate-700 dark:text-slate-400 block font-bold">Taxa de Vulnerabilidade a Pegadinhas</span>
               <div className="flex items-center justify-center gap-2 mt-1">
                 <TrendingDown className="w-6 h-6 text-rose-500" />
                 <span className="text-4xl font-black text-rose-600 dark:text-rose-400">{bancaProfile.studentVulnerabilityRate}%</span>
@@ -399,6 +483,8 @@ export const BancaPsychometrics: React.FC<BancaPsychometricsProps> = ({ onGoToSi
         </div>
 
       </div>
+        </>
+      )}
 
     </div>
   );

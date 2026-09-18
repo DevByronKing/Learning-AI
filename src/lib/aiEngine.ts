@@ -66,6 +66,16 @@ export const PLAN_LIMITS = {
     maxActiveEditais: 999999,
     hasSpeechSynthesis: true,
   },
+  black: {
+    name: 'Black Vitalício (Acesso Até a Posse)',
+    maxDailyAiRequests: 999999,
+    canAccessDiscursivas: true,
+    maxDailyDiscursivas: 999999,
+    maxMonthlyDiscursivas: 999999,
+    maxFlashcards: 999999,
+    maxActiveEditais: 999999,
+    hasSpeechSynthesis: true,
+  },
 } as const;
 
 // Cache L1 em memória RAM (reduz latência para ~1ms e 0 tokens em repetições)

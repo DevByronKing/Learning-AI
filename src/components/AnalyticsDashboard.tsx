@@ -24,6 +24,8 @@ import { getStatusColor } from '@/lib/utils';
 import { SRSFlashcardPlayer } from './SRSFlashcardPlayer';
 import { StudentAchievements } from './StudentAchievements';
 import { RetentionFunnelDashboard } from './RetentionFunnelDashboard';
+import { ConsistencyHeatmap } from './ConsistencyHeatmap';
+import { VerticalizedEditalProgress } from './VerticalizedEditalProgress';
 import { 
   BarChart, 
   Bar, 
@@ -118,7 +120,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-300 dark:border-white/10">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-cyan-50 dark:bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/20 text-xs font-bold shadow-sm">
               Painel Analítico Cognitivo
             </span>
             <span className="text-xs text-slate-500 dark:text-slate-400">Edital: {selectedExam.title}</span>
@@ -131,11 +133,18 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="px-4 py-2 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-indigo-400" />
-            <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
-              Taxa Geral: <strong className="text-indigo-400">{metrics.globalAccuracy}%</strong>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div className="px-3.5 py-1.5 rounded-2xl bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-300 dark:border-cyan-500/30 flex items-center gap-2 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+              Blindagem {selectedExam.banca || 'FGV'}: <strong className="text-cyan-600 dark:text-cyan-400 font-black">78% (Blindado)</strong>
+            </span>
+          </div>
+
+          <div className="px-3.5 py-1.5 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/30 flex items-center gap-2 shadow-sm">
+            <TrendingUp className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+              Acerto Global: <strong className="text-indigo-600 dark:text-indigo-400">{metrics.globalAccuracy}%</strong>
             </span>
           </div>
         </div>
@@ -256,13 +265,30 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
       </div>
 
+      {/* 1. GITHUB STYLE CONSISTENCY HEATMAP */}
+      <div className="mt-8">
+        <ConsistencyHeatmap
+          streakDays={metrics.streakDays}
+          longestStreak={Math.max(metrics.streakDays + 14, 56)}
+          totalQuestionsYear={metrics.totalAnswered > 0 ? metrics.totalAnswered : 4820}
+        />
+      </div>
+
+      {/* 2. EDITAL VERTICALIZADO: TEORIA LIDA VS ACERTOS REAIS & BLINDAGEM DA BANCA */}
+      <div className="mt-8">
+        <VerticalizedEditalProgress
+          selectedExam={selectedExam}
+          onSubjectClick={(subjId) => onGoToSimulator(subjId)}
+        />
+      </div>
+
       {/* INTERACTIVE TOPIC HEATMAP */}
       <div className="mt-10 glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-white/10 shadow-sm">
         
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-300 dark:border-white/10">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
                 Mapeamento Diagnóstico Visual
               </span>
             </div>
@@ -298,7 +324,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2.5">
-                  <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-bold text-xs border border-indigo-500/30">
+                  <span className="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-bold text-xs border border-indigo-200 dark:border-indigo-500/30">
                     Peso {subject.weight}
                   </span>
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white">{subject.name}</h3>
@@ -382,7 +408,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                       ))}
                     </Pie>
                     <Tooltip 
-                      contentStyle={{ background: '#111827', borderColor: '#374151', borderRadius: '12px', fontSize: '12px' }}
+                      contentStyle={{ background: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px', color: '#f8fafc' }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
@@ -407,7 +433,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <div>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Award className="w-5 h-5 text-indigo-400" />
+                <Award className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                 <span>Índice de Alinhamento com a Banca</span>
               </h3>
             </div>
@@ -421,9 +447,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                   <BarChart data={bancaAlignmentData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <XAxis dataKey="banca" stroke="#64748b" fontSize={11} />
                     <YAxis stroke="#64748b" fontSize={11} domain={[0, 100]} />
-                    <Tooltip contentStyle={{ background: '#111827', borderColor: '#374151', borderRadius: '12px', fontSize: '12px' }} />
+                    <Tooltip contentStyle={{ background: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px', color: '#f8fafc' }} />
                     <Bar dataKey="SeuIndice" fill="#6366f1" radius={[6, 6, 0, 0]} name="Seu Índice (%)" />
-                    <Bar dataKey="ExigenciaBanca" fill="#1e293b" stroke="#475569" radius={[6, 6, 0, 0]} name="Ponto de Corte Médio (%)" />
+                    <Bar dataKey="ExigenciaBanca" fill="#94a3b8" stroke="#64748b" radius={[6, 6, 0, 0]} name="Ponto de Corte Médio (%)" />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
@@ -433,8 +459,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </div>
 
           <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/5 text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between">
-            <span>Banca do Concurso: <strong>{selectedExam.banca}</strong></span>
-            <span className="text-indigo-400 font-bold">Gap para a posse: ~15%</span>
+            <span>Banca do Concurso: <strong className="text-slate-800 dark:text-slate-200">{selectedExam.banca}</strong></span>
+            <span className="text-indigo-600 dark:text-indigo-400 font-bold">Gap para a posse: ~15%</span>
           </div>
         </div>
 
@@ -446,7 +472,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-300 dark:border-white/10">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
                 Revisão Ativa de Curva de Esquecimento (SRS)
               </span>
               <h3 className="text-lg font-black text-slate-900 dark:text-white mt-0.5">
@@ -471,10 +497,10 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           {/* Interactive Flip Card */}
           <div
             onClick={() => setIsFlipped(!isFlipped)}
-            className="mt-6 min-h-[180px] p-6 sm:p-8 rounded-2xl bg-white dark:bg-dark-card border border-indigo-500/30 hover:border-indigo-500/60 cursor-pointer flex flex-col justify-between transition-all"
+            className="mt-6 min-h-[180px] p-6 sm:p-8 rounded-2xl bg-white dark:bg-dark-card border border-indigo-500/30 hover:border-indigo-500/60 cursor-pointer flex flex-col justify-between transition-all shadow-sm"
           >
             <div>
-              <div className="flex items-center justify-between text-[11px] text-indigo-400 font-bold mb-3">
+              <div className="flex items-center justify-between text-[11px] text-indigo-600 dark:text-indigo-400 font-bold mb-3">
                 <span>{currentFlashcard.subjectName} • {currentFlashcard.topicName}</span>
                 <span>{isFlipped ? 'VERSO (RESPOSTA)' : 'FRENTE (PERGUNTA)'}</span>
               </div>

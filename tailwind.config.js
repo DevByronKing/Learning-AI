@@ -8,6 +8,17 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+      },
+      letterSpacing: {
+        tighter: '-0.04em',
+        tight: '-0.02em',
+        normal: '-0.01em',
+        wide: '0em',
+        wider: '0.015em',
+        widest: '0.03em',
+      },
       colors: {
         brand: {
           50: '#eff6ff',
@@ -21,6 +32,12 @@ module.exports = {
           800: '#1e40af',
           900: '#1e3a8a',
           950: '#172554',
+        },
+        theme: {
+          canvas: 'rgb(var(--bg-canvas-rgb) / <alpha-value>)',
+          surface: 'rgb(var(--bg-surface-rgb) / <alpha-value>)',
+          card: 'rgb(var(--bg-card-rgb) / <alpha-value>)',
+          hover: 'rgb(var(--bg-card-hover-rgb) / <alpha-value>)',
         },
         dark: {
           bg: 'rgb(var(--bg-canvas-rgb) / <alpha-value>)',

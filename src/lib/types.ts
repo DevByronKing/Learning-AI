@@ -156,7 +156,7 @@ export type UserMetrics = {
   }[];
 };
 
-export type SubscriptionPlan = 'aspirante' | 'pro' | 'elite';
+export type SubscriptionPlan = 'aspirante' | 'pro' | 'elite' | 'black';
 
 export type DiscursivePrompt = {
   id: string;
@@ -421,7 +421,7 @@ export interface BancaPsychometricProfile {
   studentVulnerabilityRate: number; // taxa de erro do aluno nessa banca
 }
 
-export type GuardianAnimalId = 'coruja' | 'lobo' | 'gaviao' | 'leao' | 'raposa' | 'onca';
+export type GuardianAnimalId = 'coruja' | 'lobo' | 'gaviao' | 'leao' | 'raposa' | 'onca' | 'fenix';
 
 export interface GuardianAnimal {
   id: GuardianAnimalId;
@@ -507,3 +507,107 @@ export interface ExamIngestionResult {
   sqlInsertScript: string;
   warnings: string[];
 }
+
+// ==============================================================================
+// TIPAGENS DO RADAR DE CONCURSOS, OAB, ENEM E GESTÃO DE ASSINATURA
+// ==============================================================================
+
+export type ConcursoStatus = 'publicado' | 'previsto' | 'rumor';
+
+export type ConcursoCategory = 
+  | 'juridica' 
+  | 'policial' 
+  | 'fiscal' 
+  | 'tribunais' 
+  | 'administrativa' 
+  | 'oab' 
+  | 'enem';
+
+export type BrazilRegion = 'Nacional' | 'Sudeste' | 'Sul' | 'Centro-Oeste' | 'Nordeste' | 'Norte';
+
+export interface ConcursoRadarItem {
+  id: string;
+  title: string;
+  institution: string;
+  banca: string;
+  role: string;
+  salary: string;
+  vacancies: string | number;
+  educationLevel: 'Superior' | 'Médio' | 'Pós/Específico';
+  status: ConcursoStatus;
+  category: ConcursoCategory;
+  registrationPeriod?: string;
+  examDate?: string;
+  officialNoticeUrl?: string;
+  keyHighlights: string[];
+  matchedEditalId?: string; // ID correspondente para carregamento em 1 clique
+  location: string;
+  scope: 'Nacional' | 'Estadual' | 'Municipal';
+  region?: BrazilRegion;
+  stateCode?: string; // SP, RJ, DF, etc.
+}
+
+export interface OABCalendarEntry {
+  edition: string;
+  year: number;
+  editalDate: string;
+  registrationPeriod: string;
+  phase1Date: string;
+  phase2Date: string;
+  status: 'aberto' | 'em_andamento' | 'previsto';
+  fee: string;
+  details: {
+    banca: string;
+    phase1Structure: string;
+    phase2Structure: string;
+    repescagemInfo: string;
+    criticalSubjects: string[];
+  };
+}
+
+export interface ENEMCalendarEntry {
+  edition: string;
+  year: number;
+  exemptionPeriod: string;
+  registrationPeriod: string;
+  day1Date: string;
+  day2Date: string;
+  resultDate: string;
+  sisuDate: string;
+  fee: string;
+  details: {
+    day1Subjects: string;
+    day2Subjects: string;
+    triMechanism: string;
+    redacaoCriteria: string[];
+  };
+}
+
+export interface InvoiceEntry {
+  id: string;
+  planId: SubscriptionPlan;
+  billingCycle: 'mensal' | 'trimestral' | 'anual' | 'vitalicio';
+  amount: number;
+  status: 'paga' | 'pendente' | 'cancelada';
+  paidAt: string;
+  paymentMethod: 'pix' | 'cartao';
+  receiptCode: string;
+}
+
+export interface SubscriptionDetail {
+  planId: SubscriptionPlan;
+  status: 'ativa' | 'cancelada' | 'expirada' | 'pendente';
+  currentPeriodEnd: string;
+  autoRenew: boolean;
+  billingCycle: 'mensal' | 'trimestral' | 'anual' | 'vitalicio';
+  paymentMethodDesc: string;
+  invoices: InvoiceEntry[];
+}
+
+export interface CouponDiscount {
+  code: string;
+  discountPercent: number;
+  description: string;
+  validUntil: string;
+}
+

@@ -410,145 +410,172 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             </div>
           </div>
 
-          {/* Exam Presets Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {exams
-              .filter((exam) => {
-                if (examTab === 'past_exams' && !exam.isOfficialPastExam) return false;
-                if (examTab === 'simulados' && exam.isOfficialPastExam) return false;
-                if (careerFilter !== 'all' && exam.careerCategory !== careerFilter) return false;
-                if (bancaFilter !== 'all' && exam.banca !== bancaFilter) return false;
-                return true;
-              })
-              .map((exam) => {
-                const isLocked = userPlan === 'aspirante' && !exam.isFreeDemo;
+          {/* Exam Presets Cards with Aggressive Empty State */}
+          {(() => {
+            const filteredExams = exams.filter((exam) => {
+              if (examTab === 'past_exams' && !exam.isOfficialPastExam) return false;
+              if (examTab === 'simulados' && exam.isOfficialPastExam) return false;
+              if (careerFilter !== 'all' && exam.careerCategory !== careerFilter) return false;
+              if (bancaFilter !== 'all' && exam.banca !== bancaFilter) return false;
+              return true;
+            });
 
-                return (
-                  <div
-                    key={exam.id}
-                    className={`glass-panel p-6 sm:p-8 rounded-3xl border transition-all flex flex-col justify-between group relative overflow-hidden ${
-                      isLocked
-                        ? 'border-amber-500/30 bg-amber-500/5 hover:border-amber-500/50'
-                        : 'border-slate-300 dark:border-white/10 hover:border-indigo-500/40'
-                    }`}
-                  >
-                    <div>
-                      
-                      {/* Meta Badges */}
-                      <div className="flex items-center justify-between pb-4 border-b border-slate-300 dark:border-white/10 text-xs">
-                        <div className="flex items-center gap-2">
-                          <span className="px-3 py-1 rounded-xl bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">
-                            Banca {exam.banca}
-                          </span>
-                          {exam.isOfficialPastExam ? (
-                            <span className="px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-400 font-black border border-amber-500/30 flex items-center gap-1">
-                              <History className="w-3 h-3" />
-                              PROVA OFICIAL {exam.examYear || ''}
-                            </span>
-                          ) : (
-                            <span className="px-2.5 py-1 rounded-xl bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 font-bold border border-cyan-500/30">
-                              SIMULADO INÉDITO
-                            </span>
-                          )}
-                        </div>
-
-                        <span className="text-slate-500 dark:text-slate-400 font-mono flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-amber-400" />
-                          {exam.durationMinutes} minutos
-                        </span>
-                      </div>
-
-                      {/* Title & Organization */}
-                      <div className="mt-4">
-                        <div className="flex items-start justify-between gap-2">
-                          <h2 className="text-xl font-black text-slate-900 dark:text-white group-hover:text-indigo-300 transition-colors">
-                            {exam.title}
-                          </h2>
-                          {isLocked && (
-                            <span className="p-1.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0" title="Exclusivo Pro e Elite">
-                              <Lock className="w-4 h-4" />
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                          {exam.institution} • Cargo: <strong>{exam.role}</strong>
-                        </p>
-                      </div>
-
-                      <p className="text-xs text-slate-600 dark:text-slate-300 mt-4 leading-relaxed">
-                        {exam.description}
-                      </p>
-
-                      {/* Highlights Grid */}
-                      <div className="grid grid-cols-3 gap-3 mt-6 p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 text-center text-xs">
-                        <div>
-                          <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">Questões</span>
-                          <p className="text-base font-black text-slate-900 dark:text-white font-mono mt-0.5">{exam.totalQuestions}</p>
-                        </div>
-                        <div>
-                          <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">Regra</span>
-                          <p className="text-xs font-bold text-amber-400 mt-1">
-                            {exam.scoringRule === 'cebraspe_uma_anula_uma' ? '1 Errada Anula 1' : 'Ponderada'}
-                          </p>
-                        </div>
-                        <div>
-                          <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold">
-                            {exam.isOfficialPastExam ? 'Corte Histórico' : 'Corte Estimado'}
-                          </span>
-                          <p className="text-base font-black text-emerald-400 font-mono mt-0.5">
-                            {exam.historicalCutoffScore ? `${exam.historicalCutoffScore} pts` : `${exam.estimatedCutoffScore}%`}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Historical Real Cutoff Information Alert */}
-                      {exam.isOfficialPastExam && exam.historicalCutoffDescription && (
-                        <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-300 flex items-start gap-2">
-                          <Crown className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                          <span><strong>Referência Real da Banca:</strong> {exam.historicalCutoffDescription}</span>
-                        </div>
-                      )}
-
-                      {/* Free Demo Badge for Aspirante */}
-                      {exam.isFreeDemo && userPlan === 'aspirante' && (
-                        <div className="mt-3 p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[11px] text-emerald-400 font-bold flex items-center gap-1.5">
-                          <span>🎁</span>
-                          <span>Degustação Gratuita Liberada para o Plano Aspirante!</span>
-                        </div>
-                      )}
-
-                    </div>
-
-                    {/* Start or Unlock Button */}
-                    <div className="mt-8 pt-4 border-t border-slate-300 dark:border-white/10">
-                      {isLocked ? (
-                        <div className="space-y-2">
-                          <button
-                            onClick={onOpenPricing}
-                            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-500 text-black font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/30"
-                          >
-                            <Lock className="w-4 h-4" />
-                            <span>Desbloquear Prova Oficial (Assine PRO)</span>
-                          </button>
-                          <p className="text-[10px] text-center text-slate-500 dark:text-slate-400">
-                            Exclusivo para assinantes Concurseiro PRO e Carreiras Elite.
-                          </p>
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => handleStartExam(exam)}
-                          className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:from-blue-500 hover:to-blue-600 text-white font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30"
-                        >
-                          <span>{exam.isOfficialPastExam ? 'Iniciar Caderno de Prova Oficial' : 'Iniciar Prova Simulada'}</span>
-                          <ArrowRight className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
-
+            if (filteredExams.length === 0) {
+              return (
+                <div className="text-center py-16 px-6 glass-panel rounded-3xl border border-indigo-500/30 bg-white/60 dark:bg-dark-card/60 backdrop-blur-md space-y-5 max-w-2xl mx-auto shadow-2xl animate-fadeIn">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/40 text-indigo-400 flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(99,102,241,0.2)]">
+                    <ShieldAlert className="w-8 h-8 text-amber-400" />
                   </div>
-                );
-              })}
-          </div>
+                  <div className="space-y-2">
+                    <span className="text-[11px] font-mono font-bold tracking-widest text-amber-500 uppercase">
+                      Nenhum Simulado com os Filtros Selecionados
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
+                      A FGV não descansa. Crie o seu primeiro simulado focado em Direito Constitucional e identifique as suas vulnerabilidades.
+                    </h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+                      Não espere o edital sair para descobrir onde você erra. Redefina os filtros ou inicie um simulado imediato de alta intensidade.
+                    </p>
+                  </div>
+                  <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setExamTab('all');
+                        setCareerFilter('all');
+                        setBancaFilter('all');
+                      }}
+                      className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs shadow-lg shadow-blue-600/30 transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
+                    >
+                      <Sparkles className="w-4 h-4 text-cyan-300" />
+                      <span>Limpar Filtros & Iniciar Simulado Agora</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            }
+
+            return (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {filteredExams.map((exam) => {
+                  const isLocked = userPlan === 'aspirante' && !exam.isFreeDemo;
+
+                  return (
+                    <div
+                      key={exam.id}
+                      className={`glass-panel bg-white/80 dark:bg-dark-card/60 backdrop-blur-md shadow-sm p-6 sm:p-8 rounded-3xl border transition-all flex flex-col justify-between group relative overflow-hidden ${
+                        isLocked
+                          ? 'border-amber-500/30 bg-amber-500/5 hover:border-amber-500/50'
+                          : 'border-slate-200 dark:border-white/10 hover:border-indigo-500/40'
+                      }`}
+                    >
+                      <div>
+                        
+                        {/* Meta Badges */}
+                        <div className="flex items-center justify-between pb-4 border-b border-slate-300 dark:border-white/10 text-xs">
+                          <div className="flex items-center gap-2">
+                            <span className="px-3 py-1 rounded-xl bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">
+                              Banca {exam.banca}
+                            </span>
+                            {exam.isOfficialPastExam ? (
+                              <span className="px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-400 font-black border border-amber-500/30 flex items-center gap-1">
+                                <History className="w-3 h-3" />
+                                PROVA OFICIAL {exam.examYear || ''}
+                              </span>
+                            ) : (
+                              <span className="px-2.5 py-1 rounded-xl bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 font-bold border border-cyan-500/30">
+                                SIMULADO INÉDITO
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            {exam.isFreeDemo && (
+                              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-black text-[10px] border border-emerald-500/30">
+                                GRATUITO
+                              </span>
+                            )}
+                            <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
+                              <Clock className="w-3.5 h-3.5" />
+                              <span>{exam.durationMinutes} min</span>
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Title & Description */}
+                        <div className="mt-4 space-y-2">
+                          <h3 className="text-xl font-black text-slate-900 dark:text-white group-hover:text-indigo-400 transition-colors">
+                            {exam.title}
+                          </h3>
+                          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            {exam.description}
+                          </p>
+                        </div>
+
+                        {/* Metrics Bar */}
+                        <div className="grid grid-cols-3 gap-2 p-3 mt-5 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 text-center text-xs">
+                          <div>
+                            <span className="text-slate-500 dark:text-slate-400 text-[10px] block">Questões</span>
+                            <strong className="text-slate-900 dark:text-white font-mono font-bold">
+                              {exam.questions.length}
+                            </strong>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 dark:text-slate-400 text-[10px] block">Nota de Corte</span>
+                            <strong className="text-amber-400 font-mono font-bold">
+                              {exam.historicalCutoffScore ? `${exam.historicalCutoffScore} pts` : `${exam.estimatedCutoffScore || 70}%`}
+                            </strong>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 dark:text-slate-400 text-[10px] block">Regra</span>
+                            <strong className="text-indigo-400 font-mono font-bold text-[10px]">
+                              {exam.scoringRule === 'cebraspe_uma_anula_uma' ? '1 Errada Anula 1' : 'Padrão'}
+                            </strong>
+                          </div>
+                        </div>
+
+                        {/* Free demo badge banner */}
+                        {exam.isFreeDemo && userPlan === 'aspirante' && (
+                          <div className="mt-3 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold flex items-center gap-1.5">
+                            <span>🎁</span>
+                            <span>Degustação Gratuita Liberada para o Plano Aspirante!</span>
+                          </div>
+                        )}
+
+                      </div>
+
+                      {/* Start or Unlock Button */}
+                      <div className="mt-8 pt-4 border-t border-slate-300 dark:border-white/10">
+                        {isLocked ? (
+                          <div className="space-y-2">
+                            <button
+                              onClick={onOpenPricing}
+                              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-500 text-black font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/30"
+                            >
+                              <Lock className="w-4 h-4" />
+                              <span>Desbloquear Prova Oficial (Assine PRO)</span>
+                            </button>
+                            <p className="text-[10px] text-center text-slate-500 dark:text-slate-400">
+                              Exclusivo para assinantes Concurseiro PRO e Carreiras Elite.
+                            </p>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => handleStartExam(exam)}
+                            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:from-blue-500 hover:to-blue-600 text-white font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30"
+                          >
+                            <span>{exam.isOfficialPastExam ? 'Iniciar Caderno de Prova Oficial' : 'Iniciar Prova Simulada'}</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
 
         </div>
       )}
@@ -558,11 +585,11 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
         <div className="space-y-6">
           
           {/* Top Real-time Bar */}
-          <div className="glass-panel p-4 rounded-2xl border border-slate-300 dark:border-white/10 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md">
+          <div className="glass-panel bg-white/95 dark:bg-dark-card/95 p-4 rounded-2xl border border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md">
             
             {/* Title & Question number */}
             <div className="flex items-center gap-3">
-              <span className="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold text-xs border border-indigo-500/30">
+              <span className="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-bold text-xs border border-indigo-200 dark:border-indigo-500/30">
                 {selectedExam.banca}
               </span>
               <div>
@@ -578,8 +605,8 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             {/* Middle: Timer */}
             <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border font-mono font-black text-sm ${
               remainingSeconds <= 300
-                ? 'bg-rose-500/20 border-rose-500/50 text-rose-400 animate-pulse'
-                : 'bg-white dark:bg-dark-surface border-slate-300 dark:border-white/10 text-amber-400'
+                ? 'bg-rose-500/20 border-rose-500/50 text-rose-500 dark:text-rose-400 animate-pulse'
+                : 'bg-white dark:bg-dark-surface border-slate-200 dark:border-white/10 text-amber-500 dark:text-amber-400 shadow-sm'
             }`}>
               <Clock className="w-4 h-4" />
               <span>{formatTime(remainingSeconds)}</span>
@@ -617,11 +644,11 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             {/* Question Card */}
             <div className="lg:col-span-8 space-y-6">
               
-              <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10">
+              <div className="glass-panel bg-white/85 dark:bg-dark-card/60 backdrop-blur-md shadow-sm p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-white/10">
                 
                 {/* Law citation badge */}
                 {currentQuestion.codeCitation && (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold mb-4">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-xs font-semibold mb-4">
                     <Scale className="w-3.5 h-3.5" />
                     <span>{currentQuestion.codeCitation}</span>
                   </div>
@@ -642,19 +669,19 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                         onClick={() => handleSelectOption(currentQuestion.id, option.id)}
                         className={`w-full p-4 rounded-2xl border text-left text-xs sm:text-sm font-medium transition-all flex items-center justify-between gap-4 ${
                           isSelected
-                            ? 'bg-indigo-600/20 border-indigo-400 text-white shadow-lg shadow-indigo-600/20 ring-1 ring-indigo-400'
+                            ? 'bg-indigo-50 dark:bg-indigo-600/20 border-indigo-500 dark:border-indigo-400 text-indigo-950 dark:text-white shadow-md ring-2 ring-indigo-200 dark:ring-indigo-400/50'
                             : 'bg-white dark:bg-dark-surface/70 hover:bg-slate-50 dark:hover:bg-dark-hover border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-200'
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
-                            isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                            isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                           }`}>
                             {option.id.replace('opt-', '').toUpperCase()}
                           </div>
                           <span className="leading-snug">{option.text}</span>
                         </div>
-                        {isSelected && <CheckCircle2 className="w-5 h-5 text-indigo-400 shrink-0" />}
+                        {isSelected && <CheckCircle2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />}
                       </button>
                     );
                   })}
@@ -705,9 +732,9 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             {/* Cartão-Resposta Digital (Gabarito Lateral) */}
             <div className="lg:col-span-4 space-y-4">
               
-              <div className="glass-panel p-6 rounded-3xl border border-slate-300 dark:border-white/10 sticky top-36">
+              <div className="glass-panel bg-white/90 dark:bg-dark-card/80 backdrop-blur-md shadow-sm p-6 rounded-3xl border border-slate-200 dark:border-white/10 sticky top-36">
                 
-                <div className="flex items-center justify-between pb-3 border-b border-slate-300 dark:border-white/10">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10">
                   <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
                     <FileText className="w-3.5 h-3.5 text-indigo-400" />
                     <span>Cartão-Resposta Digital</span>
@@ -804,8 +831,8 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
           {/* Confirm Finish Modal */}
           {showConfirmModal && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-              <div className="max-w-md w-full glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10 glow-brand">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-4">
+              <div className="max-w-md w-full p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 shadow-2xl">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-500 dark:text-emerald-400 flex items-center justify-center mb-4">
                   <FileText className="w-6 h-6" />
                 </div>
                 <h3 className="text-lg font-black text-slate-900 dark:text-white">
@@ -868,31 +895,31 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
         <div className="space-y-8 animate-fadeIn">
           
           {/* Hero Performance Card */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-indigo-500/40 glow-brand">
+          <div className="glass-panel bg-white/85 dark:bg-dark-card/60 backdrop-blur-md shadow-sm p-6 sm:p-8 rounded-3xl border border-indigo-500/40 glow-brand">
             
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-300 dark:border-white/10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-white/10">
               
               <div className="flex items-center gap-4">
                 <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-black shrink-0 ${
                   result.isAboveCutoff
-                    ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400'
-                    : 'bg-rose-500/20 border border-rose-500/40 text-rose-400'
+                    ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-500 dark:text-emerald-400'
+                    : 'bg-rose-500/20 border border-rose-500/40 text-rose-500 dark:text-rose-400'
                 }`}>
                   {result.isAboveCutoff ? '✓' : '✗'}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <span className={`text-xs font-black uppercase tracking-wider ${
-                      result.isAboveCutoff ? 'text-emerald-400' : 'text-rose-400'
+                      result.isAboveCutoff ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
                     }`}>
                       {result.isAboveCutoff ? 'DENTRO DA NOTA DE CORTE' : 'ABAIXO DA NOTA DE CORTE'}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono border border-slate-200 dark:border-slate-700">
                       Corte Estimado: {result.cutoffScore}%
                     </span>
                   </div>
                   <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
-                    Nota Líquida: <span className={result.isAboveCutoff ? 'text-emerald-400' : 'text-rose-400'}>
+                    Nota Líquida: <span className={result.isAboveCutoff ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}>
                       {result.netScore > 0 ? `+${result.netScore}` : result.netScore}
                     </span> / {result.totalQuestions} pts líquidos ({result.percentage}%)
                   </h2>
@@ -903,17 +930,17 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
               </div>
 
               {/* Formula calculation badge */}
-              <div className="bg-white dark:bg-dark-surface/90 p-4 rounded-2xl border border-slate-200 dark:border-white/5 text-xs self-start md:self-auto">
+              <div className="bg-white dark:bg-dark-surface/90 p-4 rounded-2xl border border-slate-200 dark:border-white/5 text-xs self-start md:self-auto shadow-sm">
                 <span className="text-slate-500 dark:text-slate-400">Fórmula de Apuração Oficial:</span>
                 {result.scoringRule === 'cebraspe_uma_anula_uma' ? (
                   <div className="mt-1">
                     <p className="font-mono font-bold text-slate-900 dark:text-white">Nota Líquida = Acertos ({result.correctCount}) - Erros ({result.wrongCount})</p>
-                    <p className="text-[11px] text-rose-400 mt-0.5">Penalidades deduzidas: -{result.penaltyDeductions} pts</p>
+                    <p className="text-[11px] text-rose-500 dark:text-rose-400 mt-0.5 font-semibold">Penalidades deduzidas: -{result.penaltyDeductions} pts</p>
                   </div>
                 ) : (
                   <div className="mt-1">
                     <p className="font-mono font-bold text-slate-900 dark:text-white">Nota = {result.correctCount} acertos de {result.totalQuestions} questões</p>
-                    <p className="text-[11px] text-emerald-400 mt-0.5">Sem fator de penalização por erro</p>
+                    <p className="text-[11px] text-emerald-500 dark:text-emerald-400 mt-0.5 font-semibold">Sem fator de penalização por erro</p>
                   </div>
                 )}
               </div>
@@ -923,15 +950,15 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
             {/* Simulated Ranking Banner */}
             <div className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-amber-500/15 via-blue-500/10 to-emerald-500/15 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-500 dark:text-amber-400 flex items-center justify-center shrink-0">
                   <Trophy className="w-6 h-6" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
                     Posição no Ranking Simulado do Concurso
                   </span>
                   <h3 className="text-xl font-black text-slate-900 dark:text-white mt-0.5">
-                    🏆 Você ficou em <span className="text-amber-400">{result.simulatedRank}º lugar</span> entre {result.totalCandidates.toLocaleString('pt-BR')} candidatos
+                    🏆 Você ficou em <span className="text-amber-600 dark:text-amber-400">{result.simulatedRank}º lugar</span> entre {result.totalCandidates.toLocaleString('pt-BR')} candidatos
                   </h3>
                   <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
                     Percentil atingido: <strong>{Math.max(1, 100 - Math.round((result.simulatedRank / result.totalCandidates) * 100))}%</strong> dos concorrentes simulados.
@@ -943,52 +970,42 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                 <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold block">Status no Concurso</span>
                 <span className={`px-3 py-1.5 rounded-xl text-xs font-black inline-block mt-1 ${
                   result.isAboveCutoff 
-                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' 
-                    : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                    ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40' 
+                    : 'bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-500/40'
                 }`}>
                   {result.isAboveCutoff ? 'Classificado para a 2ª Fase' : 'Fora das Vagas Imediatas'}
                 </span>
               </div>
             </div>
 
-            {/* Comparador de Nota de Corte Real da Prova Oficial */}
+            {/* Official Real Cutoff Comparison Notification Banner */}
             {selectedExam.isOfficialPastExam && selectedExam.historicalCutoffScore && (
-              <div className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-blue-950/40 via-dark-surface to-slate-900/60 border border-blue-500/30 shadow-xl">
+              <div className="mt-4 p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shrink-0">
-                      <History className="w-6 h-6" />
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-500 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                      <Scale className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-indigo-400 flex items-center gap-1">
-                          <Crown className="w-3.5 h-3.5 text-amber-400" />
-                          Comparador Histórico Oficial • Concurso Real {selectedExam.examYear}
+                        <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 text-[10px] font-black uppercase tracking-wider">
+                          Métrica Oficial Real ({selectedExam.examYear})
                         </span>
-                        {userPlan === 'elite' ? (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-black border border-amber-500/30">
-                            ANÁLISE ELITE ATIVA
-                          </span>
-                        ) : (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 font-mono">
-                            Referência Oficial
-                          </span>
-                        )}
+                        <span className="text-slate-500 dark:text-slate-400 font-medium">Banca {selectedExam.banca}</span>
                       </div>
-                      <h4 className="text-base sm:text-lg font-black text-slate-900 dark:text-white mt-1">
-                        Sua Nota Líquida: <span className="font-mono text-indigo-400">{result.netScore.toFixed(1)} pts</span> | Corte Oficial Real da Época: <span className="font-mono text-amber-400">{selectedExam.historicalCutoffScore.toFixed(1)} pts</span>
+                      <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
+                        Corte Histórico Real: <span className="text-amber-600 dark:text-amber-400">{selectedExam.historicalCutoffScore} pontos líquidos</span>
                       </h4>
-                      <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                      <p className="text-slate-600 dark:text-slate-300 mt-0.5">
                         {selectedExam.historicalCutoffDescription}
                       </p>
-                      
                       {result.netScore >= selectedExam.historicalCutoffScore ? (
-                        <div className="mt-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+                        <div className="mt-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold">
                           <CheckCircle2 className="w-4 h-4 shrink-0" />
-                          <span>Parabéns! Sua nota nesta prova teria garantido convocação oficial para as próximas fases no concurso real!</span>
+                          <span>Parabéns! Sua pontuação líquida teria garantido a convocação na lista real deste certame!</span>
                         </div>
                       ) : (
-                        <div className="mt-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold">
+                        <div className="mt-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-400 text-xs font-bold">
                           <AlertTriangle className="w-4 h-4 shrink-0" />
                           <span>Você ficou a {(selectedExam.historicalCutoffScore - result.netScore).toFixed(1)} pontos do corte oficial real. Revise os pontos cegos no Caderno de Erros!</span>
                         </div>
@@ -998,7 +1015,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
 
                   {userPlan !== 'elite' && (
                     <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center shrink-0 self-start md:self-center">
-                      <span className="text-[10px] text-slate-400 block mb-1.5 font-bold">Quer diagnóstico cognitivo de cada erro?</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 block mb-1.5 font-bold">Quer diagnóstico cognitivo de cada erro?</span>
                       <button
                         onClick={onOpenPricing}
                         className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-black text-xs transition-all flex items-center gap-1.5 shadow-md shadow-amber-500/20"
@@ -1014,21 +1031,21 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
 
             {/* Quick Metrics Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 text-xs text-center">
-              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5">
-                <span className="text-slate-500 dark:text-slate-400">Acertos (Certas)</span>
-                <p className="text-xl font-black text-emerald-400 font-mono mt-1">+{result.correctCount}</p>
+              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 shadow-sm">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Acertos (Certas)</span>
+                <p className="text-xl font-black text-emerald-500 dark:text-emerald-400 font-mono mt-1">+{result.correctCount}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5">
-                <span className="text-slate-500 dark:text-slate-400">Erros (Anulam)</span>
-                <p className="text-xl font-black text-rose-400 font-mono mt-1">-{result.wrongCount}</p>
+              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 shadow-sm">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Erros (Anulam)</span>
+                <p className="text-xl font-black text-rose-500 dark:text-rose-400 font-mono mt-1">-{result.wrongCount}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5">
-                <span className="text-slate-500 dark:text-slate-400">Em Branco (Neutras)</span>
-                <p className="text-xl font-black text-amber-400 font-mono mt-1">{result.blankCount}</p>
+              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 shadow-sm">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Em Branco (Neutras)</span>
+                <p className="text-xl font-black text-amber-500 dark:text-amber-400 font-mono mt-1">{result.blankCount}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5">
-                <span className="text-slate-500 dark:text-slate-400">Tempo Médio/Questão</span>
-                <p className="text-xl font-black text-indigo-400 font-mono mt-1">
+              <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 shadow-sm">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Tempo Médio/Questão</span>
+                <p className="text-xl font-black text-indigo-500 dark:text-indigo-400 font-mono mt-1">
                   {Math.round(result.timeSpentSeconds / result.totalQuestions)}s
                 </p>
               </div>
@@ -1037,33 +1054,33 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
           </div>
 
           {/* Performance by Subject Breakdown Table */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10">
+          <div className="glass-panel bg-white/85 dark:bg-dark-card/60 backdrop-blur-md shadow-sm p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-white/10">
             <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2 mb-4">
-              <BarChart2 className="w-5 h-5 text-indigo-400" />
+              <BarChart2 className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
               <span>Desempenho Discriminado por Disciplina</span>
             </h3>
 
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left text-slate-600 dark:text-slate-300">
-                <thead className="bg-white dark:bg-dark-surface text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold border-b border-slate-300 dark:border-white/10">
+                <thead className="bg-slate-50 dark:bg-dark-surface text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold border-b border-slate-200 dark:border-white/10">
                   <tr>
                     <th className="p-3">Disciplina</th>
                     <th className="p-3 text-center">Questões</th>
-                    <th className="p-3 text-center text-emerald-400">Acertos</th>
-                    <th className="p-3 text-center text-rose-400">Erros</th>
-                    <th className="p-3 text-center text-amber-400">Em Branco</th>
+                    <th className="p-3 text-center text-emerald-500 dark:text-emerald-400">Acertos</th>
+                    <th className="p-3 text-center text-rose-500 dark:text-rose-400">Erros</th>
+                    <th className="p-3 text-center text-amber-500 dark:text-amber-400">Em Branco</th>
                     <th className="p-3 text-center font-bold text-slate-900 dark:text-white">Saldo Líquido</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5 font-mono">
+                <tbody className="divide-y divide-slate-100 dark:divide-white/5 font-mono">
                   {result.subjectBreakdown.map((subj, idx) => (
-                    <tr key={idx} className="hover:bg-white/5 transition-colors">
+                    <tr key={idx} className="hover:bg-slate-50/80 dark:hover:bg-white/5 transition-colors">
                       <td className="p-3 font-sans font-bold text-slate-900 dark:text-white">{subj.subjectName}</td>
                       <td className="p-3 text-center">{subj.total}</td>
-                      <td className="p-3 text-center text-emerald-400">+{subj.correct}</td>
-                      <td className="p-3 text-center text-rose-400">-{subj.wrong}</td>
-                      <td className="p-3 text-center text-amber-400">{subj.blank}</td>
-                      <td className="p-3 text-center font-bold text-indigo-300">
+                      <td className="p-3 text-center text-emerald-500 dark:text-emerald-400">+{subj.correct}</td>
+                      <td className="p-3 text-center text-rose-500 dark:text-rose-400">-{subj.wrong}</td>
+                      <td className="p-3 text-center text-amber-500 dark:text-amber-400">{subj.blank}</td>
+                      <td className="p-3 text-center font-bold text-indigo-600 dark:text-indigo-300">
                         {subj.netScore > 0 ? `+${subj.netScore}` : subj.netScore} pts
                       </td>
                     </tr>
@@ -1074,22 +1091,22 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
           </div>
 
           {/* Complete Answer Key (Gabarito Comentado Oficial) */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10 space-y-6">
+          <div className="glass-panel bg-white/85 dark:bg-dark-card/60 backdrop-blur-md shadow-sm p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-white/10 space-y-6">
             
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-300 dark:border-white/10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-white/10">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">Gabarito Comentado</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Gabarito Comentado</span>
                 <h3 className="text-lg font-black text-slate-900 dark:text-white mt-0.5">
                   Conferência Questão por Questão com Análise da Banca
                 </h3>
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex items-center p-1 rounded-2xl bg-white dark:bg-dark-surface border border-slate-300 dark:border-white/10 text-xs">
+              <div className="flex items-center p-1 rounded-2xl bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/10 text-xs shadow-sm">
                 <button
                   onClick={() => { setResultFilter('all'); setVisibleResultsCount(15); }}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
-                    resultFilter === 'all' ? 'bg-indigo-600 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-white'
+                    resultFilter === 'all' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Todas ({result.totalQuestions})
@@ -1097,7 +1114,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                 <button
                   onClick={() => { setResultFilter('wrong'); setVisibleResultsCount(15); }}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
-                    resultFilter === 'wrong' ? 'bg-rose-600 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-white'
+                    resultFilter === 'wrong' ? 'bg-rose-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Erros ({result.wrongCount})
@@ -1105,7 +1122,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                 <button
                   onClick={() => { setResultFilter('blank'); setVisibleResultsCount(15); }}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
-                    resultFilter === 'blank' ? 'bg-amber-600 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-white'
+                    resultFilter === 'blank' ? 'bg-amber-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Em Branco ({result.blankCount})
@@ -1115,9 +1132,9 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
 
             {/* SRS Sync Banner */}
             {result.wrongCount > 0 && (
-              <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                <div className="flex items-center gap-2 text-indigo-300">
-                  <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+              <div className="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                <div className="flex items-center gap-2 text-indigo-900 dark:text-indigo-300 font-medium">
+                  <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0" />
                   <span>
                     Você errou <strong>{result.wrongCount} questões</strong> neste simulado. Converta seus erros em flashcards para fixação definitiva.
                   </span>
@@ -1127,7 +1144,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                   disabled={addedToSRS}
                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 flex items-center gap-1.5 ${
                     addedToSRS
-                      ? 'bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 cursor-default'
+                      ? 'bg-emerald-600/30 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 cursor-default'
                       : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md'
                   }`}
                 >
@@ -1165,12 +1182,12 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                     return (
                       <div
                         key={q.id}
-                        className={`p-6 rounded-2xl border text-xs sm:text-sm transition-all ${
+                        className={`p-6 rounded-2xl border text-xs sm:text-sm transition-all shadow-sm ${
                           isCorrect
-                            ? 'bg-emerald-950/20 border-emerald-500/30'
+                            ? 'bg-emerald-50/90 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-500/30'
                             : isBlank
-                            ? 'bg-amber-950/20 border-amber-500/30'
-                            : 'bg-rose-950/20 border-rose-500/30'
+                            ? 'bg-amber-50/90 dark:bg-amber-950/20 border-amber-300 dark:border-amber-500/30'
+                            : 'bg-rose-50/90 dark:bg-rose-950/20 border-rose-300 dark:border-rose-500/30'
                         }`}
                       >
                         {/* Meta header */}
@@ -1181,37 +1198,37 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                           </div>
                           <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
                             isCorrect
-                              ? 'bg-emerald-500/20 text-emerald-400'
+                              ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400'
                               : isBlank
-                              ? 'bg-amber-500/20 text-amber-400'
-                              : 'bg-rose-500/20 text-rose-400'
+                              ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400'
+                              : 'bg-rose-500/20 text-rose-700 dark:text-rose-400'
                           }`}>
                             {isCorrect ? '✓ Acerto (+1 pt)' : isBlank ? '○ Em Branco (0 pt)' : '✗ Erro (-1 pt no Cebraspe)'}
                           </span>
                         </div>
 
                         {/* Statement */}
-                        <p className="mt-3 text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
+                        <p className="mt-3 text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
                           {q.statement}
                         </p>
 
                         {/* Comparison of Selected vs Correct */}
-                        <div className="mt-4 p-3.5 rounded-xl bg-dark-bg/70 border border-slate-200 dark:border-white/5 space-y-1.5 text-xs font-mono">
+                        <div className="mt-4 p-3.5 rounded-xl bg-slate-100 dark:bg-dark-bg/70 border border-slate-200 dark:border-white/5 space-y-1.5 text-xs font-mono">
                           <div className="flex items-center gap-2">
                             <span className="text-slate-500 dark:text-slate-400">Sua Marcação:</span>
-                            <strong className={isCorrect ? 'text-emerald-400' : isBlank ? 'text-amber-400' : 'text-rose-400'}>
+                            <strong className={isCorrect ? 'text-emerald-600 dark:text-emerald-400' : isBlank ? 'text-amber-600 dark:text-amber-400' : 'text-rose-600 dark:text-rose-400'}>
                               {isBlank ? 'EM BRANCO' : selectedOpt?.text}
                             </strong>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="text-slate-500 dark:text-slate-400">Gabarito Oficial:</span>
-                            <strong className="text-emerald-400">{correctOpt?.text}</strong>
+                            <strong className="text-emerald-600 dark:text-emerald-400">{correctOpt?.text}</strong>
                           </div>
                         </div>
 
                         {/* Explanation */}
-                        <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                          <strong className="text-indigo-300">Fundamentação: </strong>
+                        <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                          <strong className="text-indigo-700 dark:text-indigo-300">Fundamentação: </strong>
                           {q.explanation}
                         </div>
 
@@ -1219,7 +1236,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
                         {q.lawArticles && (
                           <div className="mt-3 flex flex-wrap gap-1.5">
                             {q.lawArticles.map((art, aIdx) => (
-                              <span key={aIdx} className="px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 text-[10px] font-semibold">
+                              <span key={aIdx} className="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/25 text-[10px] font-semibold">
                                 {art}
                               </span>
                             ))}

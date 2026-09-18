@@ -101,14 +101,14 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
   const getTierBadge = (tier: Achievement['tier']) => {
     switch (tier) {
       case 'diamond':
-        return 'border-cyan-400/50 bg-cyan-500/15 text-cyan-300 ring-1 ring-cyan-400/30';
+        return 'border-cyan-400/50 bg-cyan-50 dark:bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 ring-1 ring-cyan-400/30';
       case 'gold':
-        return 'border-amber-400/50 bg-amber-500/15 text-amber-300 ring-1 ring-amber-400/30';
+        return 'border-amber-400/50 bg-amber-50 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300 ring-1 ring-amber-400/30';
       case 'silver':
-        return 'border-slate-300/50 bg-slate-400/15 text-slate-200 ring-1 ring-slate-300/30';
+        return 'border-slate-300/60 bg-slate-100 dark:bg-slate-400/15 text-slate-700 dark:text-slate-200 ring-1 ring-slate-300/30';
       case 'bronze':
       default:
-        return 'border-amber-700/50 bg-amber-800/15 text-amber-500 ring-1 ring-amber-700/30';
+        return 'border-amber-700/40 bg-amber-100/50 dark:bg-amber-800/15 text-amber-800 dark:text-amber-500 ring-1 ring-amber-700/30';
     }
   };
 
@@ -155,10 +155,10 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                <span className="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-500/30 shadow-sm">
                   NÍVEL {userLevel} • {currentMascot.species.toUpperCase()}
                 </span>
-                <span className="flex items-center gap-1 text-xs font-bold text-orange-400">
+                <span className="flex items-center gap-1 text-xs font-bold text-orange-600 dark:text-orange-400">
                   <Flame className="w-3.5 h-3.5 fill-orange-500" />
                   {metrics.streakDays} dias de streak
                 </span>
@@ -172,7 +172,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
               <div className="mt-2 w-56 sm:w-72">
                 <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">
                   <span>{userXp} XP</span>
-                  <span className="text-blue-500 dark:text-blue-400">Próx. Nível: {nextLevelXp} XP</span>
+                  <span className="text-blue-600 dark:text-blue-400">Próx. Nível: {nextLevelXp} XP</span>
                 </div>
                 <div className="w-full bg-slate-200 dark:bg-dark-surface rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-300 dark:border-white/10">
                   <div 
@@ -185,20 +185,20 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
           </div>
 
           {/* Balão de Fala Acolhedor do Mascote (Foco sem Pânico) */}
-          <div className="w-full lg:max-w-md p-4 sm:p-5 rounded-2xl bg-indigo-500/10 dark:bg-dark-card/90 border border-indigo-400/30 relative">
+          <div className="w-full lg:max-w-md p-4 sm:p-5 rounded-2xl bg-indigo-50/80 dark:bg-dark-card/90 border border-indigo-200 dark:border-indigo-400/30 relative shadow-sm">
             <div className="flex items-start gap-3">
-              <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400 shrink-0 mt-0.5">
+              <div className="p-2 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5">
                 <Compass className="w-4 h-4" />
               </div>
               <div>
-                <div className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-1">
+                <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-1">
                   Direção do Dia • Sem Ansiedade
                 </div>
                 <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed italic">
                   "{currentMascot.dailyAdvice}"
                 </p>
-                <div className="mt-3 border-t border-indigo-400/20 pt-2.5">
-                  <span className="text-[11px] font-semibold text-emerald-500 dark:text-emerald-400">✨ {currentMascot.encouragement}</span>
+                <div className="mt-3 border-t border-indigo-200 dark:border-indigo-400/20 pt-2.5">
+                  <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">✨ {currentMascot.encouragement}</span>
                   <button
                     onClick={() => setIsChatModalOpen(true)}
                     className="w-full py-2.5 rounded-xl bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-500/20 dark:hover:bg-indigo-500/30 text-indigo-700 dark:text-indigo-300 text-sm font-bold transition-colors flex items-center justify-center gap-2 mt-4"
@@ -285,10 +285,10 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
                 </div>
               </div>
 
-              <span className={`px-3 py-1 rounded-full text-xs font-extrabold border ${
+              <span className={`px-3 py-1 rounded-full text-xs font-extrabold border shadow-sm ${
                 isAboveCutoff 
-                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' 
-                  : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  ? 'bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40' 
+                  : 'bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-500/40'
               }`}>
                 {isAboveCutoff ? '✓ ZONA DE CLASSIFICAÇÃO' : '⚡ DISPUTANDO CADASTRO'}
               </span>
@@ -297,11 +297,11 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
             {/* Barra Comparativa do Termômetro */}
             <div className="mt-8 space-y-4">
               <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
+                <span className="text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
                   Seu Rendimento Preditivo Atual:
                 </span>
-                <span className="text-xl font-black text-indigo-400">{metrics.probabilityOfPassing}%</span>
+                <span className="text-xl font-black text-indigo-600 dark:text-indigo-400">{metrics.probabilityOfPassing}%</span>
               </div>
 
               {/* Barra de Progresso com Marcador de Corte */}
@@ -317,7 +317,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
                   style={{ left: `${metrics.estimatedCutoffScore}%` }}
                 >
                   <div className="w-2 h-2 rounded-full bg-rose-500 -mt-1 shadow" />
-                  <span className="absolute -top-7 text-[10px] font-black text-rose-400 whitespace-nowrap bg-rose-950/90 px-1.5 py-0.5 rounded border border-rose-500/40">
+                  <span className="absolute -top-7 text-[10px] font-black text-rose-700 dark:text-rose-300 whitespace-nowrap bg-rose-100 dark:bg-rose-950/90 px-1.5 py-0.5 rounded border border-rose-300 dark:border-rose-500/40 shadow-sm">
                     Corte: {metrics.estimatedCutoffScore}%
                   </span>
                 </div>
@@ -325,7 +325,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
 
               <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
                 <span>0% (Início da Preparação)</span>
-                <span className="text-rose-400 font-bold">Ponto de Corte Estimado: {metrics.estimatedCutoffScore}%</span>
+                <span className="text-rose-600 dark:text-rose-400 font-bold">Ponto de Corte Estimado: {metrics.estimatedCutoffScore}%</span>
                 <span>100% (Gabarito Completo)</span>
               </div>
             </div>
@@ -382,10 +382,10 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
               {missions.map((mission) => (
                 <div 
                   key={mission.id}
-                  className={`p-3.5 rounded-2xl border transition-all ${
+                  className={`p-3.5 rounded-2xl border transition-all shadow-sm ${
                     mission.completed
-                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-                      : 'bg-slate-50 dark:bg-dark-surface border-slate-200 dark:border-white/5 hover:border-amber-400/30'
+                      ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-300 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300'
+                      : 'bg-white dark:bg-dark-surface border-slate-200 dark:border-white/5 hover:border-amber-400/30'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -393,7 +393,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
                       onClick={() => handleCompleteMission(mission.id)}
                       className={`w-5 h-5 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                         mission.completed
-                          ? 'bg-emerald-500 text-slate-950 font-bold'
+                          ? 'bg-emerald-500 text-white font-bold'
                           : 'border-2 border-slate-400 dark:border-slate-600 hover:border-emerald-400'
                       }`}
                     >
@@ -402,10 +402,10 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
 
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] uppercase font-bold text-indigo-400">
+                        <span className="text-[10px] uppercase font-bold text-indigo-600 dark:text-indigo-400">
                           {mission.category}
                         </span>
-                        <span className="text-[10px] font-bold text-amber-400">
+                        <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">
                           +{mission.xpReward} XP
                         </span>
                       </div>
@@ -420,7 +420,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
                         {mission.actionTab && onGoToTab && !mission.completed && (
                           <button
                             onClick={() => onGoToTab(mission.actionTab!)}
-                            className="text-indigo-400 hover:underline font-bold"
+                            className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold"
                           >
                             Ir agora ➔
                           </button>
@@ -441,12 +441,12 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
       </div>
 
       {/* 4. MURAL EXTENSO DE CONQUISTAS & MEDALHAS */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-white/10">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm">
         
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/10">
           <div>
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-amber-500/15 text-amber-400">
+              <div className="p-2 rounded-xl bg-amber-500/15 text-amber-500 dark:text-amber-400">
                 <Trophy className="w-5 h-5" />
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
@@ -459,7 +459,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-amber-400 bg-amber-500/15 border border-amber-500/30 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+            <span className="text-xs font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-500/15 border border-amber-300 dark:border-amber-500/30 px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm">
               <Trophy className="w-3.5 h-3.5" />
               <span>{unlockedCount} de {achievements.length} Desbloqueadas</span>
             </span>
@@ -499,23 +499,23 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
           {filteredAchievements.map((ach) => (
             <div
               key={ach.id}
-              className={`p-5 rounded-2xl border transition-all flex flex-col justify-between ${
+              className={`p-5 rounded-2xl border transition-all flex flex-col justify-between shadow-sm ${
                 ach.unlocked
-                  ? 'bg-gradient-to-br from-indigo-900/20 via-slate-900/40 to-slate-900/60 border-amber-500/40 shadow-lg shadow-amber-500/5 glow-brand'
-                  : 'bg-slate-50 dark:bg-dark-surface/50 border-slate-200 dark:border-white/5 opacity-80 hover:opacity-100'
+                  ? 'bg-gradient-to-br from-indigo-50/90 via-white to-amber-50/50 dark:from-indigo-900/20 dark:via-slate-900/40 dark:to-slate-900/60 border-amber-400/50 dark:border-amber-500/40 shadow-amber-500/5 glow-brand'
+                  : 'bg-white dark:bg-dark-surface/50 border-slate-200 dark:border-white/5 opacity-85 hover:opacity-100'
               }`}
             >
               <div>
                 <div className="flex items-start justify-between gap-3">
                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 shadow-md ${
                     ach.unlocked 
-                      ? 'bg-gradient-to-tr from-amber-500/30 to-indigo-500/30 border border-amber-400/40' 
+                      ? 'bg-gradient-to-tr from-amber-500/20 to-indigo-500/20 dark:from-amber-500/30 dark:to-indigo-500/30 border border-amber-400/40' 
                       : 'bg-slate-200 dark:bg-slate-800 grayscale'
                   }`}>
                     {ach.icon}
                   </div>
 
-                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full border uppercase tracking-wider ${getTierBadge(ach.tier)}`}>
+                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full border uppercase tracking-wider shadow-sm ${getTierBadge(ach.tier)}`}>
                     {ach.tier}
                   </span>
                 </div>
@@ -523,9 +523,9 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
                 <div className="mt-3">
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                     <span>{ach.title}</span>
-                    {ach.unlocked && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
+                    {ach.unlocked && <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />}
                   </h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
                     {ach.description}
                   </p>
                 </div>
@@ -533,15 +533,15 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
 
               <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5">
                 {ach.unlocked ? (
-                  <div className="flex items-center justify-between text-[11px] text-emerald-400 font-bold">
+                  <div className="flex items-center justify-between text-[11px] text-emerald-700 dark:text-emerald-400 font-bold">
                     <span>✓ Desbloqueada em {ach.unlockedAt}</span>
-                    <span className="text-amber-400">+{ach.xpReward} XP</span>
+                    <span className="text-amber-700 dark:text-amber-400">+{ach.xpReward} XP</span>
                   </div>
                 ) : (
                   <div>
                     <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">
                       <span>{ach.currentValue} / {ach.targetValue} {ach.unit}</span>
-                      <span className="text-indigo-400 font-bold">+{ach.xpReward} XP</span>
+                      <span className="text-indigo-600 dark:text-indigo-400 font-bold">+{ach.xpReward} XP</span>
                     </div>
                     <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
                       <div 

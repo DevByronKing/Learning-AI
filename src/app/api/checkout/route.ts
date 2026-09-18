@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       planId = 'pro', 
       billingCycle = 'annual', 
       paymentMethod = 'pix', 
-      userEmail = 'aluno@aprovalens.ai', 
+      userEmail = 'aluno@learningai.app', 
       userName = 'Concurseiro' 
     } = body;
 
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
       amount,
       userEmail,
       userName,
-      description: `AprovaLens AI - Assinatura ${planConfig.name} (${billingCycle === 'annual' ? 'Anual' : 'Mensal'})`,
+      description: `Learning AI - Assinatura ${planConfig.name} (${billingCycle === 'annual' ? 'Anual' : 'Mensal'})`,
     });
 
     // Registrar no TransactionManager

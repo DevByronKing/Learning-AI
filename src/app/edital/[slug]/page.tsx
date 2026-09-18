@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: EditalPageProps): Promise<Met
       url: pageUrl,
       type: 'article',
       locale: 'pt_BR',
-      siteName: 'AprovaLens AI',
+      siteName: 'Learning AI',
     },
     twitter: {
       card: 'summary_large_image',
@@ -102,8 +102,8 @@ export default function EditalPublicPage({ params }: EditalPageProps) {
         description: edital.summary,
         provider: {
           '@type': 'Organization',
-          name: 'AprovaLens AI',
-          url: 'https://aprovalens.ai',
+          name: 'Learning AI',
+          url: 'https://learningai.app',
         },
         educationalCredentialAwarded: edital.role,
         timeToComplete: 'P6M',
@@ -126,19 +126,19 @@ export default function EditalPublicPage({ params }: EditalPageProps) {
             '@type': 'ListItem',
             position: 1,
             name: 'Início',
-            item: 'https://aprovalens.ai',
+            item: 'https://learningai.app',
           },
           {
             '@type': 'ListItem',
             position: 2,
             name: 'Editais Verticalizados',
-            item: 'https://aprovalens.ai/edital',
+            item: 'https://learningai.app/edital',
           },
           {
             '@type': 'ListItem',
             position: 3,
             name: edital.title,
-            item: `https://aprovalens.ai/edital/${edital.slug}`,
+            item: `https://learningai.app/edital/${edital.slug}`,
           },
         ],
       },
@@ -163,7 +163,7 @@ export default function EditalPublicPage({ params }: EditalPageProps) {
               </div>
             </div>
             <span className="font-black text-lg text-white tracking-tight">
-              Aprova<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Lens</span>
+              Learning <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">AI</span>
             </span>
           </Link>
 
@@ -268,7 +268,7 @@ export default function EditalPublicPage({ params }: EditalPageProps) {
                     <span>Conteúdo Programático Mapeado por Relevância</span>
                   </h2>
                   <p className="text-xs text-slate-400 mt-1">
-                    Pesos atribuídos pelo algoritmo da AprovaLens com base no histórico da banca <strong>{edital.banca}</strong>.
+                    Pesos atribuídos pelo algoritmo da Learning AI com base no histórico da banca <strong>{edital.banca}</strong>.
                   </p>
                 </div>
                 <span className="text-xs font-bold text-indigo-400 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 shrink-0 self-start">
@@ -417,7 +417,7 @@ export default function EditalPublicPage({ params }: EditalPageProps) {
       {/* Footer */}
       <footer className="border-t border-white/5 py-8 mt-12 bg-[#0a0f1d] text-center text-xs text-slate-500">
         <div className="max-w-6xl mx-auto px-4">
-          <p>© 2026 AprovaLens AI • Tecnologia Cognitiva para Aprovação em Concursos.</p>
+          <p>© 2026 Learning AI • Tecnologia Cognitiva para Aprovação em Concursos.</p>
           <p className="mt-1 text-[11px] text-slate-600">
             Editais verticalizados baseados nas publicações oficiais dos órgãos examinadores.
           </p>

@@ -796,10 +796,10 @@ export const EditalParser: React.FC<EditalParserProps> = ({
           </div>
 
           {/* Banca Weight Distribution Card */}
-          <div className="glass-panel p-6 rounded-3xl border border-slate-300 dark:border-white/10 flex flex-col justify-between">
+          <div className="glass-panel bg-white/80 dark:bg-dark-card/60 backdrop-blur-md p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm flex flex-col justify-between">
             <div>
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-amber-400" />
+                <Flame className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
                 <span>Distribuição Estatística da Prova</span>
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">Relevância percentual de cada disciplina no cálculo da nota de corte:</p>
@@ -847,7 +847,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
 
       {/* Tira-Dúvidas com IA sobre o Edital Selecionado */}
       {!isProcessing && (
-        <div className="mt-8 glass-panel p-6 sm:p-7 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm space-y-5">
+        <div className="mt-8 glass-panel bg-white/80 dark:bg-dark-card/60 backdrop-blur-md p-6 sm:p-7 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-white/10">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-indigo-600/20 shrink-0">
@@ -993,12 +993,12 @@ export const EditalParser: React.FC<EditalParserProps> = ({
           {/* Subjects Accordion / List */}
           <div className="space-y-4">
             {filteredSubjects.map((sub) => (
-              <div key={sub.id} className="glass-panel rounded-2xl border border-slate-200 dark:border-white/5 overflow-hidden">
+              <div key={sub.id} className="glass-panel bg-white/80 dark:bg-dark-card/60 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-white/5 overflow-hidden shadow-sm">
                 
                 {/* Subject Header */}
                 <div
                   onClick={() => setExpandedSubject(expandedSubject === sub.id ? null : sub.id)}
-                  className="p-4 sm:p-5 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors"
+                  className="p-4 sm:p-5 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 font-bold text-xs border border-indigo-500/20">
@@ -1082,12 +1082,12 @@ export const EditalParser: React.FC<EditalParserProps> = ({
       {/* Upload Custom Edital Modal */}
       {showUploadModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="glass-panel w-full max-w-xl p-6 rounded-3xl border border-indigo-500/40 relative glow-brand my-8">
+          <div className="w-full max-w-xl p-6 rounded-3xl bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-indigo-500/40 shadow-2xl relative my-8">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-300 dark:border-white/10">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-white/10">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                <div className="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-500 dark:text-indigo-400">
                   <UploadCloud className="w-5 h-5" />
                 </div>
                 <div>
@@ -1100,7 +1100,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
                   setShowUploadModal(false);
                   setUploadError(null);
                 }}
-                className="w-8 h-8 rounded-lg bg-white dark:bg-dark-card hover:bg-slate-50 dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors"
+                className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1110,7 +1110,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
               
               {/* Drag and Drop Upload Area */}
               <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                   Arquivo do Edital (PDF, DOCX ou TXT):
                 </label>
 
@@ -1135,22 +1135,22 @@ export const EditalParser: React.FC<EditalParserProps> = ({
                     onClick={() => fileInputRef.current?.click()}
                     className={`p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer text-center ${
                       isDragging
-                        ? 'border-indigo-400 bg-indigo-500/20 scale-[0.99]'
-                        : 'border-indigo-500/30 hover:border-indigo-400/70 bg-indigo-500/5 hover:bg-indigo-500/10'
+                        ? 'border-indigo-500 bg-indigo-500/20 scale-[0.99]'
+                        : 'border-indigo-400/40 hover:border-indigo-500 bg-indigo-500/5 hover:bg-indigo-500/10'
                     }`}
                   >
-                    <FileUp className="w-9 h-9 text-indigo-400 mx-auto mb-2 animate-bounce" />
-                    <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200">
+                    <FileUp className="w-9 h-9 text-indigo-500 dark:text-indigo-400 mx-auto mb-2 animate-bounce" />
+                    <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200">
                       Arraste e solte seu edital em PDF aqui
                     </p>
-                    <p className="text-[11px] text-indigo-300/80 mt-1 font-medium">
+                    <p className="text-[11px] text-indigo-600 dark:text-indigo-300/90 mt-1 font-medium">
                       ou clique aqui para buscar nos arquivos do seu computador
                     </p>
                     <div className="mt-3 flex items-center justify-center gap-2">
-                      <span className="px-2.5 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/25 text-[10px] text-indigo-300 font-semibold">
+                      <span className="px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200 dark:border-indigo-500/25 text-[10px] text-indigo-700 dark:text-indigo-300 font-semibold">
                         PDF • DOCX • TXT (até 50MB)
                       </span>
-                      <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/25 text-[10px] text-emerald-300 font-semibold">
+                      <span className="px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/25 text-[10px] text-emerald-700 dark:text-emerald-300 font-semibold">
                         OCR com IA Integrada
                       </span>
                     </div>

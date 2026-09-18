@@ -104,22 +104,22 @@ export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
   };
 
   return (
-    <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-indigo-500/40 glow-brand animate-fadeIn mt-6">
+    <div className="glass-panel bg-white/90 dark:bg-dark-card/60 backdrop-blur-md shadow-sm p-6 sm:p-8 rounded-3xl border border-indigo-500/40 glow-brand animate-fadeIn mt-6">
       
       {/* Header Result Badge */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-300 dark:border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200 dark:border-white/10">
         <div className="flex items-center gap-3">
           <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
-            isCorrect ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
+            isCorrect ? 'bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 border border-emerald-500/40' : 'bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/40'
           }`}>
             {isCorrect ? <CheckCircle2 className="w-7 h-7" /> : <XCircle className="w-7 h-7" />}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className={`text-sm font-black uppercase tracking-wider ${isCorrect ? 'text-emerald-400' : 'text-rose-400'}`}>
+              <span className={`text-sm font-black uppercase tracking-wider ${isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                 {isCorrect ? '✓ RESPOSTA CORRETA' : '✗ RESPOSTA INCORRETA'}
               </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono border border-slate-200 dark:border-slate-700">
                 Confiança: {confidence.toUpperCase()}
               </span>
             </div>
@@ -144,13 +144,13 @@ export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
       {/* Opção A: Alerta Sutil de Cota Diária Atingida no Freemium (Fallback Determinístico) */}
       {quotaExceeded && userPlan === 'aspirante' && (
         <div className="mt-5 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs animate-fadeIn">
-          <div className="flex items-center gap-2.5 text-amber-300">
-            <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+          <div className="flex items-center gap-2.5 text-amber-700 dark:text-amber-300">
+            <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0" />
             <div>
-              <p className="font-bold text-amber-200">
+              <p className="font-bold text-amber-800 dark:text-amber-200">
                 ⚡ Modo Resolução Contínua (Cota de IA Diária Utilizada: 5/5)
               </p>
-              <p className="text-slate-300 text-[11px] mt-0.5">
+              <p className="text-slate-600 dark:text-slate-300 text-[11px] mt-0.5">
                 Você continua resolvendo questões normalmente com <strong>gabarito oficial e fundamentação em lei seca</strong> (Custo R$ 0,00). Assine o PRO para análises cognitivas ilimitadas.
               </p>
             </div>
@@ -196,17 +196,17 @@ export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
           
           {/* Diagnostic Badge */}
           {!isCorrect && (
-            <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30">
-              <div className="flex items-center gap-2 text-rose-400 text-xs font-black uppercase tracking-wider">
+            <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/30">
+              <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 text-xs font-black uppercase tracking-wider">
                 <AlertTriangle className="w-4 h-4" />
                 <span>Diagnóstico Cognitivo do Erro</span>
               </div>
               <p className="text-sm font-bold text-slate-900 dark:text-white mt-1">{errorLabel}</p>
-              <p className="text-xs text-rose-200 mt-0.5">{errorDesc}</p>
+              <p className="text-xs text-rose-700 dark:text-rose-200 mt-0.5">{errorDesc}</p>
               
               {selectedOption?.distractorReason && (
-                <div className="mt-3 p-3 rounded-xl bg-dark-bg/60 border border-rose-500/20 text-xs text-slate-700 dark:text-slate-200">
-                  <strong className="text-rose-300">Mecanismo do distrator explorado pela banca: </strong>
+                <div className="mt-3 p-3 rounded-xl bg-slate-100 dark:bg-dark-bg/60 border border-rose-200 dark:border-rose-500/20 text-xs text-slate-800 dark:text-slate-200">
+                  <strong className="text-rose-700 dark:text-rose-300">Mecanismo do distrator explorado pela banca: </strong>
                   {selectedOption.distractorReason}
                 </div>
               )}
@@ -214,8 +214,8 @@ export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
           )}
 
           {/* Explanation / Fundamentação */}
-          <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/90 border border-slate-200 dark:border-white/5">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5 mb-2">
+          <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/90 border border-slate-200 dark:border-white/5 shadow-sm">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 mb-2">
               <BookOpen className="w-4 h-4" />
               <span>Fundamentação Jurídica & Doutrinária</span>
             </h4>
@@ -226,14 +226,14 @@ export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
 
           {/* Law Articles Citations */}
           {question.lawArticles && question.lawArticles.length > 0 && (
-            <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/90 border border-slate-200 dark:border-white/5">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5 mb-2">
+            <div className="p-4 rounded-2xl bg-white dark:bg-dark-surface/90 border border-slate-200 dark:border-white/5 shadow-sm">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 flex items-center gap-1.5 mb-2">
                 <Scale className="w-4 h-4" />
                 <span>Artigos de Lei & Jurisprudência Correlata</span>
               </h4>
               <div className="flex flex-wrap gap-2">
                 {question.lawArticles.map((art, idx) => (
-                  <span key={idx} className="px-3 py-1.5 rounded-xl bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 text-xs font-mono font-bold flex items-center gap-1.5">
+                  <span key={idx} className="px-3 py-1.5 rounded-xl bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-200 dark:border-cyan-500/25 text-cyan-700 dark:text-cyan-300 text-xs font-mono font-bold flex items-center gap-1.5">
                     📜 {art}
                   </span>
                 ))}
@@ -247,24 +247,24 @@ export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
         <div className="space-y-4">
           
           {/* Banca Tendency Box */}
-          <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/30">
-            <div className="flex items-center gap-1.5 text-indigo-300 text-xs font-bold">
-              <BrainCircuit className="w-4 h-4 text-indigo-400" />
+          <div className="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/30">
+            <div className="flex items-center gap-1.5 text-indigo-700 dark:text-indigo-300 text-xs font-bold">
+              <BrainCircuit className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
               <span>Padrão da Banca {question.banca}</span>
             </div>
-            <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
+            <p className="text-xs text-slate-700 dark:text-slate-300 mt-2 leading-relaxed">
               {question.cognitiveAnalysis.bancaTendency}
             </p>
-            <div className="mt-3 pt-3 border-t border-indigo-500/20 text-[11px] text-indigo-200">
+            <div className="mt-3 pt-3 border-t border-indigo-200 dark:border-indigo-500/20 text-[11px] text-indigo-800 dark:text-indigo-200">
               <strong>Conceito-Chave:</strong> {question.cognitiveAnalysis.keyConcept}
             </div>
           </div>
 
           {/* 1-Click Flashcard Creator */}
-          <div className="p-4 rounded-2xl bg-white dark:bg-dark-card/90 border border-slate-300 dark:border-white/10">
+          <div className="p-4 rounded-2xl bg-white dark:bg-dark-card/90 border border-slate-200 dark:border-white/10 shadow-sm">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Lightbulb className="w-4 h-4 text-amber-400" />
+                <Lightbulb className="w-4 h-4 text-amber-500 dark:text-amber-400" />
                 <span>Fixação por Repetição Espaçada (SRS)</span>
               </span>
             </div>

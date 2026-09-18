@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { EditalCatalogItem } from '@/lib/editaisCatalog';
+import { trackConversion } from '@/components/TrackingScripts';
 
 interface LeadCaptureFormProps {
   edital: EditalCatalogItem;
@@ -68,6 +69,7 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ edital }) => {
       }
 
       setIsSubmitted(true);
+      trackConversion.lead({ email, edital: edital.title });
       try {
         confetti({
           particleCount: 100,

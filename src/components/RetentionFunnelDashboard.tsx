@@ -64,7 +64,7 @@ export const RetentionFunnelDashboard: React.FC = () => {
       count: eventCounts.diagnosis_completed,
       percent: '100%',
       color: 'from-cyan-500 to-blue-600',
-      badgeColor: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
+      badgeColor: 'bg-cyan-50 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-400 border-cyan-200 dark:border-cyan-500/30',
       insight: 'Usuários que chegam ao termômetro têm 4.2x mais chance de retenção D7.',
     },
     {
@@ -74,7 +74,7 @@ export const RetentionFunnelDashboard: React.FC = () => {
       count: eventCounts.mascot_strategy_interacted,
       percent: '84.2%',
       color: 'from-blue-600 to-cyan-500',
-      badgeColor: 'bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30',
+      badgeColor: 'bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/30',
       insight: 'Acolhimento diário reduz a ansiedade de desistência pós-simulado em 68%.',
     },
     {
@@ -84,7 +84,7 @@ export const RetentionFunnelDashboard: React.FC = () => {
       count: eventCounts.daily_mission_completed,
       percent: '71.5%',
       color: 'from-amber-500 to-orange-600',
-      badgeColor: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+      badgeColor: 'bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/30',
       insight: 'Completar 2 missões diárias garante que o aluno retorne no dia seguinte.',
     },
     {
@@ -94,7 +94,7 @@ export const RetentionFunnelDashboard: React.FC = () => {
       count: eventCounts.flashcard_srs_reviewed,
       percent: '58.9%',
       color: 'from-emerald-500 to-teal-600',
-      badgeColor: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+      badgeColor: 'bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/30',
       insight: 'Retenção da memória de 88.4% aos 21 dias conforme a curva de Ebbinghaus.',
     },
     {
@@ -104,7 +104,7 @@ export const RetentionFunnelDashboard: React.FC = () => {
       count: eventCounts.subscription_activated,
       percent: '13.4%',
       color: 'from-rose-500 to-pink-600',
-      badgeColor: 'bg-rose-500/20 text-rose-400 border-rose-500/30',
+      badgeColor: 'bg-rose-50 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/30',
       insight: 'Conversão acima da média do setor EdTech B2C (benchmark é 3% a 5%).',
     },
   ];

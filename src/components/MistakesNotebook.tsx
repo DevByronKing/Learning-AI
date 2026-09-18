@@ -276,16 +276,16 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
       </div>
 
       {/* Filter Bar */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white dark:bg-dark-surface/70 border border-slate-200 dark:border-white/5 p-4 rounded-2xl backdrop-blur-xl">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white dark:bg-dark-surface/70 border border-slate-200 dark:border-white/5 p-4 rounded-2xl backdrop-blur-xl shadow-sm">
         
         {/* Status Filter Tabs */}
-        <div className="flex items-center gap-1.5 bg-dark-bg/80 p-1 rounded-xl border border-slate-200 dark:border-white/5">
+        <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-dark-bg/80 p-1 rounded-xl border border-slate-200 dark:border-white/5">
           <button
             onClick={() => setFilterStatus('pending')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               filterStatus === 'pending'
                 ? 'bg-rose-600 text-white shadow-md'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white'
             }`}
           >
             Pendentes ({pendingMistakes})
@@ -295,7 +295,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               filterStatus === 'overcome'
                 ? 'bg-emerald-600 text-white shadow-md'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white'
             }`}
           >
             Superados ({overcomeMistakes})
@@ -305,7 +305,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               filterStatus === 'all'
                 ? 'bg-indigo-600 text-white shadow-md'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white'
             }`}
           >
             Todos ({totalMistakes})
@@ -321,7 +321,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
             <select
               value={filterErrorType}
               onChange={(e) => setFilterErrorType(e.target.value)}
-              className="bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-rose-500"
+              className="bg-white dark:bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-rose-500 shadow-sm cursor-pointer"
             >
               <option value="all">Todas as Causas</option>
               <option value="pegadinha_banca">🎯 Pegadinhas de Banca ({errorTypeCounts.pegadinha_banca})</option>
@@ -338,7 +338,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
               <select
                 value={selectedSubject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
-                className="bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-indigo-500"
+                className="bg-white dark:bg-dark-bg border border-slate-300 dark:border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-indigo-500 shadow-sm cursor-pointer"
               >
                 <option value="all">Todas as Matérias</option>
                 {availableSubjects.map((sub) => (
@@ -351,25 +351,32 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
         </div>
       </div>
 
-      {/* Main Content Area */}
+      {/* Main Content Area with Aggressive High-Performance Empty State */}
       {filteredMistakes.length === 0 ? (
-        <div className="text-center py-16 px-4 bg-white dark:bg-dark-surface/40 border border-slate-200 dark:border-white/5 rounded-3xl space-y-4">
-          <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-2xl">
-            🎉
+        <div className="text-center py-16 px-6 glass-panel rounded-3xl border border-rose-500/30 bg-white/70 dark:bg-dark-surface/60 backdrop-blur-md space-y-5 max-w-2xl mx-auto shadow-2xl animate-fadeIn">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500/20 to-amber-500/20 border border-rose-500/40 text-rose-500 flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(244,63,94,0.25)]">
+            <Flame className="w-8 h-8 text-amber-500 fill-amber-500/20" />
           </div>
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Nenhum erro encontrado com os filtros selecionados</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-            {filterStatus === 'pending'
-              ? 'Excelente! Você não possui erros pendentes nesta categoria. Continue resolvendo simulados!'
-              : 'Tente mudar os filtros de causa ou disciplina para visualizar outras questões.'}
-          </p>
-          <button
-            onClick={onGoToSimulator}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-lg shadow-indigo-600/20"
-          >
-            <BookOpen className="w-4 h-4" />
-            <span>Treinar no Simulador de Questões</span>
-          </button>
+          <div className="space-y-2">
+            <span className="text-[11px] font-mono font-bold tracking-widest text-rose-500 uppercase">
+              Sem Erros Registrados Nesta Categoria
+            </span>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
+              A FGV e o Cebraspe não descansam. Identifique as suas vulnerabilidades antes que a banca as explore.
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-300 max-w-lg mx-auto leading-relaxed">
+              O estudante de alta performance não se acomoda com um caderno vazio: ele busca o erro deliberadamente em simulados de alta pressão para blindar sua pontuação.
+            </p>
+          </div>
+          <div className="pt-2 flex justify-center">
+            <button
+              onClick={onGoToSimulator}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs transition-all shadow-lg shadow-blue-600/30 hover:scale-105 active:scale-95"
+            >
+              <Zap className="w-4 h-4 text-amber-300" />
+              <span>Iniciar Bateria de Combate no Simulador</span>
+            </button>
+          </div>
         </div>
       ) : (
         <div className="space-y-4">
@@ -393,13 +400,13 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                   <div className="space-y-1.5 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="text-xs font-black text-slate-500 dark:text-slate-400">#{index + 1}</span>
-                      <span className="text-xs font-bold text-slate-700 dark:text-slate-200 bg-white/5 px-2 py-0.5 rounded">
+                      <span className="text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded border border-slate-200/50 dark:border-transparent">
                         {mistake.question.banca} • {mistake.question.year}
                       </span>
-                      <span className="text-xs font-semibold text-indigo-300">
+                      <span className="text-xs font-semibold text-indigo-700 dark:text-indigo-300">
                         {mistake.question.subjectName}
                       </span>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">›</span>
+                      <span className="text-xs text-slate-400">›</span>
                       <span className="text-xs text-slate-600 dark:text-slate-300 font-medium">
                         {mistake.question.topicName}
                       </span>
@@ -433,7 +440,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                   <div className="flex items-center gap-2 shrink-0">
                     <button
                       onClick={() => toggleExpand(mistake.id)}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-bg hover:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-600 dark:text-slate-300 text-xs font-semibold transition-all"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-dark-bg dark:hover:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 text-xs font-semibold transition-all shadow-sm"
                     >
                       <span>{isExpanded ? 'Recolher' : 'Ver Detalhes'}</span>
                       {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -446,7 +453,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                   <div className="px-5 pb-5 pt-2 border-t border-slate-200 dark:border-white/5 space-y-5 animate-fadeIn">
                     
                     {/* Full Statement */}
-                    <div className="bg-dark-bg/60 p-4 rounded-xl border border-slate-200 dark:border-white/5">
+                    <div className="bg-slate-50 dark:bg-dark-bg/60 p-4 rounded-xl border border-slate-200 dark:border-white/5 shadow-inner">
                       <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">
                         Enunciado da Questão
                       </span>
@@ -581,7 +588,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
 
               <button
                 onClick={() => setIsRevancheActive(false)}
-                className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white text-xs font-bold px-3 py-1.5 rounded-lg bg-white/5"
+                className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-white/5 transition-colors"
               >
                 Encerrar
               </button>
@@ -589,7 +596,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
 
             {/* Question Statement */}
             <div className="space-y-4">
-              <div className="bg-dark-bg p-4 rounded-2xl border border-slate-200 dark:border-white/5">
+              <div className="bg-slate-50 dark:bg-dark-bg p-4 rounded-2xl border border-slate-200 dark:border-white/5 shadow-inner">
                 <p className="text-sm text-slate-800 dark:text-slate-100 whitespace-pre-line leading-relaxed font-medium">
                   {currentRevancheMistake.question.statement}
                 </p>
@@ -666,7 +673,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                   className={`px-6 py-3 rounded-xl font-bold text-xs tracking-wide transition-all ${
                     revancheSelectedOption
                       ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/30'
-                      : 'bg-dark-bg text-slate-500 border border-slate-200 dark:border-white/5 cursor-not-allowed'
+                      : 'bg-slate-100 dark:bg-dark-bg text-slate-400 border border-slate-200 dark:border-white/5 cursor-not-allowed'
                   }`}
                 >
                   Confirmar Resposta da Revanche

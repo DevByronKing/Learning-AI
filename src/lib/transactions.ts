@@ -124,7 +124,7 @@ export class TransactionManager {
         status: 'confirmed',
         provider,
         externalId,
-        userEmail: 'aluno@aprovalens.ai',
+        userEmail: 'aluno@learningai.app',
         userName: 'Concurseiro',
         createdAt: new Date().toISOString(),
         confirmedAt: new Date().toISOString(),
@@ -176,7 +176,7 @@ export class TransactionManager {
         status: 'confirmed',
         provider,
         externalId,
-        userEmail: 'aluno@aprovalens.ai',
+        userEmail: 'aluno@learningai.app',
         userName: 'Concurseiro',
         createdAt: new Date().toISOString(),
         confirmedAt: new Date().toISOString(),
@@ -211,6 +211,17 @@ export class TransactionManager {
               external_id: tx.externalId,
               expires_at: tx.expiresAt,
             });
+
+          // Atualiza automaticamente o tier do aluno na tabela profiles
+          if (tx.userEmail) {
+            await client
+              .from('profiles')
+              .update({
+                subscription_tier: tx.planId,
+                updated_at: new Date().toISOString(),
+              })
+              .eq('email', tx.userEmail);
+          }
         } catch (error: any) {
           console.warn('[TransactionManager] Erro ao sincronizar confirmação no Supabase:', error.message);
         }
