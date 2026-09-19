@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { StudentProfile, GuardianAnimalId, SubscriptionPlan } from '@/lib/types';
 import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
+import { HolographicAvatar3D } from '@/components/HolographicAvatar3D';
 import { useAuthStore } from '@/store/useAuthStore';
 import { SupabaseService } from '@/lib/supabaseService';
 
@@ -105,8 +106,16 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
           </div>
 
           <div className="flex items-center gap-4 mt-3">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/10 backdrop-blur-md border border-white/30 flex items-center justify-center text-4xl sm:text-5xl shadow-lg shrink-0">
-              {selectedAnimal.emoji}
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-black/40 backdrop-blur-md border border-white/30 overflow-hidden flex items-center justify-center shadow-xl shrink-0 relative">
+              {selectedAnimal.avatar3dUrl ? (
+                <img
+                  src={selectedAnimal.avatar3dUrl}
+                  alt={selectedAnimal.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-4xl sm:text-5xl">{selectedAnimal.emoji}</span>
+              )}
             </div>
             <div className="min-w-0">
               <h2 className="text-xl sm:text-2xl font-black text-white truncate drop-shadow-sm">
@@ -209,9 +218,13 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
 
                       <div>
                         <div className="flex items-center gap-2.5">
-                          <span className="text-3xl p-1.5 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-white/5 shadow-sm">
-                            {animal.emoji}
-                          </span>
+                          <div className="w-11 h-11 rounded-xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-white/10 shrink-0 shadow-sm relative">
+                            {animal.avatar3dUrl ? (
+                              <img src={animal.avatar3dUrl} alt={animal.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="text-2xl flex items-center justify-center h-full">{animal.emoji}</span>
+                            )}
+                          </div>
                           <div className="min-w-0">
                             <h4 className="text-xs font-black text-slate-900 dark:text-white truncate">{animal.name}</h4>
                             <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold block truncate">{animal.archetype}</span>
@@ -245,22 +258,36 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                 })}
               </div>
 
-              {/* Detailed Breakdown of Currently Selected Animal */}
-              <div className="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-500/30 text-xs space-y-2">
-                <div className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300 font-bold">
-                  <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                  <span>Estilo Cognitivo de {selectedAnimal.name}:</span>
+              {/* Detailed Breakdown with Interactive 3D Holographic Card */}
+              <div className="p-5 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-500/30 flex flex-col sm:flex-row items-center gap-6">
+                <div className="shrink-0">
+                  <HolographicAvatar3D 
+                    guardian={selectedAnimal} 
+                    size="md" 
+                    interactive={true} 
+                    showStats={true} 
+                  />
                 </div>
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-                  {selectedAnimal.cognitiveStyle}
-                </p>
-                <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                  <span className="text-[10px] text-slate-600 dark:text-slate-400 font-bold">Carreiras Recomendadas:</span>
-                  {selectedAnimal.bestForCareers.map((car, idx) => (
-                    <span key={idx} className="px-2 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-500/20 text-indigo-800 dark:text-indigo-200 text-[10px] font-medium border border-indigo-200 dark:border-indigo-500/20">
-                      {car}
-                    </span>
-                  ))}
+                
+                <div className="space-y-2.5 text-xs flex-1">
+                  <div className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300 font-bold text-sm">
+                    <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                    <span>Estilo Cognitivo: {selectedAnimal.name}</span>
+                  </div>
+                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                    {selectedAnimal.cognitiveStyle}
+                  </p>
+                  <p className="text-[11px] text-amber-600 dark:text-amber-400 font-semibold italic">
+                    "{selectedAnimal.motto}"
+                  </p>
+                  <div className="flex flex-wrap items-center gap-1.5 pt-2">
+                    <span className="text-[10px] text-slate-600 dark:text-slate-400 font-bold">Carreiras Recomendadas:</span>
+                    {selectedAnimal.bestForCareers.map((car, idx) => (
+                      <span key={idx} className="px-2 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-500/20 text-indigo-800 dark:text-indigo-200 text-[10px] font-semibold border border-indigo-200 dark:border-indigo-500/20">
+                        {car}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

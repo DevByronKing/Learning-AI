@@ -436,6 +436,7 @@ export interface GuardianAnimal {
   name: string;
   title: string;
   emoji: string;
+  avatar3dUrl?: string;
   archetype: string;
   superpower: string;
   cognitiveStyle: string;

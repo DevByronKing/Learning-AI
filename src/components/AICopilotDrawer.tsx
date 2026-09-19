@@ -193,10 +193,14 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
         {/* Drawer Header */}
         <div className="p-5 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-gradient-to-r from-indigo-50/70 via-white to-indigo-50/40 dark:from-indigo-950/40 dark:via-dark-surface dark:to-dark-bg">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-600 via-blue-500 to-cyan-400 p-[1.5px] glow-brand shrink-0">
-              <div className="w-full h-full bg-white dark:bg-dark-surface rounded-[14px] flex items-center justify-center text-2xl">
-                {copilotEmoji}
-              </div>
+            <div className="w-11 h-11 rounded-2xl overflow-hidden bg-slate-950 border border-amber-400/50 shadow-md shrink-0 relative">
+              {guardian.avatar3dUrl ? (
+                <img src={guardian.avatar3dUrl} alt={copilotName} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-2xl">
+                  {copilotEmoji}
+                </div>
+              )}
             </div>
             <div>
               <div className="flex items-center gap-1.5">

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
 import { GuardianAnimal, StudentProfile } from '@/lib/types';
+import { HolographicAvatar3D } from '@/components/HolographicAvatar3D';
 
 interface AvatarOnboardingModalProps {
   isOpen: boolean;
@@ -104,8 +105,18 @@ export const AvatarOnboardingModal: React.FC<AvatarOnboardingModalProps> = ({ is
                   <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 bg-gradient-to-br ${animal.colorGradient} transition-opacity duration-500 pointer-events-none`} />
                   
                   <div className="flex items-start justify-between mb-4">
-                    <div className="w-16 h-16 flex items-center justify-center rounded-2xl text-4xl bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                      {animal.emoji}
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-white/10 group-hover:border-amber-400 shadow-md group-hover:scale-105 transition-all duration-500 relative shrink-0">
+                      {animal.avatar3dUrl ? (
+                        <img 
+                          src={animal.avatar3dUrl} 
+                          alt={animal.name} 
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-4xl">
+                          {animal.emoji}
+                        </div>
+                      )}
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
                       {animal.archetype}
@@ -164,28 +175,24 @@ export const AvatarOnboardingModal: React.FC<AvatarOnboardingModalProps> = ({ is
                 <ChevronLeft className="w-5 h-5" />
               </button>
 
-              <div className="relative z-10 text-center space-y-6 w-full">
-                <div className="text-8xl md:text-9xl drop-shadow-2xl animate-bounce" style={{ animationDuration: '3s' }}>
-                  {selectedAvatar.emoji}
-                </div>
-                <div>
-                  <h2 className="text-3xl md:text-4xl font-black text-white drop-shadow-lg mb-2">
-                    {selectedAvatar.name}
-                  </h2>
-                  <p className="text-sm md:text-base font-bold text-white/80 uppercase tracking-widest">
-                    {selectedAvatar.archetype}
-                  </p>
-                </div>
+              <div className="relative z-10 text-center space-y-4 w-full flex flex-col items-center">
+                <HolographicAvatar3D
+                  guardian={selectedAvatar}
+                  size="hero"
+                  interactive={true}
+                  showMotto={false}
+                  showStats={true}
+                />
 
-                <div className="p-5 rounded-2xl bg-black/30 backdrop-blur-md border border-white/10 text-left mt-8">
-                  <div className="flex items-center gap-2 mb-2 text-white/90">
+                <div className="p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 text-left w-full max-w-sm">
+                  <div className="flex items-center gap-2 mb-1.5 text-white/90">
                     <Zap className="w-4 h-4 text-amber-400" />
                     <span className="font-bold text-xs uppercase tracking-wider">Superpoder de Estudo</span>
                   </div>
-                  <p className="text-sm md:text-base font-black text-white">
+                  <p className="text-sm font-black text-white">
                     {selectedAvatar.superpower}
                   </p>
-                  <p className="text-xs text-white/70 italic mt-3 border-t border-white/10 pt-3">
+                  <p className="text-xs text-white/70 italic mt-2 border-t border-white/10 pt-2">
                     {selectedAvatar.motto}
                   </p>
                 </div>

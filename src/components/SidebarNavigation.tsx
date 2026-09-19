@@ -374,9 +374,13 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
             }`}
             title={`Perfil: ${studentProfile?.name || 'Estudante'} (${currentGuardian.name})`}
           >
-            <span className="text-xl select-none shrink-0">
-              {currentGuardian.emoji}
-            </span>
+            <div className="w-8 h-8 rounded-lg overflow-hidden bg-slate-900 border border-amber-400/30 shrink-0 relative shadow-sm flex items-center justify-center">
+              {currentGuardian.avatar3dUrl ? (
+                <img src={currentGuardian.avatar3dUrl} alt={currentGuardian.name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-lg select-none">{currentGuardian.emoji}</span>
+              )}
+            </div>
 
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
