@@ -19,7 +19,6 @@ import {
 } from 'lucide-react';
 import { Question, ErrorType, Flashcard, SubscriptionPlan } from '@/lib/types';
 import { RewardedAdModal } from './RewardedAdModal';
-import confetti from 'canvas-confetti';
 
 interface CognitiveDiagnosisCardProps {
   question: Question;
@@ -93,14 +92,6 @@ export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
 
     onAddFlashcard(newFlashcard);
     setFlashcardAdded(true);
-
-    try {
-      confetti({
-        particleCount: 40,
-        spread: 50,
-        origin: { y: 0.8 }
-      });
-    } catch {}
   };
 
   return (

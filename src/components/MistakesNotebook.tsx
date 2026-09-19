@@ -24,7 +24,6 @@ import {
   ChevronUp
 } from 'lucide-react';
 import { MistakeEntry, ErrorType, Question } from '@/lib/types';
-import confetti from 'canvas-confetti';
 
 interface MistakesNotebookProps {
   mistakes: MistakeEntry[];
@@ -126,11 +125,6 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
     setRevancheFeedbackCorrect(isCorrect);
 
     if (isCorrect) {
-      confetti({
-        particleCount: 70,
-        spread: 60,
-        origin: { y: 0.7 }
-      });
       onResolveMistakeInRevanche(currentRevancheMistake.id, true);
     } else {
       onResolveMistakeInRevanche(currentRevancheMistake.id, false);

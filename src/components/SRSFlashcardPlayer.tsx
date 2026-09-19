@@ -20,7 +20,6 @@ import {
   Filter
 } from 'lucide-react';
 import { Flashcard } from '@/lib/types';
-import confetti from 'canvas-confetti';
 
 interface SRSFlashcardPlayerProps {
   flashcards: Flashcard[];
@@ -104,13 +103,6 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
       setCurrentQueueIndex((prev) => prev + 1);
     } else {
       setViewMode('complete');
-      try {
-        confetti({
-          particleCount: 75,
-          spread: 80,
-          origin: { y: 0.6 }
-        });
-      } catch {}
     }
   }, [currentCard, currentQueueIndex, onReviewCard, sessionQueue.length]);
 

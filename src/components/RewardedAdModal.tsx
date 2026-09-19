@@ -13,7 +13,6 @@ import {
   Zap,
   Info
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 interface RewardedAdModalProps {
   isOpen: boolean;
@@ -52,13 +51,6 @@ export const RewardedAdModal: React.FC<RewardedAdModalProps> = ({
           clearInterval(timer);
           setAdStage('reward_ready');
           setIsCompleted(true);
-          try {
-            confetti({
-              particleCount: 80,
-              spread: 70,
-              origin: { y: 0.6 }
-            });
-          } catch {}
           return 0;
         }
         return prev - 1;

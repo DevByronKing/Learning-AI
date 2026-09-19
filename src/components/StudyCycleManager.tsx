@@ -16,11 +16,9 @@ import {
   Play, 
   RefreshCw,
   Sliders,
-  Award,
   Printer
 } from 'lucide-react';
 import { ExamNotice, StudyMethodology, DailyScheduleItem } from '@/lib/types';
-import confetti from 'canvas-confetti';
 
 interface StudyCycleManagerProps {
   selectedExam: ExamNotice;
@@ -148,15 +146,6 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
           blocks: day.blocks.map((block) => {
             if (block.id !== blockId) return block;
             const newStatus = block.status === 'concluido' ? 'pendente' : 'concluido';
-            if (newStatus === 'concluido') {
-              try {
-                confetti({
-                  particleCount: 50,
-                  spread: 60,
-                  origin: { y: 0.7 }
-                });
-              } catch {}
-            }
             return {
               ...block,
               status: newStatus,

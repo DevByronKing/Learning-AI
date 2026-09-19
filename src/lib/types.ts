@@ -321,16 +321,24 @@ export type CopilotMessage = {
   };
 };
 
-export type MicroSummary = {
+export type SmartSubjectSummary = {
   id: string;
   subjectName: string;
   topicName: string;
   banca: string;
   title: string;
+  incidence?: 'Alta (80/20)' | 'Média' | 'Ponto Crítico';
+  coreConcept?: string;
   keyPoints: string[];
   bancaTrapAlert: string;
   mnemonic?: string;
+  hotArticles?: string[];
+  relatedQuestionIds?: string[];
+  tags?: string[];
+  isCustomAiGenerated?: boolean;
 };
+
+export type MicroSummary = SmartSubjectSummary;
 
 // Gamification, Mascot Companion & Achievements
 export type MascotId = 'coruja' | 'falcao' | 'lobo' | 'leao';

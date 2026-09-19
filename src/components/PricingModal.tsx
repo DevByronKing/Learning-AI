@@ -19,7 +19,6 @@ import {
   Flame
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
-import confetti from 'canvas-confetti';
 import { trackConversion } from '@/components/TrackingScripts';
 
 interface PricingModalProps {
@@ -94,16 +93,9 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           clearInterval(interval);
           trackConversion.purchase(transactionId, data.amount || 29.90, selectedPlanToBuy);
           onUpgradePlan(selectedPlanToBuy);
-          try {
-            confetti({
-              particleCount: 120,
-              spread: 90,
-              origin: { y: 0.5 }
-            });
-          } catch {}
           setTimeout(() => {
             onClose();
-          }, 2000);
+          }, 1500);
         }
       } catch (err) {
         // Silencioso em caso de instabilidade de rede
@@ -145,13 +137,6 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       });
       setPaymentStatus('confirmed');
       onUpgradePlan(selectedPlanToBuy);
-      try {
-        confetti({
-          particleCount: 100,
-          spread: 80,
-          origin: { y: 0.6 }
-        });
-      } catch {}
       setTimeout(() => {
         setIsProcessing(false);
         onClose();

@@ -29,7 +29,6 @@ import {
 } from 'lucide-react';
 import { DiscursivePrompt, DiscursiveEvaluation, DiscursiveSubmission, SubscriptionPlan } from '@/lib/types';
 import { MOCK_DISCURSIVE_PROMPTS } from '@/lib/mockData';
-import confetti from 'canvas-confetti';
 
 interface DiscursiveStudioProps {
   onRecordSubmission?: (submission: DiscursiveSubmission) => void;
@@ -251,16 +250,6 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
         timeSpentSeconds: timerSeconds,
         evaluation: evalResult,
       });
-    }
-
-    if (evalResult?.passed) {
-      try {
-        confetti({
-          particleCount: 70,
-          spread: 70,
-          origin: { y: 0.6 },
-        });
-      } catch {}
     }
 
     setTimeout(() => {

@@ -142,6 +142,14 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
       badgeColor: ''
     },
     {
+      id: 'summaries',
+      label: 'Resumos Inteligentes',
+      shortLabel: 'Resumos',
+      icon: BookOpen,
+      badge: '80/20',
+      badgeColor: 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30'
+    },
+    {
       id: 'discursivas',
       label: 'Discursivas',
       shortLabel: 'Redação',

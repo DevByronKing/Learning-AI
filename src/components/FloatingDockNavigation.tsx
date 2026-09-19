@@ -86,6 +86,7 @@ export const FloatingDockNavigation: React.FC<FloatingDockNavigationProps> = ({
     { id: 'edital', label: 'Edital IA', icon: ScrollText },
     { id: 'cycle', label: 'Ciclos de Estudo', icon: CalendarClock },
     { id: 'questions', label: 'Banco de Questões', icon: BookCheck },
+    { id: 'summaries', label: 'Resumos 80/20', icon: BookOpen },
     { id: 'discursivas', label: 'Discursivas', icon: Feather },
     { id: 'guide', label: 'Guia do Aluno', icon: BookOpen },
     { id: 'settings', label: 'Configurações', icon: Settings },

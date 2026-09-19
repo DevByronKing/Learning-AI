@@ -1783,6 +1783,8 @@ export const INITIAL_MICRO_SUMMARIES: MicroSummary[] = [
     topicName: 'Improbidade Administrativa (Lei 14.230/21)',
     banca: 'Cebraspe / FGV',
     title: 'Raio-X da Nova Lei de Improbidade (O que as bancas cobram)',
+    incidence: 'Alta (80/20)',
+    coreConcept: 'A Lei 14.230/21 extinguiu expressamente a modalidade culposa de ato de improbidade administrativa, exigindo dolo específico para qualquer sanção da lei.',
     keyPoints: [
       'Extinção da Improbidade Culposa: Somente condutas com DOLO ESPECÍFICO configuram ato ímprobo.',
       'Prazo Prescricional Unificado: 8 anos contados a partir da data do fato (art. 23). Interrupções reiniciam pela metade (4 anos).',
@@ -1790,7 +1792,9 @@ export const INITIAL_MICRO_SUMMARIES: MicroSummary[] = [
       'Legitimidade Exclusiva: Apenas o Ministério Público tem legitimidade para a ação de improbidade (pessoa jurídica lesada atua como assistente).'
     ],
     bancaTrapAlert: 'A banca vai tentar te seduzir com "culpa gravíssima equivalente a dolo". NÃO CAIA: culpa grave não é dolo!',
-    mnemonic: 'P-I-P-O-C-A: Prescrição em 8 anos; Inexistência de culpa; Princípios com rol taxativo; Órgão exclusivo é o MP.'
+    mnemonic: 'P-I-P-O-C-A: Prescrição em 8 anos; Inexistência de culpa; Princípios com rol taxativo; Órgão exclusivo é o MP.',
+    hotArticles: ['Art. 1º, § 1º da Lei 8.429/92', 'Art. 11 da Lei 8.429/92', 'Art. 23 da Lei 8.429/92'],
+    tags: ['Direito Administrativo', 'Improbidade', 'Lei 14.230/21', 'Cebraspe', 'FGV']
   },
   {
     id: 'sum-dir-const-inviolabilidade',
@@ -1798,6 +1802,8 @@ export const INITIAL_MICRO_SUMMARIES: MicroSummary[] = [
     topicName: 'Inviolabilidade Domiciliar (Art. 5º, XI CF/88)',
     banca: 'Cebraspe / Vunesp',
     title: 'Regras de Ouro da Entrada em Domicílio',
+    incidence: 'Alta (80/20)',
+    coreConcept: 'A casa é asilo inviolável do indivíduo. A entrada sem consentimento é exceção constitucional taxativa com regras diurnas e noturnas bem delimitadas.',
     keyPoints: [
       'De Dia e de Noite: Flagrante delito, desastre natural ou prestar socorro a vítimas.',
       'Apenas Durante o Dia: Determinação judicial (mandado de busca e apreensão).',
@@ -1805,21 +1811,85 @@ export const INITIAL_MICRO_SUMMARIES: MicroSummary[] = [
       'Tema 280/STF: Entrada noturna em flagrante delito exige "fundadas razões" objetivas e justificadas a posteriori.'
     ],
     bancaTrapAlert: 'Mandado judicial executado às 22h é NULO e gera responsabilidade por abuso de autoridade.',
-    mnemonic: 'F-D-S (Flagrante, Desastre, Socorro) = Qualquer hora. Mandado do Juiz = Só com a luz do Sol.'
+    mnemonic: 'F-D-S (Flagrante, Desastre, Socorro) = Qualquer hora. Mandado do Juiz = Só com a luz do Sol.',
+    hotArticles: ['Art. 5º, XI da CF/88', 'Tema 280 STF', 'Art. 22 da Lei 13.869/19'],
+    tags: ['Direito Constitucional', 'Direitos Fundamentais', 'Carreiras Policiais', 'Cebraspe']
+  },
+  {
+    id: 'sum-penal-ponte-ouro',
+    subjectName: 'Direito Penal',
+    topicName: 'Iter Criminis: Desistência Voluntária & Arrependimento Eficaz',
+    banca: 'Cebraspe / FGV / FCC',
+    title: 'Ponte de Ouro vs Ponte de Prata (Art. 15 vs 16 CP)',
+    incidence: 'Alta (80/20)',
+    coreConcept: 'A desistência voluntária e o arrependimento eficaz afastam a tipicidade da tentativa, fazendo o agente responder apenas pelos atos já praticados.',
+    keyPoints: [
+      'Fórmula de Frank: "Posso prosseguir, mas não quero" (Art. 15 - Desistência Voluntária). Se "Quero prosseguir, mas não posso", é TENTATIVA.',
+      'Arrependimento Eficaz: O agente esgota todos os atos executórios, mas age para impedir o resultado consumativo com sucesso.',
+      'Consequência Jurídica: Desclassificação para os crimes já consumados (ex: responde por lesão corporal leve em vez de tentativa de homicídio).',
+      'Arrependimento Posterior (Art. 16 - Ponte de Prata): Crime sem violência/grave ameaça, reparação do dano até o recebimento da denúncia (reduz pena de 1/3 a 2/3).'
+    ],
+    bancaTrapAlert: 'A banca diz que o agente responde por tentativa de homicídio com pena diminuída. FALSO! Na desistência voluntária e arrependimento eficaz, NÃO HÁ tentativa!',
+    mnemonic: 'Ponte de OURO (Art. 15): O crime inicial SOME, só sobram os atos anteriores. Ponte de PRATA (Art. 16): O crime CONTINUA, mas a pena DIMINUI.',
+    hotArticles: ['Art. 15 do Código Penal', 'Art. 16 do Código Penal'],
+    tags: ['Direito Penal', 'Teoria do Crime', 'Polícia Civil', 'OAB 1ª Fase', 'Delegado']
+  },
+  {
+    id: 'sum-proc-penal-inquerito',
+    subjectName: 'Processo Penal',
+    topicName: 'Inquérito Policial: Características & Arquivamento',
+    banca: 'Cebraspe / FGV',
+    title: 'DNA do Inquérito Policial (As 7 Características)',
+    incidence: 'Alta (80/20)',
+    coreConcept: 'O inquérito policial é procedimento administrativo pré-processual, inquisitivo, sigiloso e informativo, presidido pelo Delegado de Polícia.',
+    keyPoints: [
+      'Características Inegociáveis: Escrito, Dispensável, Sigiloso, Inquisitivo, Oficial, Oficioso e Indisponível (Delegado não pode arquivar IP - art. 17 CPP).',
+      'Súmula Vinculante 14 do STF: O defensor tem direito de acessar os elementos de prova JÁ DOCUMENTADOS que digam respeito ao exercício do direito de defesa.',
+      'Diligências em andamento (ex: interceptação telefônica em curso) NÃO precisam ser franqueadas à defesa.',
+      'Valor Probatório Relativo: Elementos colhidos no IP não fundamentam condenação isoladamente (art. 155 CPP), salvo provas cautelares, não repetíveis e antecipadas.'
+    ],
+    bancaTrapAlert: 'A banca afirma que "o delegado de polícia arquivou o inquérito após verificar a atipicidade". NUNCA! O Delegado JAMAIS pode arquivar autos de inquérito.',
+    mnemonic: 'O-F-I-C-I-O-S-O: Oficial, Formal (escrito), Indisponível, Cautelar, Inquisitivo, Oficioso, Sigiloso, Obrigatório.',
+    hotArticles: ['Art. 17 do CPP', 'Art. 155 do CPP', 'Súmula Vinculante 14 STF'],
+    tags: ['Processo Penal', 'Inquérito Policial', 'Polícia Federal', 'PC-SP', 'Cebraspe']
+  },
+  {
+    id: 'sum-etica-oab-incompatibilidade',
+    subjectName: 'Ética Profissional OAB',
+    topicName: 'Incompatibilidade vs Impedimento (Arts. 27 a 30 EAOAB)',
+    banca: 'FGV (Exame de Ordem)',
+    title: 'Guia Definitivo: Quem Pode e Quem Não Pode Advogar',
+    incidence: 'Ponto Crítico',
+    coreConcept: 'A incompatibilidade determina a proibição total do exercício da advocacia; o impedimento determina a proibição parcial para certas causas ou pessoas.',
+    keyPoints: [
+      'Incompatibilidade (Total - Art. 28): Magistrados, membros do MP, chefes do Poder Executivo, policiais e militares na ativa, ocupantes de cargos de direção bancária.',
+      'Impedimento (Parcial - Art. 30): Servidores públicos em geral não podem advogar contra a Fazenda Pública que os remunera; Parlamentares não podem advogar contra entidades públicas.',
+      'Técnico e Analista Judiciário: São INCOMPATÍVEIS com a advocacia (art. 28, IV do EAOAB), mesmo que fora do expediente forense.',
+      'Suspensão vs Cancelamento: Incompatibilidade temporária gera SUSPENSÃO da inscrição; incompatibilidade definitiva gera CANCELAMENTO.'
+    ],
+    bancaTrapAlert: 'A FGV adora inventar que servidor do TJ pode advogar na área trabalhista porque o TJ é Justiça Estadual. ERRADO: servidores do Judiciário são 100% incompatíveis!',
+    mnemonic: 'IN-compatível = IN-tolerância total (zero advocacia). IM-pedido = IM-posto um limite (pode advogar, menos contra quem te paga).',
+    hotArticles: ['Art. 27 a 30 do Estatuto da OAB (Lei 8.906/94)'],
+    tags: ['Ética OAB', 'OAB 1ª Fase', 'FGV', 'Estatuto da OAB']
   },
   {
     id: 'sum-tributario-decadencia',
     subjectName: 'Direito Tributário',
     topicName: 'Decadência no Lançamento por Homologação',
-    banca: 'FGV',
+    banca: 'FGV / FCC',
     title: 'Termo Inicial da Decadência Tributária (Tema 163/STJ)',
+    incidence: 'Alta (80/20)',
+    coreConcept: 'A decadência extingue o direito do Fisco constituir o crédito tributário. O termo inicial varia se houve ou não antecipação de pagamento pelo contribuinte.',
     keyPoints: [
       'Houve pagamento antecipado (mesmo parcial) e SEM fraude: Prazo de 5 anos conta da DATA DO FATO GERADOR (art. 150, § 4º do CTN).',
       'NÃO houve pagamento antecipado OU com dolo/fraude: Prazo de 5 anos conta do PRIMEIRO DIA DO EXERCÍCIO SEGUINTE àquele em que o lançamento poderia ter sido efetuado (art. 173, I do CTN).',
-      'Súmula Vinculante 8 do STF: São inconstitucionais normas estaduais ou municipais que fixem prazo decadencial diferente de 5 anos.'
+      'Súmula Vinculante 8 do STF: São inconstitucionais normas estaduais ou municipais que fixem prazo decadencial diferente de 5 anos.',
+      'Súmula 555 do STJ: Na hipótese de declaração com fraude, aplica-se o art. 173, I, mesmo havendo recolhimento antecipado.'
     ],
     bancaTrapAlert: 'A FGV coloca um caso onde o contribuinte pagou 10% do valor e pergunta quando prescreve. A regra muda do 173 para o 150!',
-    mnemonic: 'Pagou nem que seja um tostão? Conta do Fato Gerador! Não pagou nada ou foi pilantra? Conta do 1º de Janeiro do ano seguinte!'
+    mnemonic: 'Pagou nem que seja um tostão? Conta do Fato Gerador! Não pagou nada ou foi pilantra? Conta do 1º de Janeiro do ano seguinte!',
+    hotArticles: ['Art. 150, § 4º do CTN', 'Art. 173, I do CTN', 'Súmula Vinculante 8 STF'],
+    tags: ['Direito Tributário', 'Carreiras Fiscais', 'OAB Tributário', 'FGV', 'FCC']
   }
 ];
 

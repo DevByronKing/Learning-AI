@@ -213,6 +213,17 @@ export const Navbar: React.FC<NavbarProps> = ({
       hotkey: 'Q'
     },
     {
+      id: 'summaries',
+      label: 'Resumos Inteligentes',
+      shortLabel: 'Resumos',
+      icon: BookOpen,
+      desc: 'Sínteses 80/20 com Mnemônicos e Áudio IA',
+      badge: '80/20',
+      badgeColor: 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30',
+      category: 'Preparação & Editais',
+      hotkey: 'R'
+    },
+    {
       id: 'discursivas',
       label: 'Discursivas & Peças',
       shortLabel: 'Redação',

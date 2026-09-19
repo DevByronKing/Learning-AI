@@ -461,6 +461,23 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
           {activeSubTab === 'summaries' && (
             <div className="space-y-4 animate-fadeIn">
               
+              <div className="flex items-center justify-between p-2.5 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800/40">
+                <span className="text-[11px] font-black text-indigo-900 dark:text-indigo-200">
+                  Caderno de Sinopses 80/20
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onNavigateTab('summaries');
+                    onClose();
+                  }}
+                  className="text-[11px] font-black text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+                >
+                  <span>Abrir Central</span>
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
+
               <div className="space-y-1">
                 <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">
                   Selecione o Micro-Resumo da Banca:

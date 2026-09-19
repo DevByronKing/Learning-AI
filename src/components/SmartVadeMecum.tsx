@@ -27,7 +27,6 @@ import {
 } from 'lucide-react';
 import { VadeMecumArticle } from '@/lib/types';
 import { INITIAL_VADE_MECUM } from '@/lib/mockData';
-import confetti from 'canvas-confetti';
 
 interface SmartVadeMecumProps {
   onGoToQuestion?: (questionId: string) => void;
@@ -379,13 +378,6 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
       setChallengeResult('correct');
       setTrapStreak(prev => prev + 1);
       setTrapScore(prev => prev + 25);
-      try {
-        confetti({
-          particleCount: 50,
-          spread: 60,
-          origin: { y: 0.7 }
-        });
-      } catch {}
     } else {
       setChallengeResult('wrong');
       setTrapStreak(0);

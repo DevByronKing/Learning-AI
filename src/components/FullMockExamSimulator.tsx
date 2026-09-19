@@ -29,7 +29,6 @@ import {
 } from 'lucide-react';
 import { MockExam, MockExamAnswer, MockExamResult, MockExamSubjectBreakdown, Question, Flashcard, SubscriptionPlan } from '@/lib/types';
 import { MOCK_FULL_EXAMS } from '@/lib/mockData';
-import confetti from 'canvas-confetti';
 
 interface FullMockExamSimulatorProps {
   onAddFlashcardsBatch?: (flashcards: Flashcard[]) => void;
@@ -246,16 +245,6 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
 
     setResult(examResult);
     setViewMode('result');
-
-    if (isAboveCutoff) {
-      try {
-        confetti({
-          particleCount: 80,
-          spread: 80,
-          origin: { y: 0.6 }
-        });
-      } catch {}
-    }
   };
 
   const handleAddWrongQuestionsToSRS = () => {

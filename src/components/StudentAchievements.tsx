@@ -27,7 +27,6 @@ import {
 import { UserMetrics, ExamNotice, MascotId, MascotCompanion, Achievement, DailyMission } from '@/lib/types';
 import { MASCOTS_DATA, INITIAL_ACHIEVEMENTS, INITIAL_DAILY_MISSIONS } from '@/lib/mockData';
 import { MascotChatModal } from './MascotChatModal';
-import confetti from 'canvas-confetti';
 
 interface StudentAchievementsProps {
   metrics: UserMetrics;
@@ -76,13 +75,6 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
         if (m.id === missionId && !m.completed) {
           const addedXp = m.xpReward;
           setUserXp((x) => x + addedXp);
-          try {
-            confetti({
-              particleCount: 80,
-              spread: 70,
-              origin: { y: 0.6 }
-            });
-          } catch {}
           showToast(`Missão Concluída! +${addedXp} XP para ${currentMascot.name}`);
           return { ...m, completed: true, current: m.target };
         }

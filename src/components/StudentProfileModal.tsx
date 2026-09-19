@@ -20,7 +20,6 @@ import { StudentProfile, GuardianAnimalId, SubscriptionPlan } from '@/lib/types'
 import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
 import { useAuthStore } from '@/store/useAuthStore';
 import { SupabaseService } from '@/lib/supabaseService';
-import confetti from 'canvas-confetti';
 
 interface StudentProfileModalProps {
   isOpen: boolean;
@@ -70,14 +69,6 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
     if (user?.id) {
       SupabaseService.syncStudentProfile(user.id, updated);
     }
-
-    try {
-      confetti({
-        particleCount: 60,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-    } catch {}
 
     onClose();
   };

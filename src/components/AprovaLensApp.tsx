@@ -29,6 +29,7 @@ import { ConcursosRadarTab } from '@/components/ConcursosRadarTab';
 import { PlatformGuideTab } from '@/components/PlatformGuideTab';
 import { HelpAndAboutTab } from '@/components/HelpAndAboutTab';
 import { PricingPlansTab } from '@/components/PricingPlansTab';
+import { SmartSubjectSummaries } from '@/components/SmartSubjectSummaries';
 import { 
   ExamNotice, 
   QuestionAttempt, 
@@ -569,6 +570,23 @@ export function AprovaLensApp() {
               setActiveTab('simulator');
               showToast(`Carregando questão de prova vinculada: ${qid}`);
             }}
+          />
+        )}
+
+        {(activeTab === 'summaries' || activeTab === 'resumos') && (
+          <SmartSubjectSummaries
+            onAddFlashcard={handleAddFlashcard}
+            onGoToVadeMecum={(query) => {
+              setActiveTab('vademecum');
+              if (query) showToast(`Buscando no Vade Mecum: ${query}`);
+            }}
+            onGoToSimulator={(subj) => {
+              setActiveTab('simulator');
+              if (subj) showToast(`Iniciando bateria de questões: ${subj}`);
+            }}
+            userPlan={plan}
+            onOpenPricing={() => setIsPricingOpen(true)}
+            showToast={showToast}
           />
         )}
 
