@@ -14,7 +14,8 @@ import {
   Lock, 
   CreditCard,
   ChevronDown,
-  Gift
+  Gift,
+  Flame
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
 
@@ -256,6 +257,56 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
               30% OFF
             </span>
           </button>
+        </div>
+      </div>
+
+      {/* BANNER VIP DE LANÇAMENTO: OFERTA FECHADA R$ 97 */}
+      <div className="relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-orange-600 via-amber-600 to-rose-600 text-white shadow-xl shadow-orange-500/20 border border-orange-400/30">
+        <div className="absolute -right-10 -bottom-10 w-52 h-52 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-2.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 shadow-sm">
+                <Flame className="w-3.5 h-3.5 fill-current text-yellow-300" />
+                Lote 1 Exclusivo • Primeiros 200 Alunos
+              </span>
+              <span className="text-xs text-yellow-200 font-extrabold bg-black/20 px-2.5 py-0.5 rounded-full">
+                Restam apenas 38 vagas
+              </span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+              Oferta Fechada de Lançamento: Passe Até a Prova
+            </h2>
+            <p className="text-orange-100 text-xs sm:text-sm max-w-2xl leading-relaxed">
+              Desenvolvido cirurgicamente para quem presta <strong className="text-white">Tribunais, Carreiras Policiais ou 1ª Fase OAB</strong> e sente que bateu no teto de acertos. Elimine erros por pegadinha com o Vade Mecum Radar, IAs Especialistas e Caderno SM-2 sem pagar mensalidade.
+            </p>
+            <div className="flex items-center gap-4 text-xs font-bold pt-1 text-orange-200">
+              <div className="w-48 bg-black/30 rounded-full h-2.5 overflow-hidden border border-white/20">
+                <div className="bg-yellow-300 h-full rounded-full transition-all duration-1000" style={{ width: '81%' }} />
+              </div>
+              <span>162 / 200 alunos matriculados</span>
+            </div>
+          </div>
+
+          <div className="text-left lg:text-right shrink-0 space-y-3 pt-2 lg:pt-0">
+            <div>
+              <p className="text-xs uppercase font-extrabold tracking-wider text-orange-200">Pagamento Único • Sem Mensalidades</p>
+              <div className="flex items-baseline lg:justify-end gap-1">
+                <span className="text-4xl sm:text-5xl font-black text-white">R$ 97</span>
+                <span className="text-xs font-bold text-orange-200">/ dose única</span>
+              </div>
+              <p className="text-[11px] text-orange-200 font-medium">Acesso total irrestrito até o dia da sua prova</p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => onSelectPlanForCheckout('lancamento')}
+              className="w-full lg:w-auto px-8 py-3.5 rounded-2xl bg-white text-orange-600 hover:bg-orange-50 font-black text-sm tracking-wide shadow-xl shadow-black/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+            >
+              <span>Garantir Vaga por R$ 97</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 

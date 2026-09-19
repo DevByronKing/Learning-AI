@@ -156,7 +156,7 @@ export type UserMetrics = {
   }[];
 };
 
-export type SubscriptionPlan = 'aspirante' | 'pro' | 'elite' | 'black';
+export type SubscriptionPlan = 'aspirante' | 'pro' | 'elite' | 'black' | 'lancamento';
 
 export type DiscursivePrompt = {
   id: string;

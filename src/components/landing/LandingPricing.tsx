@@ -1,5 +1,5 @@
 import React from 'react';
-import { Crown, CheckCircle2, XCircle } from 'lucide-react';
+import { Crown, CheckCircle2, XCircle, Flame, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
 
 interface LandingPricingProps {
@@ -13,7 +13,7 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
 }) => {
   return (
     <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="pricing">
-      <div className="text-center mb-20">
+      <div className="text-center mb-16">
         <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-500 dark:text-amber-400 text-sm font-bold mb-4 shadow-sm">
           <Crown className="w-4 h-4 fill-amber-500 dark:fill-amber-400" />
           <span className="uppercase tracking-widest">INVESTIMENTO NO SEU CARGO PÚBLICO</span>
@@ -24,6 +24,59 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
         <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto font-medium">
           Cancele a qualquer momento com 1 clique. Garantia incondicional de 7 dias com reembolso integral.
         </p>
+      </div>
+
+      {/* BANNER VIP OFERTA FECHADA DE LANÇAMENTO (R$ 97) */}
+      <div className="mb-14 relative overflow-hidden rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-orange-600 via-amber-600 to-rose-600 text-white shadow-2xl shadow-orange-500/25 border border-orange-400/40">
+        <div className="absolute -right-12 -bottom-12 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 relative z-10">
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-black tracking-wider uppercase flex items-center gap-1.5 shadow-sm">
+                <Flame className="w-4 h-4 fill-current text-yellow-300" />
+                Lote 1 Exclusivo • Primeiros 200 Alunos
+              </span>
+              <span className="text-xs text-yellow-200 font-extrabold bg-black/30 px-3 py-1 rounded-full">
+                Restam apenas 38 vagas
+              </span>
+            </div>
+            <h3 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
+              Oferta Fechada: Passe Até a Prova
+            </h3>
+            <p className="text-orange-100 text-sm sm:text-base max-w-2xl leading-relaxed">
+              Feito para concurseiros de <strong className="text-white">Tribunais, Carreiras Policiais e OAB 1ª Fase</strong> que estão há meses estudando e se sentem travados por pegadinhas da banca. Pague uma única vez e tenha acesso total até a data da prova.
+            </p>
+            <div className="flex items-center gap-4 text-xs font-bold pt-1 text-orange-200">
+              <div className="w-48 sm:w-60 bg-black/30 rounded-full h-3 overflow-hidden border border-white/20">
+                <div className="bg-yellow-300 h-full rounded-full transition-all duration-1000" style={{ width: '81%' }} />
+              </div>
+              <span>162 / 200 vagas preenchidas</span>
+            </div>
+          </div>
+
+          <div className="text-left lg:text-right shrink-0 space-y-3 pt-2 lg:pt-0">
+            <div>
+              <p className="text-xs uppercase font-extrabold tracking-wider text-orange-200">Taxa Única Sem Mensalidade</p>
+              <div className="flex items-baseline lg:justify-end gap-1">
+                <span className="text-5xl font-black text-white">R$ 97</span>
+                <span className="text-xs font-bold text-orange-200">/ dose única</span>
+              </div>
+              <p className="text-xs text-orange-200 font-medium">Acesso total irrestrito até o dia da sua prova</p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                onSelectPlan('lancamento');
+                onOpenPricing();
+              }}
+              className="w-full lg:w-auto px-8 py-4 rounded-2xl bg-white text-orange-600 hover:bg-orange-50 font-black text-base tracking-wide shadow-xl shadow-black/25 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+            >
+              <span>Garantir Vaga por R$ 97</span>
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch relative z-10">
@@ -191,6 +244,47 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
           </button>
         </div>
 
+      </div>
+
+      {/* CARD VIP: PLANO BLACK VITALÍCIO */}
+      <div className="mt-12 relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950/40 border-2 border-amber-500/50 text-white shadow-2xl">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-black uppercase tracking-wider">
+              <Crown className="w-3.5 h-3.5 fill-amber-300" />
+              <span>Acesso Até a Posse • Edição Black</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-black text-white">
+              Plano BLACK VITALÍCIO
+            </h3>
+            <p className="text-slate-300 text-xs sm:text-sm max-w-2xl leading-relaxed">
+              Pague uma única vez e nunca mais compre cursos ou plataformas. Tenha acesso perpétuo irrestrito a todas as ferramentas, IAs e atualizações até ser nomeado no Diário Oficial.
+            </p>
+          </div>
+
+          <div className="text-left lg:text-right shrink-0 space-y-3">
+            <div>
+              <p className="text-xs uppercase font-extrabold tracking-wider text-amber-400">12x de R$ 149,70 sem juros</p>
+              <div className="flex items-baseline lg:justify-end gap-1">
+                <span className="text-4xl font-black text-white">R$ 1.497</span>
+                <span className="text-xs font-bold text-amber-400">/ único</span>
+              </div>
+              <p className="text-[11px] text-slate-400">ou R$ 197/mês no plano recorrente</p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                onSelectPlan('black');
+                onOpenPricing();
+              }}
+              className="w-full lg:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-sm tracking-wide shadow-lg shadow-amber-500/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Garantir Acesso Vitalício Black</span>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );

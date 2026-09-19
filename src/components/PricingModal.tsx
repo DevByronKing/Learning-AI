@@ -15,7 +15,8 @@ import {
   ArrowRight,
   ArrowLeft,
   Lock,
-  BadgeCheck
+  BadgeCheck,
+  Flame
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
 import confetti from 'canvas-confetti';
@@ -162,6 +163,11 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
   const planPrices: Record<SubscriptionPlan, { price: string; period: string; annualTotal: string }> = {
     aspirante: { price: 'R$ 0', period: '/ sempre', annualTotal: 'Totalmente gratuito' },
+    lancamento: {
+      price: 'R$ 97',
+      period: 'único',
+      annualTotal: 'Passe de Lançamento: Acesso total até a sua prova (200 vagas)'
+    },
     pro: {
       price: billingCycle === 'annual' ? 'R$ 39,90' : 'R$ 59,90',
       period: '/ mês',
@@ -239,9 +245,59 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
         {/* TAB 1: COMPARADOR DE PLANOS */}
         {activeTab === 'plans' && (
-          <div className="p-6 sm:p-8 animate-fadeIn">
-            {/* Billing Cycle Switcher */}
-            <div className="text-center max-w-md mx-auto mb-8">
+          <div className="p-6 sm:p-8 animate-fadeIn space-y-6">
+            
+            {/* VIP Banner: Oferta Fechada de Lançamento (Passe Até a Prova - R$ 97) */}
+            <div className="relative p-6 sm:p-7 rounded-3xl bg-gradient-to-r from-orange-500/15 via-amber-500/15 to-emerald-500/15 border-2 border-orange-500/60 shadow-xl overflow-hidden animate-fadeIn">
+              <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                <div className="space-y-2.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-3 py-1 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 text-[11px] font-black uppercase tracking-wider shadow-sm flex items-center gap-1.5">
+                      <Flame className="w-3.5 h-3.5 fill-slate-950" />
+                      OFERTA FECHADA DE LANÇAMENTO • LOTE 1 (200 VAGAS)
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30 text-[11px] font-black animate-pulse">
+                      Restam apenas 38 vagas
+                    </span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+                    Passe Até a Prova: Acesso Irrestrito Sem Mensalidades
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl">
+                    Pague uma única vez <strong className="text-orange-600 dark:text-orange-400 font-extrabold">R$ 97,00</strong> e tenha Copiloto Cognitivo, Arena de Combate 60/40, Smart Vade Mecum, Flashcards SRS 3D e Diagnóstico Psicométrico de Pegadinhas liberados até o dia do seu exame.
+                  </p>
+                  {/* Progress Bar of Remaining Spots */}
+                  <div className="pt-1 max-w-md">
+                    <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">
+                      <span>Vagas Preenchidas:</span>
+                      <span className="text-orange-600 dark:text-orange-400 font-bold">162 de 200 alunos matriculados (81%)</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                      <div className="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-500 w-[81%]" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:items-end justify-center shrink-0 space-y-2">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">R$ 97</span>
+                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400">/ dose única</span>
+                  </div>
+                  <button
+                    onClick={() => handleSelectPlanAndGoToCheckout('lancamento')}
+                    className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 hover:from-orange-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5 glow-emerald"
+                  >
+                    <span>Garantir Passe por R$ 97</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Billing Cycle Switcher for Subscription Plans */}
+            <div className="text-center max-w-md mx-auto pt-2">
+              <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Ou escolha por assinatura mensal/anual:</p>
               <div className="inline-flex items-center p-1 rounded-2xl bg-slate-100 dark:bg-dark-card border border-slate-200 dark:border-white/10">
                 <button
                   onClick={() => setBillingCycle('monthly')}
@@ -265,77 +321,15 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               </div>
             </div>
 
-            {/* 3 Plans Grid */}
+            {/* 3 Core Plans Grid (Pro, Elite, Black Vitalício) */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
               
-              {/* PLANO ASPIRANTE (FREEMIUM) */}
-              <div
-                className={`p-6 rounded-3xl border transition-all flex flex-col justify-between ${
-                  selectedPlanToBuy === 'aspirante'
-                    ? 'border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/30 ring-2 ring-slate-400/20 shadow-sm'
-                    : 'border-slate-200 dark:border-white/5 bg-white dark:bg-dark-card/50 hover:border-slate-300 dark:hover:border-white/10'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700/50 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10">
-                      ASPIRANTE • GRATUITO
-                    </span>
-                    {currentPlan === 'aspirante' && (
-                      <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">Ativo</span>
-                    )}
-                  </div>
-
-                  <div className="mt-4 mb-5">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-black text-slate-900 dark:text-white">R$ 0</span>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">/ sempre</span>
-                    </div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">
-                      Acesso básico gratuito para iniciar a rotina
-                    </p>
-                  </div>
-
-                  <ul className="space-y-2.5 text-xs text-slate-700 dark:text-slate-300">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                      <span><strong>10 questões / dia</strong> no Banco</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                      <span><strong>5 diagnósticos IA / dia</strong></span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                      <span><strong>3 perguntas / dia</strong> ao Copiloto</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                      <span>Vade Mecum & Desafios Básicos</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-slate-400">
-                      <X className="w-4 h-4 text-slate-400 shrink-0" />
-                      <span>Discursivas com IA bloqueadas</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/10">
-                  <button
-                    onClick={() => handleSelectPlanAndGoToCheckout('aspirante')}
-                    className="w-full py-3 rounded-2xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors"
-                  >
-                    {currentPlan === 'aspirante' ? 'Plano Atual Ativo' : 'Usar Versão Gratuita'}
-                  </button>
-                </div>
-              </div>
-
               {/* PLANO PRO (COPILOTO COGNITIVO) */}
               <div
                 className="p-6 rounded-3xl border-2 border-indigo-600 dark:border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20 relative shadow-xl shadow-indigo-600/10 flex flex-col justify-between glow-brand"
               >
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-black uppercase tracking-wider shadow-md">
-                  Mais Recomendado
+                  Mais Popular
                 </div>
 
                 <div>
@@ -391,13 +385,13 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                     onClick={() => handleSelectPlanAndGoToCheckout('pro')}
                     className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-xs tracking-wide shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"
                   >
-                    <span>Checklist & Assinar Pro</span>
+                    <span>Assinar Plano Pro</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
-              {/* PLANO ELITE (CARREIRAS JURÍDICAS) */}
+              {/* PLANO ELITE (CARREIRAS JURÍDICAS & DISCURSIVAS) */}
               <div
                 className="p-6 rounded-3xl border border-amber-300 dark:border-amber-500/40 bg-amber-50/40 dark:bg-amber-950/20 flex flex-col justify-between hover:border-amber-400 transition-all shadow-md"
               >
@@ -450,12 +444,84 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                     onClick={() => handleSelectPlanAndGoToCheckout('elite')}
                     className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-extrabold text-xs tracking-wide shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"
                   >
-                    <span>Checklist & Assinar Elite</span>
+                    <span>Assinar Plano Elite</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
+              {/* PLANO BLACK VITALÍCIO (MEMBRO FUNDADOR) */}
+              <div
+                className="p-6 rounded-3xl border-2 border-amber-400 bg-gradient-to-b from-slate-950 via-[#0c1222] to-slate-950 text-white relative shadow-2xl flex flex-col justify-between"
+              >
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-lg flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 fill-slate-950" />
+                  MEMBRO FUNDADOR • ATÉ A POSSE
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      BLACK VITALÍCIO
+                    </span>
+                    <Crown className="w-5 h-5 text-amber-400" />
+                  </div>
+
+                  <div className="mt-4 mb-5">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-black text-white">R$ 1.497</span>
+                      <span className="text-xs text-amber-400">/ único</span>
+                    </div>
+                    <p className="text-xs text-amber-300/90 font-medium mt-1">
+                      Ou 12x de R$ 149,70 • Nunca mais pague nada
+                    </p>
+                  </div>
+
+                  <ul className="space-y-2.5 text-xs text-slate-200">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
+                      <span><strong>Acesso Vitalício Perpétuo</strong> até a posse</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
+                      <span><strong>Correções ILIMITADAS</strong> de Peças OAB & Redações</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
+                      <span><strong>Simulador Cognitivo de Prova Oral</strong> com IA</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
+                      <span><strong>Animal Guardião:</strong> Fênix Dourada Mítica 🔥</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
+                      <span><strong>Suporte 1-a-1 VIP</strong> com Gerente no WhatsApp</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-white/10">
+                  <button
+                    onClick={() => handleSelectPlanAndGoToCheckout('black')}
+                    className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-400/25 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"
+                  >
+                    <span>Garantir Vitalício Black</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Link para versão gratuita no rodapé */}
+            <div className="text-center pt-2">
+              <button
+                onClick={() => handleSelectPlanAndGoToCheckout('aspirante')}
+                className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 underline font-medium"
+              >
+                Prefere apenas testar? Continuar com o Plano Gratuito Aspirante (10 questões/dia)
+              </button>
             </div>
           </div>
         )}

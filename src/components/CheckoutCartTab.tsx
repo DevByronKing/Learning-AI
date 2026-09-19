@@ -18,7 +18,8 @@ import {
   CheckCircle2, 
   Shield, 
   ShoppingBag,
-  Gift
+  Gift,
+  Flame
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
 import { AVAILABLE_COUPONS } from '@/lib/concursosData';
@@ -64,13 +65,15 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
   const [isPaymentConfirmed, setIsPaymentConfirmed] = useState(false);
 
   // Preços Base Reposicionados
-  const baseMonthlyPrices: Record<'pro' | 'elite' | 'black', number> = {
+  const baseMonthlyPrices: Record<'pro' | 'elite' | 'black' | 'lancamento', number> = {
     pro: 59.90,
     elite: 129.90,
-    black: 197.00
+    black: 197.00,
+    lancamento: 97.00
   };
 
   const planName = 
+    selectedPlan === 'lancamento' ? 'Oferta Fechada: Passe Até a Prova (200 Vagas)' :
     selectedPlan === 'black' ? 'Plano BLACK VITALÍCIO (Até a Posse)' :
     selectedPlan === 'elite' ? 'Plano ELITE VIP' : 'Plano PRO';
 
@@ -79,7 +82,11 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
   let cycleDiscountPercent = 0;
   let cycleDiscountValue = 0;
 
-  if (selectedPlan === 'black') {
+  if (selectedPlan === 'lancamento') {
+    rawTotal = 97.00;
+    cycleDiscountPercent = 0;
+    cycleDiscountValue = 0;
+  } else if (selectedPlan === 'black') {
     if (billingCycle === 'vitalicio') {
       rawTotal = 1497.00;
       cycleDiscountPercent = 0;
@@ -209,156 +216,211 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
               1. Escolha o Seu Nível de Preparação
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {/* Plano PRO */}
-              <button
-                type="button"
+            <div className="space-y-3">
+              {/* OFERTA FECHADA DE LANÇAMENTO (R$ 97) */}
+              <div 
                 onClick={() => {
-                  setSelectedPlan('pro');
-                  if (billingCycle === 'vitalicio') setBillingCycle('mensal');
+                  setSelectedPlan('lancamento');
                 }}
-                className={`p-4 rounded-2xl border text-left transition-all relative ${
-                  selectedPlan === 'pro'
-                    ? 'border-blue-500 bg-blue-50/40 dark:bg-blue-500/10 ring-2 ring-blue-500/20 shadow-md'
-                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                className={`p-4 rounded-2xl border cursor-pointer transition-all relative overflow-hidden ${
+                  selectedPlan === 'lancamento'
+                    ? 'border-orange-500 bg-gradient-to-br from-orange-500/15 via-amber-500/10 to-transparent ring-2 ring-orange-500/30 shadow-md'
+                    : 'border-orange-300/60 dark:border-orange-500/30 bg-orange-50/40 dark:bg-orange-950/15 hover:border-orange-400'
                 }`}
               >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-black text-blue-600 dark:text-blue-400 flex items-center gap-1">
-                    <Zap className="w-4 h-4" /> Plano PRO
-                  </span>
-                  {selectedPlan === 'pro' && <CheckCircle2 className="w-4 h-4 text-blue-600" />}
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                      <Flame className="w-3 h-3 fill-current" /> Lote 1 • Exclusivo 200 Vagas
+                    </span>
+                    <span className="text-xs text-orange-600 dark:text-orange-400 font-extrabold">
+                      Restam apenas 38 vagas
+                    </span>
+                  </div>
+                  {selectedPlan === 'lancamento' && <CheckCircle2 className="w-5 h-5 text-orange-600 dark:text-orange-400 shrink-0" />}
                 </div>
-                <p className="text-xl font-black text-slate-900 dark:text-white">R$ 59,90 <span className="text-xs font-normal text-slate-400">/mês</span></p>
-                <p className="text-[11px] text-blue-500 font-bold mt-0.5">ou R$ 39,90/mês no anual</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">IA Flash Ilimitada + Caderno SM-2 + até 4 Editais.</p>
-              </button>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-1.5">
+                      Passe Até a Prova (Acesso Total Anti-Pegadinha)
+                    </h3>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                      Vade Mecum Radar, IAs Especialistas, Caderno SM-2 e Arena até o dia do seu concurso/exame.
+                    </p>
+                  </div>
+                  <div className="text-left sm:text-right shrink-0">
+                    <p className="text-2xl font-black text-orange-600 dark:text-orange-400">R$ 97,00</p>
+                    <p className="text-[10px] text-slate-500 uppercase font-bold">Dose Única • Sem Mensalidade</p>
+                  </div>
+                </div>
+              </div>
 
-              {/* Plano ELITE */}
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedPlan('elite');
-                  if (billingCycle === 'vitalicio') setBillingCycle('mensal');
-                }}
-                className={`p-4 rounded-2xl border text-left transition-all relative ${
-                  selectedPlan === 'elite'
-                    ? 'border-indigo-500 bg-indigo-50/40 dark:bg-indigo-500/10 ring-2 ring-indigo-500/20 shadow-md'
-                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-black text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
-                    <Crown className="w-4 h-4" /> ELITE VIP
-                  </span>
-                  {selectedPlan === 'elite' && <CheckCircle2 className="w-4 h-4 text-indigo-500" />}
-                </div>
-                <p className="text-xl font-black text-slate-900 dark:text-white">R$ 129,90 <span className="text-xs font-normal text-slate-400">/mês</span></p>
-                <p className="text-[11px] text-indigo-500 font-bold mt-0.5">ou R$ 89,90/mês no anual</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Psicometria TRI + 10 Peças OAB/mês + Gemini Pro.</p>
-              </button>
+              {/* DEMAIS PLANOS CONTÍNUOS */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* Plano PRO */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedPlan('pro');
+                    if (billingCycle === 'vitalicio') setBillingCycle('mensal');
+                  }}
+                  className={`p-4 rounded-2xl border text-left transition-all relative ${
+                    selectedPlan === 'pro'
+                      ? 'border-blue-500 bg-blue-50/40 dark:bg-blue-500/10 ring-2 ring-blue-500/20 shadow-md'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-black text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                      <Zap className="w-4 h-4" /> Plano PRO
+                    </span>
+                    {selectedPlan === 'pro' && <CheckCircle2 className="w-4 h-4 text-blue-600" />}
+                  </div>
+                  <p className="text-xl font-black text-slate-900 dark:text-white">R$ 59,90 <span className="text-xs font-normal text-slate-400">/mês</span></p>
+                  <p className="text-[11px] text-blue-500 font-bold mt-0.5">ou R$ 39,90/mês no anual</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">IA Flash Ilimitada + Caderno SM-2 + até 4 Editais.</p>
+                </button>
 
-              {/* Plano BLACK VITALÍCIO */}
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedPlan('black');
-                  setBillingCycle('vitalicio');
-                }}
-                className={`p-4 rounded-2xl border text-left transition-all relative ${
-                  selectedPlan === 'black'
-                    ? 'border-amber-500 bg-slate-900 text-white ring-2 ring-amber-500/40 shadow-lg'
-                    : 'border-slate-200 dark:border-slate-800 hover:border-amber-400/50 dark:hover:border-amber-500/50'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-black text-amber-500 flex items-center gap-1">
-                    <Sparkles className="w-4 h-4" /> BLACK VIP
-                  </span>
-                  {selectedPlan === 'black' && <CheckCircle2 className="w-4 h-4 text-amber-400" />}
-                </div>
-                <p className="text-xl font-black text-slate-900 dark:text-white">R$ 1.497 <span className="text-xs font-normal text-amber-400">único</span></p>
-                <p className="text-[11px] text-amber-500 font-bold mt-0.5">12x R$ 149,70 ou R$ 197/mês</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Acesso Até a Posse + Todas Ferramentas + Fênix Dourada.</p>
-              </button>
+                {/* Plano ELITE */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedPlan('elite');
+                    if (billingCycle === 'vitalicio') setBillingCycle('mensal');
+                  }}
+                  className={`p-4 rounded-2xl border text-left transition-all relative ${
+                    selectedPlan === 'elite'
+                      ? 'border-indigo-500 bg-indigo-50/40 dark:bg-indigo-500/10 ring-2 ring-indigo-500/20 shadow-md'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-black text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+                      <Crown className="w-4 h-4" /> ELITE VIP
+                    </span>
+                    {selectedPlan === 'elite' && <CheckCircle2 className="w-4 h-4 text-indigo-500" />}
+                  </div>
+                  <p className="text-xl font-black text-slate-900 dark:text-white">R$ 129,90 <span className="text-xs font-normal text-slate-400">/mês</span></p>
+                  <p className="text-[11px] text-indigo-500 font-bold mt-0.5">ou R$ 89,90/mês no anual</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Psicometria TRI + 10 Peças OAB/mês + Gemini Pro.</p>
+                </button>
+
+                {/* Plano BLACK VITALÍCIO */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedPlan('black');
+                    setBillingCycle('vitalicio');
+                  }}
+                  className={`p-4 rounded-2xl border text-left transition-all relative ${
+                    selectedPlan === 'black'
+                      ? 'border-amber-500 bg-slate-900 text-white ring-2 ring-amber-500/40 shadow-lg'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-amber-400/50 dark:hover:border-amber-500/50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-black text-amber-500 flex items-center gap-1">
+                      <Sparkles className="w-4 h-4" /> BLACK VIP
+                    </span>
+                    {selectedPlan === 'black' && <CheckCircle2 className="w-4 h-4 text-amber-400" />}
+                  </div>
+                  <p className="text-xl font-black text-slate-900 dark:text-white">R$ 1.497 <span className="text-xs font-normal text-amber-400">único</span></p>
+                  <p className="text-[11px] text-amber-500 font-bold mt-0.5">12x R$ 149,70 ou R$ 197/mês</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Acesso Até a Posse + Todas Ferramentas + Fênix Dourada.</p>
+                </button>
+              </div>
             </div>
 
             {/* Seletor de Ciclos */}
-            <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80">
-              <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-2">
-                {selectedPlan === 'black' ? 'Formato de Pagamento' : 'Frequência de Cobrança (Economize até 33%)'}
-              </label>
-
-              {selectedPlan === 'black' ? (
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setBillingCycle('vitalicio')}
-                    className={`py-2 px-3 rounded-xl text-xs font-bold transition-all ${
-                      billingCycle === 'vitalicio'
-                        ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black shadow-md'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                    }`}
-                  >
-                    <span>Vitalício (Até a Posse)</span>
-                    <span className="block text-[9px] text-amber-900 dark:text-amber-200 font-extrabold">12x R$ 149,70 • Acesso Perpétuo</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setBillingCycle('mensal')}
-                    className={`py-2 px-3 rounded-xl text-xs font-bold transition-all ${
-                      billingCycle === 'mensal'
-                        ? 'bg-blue-600 text-white shadow-sm'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                    }`}
-                  >
-                    <span>Mensal Recorrente</span>
-                    <span className="block text-[9px] text-slate-400 font-extrabold">R$ 197,00/mês</span>
-                  </button>
+            {selectedPlan === 'lancamento' ? (
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                <div className="bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-900/40 rounded-xl p-3.5 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5 text-xs text-orange-900 dark:text-orange-200 font-bold">
+                    <Flame className="w-4 h-4 text-orange-500 shrink-0" />
+                    <span>Oferta Fechada Lote 1: R$ 97,00 valor único válido até o dia da sua prova.</span>
+                  </div>
+                  <span className="text-[11px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/50 px-2 py-0.5 rounded-md shrink-0">
+                    Sem Mensalidade
+                  </span>
                 </div>
-              ) : (
-                <div className="grid grid-cols-3 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setBillingCycle('mensal')}
-                    className={`py-2 px-3 rounded-xl text-xs font-bold transition-all ${
-                      billingCycle === 'mensal'
-                        ? 'bg-blue-600 text-white shadow-sm'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                    }`}
-                  >
-                    Mensal
-                  </button>
+              </div>
+            ) : (
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-2">
+                  {selectedPlan === 'black' ? 'Formato de Pagamento' : 'Frequência de Cobrança (Economize até 33%)'}
+                </label>
 
-                  <button
-                    type="button"
-                    onClick={() => setBillingCycle('trimestral')}
-                    className={`py-2 px-3 rounded-xl text-xs font-bold transition-all relative ${
-                      billingCycle === 'trimestral'
-                        ? 'bg-blue-600 text-white shadow-sm'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                    }`}
-                  >
-                    <span>Trimestral</span>
-                    <span className="block text-[9px] text-emerald-400 font-extrabold">-15% OFF</span>
-                  </button>
+                {selectedPlan === 'black' ? (
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setBillingCycle('vitalicio')}
+                      className={`py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+                        billingCycle === 'vitalicio'
+                          ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black shadow-md'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                      }`}
+                    >
+                      <span>Vitalício (Até a Posse)</span>
+                      <span className="block text-[9px] text-amber-900 dark:text-amber-200 font-extrabold">12x R$ 149,70 • Acesso Perpétuo</span>
+                    </button>
 
-                  <button
-                    type="button"
-                    onClick={() => setBillingCycle('anual')}
-                    className={`py-2 px-3 rounded-xl text-xs font-bold transition-all relative ${
-                      billingCycle === 'anual'
-                        ? 'bg-blue-600 text-white shadow-sm'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                    }`}
-                  >
-                    <span>Anual</span>
-                    <span className="block text-[9px] text-amber-300 font-extrabold">-33% OFF</span>
-                  </button>
-                </div>
-              )}
-            </div>
+                    <button
+                      type="button"
+                      onClick={() => setBillingCycle('mensal')}
+                      className={`py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+                        billingCycle === 'mensal'
+                          ? 'bg-blue-600 text-white shadow-sm'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                      }`}
+                    >
+                      <span>Mensal Recorrente</span>
+                      <span className="block text-[9px] text-slate-400 font-extrabold">R$ 197,00/mês</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setBillingCycle('mensal')}
+                      className={`py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+                        billingCycle === 'mensal'
+                          ? 'bg-blue-600 text-white shadow-sm'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                      }`}
+                    >
+                      Mensal
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setBillingCycle('trimestral')}
+                      className={`py-2 px-3 rounded-xl text-xs font-bold transition-all relative ${
+                        billingCycle === 'trimestral'
+                          ? 'bg-blue-600 text-white shadow-sm'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                      }`}
+                    >
+                      <span>Trimestral</span>
+                      <span className="block text-[9px] text-emerald-400 font-extrabold">-15% OFF</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setBillingCycle('anual')}
+                      className={`py-2 px-3 rounded-xl text-xs font-bold transition-all relative ${
+                        billingCycle === 'anual'
+                          ? 'bg-blue-600 text-white shadow-sm'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                      }`}
+                    >
+                      <span>Anual</span>
+                      <span className="block text-[9px] text-amber-300 font-extrabold">-33% OFF</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Seletor de Forma de Pagamento */}
@@ -616,7 +678,9 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
               <div>
                 <p className="font-black text-sm text-slate-900 dark:text-white">{planName}</p>
-                <p className="text-xs text-slate-400 capitalize">Ciclo {billingCycle}</p>
+                <p className="text-xs text-slate-400 capitalize">
+                  {selectedPlan === 'lancamento' ? 'Acesso Até o Dia da Sua Prova' : `Ciclo ${billingCycle}`}
+                </p>
               </div>
               <p className="font-bold text-sm text-slate-900 dark:text-white">
                 R$ {rawTotal.toFixed(2)}
@@ -676,7 +740,9 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                     R$ {finalPrice.toFixed(2)}
                   </span>
                   <span className="block text-[10px] text-slate-400">
-                    {billingCycle === 'vitalicio'
+                    {selectedPlan === 'lancamento'
+                      ? 'Pagamento único com acesso completo até o dia da sua prova'
+                      : billingCycle === 'vitalicio'
                       ? 'Pagamento único com acesso vitalício até a posse'
                       : billingCycle === 'mensal'
                       ? 'Cobrança mensal recorrente'
