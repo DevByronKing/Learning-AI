@@ -12,6 +12,7 @@
     "test:coverage": "vitest run --coverage",
     "test:stress": "vitest run src/__tests__/stressTesting.test.ts",
     "test:e2e": "playwright test",
+    "test:a11y": "playwright test e2e/accessibility.spec.ts",
     "review": "ocr review",
     "review:preview": "ocr delegate preview",
     "review:agent": "ocr review --audience agent"
@@ -29,6 +30,7 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
