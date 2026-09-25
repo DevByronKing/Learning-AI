@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:stress": "vitest run src/__tests__/stressTesting.test.ts",
     "review": "ocr review",
     "review:preview": "ocr delegate preview",
     "review:agent": "ocr review --audience agent"
