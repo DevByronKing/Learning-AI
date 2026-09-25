@@ -10,6 +10,16 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: [],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html'],
+      reportsDirectory: './coverage',
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'src/**/*.d.ts',
+        'src/**/__tests__/**',
+      ],
+    },
   },
   resolve: {
     alias: {
