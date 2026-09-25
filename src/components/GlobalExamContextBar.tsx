@@ -3,7 +3,6 @@
 import React from 'react';
 import { 
   Target, 
-  Calendar, 
   Clock, 
   ShieldAlert, 
   BookOpen, 
@@ -12,11 +11,7 @@ import {
   Scale, 
   PenTool, 
   FileText, 
-  Sparkles,
-  ChevronRight,
-  ExternalLink,
-  Layers,
-  ArrowRight
+  ChevronRight
 } from 'lucide-react';
 import { ExamNotice, StudentProfile } from '@/lib/types';
 

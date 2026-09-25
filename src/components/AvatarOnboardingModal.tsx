@@ -2,20 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { 
-  Shield, 
   Sparkles, 
-  ChevronRight, 
-  Award,
   Zap,
-  Target,
   Activity,
   CheckCircle2,
-  Sword,
   Swords,
   ChevronLeft
 } from 'lucide-react';
 import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
-import { GuardianAnimal, StudentProfile } from '@/lib/types';
 import { HolographicAvatar3D } from '@/components/HolographicAvatar3D';
 
 interface AvatarOnboardingModalProps {
