@@ -1,9 +1,34 @@
 import { NextResponse } from 'next/server';
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimiter';
 
 export async function POST(req: Request) {
   try {
-    const { email, password } = await req.json();
+    // Proteção contra Brute Force / Credential Stuffing (máx 10 tentativas por minuto)
+    const ip = getClientIp(req);
+    const { allowed, resetTime } = checkRateLimit(`login_${ip}`, 10, 60000);
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Muitas tentativas de login consecutivas. Aguarde 1 minuto para tentar novamente.',
+          retryAfterSeconds: Math.ceil((resetTime - Date.now()) / 1000),
+        },
+        { status: 429 }
+      );
+    }
+
+    let body: any;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { success: false, error: 'Formato de requisição inválido (JSON malformado).' },
+        { status: 400 }
+      );
+    }
+
+    const { email, password } = body || {};
 
     if (!email || !password) {
       return NextResponse.json(

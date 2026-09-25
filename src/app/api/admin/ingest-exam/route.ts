@@ -10,7 +10,26 @@ import { ExamIngestionMetadata, ParsedExamQuestion } from '@/lib/types';
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    // 0. Controle de Acesso Administrativo em Produção
+    const adminKey = req.headers.get('x-admin-key') || req.headers.get('authorization')?.replace('Bearer ', '');
+    const configuredSecret = process.env.ADMIN_API_KEY || 'learning-ai-admin-secret';
+    if (process.env.NODE_ENV === 'production' && adminKey !== configuredSecret) {
+      return NextResponse.json(
+        { success: false, error: 'Acesso não autorizado. Chave administrativa ausente ou inválida.' },
+        { status: 401 }
+      );
+    }
+
+    let body: any;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { success: false, error: 'Payload JSON inválido ou malformado.' },
+        { status: 400 }
+      );
+    }
+
     const action = body.action || 'preview'; // 'preview' | 'commit'
     const metadata: ExamIngestionMetadata = body.metadata || {
       title: 'Prova Oficial Concurso Público',
