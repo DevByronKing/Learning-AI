@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "review": "ocr review",
+    "review:preview": "ocr delegate preview",
+    "review:agent": "ocr review --audience agent"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.115.0",
