@@ -11,7 +11,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: [],
+    exclude: ['node_modules', 'dist', 'e2e/**', '.next/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
@@ -23,6 +23,7 @@ export default defineConfig({
         'src/app/sitemap.ts',
         'src/app/robots.ts',
         'src/app/manifest.ts',
+        'e2e/**',
       ],
     },
   },

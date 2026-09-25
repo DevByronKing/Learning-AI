@@ -11,6 +11,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:stress": "vitest run src/__tests__/stressTesting.test.ts",
+    "test:e2e": "playwright test",
     "review": "ocr review",
     "review:preview": "ocr delegate preview",
     "review:agent": "ocr review --audience agent"
@@ -28,6 +29,7 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@types/canvas-confetti": "^1.9.0",
