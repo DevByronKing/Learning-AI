@@ -23,14 +23,17 @@ import {
   RotateCcw,
   Zap,
   Check,
-  X
+  X,
+  Crosshair
 } from 'lucide-react';
-import { VadeMecumArticle } from '@/lib/types';
+import { VadeMecumArticle, ExamNotice, StudentProfile } from '@/lib/types';
 import { INITIAL_VADE_MECUM } from '@/lib/mockData';
 
 interface SmartVadeMecumProps {
   onGoToQuestion?: (questionId: string) => void;
-  onGoToSimulator: () => void;
+  onGoToSimulator: (queryOrTopic?: string) => void;
+  selectedExam?: ExamNotice;
+  studentProfile?: StudentProfile;
 }
 
 interface TrapChallenge {
@@ -251,13 +254,56 @@ function getMissedQuestionsForArticle(art: VadeMecumArticle): ArticleMissedQuest
 
 export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
   onGoToQuestion,
-  onGoToSimulator
+  onGoToSimulator,
+  selectedExam,
+  studentProfile
 }) => {
   const [articles] = useState<VadeMecumArticle[]>(INITIAL_VADE_MECUM);
   const [selectedDiploma, setSelectedDiploma] = useState<string>('all');
   const [selectedIncidence, setSelectedIncidence] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [filterOnlyActiveExam, setFilterOnlyActiveExam] = useState<boolean>(false);
+
+  // Helper para verificar se um artigo faz parte do escopo do concurso/OAB ativo
+  const isArticleInActiveExam = (art: VadeMecumArticle): boolean => {
+    if (!selectedExam) return false;
+    const examLower = (selectedExam.title + ' ' + selectedExam.institution + ' ' + selectedExam.role).toLowerCase();
+    const artText = (art.diploma + ' ' + art.title + ' ' + art.tags.join(' ')).toLowerCase();
+
+    if (examLower.includes('oab') || examLower.includes('advoga')) {
+      if (artText.includes('oab') || artText.includes('ética') || artText.includes('8.906') || artText.includes('jurídica')) return true;
+    }
+    if (examLower.includes('polic') || examLower.includes('prf') || examLower.includes('pf')) {
+      if (artText.includes('policial') || artText.includes('penal') || artText.includes('8.112') || art.diploma.includes('CP')) return true;
+    }
+    if (examLower.includes('inss') || examLower.includes('previd')) {
+      if (artText.includes('previd') || artText.includes('8.213') || artText.includes('8.112') || art.diploma.includes('8.213')) return true;
+    }
+    if (examLower.includes('fiscal') || examLower.includes('receita')) {
+      if (artText.includes('tributár') || artText.includes('fiscal') || artText.includes('ctn') || artText.includes('8.112')) return true;
+    }
+    if (examLower.includes('tribunal') || examLower.includes('tj') || examLower.includes('trt') || examLower.includes('trf')) {
+      if (artText.includes('tribuna') || artText.includes('cpc') || artText.includes('processual') || artText.includes('8.429') || artText.includes('8.112')) return true;
+    }
+
+    if (selectedExam.subjects) {
+      for (const sub of selectedExam.subjects) {
+        if (art.tags.some(t => sub.name.toLowerCase().includes(t.toLowerCase()) || t.toLowerCase().includes(sub.name.toLowerCase()))) {
+          return true;
+        }
+        if (sub.topics) {
+          for (const top of sub.topics) {
+            if (top.articlesOrLaws && top.articlesOrLaws.some(law => artText.includes(law.toLowerCase()) || law.toLowerCase().includes(art.numberStr.toLowerCase()))) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
+  };
 
   // Audio Speech state
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
@@ -296,6 +342,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
 
   // Filtering
   const filteredArticles = articles.filter(art => {
+    if (filterOnlyActiveExam && !isArticleInActiveExam(art)) return false;
     if (selectedDiploma !== 'all' && art.diploma !== selectedDiploma) return false;
     if (selectedIncidence !== 'all' && art.incidence !== selectedIncidence) return false;
     if (searchQuery.trim()) {
@@ -426,7 +473,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
             </button>
 
             <button
-              onClick={onGoToSimulator}
+              onClick={() => onGoToSimulator?.()}
               className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-700 dark:border-white/10 text-white font-bold text-xs tracking-wide transition-all shadow-sm"
             >
               <BookOpen className="w-4 h-4 text-amber-400" />
@@ -597,21 +644,43 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
         </div>
       )}
 
-      {/* Diploma Filter Navigation */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-        {diplomas.map((d) => (
-          <button
-            key={d.id}
-            onClick={() => setSelectedDiploma(d.id)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-              selectedDiploma === d.id
-                ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20'
-                : 'bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 shadow-sm'
-            }`}
-          >
-            {d.name}
-          </button>
-        ))}
+      {/* Active Exam Quick Filter & Diploma Filter Navigation */}
+      <div className="space-y-3">
+        {selectedExam && (
+          <div className="flex flex-wrap items-center gap-2 p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs">
+            <span className="font-black text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+              <span>🎯</span>
+              <span>Concurso Ativo: {selectedExam.title}</span>
+            </span>
+            <button
+              onClick={() => setFilterOnlyActiveExam(!filterOnlyActiveExam)}
+              className={`ml-auto flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-extrabold text-xs transition-all cursor-pointer ${
+                filterOnlyActiveExam
+                  ? 'bg-amber-500 text-black shadow-md shadow-amber-500/25 font-black ring-2 ring-amber-400/50'
+                  : 'bg-white dark:bg-dark-surface text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 hover:border-amber-400'
+              }`}
+            >
+              <span>⭐</span>
+              <span>{filterOnlyActiveExam ? 'Exibindo apenas Leis do seu Edital (Ativo ✓)' : 'Filtrar Leis Cobradas no seu Edital'}</span>
+            </button>
+          </div>
+        )}
+
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          {diplomas.map((d) => (
+            <button
+              key={d.id}
+              onClick={() => setSelectedDiploma(d.id)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                selectedDiploma === d.id
+                  ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20'
+                  : 'bg-white dark:bg-dark-surface/80 border border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 shadow-sm'
+              }`}
+            >
+              {d.name}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Search & Filters */}
@@ -671,6 +740,12 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
                     <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
                       {art.title}
                     </span>
+                    {selectedExam && isArticleInActiveExam(art) && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 flex items-center gap-1">
+                        <span>📌</span>
+                        <span>Cobrado em {selectedExam.title}</span>
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2">
@@ -743,7 +818,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
                     ))}
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     {art.relatedQuestionId && onGoToQuestion && (
                       <button
                         onClick={() => onGoToQuestion(art.relatedQuestionId!)}
@@ -753,6 +828,14 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     )}
+                    <button
+                      onClick={() => onGoToSimulator(`${art.diploma} ${art.numberStr}`)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-50 dark:bg-blue-500/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-500/30 transition-all cursor-pointer"
+                      title="Treinar questões deste tema no Simulador"
+                    >
+                      <Crosshair className="w-3.5 h-3.5" />
+                      <span>Treinar na Arena</span>
+                    </button>
                   </div>
                 </div>
 

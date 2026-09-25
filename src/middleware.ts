@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+function applySecurityHeaders(response: NextResponse): NextResponse {
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  return response;
+}
+
 /**
  * Middleware de Segurança e Autenticação do Learning AI.
  * Protege rotas sensíveis e APIs de administração.
@@ -13,6 +22,8 @@ export function middleware(request: NextRequest) {
     pathname === '/' ||
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/leads') ||
+    pathname.startsWith('/api/copilot') ||
+    pathname.startsWith('/api/diagnosis') ||
     pathname.startsWith('/edital') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
@@ -20,7 +31,7 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/manifest');
 
   if (isPublicRoute) {
-    return NextResponse.next();
+    return applySecurityHeaders(NextResponse.next());
   }
 
   // Obter token dos cabeçalhos ou cookies
@@ -36,7 +47,7 @@ export function middleware(request: NextRequest) {
   // Proteção de rotas da API Admin
   if (pathname.startsWith('/api/admin')) {
     if (!hasToken) {
-      return NextResponse.json(
+      const unauthorizedResponse = NextResponse.json(
         { 
           success: false, 
           error: 'Acesso negado: Token JWT ausente ou expirado.',
@@ -44,6 +55,7 @@ export function middleware(request: NextRequest) {
         },
         { status: 401 }
       );
+      return applySecurityHeaders(unauthorizedResponse);
     }
   }
 
@@ -54,23 +66,17 @@ export function middleware(request: NextRequest) {
       const loginUrl = new URL('/', request.url);
       loginUrl.searchParams.set('auth', 'required');
       loginUrl.searchParams.set('redirect', pathname);
-      return NextResponse.redirect(loginUrl);
+      return applySecurityHeaders(NextResponse.redirect(loginUrl));
     }
   }
 
   const response = NextResponse.next();
-  // Anexar cabeçalhos de segurança básicos (CSP, X-Frame, X-Content-Type)
-  response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('X-Frame-Options', 'DENY');
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-
-  return response;
+  return applySecurityHeaders(response);
 }
 
 export const config = {
   matcher: [
-    '/admin/:path*',
-    '/dashboard/:path*',
-    '/api/admin/:path*',
+    '/((?!_next/static|_next/image|favicon.ico|icon.svg|fonts|images).*)',
   ],
 };
+

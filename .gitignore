@@ -22,9 +22,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Environment variables
-.env*.local
-.env
-.env.production
+.env*
 !.env.example
 
 # Vercel

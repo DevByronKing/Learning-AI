@@ -76,7 +76,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenProfile,
   onOpenAdminIngest,
   onOpenSettings,
-  navMode = 'sidebar',
+  navMode = 'dock',
   setNavMode,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -361,388 +361,40 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Header Row: Altura equilibrada de 68px, zero transbordamento horizontal */}
           <div className="flex items-center justify-between h-17 gap-3">
             
-            {/* Lado Esquerdo: Marca / Breadcrumb + Mega-Menu Seletor */}
+            {/* Lado Esquerdo: Marca Learning AI */}
             <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-              
-              {navMode === 'sidebar' ? (
-                /* Modo Sidebar: Breadcrumbs limpos no topo */
-                <div className="flex items-center gap-2 text-xs sm:text-sm font-extrabold text-slate-400">
-                  <span 
-                    onClick={() => handleTabClick('landing')}
-                    className="cursor-pointer hover:text-blue-500 transition-colors hidden sm:inline"
-                  >
-                    Learning AI
-                  </span>
-                  <span className="opacity-40 hidden sm:inline">/</span>
-                  <span className="text-slate-900 dark:text-white flex items-center gap-1.5 font-black">
-                    <activeTabInfo.icon className="w-4 h-4 text-blue-500 dark:text-cyan-400" />
-                    {activeTabInfo.label}
-                  </span>
-                </div>
-              ) : (
-                /* Logo: Learning AI */
-                <div 
-                  className="flex items-center gap-2 xl:gap-2.5 cursor-pointer shrink-0 select-none" 
-                  onClick={() => handleTabClick('landing')}
-                  title="Ir para o início"
-                >
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 p-[1.5px] glow-brand shadow-sm">
-                    <div className={`w-full h-full rounded-[10px] flex items-center justify-center transition-colors ${
-                      isLight ? 'bg-white' : 'bg-[#0d1322]'
-                    }`}>
-                      <BrainCircuit className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className={`text-base sm:text-lg xl:text-xl font-black tracking-tight transition-colors ${
-                      isLight ? 'text-slate-900' : 'text-white'
-                    }`}>
-                      Learning <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-400">AI</span>
-                    </span>
-                    <span className={`text-[10px] font-extrabold px-1.5 py-0.2 rounded border transition-colors ${
-                      isLight 
-                        ? 'bg-blue-50 text-blue-700 border-blue-200' 
-                        : 'bg-blue-500/20 text-blue-300 border-blue-500/30'
-                    }`}>
-                      PRO
-                    </span>
+              <div 
+                className="flex items-center gap-2 xl:gap-2.5 cursor-pointer shrink-0 select-none" 
+                onClick={() => handleTabClick('landing')}
+                title="Ir para o início"
+              >
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 p-[1.5px] glow-brand shadow-sm">
+                  <div className={`w-full h-full rounded-[10px] flex items-center justify-center transition-colors ${
+                    isLight ? 'bg-white' : 'bg-[#0d1322]'
+                  }`}>
+                    <BrainCircuit className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   </div>
                 </div>
-              )}
-
-              {/* Botão Gatilho do Mega-Menu Suspenso (Opção 2 - Glassmorphism) */}
-              {(navMode === 'megamenu' || navMode === 'dock') && (
-                <div className="relative" ref={megaMenuRef}>
-                  <button
-                    onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
-                    className={`flex items-center gap-2 px-3 sm:px-3.5 py-2 rounded-2xl border text-xs sm:text-sm font-bold transition-all shadow-sm select-none cursor-pointer group ${
-                      isMegaMenuOpen
-                        ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-600/30'
-                        : isLight
-                          ? 'bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-blue-900 border-blue-200 shadow-xs'
-                          : 'bg-gradient-to-r from-blue-600/10 via-cyan-500/10 to-purple-600/10 hover:from-blue-600/20 hover:to-purple-600/20 text-white border-blue-500/30 hover:border-blue-400/50'
-                    }`}
-                    title="Abrir Central de Módulos & Ferramentas (Ctrl + K)"
-                  >
-                  <activeTabInfo.icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${
-                    isMegaMenuOpen ? 'text-white' : 'text-blue-500 dark:text-cyan-400'
-                  }`} />
-                  
-                  <span className="font-black tracking-tight max-w-[130px] sm:max-w-[190px] truncate">
-                    {activeTabInfo.label}
+                <div className="flex items-center gap-1.5">
+                  <span className={`text-base sm:text-lg xl:text-xl font-black tracking-tight transition-colors ${
+                    isLight ? 'text-slate-900' : 'text-white'
+                  }`}>
+                    Learning <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-400">AI</span>
                   </span>
-
-                  {activeTabInfo.badge && (
-                    <span className={`hidden sm:inline-flex px-1.5 py-0.2 rounded-full text-[9px] font-black shrink-0 ${
-                      activeTabInfo.badgeColor || 'bg-blue-500 text-white'
-                    }`}>
-                      {activeTabInfo.badge}
-                    </span>
-                  )}
-
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                    isMegaMenuOpen ? 'rotate-180 text-white' : 'text-slate-400 group-hover:text-white'
-                  }`} />
-
-                  <kbd className="hidden xl:inline-flex items-center text-[9px] font-mono px-1 py-0.2 rounded bg-black/10 dark:bg-white/10 text-slate-400 font-semibold ml-0.5">
-                    ⌘K
-                  </kbd>
-                </button>
-
-                {/* PAINEL SUSPENSO MEGA-MENU GLASSMORPHISM (Estilo Stripe / Vercel) */}
-                {isMegaMenuOpen && (
-                  <>
-                    {/* Backdrop escuro para isolar o menu e impedir que o texto da página vaze por trás */}
-                    <div 
-                      className="fixed inset-0 bg-black/70 backdrop-blur-xs z-40 transition-opacity cursor-pointer"
-                      onClick={() => setIsMegaMenuOpen(false)}
-                      title="Clique para fechar"
-                    />
-
-                    {/* Container do Mega-Menu 100% Opaco com borda brilhante e sombra profunda */}
-                    <div 
-                      style={{ backgroundColor: isLight ? '#ffffff' : '#0b101e' }}
-                      className={`absolute top-full left-0 mt-3 w-[calc(100vw-24px)] sm:w-[680px] lg:w-[740px] max-w-[740px] rounded-3xl border shadow-2xl p-4 sm:p-5 z-50 animate-fadeIn transition-all select-none ${
-                        isLight 
-                          ? 'border-slate-200 shadow-slate-400/50 text-slate-900' 
-                          : 'border-blue-500/30 dark:border-white/15 shadow-black/95 text-white ring-1 ring-blue-500/20'
-                      }`}
-                    >
-                    
-                    {/* Barra Superior do Mega-Menu com Campo de Busca Rápida */}
-                    <div className={`flex items-center justify-between pb-3.5 border-b mb-4 ${
-                      isLight ? 'border-slate-100' : 'border-white/10'
-                    }`}>
-                      <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-lg bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-500">
-                          <Sparkles className="w-3.5 h-3.5" />
-                        </div>
-                        <div>
-                          <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
-                            Central de Módulos & Ferramentas
-                          </h3>
-                          <p className="text-[10px] text-slate-400">
-                            Selecione uma ferramenta ou use o teclado
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Campo de Busca Fluido */}
-                      <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs w-48 sm:w-60 transition-colors ${
-                        isLight ? 'bg-slate-50 border-slate-200' : 'bg-white/5 border-white/10'
-                      }`}>
-                        <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <input
-                          ref={searchInputRef}
-                          type="text"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          placeholder="Buscar módulo..."
-                          className="bg-transparent outline-none text-xs w-full text-slate-900 dark:text-white placeholder:text-slate-400"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Grade de Duas Colunas do Mega-Menu */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 max-h-[60vh] overflow-y-auto pr-1">
-                      
-                      {/* COLUNA 1: ALTA PERFORMANCE (Os 6 Pilares) */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between px-1 text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-cyan-400">
-                          <span className="flex items-center gap-1.5">
-                            <Zap className="w-3.5 h-3.5" />
-                            Alta Performance
-                          </span>
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-blue-500/15 border border-blue-500/20 font-bold">
-                            Pilar de Elite
-                          </span>
-                        </div>
-
-                        <div className="space-y-1.5">
-                          {highPerfTabs.map((tab) => {
-                            const Icon = tab.icon;
-                            const isSelected = activeTab === tab.id;
-                            return (
-                              <button
-                                key={tab.id}
-                                onClick={() => handleTabClick(tab.id)}
-                                className={`w-full flex items-center gap-3 p-2.5 rounded-2xl text-left transition-all group cursor-pointer border ${
-                                  isSelected
-                                    ? isLight
-                                      ? 'bg-blue-50 border-blue-200 text-blue-900 shadow-xs'
-                                      : 'bg-blue-600/20 border-blue-500/40 text-white shadow-md shadow-blue-600/10'
-                                    : isLight
-                                      ? 'hover:bg-slate-50 border-transparent text-slate-700'
-                                      : 'hover:bg-white/5 border-transparent text-slate-200'
-                                }`}
-                              >
-                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border transition-transform group-hover:scale-105 ${
-                                  isSelected
-                                    ? 'bg-blue-600 text-white border-blue-500 shadow-sm'
-                                    : isLight
-                                      ? 'bg-slate-100 text-blue-600 border-slate-200'
-                                      : 'bg-white/5 text-blue-300 border-white/10'
-                                }`}>
-                                  <Icon className="w-4 h-4" />
-                                </div>
-
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-1.5">
-                                    <span className={`text-xs font-black truncate ${isSelected ? 'text-blue-600 dark:text-cyan-400' : ''}`}>
-                                      {tab.label}
-                                    </span>
-                                    {tab.badge && (
-                                      <span className={`px-1.5 py-0.2 rounded-full text-[8px] font-black uppercase shrink-0 ${tab.badgeColor || 'bg-blue-500/20 text-blue-400'}`}>
-                                        {tab.badge}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <p className="text-[10px] text-slate-400 truncate mt-0.5">
-                                    {tab.desc}
-                                  </p>
-                                </div>
-
-                                {tab.hotkey && (
-                                  <kbd className="hidden sm:inline-flex text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/5 border border-slate-700/30 text-slate-400 shrink-0">
-                                    {tab.hotkey}
-                                  </kbd>
-                                )}
-
-                                {isSelected && (
-                                  <Check className="w-4 h-4 text-blue-500 shrink-0 ml-1" />
-                                )}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* COLUNA 2: PREPARAÇÃO & EDITAIS */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between px-1 text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                          <span className="flex items-center gap-1.5">
-                            <Radar className="w-3.5 h-3.5" />
-                            Editais & Preparação
-                          </span>
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/15 border border-emerald-500/20 font-bold">
-                            Oficial 2026
-                          </span>
-                        </div>
-
-                        <div className="space-y-1.5">
-                          {prepTabs.map((tab) => {
-                            const Icon = tab.icon;
-                            const isSelected = activeTab === tab.id;
-                            return (
-                              <button
-                                key={tab.id}
-                                onClick={() => handleTabClick(tab.id)}
-                                className={`w-full flex items-center gap-3 p-2.5 rounded-2xl text-left transition-all group cursor-pointer border ${
-                                  isSelected
-                                    ? isLight
-                                      ? 'bg-emerald-50 border-emerald-200 text-emerald-900 shadow-xs'
-                                      : 'bg-emerald-600/20 border-emerald-500/40 text-white shadow-md shadow-emerald-600/10'
-                                    : isLight
-                                      ? 'hover:bg-slate-50 border-transparent text-slate-700'
-                                      : 'hover:bg-white/5 border-transparent text-slate-200'
-                                }`}
-                              >
-                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border transition-transform group-hover:scale-105 ${
-                                  isSelected
-                                    ? 'bg-emerald-600 text-white border-emerald-500 shadow-sm'
-                                    : isLight
-                                      ? 'bg-slate-100 text-emerald-600 border-slate-200'
-                                      : 'bg-white/5 text-emerald-300 border-white/10'
-                                }`}>
-                                  <Icon className="w-4 h-4" />
-                                </div>
-
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-1.5">
-                                    <span className={`text-xs font-black truncate ${isSelected ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>
-                                      {tab.label}
-                                    </span>
-                                    {tab.badge && (
-                                      <span className={`px-1.5 py-0.2 rounded-full text-[8px] font-black uppercase shrink-0 ${tab.badgeColor || 'bg-emerald-500/20 text-emerald-400'}`}>
-                                        {tab.badge}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <p className="text-[10px] text-slate-400 truncate mt-0.5">
-                                    {tab.desc}
-                                  </p>
-                                </div>
-
-                                {tab.hotkey && (
-                                  <kbd className="hidden sm:inline-flex text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/5 border border-slate-700/30 text-slate-400 shrink-0">
-                                    {tab.hotkey}
-                                  </kbd>
-                                )}
-
-                                {isSelected && (
-                                  <Check className="w-4 h-4 text-emerald-500 shrink-0 ml-1" />
-                                )}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                    </div>
-
-                    {/* Rodapé Integrado do Mega-Menu com Acesso Rápido a Ajustes e Planos */}
-                    <div className={`mt-4 pt-3.5 border-t flex flex-wrap items-center justify-between gap-2 text-xs ${
-                      isLight ? 'border-slate-100 text-slate-600' : 'border-white/10 text-slate-400'
-                    }`}>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <button
-                          onClick={() => handleTabClick('guide')}
-                          className="hover:text-blue-500 font-semibold transition-colors flex items-center gap-1"
-                        >
-                          <BookOpen className="w-3.5 h-3.5" />
-                          Guia do Aluno
-                        </button>
-                        <span>•</span>
-                        <button
-                          onClick={() => handleTabClick('settings')}
-                          className="hover:text-blue-500 font-semibold transition-colors flex items-center gap-1"
-                        >
-                          <Settings className="w-3.5 h-3.5" />
-                          Configurações
-                        </button>
-                        <span>•</span>
-                        <button
-                          onClick={() => handleTabClick('pricing-plans')}
-                          className="hover:text-amber-500 font-semibold transition-colors flex items-center gap-1 text-amber-500"
-                        >
-                          <Crown className="w-3.5 h-3.5" />
-                          Planos de Assinatura
-                        </button>
-                      </div>
-
-                      {onOpenAdminIngest && (
-                        <button
-                          onClick={() => {
-                            setIsMegaMenuOpen(false);
-                            onOpenAdminIngest();
-                          }}
-                          className="text-[10px] font-bold px-2 py-1 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 border border-blue-500/20 transition-all flex items-center gap-1"
-                        >
-                          <Database className="w-3 h-3" />
-                          Extrator Oficial (Admin)
-                        </button>
-                      )}
-                    </div>
-
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-
+                  <span className={`text-[10px] font-extrabold px-1.5 py-0.2 rounded border transition-colors ${
+                    isLight 
+                      ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                      : 'bg-blue-500/20 text-blue-300 border-blue-500/30'
+                  }`}>
+                    PRO
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Lado Direito: Status e Ações Globais (Compactos e 100% Responsivos) */}
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               
-              {/* Seletor de Estilo de Navegação: Sidebar ◨ | Topo ◪ | Dock ◫ */}
-              {setNavMode && (
-                <div className="hidden sm:flex items-center p-0.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100/90 dark:bg-white/5 text-[10px] font-bold mr-1">
-                  <button
-                    onClick={() => setNavMode('sidebar')}
-                    className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
-                      navMode === 'sidebar'
-                        ? 'bg-blue-600 text-white shadow-xs font-black'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                    }`}
-                    title="Opção 1: Sidebar Lateral Retrátil (Estilo Linear / Notion)"
-                  >
-                    Sidebar
-                  </button>
-                  <button
-                    onClick={() => setNavMode('megamenu')}
-                    className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
-                      navMode === 'megamenu'
-                        ? 'bg-blue-600 text-white shadow-xs font-black'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                    }`}
-                    title="Opção 2: Mega-Menu Glassmorphism no Topo (Estilo Stripe / Vercel)"
-                  >
-                    Topo
-                  </button>
-                  <button
-                    onClick={() => setNavMode('dock')}
-                    className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
-                      navMode === 'dock'
-                        ? 'bg-blue-600 text-white shadow-xs font-black'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                    }`}
-                    title="Opção 3: Dock Flutuante Inferior (Estilo Apple VisionOS / macOS)"
-                  >
-                    Dock
-                  </button>
-                </div>
-              )}
 
               {/* Alternador de Tema (Modo Claro / Modo Escuro) */}
               {onToggleTheme && (
@@ -774,6 +426,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'bg-gradient-to-r from-blue-500/15 via-cyan-500/10 to-blue-500/15 border-blue-400/35 text-blue-200 hover:border-blue-400 hover:bg-blue-500/25'
                   }`}
                   title="Abrir Copiloto Cognitivo IA"
+                  aria-label="Abrir Copiloto Cognitivo IA"
                 >
                   <Sparkles className={`w-3.5 h-3.5 ${isLight ? 'text-blue-600' : 'text-cyan-400'} animate-pulse`} />
                   <span className="hidden sm:inline whitespace-nowrap">
@@ -790,6 +443,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     : 'bg-amber-500/10 border-amber-500/25 text-amber-400'
                 }`}
                 title="Sequência de dias consecutivos de estudo"
+                aria-label={`Sequência de estudo: ${streakDays} dias`}
               >
                 <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500/30 animate-bounce" />
                 <span className="whitespace-nowrap">{streakDays}d</span>
@@ -804,6 +458,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     : 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400 hover:bg-emerald-500/20'
                 }`}
                 title="Sincronizar com App Mobile (iOS / Android)"
+                aria-label="Sincronizar com App Mobile PWA para iOS e Android"
               >
                 <Smartphone className="w-3.5 h-3.5 text-emerald-400" />
                 <span className="whitespace-nowrap">App</span>
@@ -819,6 +474,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'bg-white/5 hover:bg-white/10 border-white/10 text-white'
                   }`}
                   title={`Passaporte Cognitivo: ${studentProfile?.name || 'Estudante'} (${currentGuardian.name})`}
+                  aria-label={`Abrir Passaporte Cognitivo: ${studentProfile?.name || 'Estudante'} (${currentGuardian.name})`}
                 >
                   <span className="text-base select-none transition-transform group-hover:scale-110">
                     {currentGuardian.emoji}
@@ -840,6 +496,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={onOpenPricing}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black text-xs font-black tracking-wide transition-all shadow-md shadow-amber-500/20 whitespace-nowrap shrink-0 cursor-pointer"
                   title="Conhecer Planos e Preços"
+                  aria-label="Conhecer Planos e Assinar Pro"
                 >
                   <Crown className="w-3.5 h-3.5 fill-black" />
                   <span className="hidden sm:inline">ASSINAR PRO</span>
@@ -853,6 +510,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       ? 'bg-blue-50 border-blue-200 hover:bg-blue-100 text-blue-800' 
                       : 'bg-blue-500/20 border-blue-500/40 text-blue-300'
                   }`}
+                  aria-label={`Plano ativo: ${plan.toUpperCase()}`}
                 >
                   <Zap className={`w-3.5 h-3.5 ${isLight ? 'text-blue-600 fill-blue-600/40' : 'text-blue-400 fill-blue-400/40'}`} />
                   <span>{plan.toUpperCase()}</span>
@@ -867,7 +525,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     ? 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900' 
                     : 'bg-white/5 border-white/10 text-slate-300 hover:text-white'
                 }`}
-                aria-label="Abrir menu de navegação"
+                aria-label={isMobileMenuOpen ? "Fechar menu de navegação" : "Abrir menu de navegação"}
+                aria-expanded={isMobileMenuOpen}
               >
                 {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>

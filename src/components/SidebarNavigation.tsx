@@ -37,6 +37,7 @@ interface SidebarNavigationProps {
   plan?: SubscriptionPlan;
   onOpenPricing?: () => void;
   onOpenProfile?: () => void;
+  onOpenOnboarding?: () => void;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
 }
@@ -51,6 +52,7 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
   plan = 'aspirante',
   onOpenPricing,
   onOpenProfile,
+  onOpenOnboarding,
   isCollapsed,
   onToggleCollapse
 }) => {
@@ -328,6 +330,21 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
         {/* Seção 3: Sistema & Ferramentas */}
         <div className="pt-2 border-t border-inherit">
           <div className="space-y-1">
+            {onOpenOnboarding && (
+              <button
+                onClick={onOpenOnboarding}
+                title={isCollapsed ? 'Onboarding & Diagnóstico' : undefined}
+                className={`w-full flex items-center gap-3 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                  isLight ? 'text-blue-600 hover:bg-blue-50' : 'text-blue-400 hover:bg-blue-500/10'
+                }`}
+              >
+                <div className="p-1.5 rounded-lg shrink-0 bg-blue-500/10 text-blue-500">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                {!isCollapsed && <span className="truncate font-black">Onboarding & Metas</span>}
+              </button>
+            )}
+
             <button
               onClick={() => setActiveTab('guide')}
               title={isCollapsed ? 'Guia do Aluno' : undefined}

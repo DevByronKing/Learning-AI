@@ -1,35 +1,98 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { Navbar } from '@/components/Navbar';
 import { LandingPage } from '@/components/LandingPage';
-import { EditalParser } from '@/components/EditalParser';
-import { StudyCycleManager } from '@/components/StudyCycleManager';
-import { QuizSimulator } from '@/components/QuizSimulator';
-import { AnalyticsDashboard } from '@/components/AnalyticsDashboard';
-import { DiscursiveStudio } from '@/components/DiscursiveStudio';
 import { PricingModal } from '@/components/PricingModal';
-import { MistakesNotebook } from '@/components/MistakesNotebook';
-import { SmartVadeMecum } from '@/components/SmartVadeMecum';
-import { QuestionBank } from '@/components/QuestionBank';
 import { AICopilotDrawer } from '@/components/AICopilotDrawer';
-import { BancaPsychometrics } from '@/components/BancaPsychometrics';
-import { SRSFlashcardPlayer } from '@/components/SRSFlashcardPlayer';
 import { StudentProfileModal } from '@/components/StudentProfileModal';
-import { AdminQuestionIngestModal } from '@/components/AdminQuestionIngestModal';
-import { NarrativeOnboardingTerminal } from '@/components/NarrativeOnboardingTerminal';
-import { AvatarOnboardingModal } from '@/components/AvatarOnboardingModal';
+import { UserOnboardingModal } from '@/components/UserOnboardingModal';
+import { SeanEllisSurveyModal } from '@/components/SeanEllisSurveyModal';
+import { TabLoadingSkeleton } from '@/components/TabLoadingSkeleton';
 import { ScrollToTop } from '@/components/ScrollToTop';
-import { UserSettingsTab } from '@/components/UserSettingsTab';
-import { SidebarNavigation } from '@/components/SidebarNavigation';
 import { FloatingDockNavigation } from '@/components/FloatingDockNavigation';
-import { CheckoutCartTab } from '@/components/CheckoutCartTab';
-import { SubscriptionManagementTab } from '@/components/SubscriptionManagementTab';
-import { ConcursosRadarTab } from '@/components/ConcursosRadarTab';
-import { PlatformGuideTab } from '@/components/PlatformGuideTab';
-import { HelpAndAboutTab } from '@/components/HelpAndAboutTab';
-import { PricingPlansTab } from '@/components/PricingPlansTab';
-import { SmartSubjectSummaries } from '@/components/SmartSubjectSummaries';
+import { useAuthStore } from '@/store/useAuthStore';
+import { Sparkles } from 'lucide-react';
+import { GlobalExamContextBar } from '@/components/GlobalExamContextBar';
+
+// Code Splitting Dinâmico de Abas Pesadas (Performance Otimizada)
+const EditalParser = dynamic(
+  () => import('@/components/EditalParser').then((m) => m.EditalParser),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const StudyCycleManager = dynamic(
+  () => import('@/components/StudyCycleManager').then((m) => m.StudyCycleManager),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const QuizSimulator = dynamic(
+  () => import('@/components/QuizSimulator').then((m) => m.QuizSimulator),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const AnalyticsDashboard = dynamic(
+  () => import('@/components/AnalyticsDashboard').then((m) => m.AnalyticsDashboard),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const DiscursiveStudio = dynamic(
+  () => import('@/components/DiscursiveStudio').then((m) => m.DiscursiveStudio),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const MistakesNotebook = dynamic(
+  () => import('@/components/MistakesNotebook').then((m) => m.MistakesNotebook),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const SmartVadeMecum = dynamic(
+  () => import('@/components/SmartVadeMecum').then((m) => m.SmartVadeMecum),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const QuestionBank = dynamic(
+  () => import('@/components/QuestionBank').then((m) => m.QuestionBank),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const BancaPsychometrics = dynamic(
+  () => import('@/components/BancaPsychometrics').then((m) => m.BancaPsychometrics),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const SRSFlashcardPlayer = dynamic(
+  () => import('@/components/SRSFlashcardPlayer').then((m) => m.SRSFlashcardPlayer),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const UserSettingsTab = dynamic(
+  () => import('@/components/UserSettingsTab').then((m) => m.UserSettingsTab),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const CheckoutCartTab = dynamic(
+  () => import('@/components/CheckoutCartTab').then((m) => m.CheckoutCartTab),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const SubscriptionManagementTab = dynamic(
+  () => import('@/components/SubscriptionManagementTab').then((m) => m.SubscriptionManagementTab),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const ConcursosRadarTab = dynamic(
+  () => import('@/components/ConcursosRadarTab').then((m) => m.ConcursosRadarTab),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const PlatformGuideTab = dynamic(
+  () => import('@/components/PlatformGuideTab').then((m) => m.PlatformGuideTab),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const HelpAndAboutTab = dynamic(
+  () => import('@/components/HelpAndAboutTab').then((m) => m.HelpAndAboutTab),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const PricingPlansTab = dynamic(
+  () => import('@/components/PricingPlansTab').then((m) => m.PricingPlansTab),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const SmartSubjectSummaries = dynamic(
+  () => import('@/components/SmartSubjectSummaries').then((m) => m.SmartSubjectSummaries),
+  { loading: () => <TabLoadingSkeleton />, ssr: false }
+);
+const AdminQuestionIngestModal = dynamic(
+  () => import('@/components/AdminQuestionIngestModal').then((m) => m.AdminQuestionIngestModal),
+  { ssr: false }
+);
 import { 
   ExamNotice, 
   QuestionAttempt, 
@@ -64,14 +127,16 @@ export function AprovaLensApp() {
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [isAdminIngestOpen, setIsAdminIngestOpen] = useState(false);
   const [isOnboardingTerminalOpen, setIsOnboardingTerminalOpen] = useState(false);
+  const [isSeanEllisSurveyOpen, setIsSeanEllisSurveyOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Student Profile & Daily AI Quota tracking
   const [studentProfile, setStudentProfile] = useState<StudentProfile>(DEFAULT_STUDENT_PROFILE);
+  const [defaultExamId, setDefaultExamId] = useState<string>(INITIAL_EXAMS[0].id);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [dailyAiCount, setDailyAiCount] = useState<number>(0);
   // Navigation Style Mode: 'sidebar' (Opção 1) | 'megamenu' (Opção 2) | 'dock' (Opção 3)
-  const [navMode, setNavMode] = useState<'sidebar' | 'megamenu' | 'dock'>('sidebar');
+  const [navMode, setNavMode] = useState<'sidebar' | 'megamenu' | 'dock'>('dock');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   // Load from LocalStorage if available
@@ -94,6 +159,29 @@ export function AprovaLensApp() {
         } catch {}
       }
 
+      // Carregar editais personalizados salvos pelo estudante
+      let combinedExams = INITIAL_EXAMS;
+      const savedCustomExams = localStorage.getItem('aprovalens_custom_exams');
+      if (savedCustomExams) {
+        try {
+          const parsedCustom = JSON.parse(savedCustomExams);
+          if (Array.isArray(parsedCustom) && parsedCustom.length > 0) {
+            combinedExams = [...parsedCustom, ...INITIAL_EXAMS];
+            setExams(combinedExams);
+          }
+        } catch {}
+      }
+
+      // Carregar edital padrão preferido
+      const savedDefaultExamId = localStorage.getItem('aprovalens_default_exam_id');
+      if (savedDefaultExamId) {
+        const matched = combinedExams.find(e => e.id === savedDefaultExamId);
+        if (matched) {
+          setSelectedExam(matched);
+          setDefaultExamId(matched.id);
+        }
+      }
+
       // Carregar cota de IA diária utilizada hoje
       const todayKey = `aprovalens_ai_count_${new Date().toISOString().split('T')[0]}`;
       const savedCount = localStorage.getItem(todayKey);
@@ -104,6 +192,7 @@ export function AprovaLensApp() {
       // Carregar preferência de tema (Claro / Escuro)
       const savedTheme = (localStorage.getItem('learning_ai_theme') as 'dark' | 'light') || 'dark';
       setTheme(savedTheme);
+      // Aplica classes de tema: 'dark' para Tailwind dark: + CSS vars, 'light' para CSS vars html.light
       document.documentElement.classList.remove('light', 'dark');
       document.documentElement.classList.add(savedTheme);
       if (typeof document !== 'undefined' && document.body) {
@@ -111,9 +200,9 @@ export function AprovaLensApp() {
         document.body.classList.add(savedTheme);
       }
 
-      // Carregar preferência de estilo de navegação
-      const savedNavMode = localStorage.getItem('learning_ai_nav_mode') as 'sidebar' | 'megamenu' | 'dock';
-      if (savedNavMode) setNavMode(savedNavMode);
+      // Carregar preferência de estilo de navegação (Padrão: Dock Flutuante)
+      const savedNavMode = (localStorage.getItem('learning_ai_nav_mode') as 'sidebar' | 'megamenu' | 'dock') || 'dock';
+      setNavMode(savedNavMode);
 
       // Captura de parâmetros de URL originados de Landing Pages de SEO (?edital=...&tab=...)
       if (typeof window !== 'undefined') {
@@ -136,6 +225,21 @@ export function AprovaLensApp() {
           }
         }
       }
+
+      // Se for a primeira visita do concurseiro, acolher com o Onboarding automaticamente após breve delay
+      const onboardingCompleted = localStorage.getItem('learning_ai_onboarding_completed');
+      if (!onboardingCompleted && !savedProfile) {
+        setTimeout(() => {
+          setIsOnboardingTerminalOpen(true);
+        }, 1200);
+      }
+
+      // Listener para abertura manual da pesquisa de PMF (via Configurações/Ajuda)
+      const handleOpenSurvey = () => setIsSeanEllisSurveyOpen(true);
+      window.addEventListener('open-pmf-survey', handleOpenSurvey);
+      return () => {
+        window.removeEventListener('open-pmf-survey', handleOpenSurvey);
+      };
     } catch {}
   }, []);
 
@@ -164,33 +268,75 @@ export function AprovaLensApp() {
     setTimeout(() => setToastMessage(null), 3500);
   };
 
+  const applyThemeClasses = (t: 'dark' | 'light') => {
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(t);
+    if (document.body) {
+      document.body.classList.remove('light', 'dark');
+      document.body.classList.add(t);
+    }
+  };
+
   const handleToggleTheme = () => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(nextTheme);
     try {
       localStorage.setItem('learning_ai_theme', nextTheme);
     } catch {}
-    if (nextTheme === 'light') {
-      document.documentElement.classList.remove('dark');
-      document.documentElement.classList.add('light');
-      if (document.body) {
-        document.body.classList.remove('dark');
-        document.body.classList.add('light');
-      }
-    } else {
-      document.documentElement.classList.remove('light');
-      document.documentElement.classList.add('dark');
-      if (document.body) {
-        document.body.classList.remove('light');
-        document.body.classList.add('dark');
-      }
-    }
+    applyThemeClasses(nextTheme);
     showToast(nextTheme === 'light' ? '☀️ Modo Claro ativado!' : '🌙 Modo Escuro ativado!');
   };
 
   const handleSelectExam = (exam: ExamNotice) => {
     setSelectedExam(exam);
     showToast(`Edital selecionado: ${exam.title}`);
+  };
+
+  const handleSetDefaultExam = (exam: ExamNotice) => {
+    setSelectedExam(exam);
+    setDefaultExamId(exam.id);
+    try {
+      localStorage.setItem('aprovalens_default_exam_id', exam.id);
+    } catch {}
+
+    const careerDetected = 
+      (exam.title + ' ' + exam.role).toLowerCase().includes('polic') || (exam.title + ' ' + exam.role).toLowerCase().includes('prf') || (exam.title + ' ' + exam.role).toLowerCase().includes('pf')
+        ? 'policial'
+        : (exam.title + ' ' + exam.role).toLowerCase().includes('fiscal') || (exam.title + ' ' + exam.role).toLowerCase().includes('receita')
+        ? 'fiscal'
+        : (exam.title + ' ' + exam.role).toLowerCase().includes('tribunal') || (exam.title + ' ' + exam.role).toLowerCase().includes('tj') || (exam.title + ' ' + exam.role).toLowerCase().includes('trf')
+        ? 'tribunais'
+        : (exam.title + ' ' + exam.role).toLowerCase().includes('oab') || (exam.title + ' ' + exam.role).toLowerCase().includes('advoga')
+        ? 'juridica'
+        : studentProfile.targetCareer;
+
+    setStudentProfile((prev) => {
+      const updated: StudentProfile = {
+        ...prev,
+        targetExamTitle: exam.title,
+        targetBanca: (exam.banca === 'Cebraspe' || exam.banca === 'FGV' || exam.banca === 'FCC' || exam.banca === 'Vunesp' || exam.banca === 'Outra') 
+          ? exam.banca 
+          : 'Outra',
+        targetCareer: careerDetected,
+        updatedAt: new Date().toISOString()
+      };
+
+      try {
+        localStorage.setItem('aprovalens_student_profile', JSON.stringify(updated));
+      } catch {}
+
+      try {
+        useAuthStore.getState().updateProfile(updated);
+        const authUser = useAuthStore.getState().user;
+        if (authUser?.id) {
+          SupabaseService.syncStudentProfile(authUser.id, updated);
+        }
+      } catch {}
+
+      return updated;
+    });
+
+    showToast(`⭐ "${exam.title}" definido como seu Edital Padrão! Ciclo de estudos, simulados e banco calibrados.`);
   };
 
   const handleGenerateCycle = (exam: ExamNotice) => {
@@ -200,7 +346,14 @@ export function AprovaLensApp() {
   };
 
   const handleAddCustomExam = (newExam: ExamNotice) => {
-    setExams((prev) => [newExam, ...prev]);
+    setExams((prev) => {
+      const updated = [newExam, ...prev.filter(e => e.id !== newExam.id)];
+      try {
+        const customExams = updated.filter(e => !INITIAL_EXAMS.some(ie => ie.id === e.id));
+        localStorage.setItem('aprovalens_custom_exams', JSON.stringify(customExams));
+      } catch {}
+      return updated;
+    });
     setSelectedExam(newExam);
     showToast(`Novo edital "${newExam.title}" processado com sucesso!`);
   };
@@ -317,6 +470,21 @@ export function AprovaLensApp() {
         localStorage.setItem('aprovalens_metrics', JSON.stringify(updated));
       } catch {}
       SupabaseService.syncMetrics('user-demo', updated);
+
+      // Gatilho inteligente do Sean Ellis Test após 10 resoluções de questões
+      if (newTotal >= 10) {
+        try {
+          const completed = localStorage.getItem('learning_ai_sean_ellis_survey_completed');
+          const skipUntilStr = localStorage.getItem('learning_ai_sean_ellis_skip_until');
+          const skipUntil = skipUntilStr ? parseInt(skipUntilStr, 10) : 0;
+          if (!completed && Date.now() > skipUntil) {
+            setTimeout(() => {
+              setIsSeanEllisSurveyOpen(true);
+            }, 1200);
+          }
+        } catch {}
+      }
+
       return updated;
     });
 
@@ -429,7 +597,7 @@ export function AprovaLensApp() {
 
   return (
     <div className={`min-h-screen flex flex-col items-center w-full selection:bg-blue-500/25 selection:text-blue-900 dark:selection:bg-blue-500/30 dark:selection:text-blue-100 transition-colors duration-300 relative overflow-x-hidden ${
-      theme === 'light' ? 'app-bg-light text-slate-900 light' : 'app-bg-dark text-slate-100 dark'
+      theme === 'light' ? 'app-bg-light text-slate-900' : 'app-bg-dark text-slate-100'
     }`}>
       
       {/* Ambient Background Glow Mesh Layer (Visível em ambos os modos) */}
@@ -454,25 +622,8 @@ export function AprovaLensApp() {
       {/* Wrapper Constraint for Ultra-wide screens */}
       <div className="w-full max-w-[1920px] mx-auto flex flex-row flex-1 relative z-10 min-w-0">
 
-        {/* Sidebar Lateral Retrátil (Opção 1) */}
-        {navMode === 'sidebar' && (
-          <SidebarNavigation
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            theme={theme}
-            pendingMistakesCount={pendingMistakesCount}
-            studentProfile={studentProfile}
-            streakDays={metrics.streakDays}
-            plan={plan}
-            onOpenPricing={() => setActiveTab('pricing-plans')}
-            onOpenProfile={() => setIsProfileModalOpen(true)}
-            isCollapsed={isSidebarCollapsed}
-            onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-          />
-        )}
-
         <div className="flex-1 flex flex-col min-w-0 relative">
-          {/* Global Navbar com alternância de tema e seletor de estilo */}
+          {/* Global Navbar com alternância de tema */}
           <div className="relative z-20">
             <Navbar
               activeTab={activeTab}
@@ -490,10 +641,17 @@ export function AprovaLensApp() {
               onOpenProfile={() => setIsProfileModalOpen(true)}
               onOpenSettings={() => setActiveTab('settings')}
               onOpenAdminIngest={() => setIsAdminIngestOpen(true)}
-              navMode={navMode}
-              setNavMode={handleSetNavMode}
             />
           </div>
+
+          {/* Global Exam Context Bar - Ecossistema Conectado */}
+          <GlobalExamContextBar
+            selectedExam={selectedExam}
+            studentProfile={studentProfile}
+            activeTab={activeTab}
+            onNavigateTab={setActiveTab}
+            onOpenEditalSelector={() => setActiveTab('edital')}
+          />
 
       {/* Main Content Area com Transição Suave */}
       <main className={`flex-1 relative z-10 ${navMode === 'dock' ? 'pb-28 sm:pb-32' : 'pb-20 sm:pb-8'}`}>
@@ -516,7 +674,9 @@ export function AprovaLensApp() {
           <EditalParser
             exams={exams}
             selectedExam={selectedExam}
+            defaultExamId={defaultExamId}
             onSelectExam={handleSelectExam}
+            onSetDefaultExam={handleSetDefaultExam}
             onGenerateCycle={handleGenerateCycle}
             onAddCustomExam={handleAddCustomExam}
           />
@@ -526,6 +686,7 @@ export function AprovaLensApp() {
           <StudyCycleManager
             selectedExam={selectedExam}
             onGoToSimulator={() => setActiveTab('simulator')}
+            studentProfile={studentProfile}
           />
         )}
 
@@ -541,6 +702,7 @@ export function AprovaLensApp() {
             userPlan={plan}
             dailyAiCount={dailyAiCount}
             onOpenPricing={() => setIsPricingOpen(true)}
+            studentProfile={studentProfile}
           />
         )}
 
@@ -560,11 +722,19 @@ export function AprovaLensApp() {
             onUpdateMistakeNote={handleUpdateMistakeNote}
             onResolveMistakeInRevanche={handleResolveMistakeInRevanche}
             onGoToSimulator={() => setActiveTab('simulator')}
+            selectedExam={selectedExam}
+            onGoToVadeMecum={(query) => {
+              setActiveTab('vademecum');
+              if (query) showToast(`Buscando no Vade Mecum: ${query}`);
+            }}
+            onGoToEdital={() => setActiveTab('edital')}
           />
         )}
 
         {activeTab === 'vademecum' && (
           <SmartVadeMecum
+            selectedExam={selectedExam}
+            studentProfile={studentProfile}
             onGoToSimulator={() => setActiveTab('simulator')}
             onGoToQuestion={(qid) => {
               setActiveTab('simulator');
@@ -575,6 +745,8 @@ export function AprovaLensApp() {
 
         {(activeTab === 'summaries' || activeTab === 'resumos') && (
           <SmartSubjectSummaries
+            selectedExam={selectedExam}
+            studentProfile={studentProfile}
             onAddFlashcard={handleAddFlashcard}
             onGoToVadeMecum={(query) => {
               setActiveTab('vademecum');
@@ -592,6 +764,8 @@ export function AprovaLensApp() {
 
         {activeTab === 'discursivas' && (
           <DiscursiveStudio
+            selectedExam={selectedExam}
+            studentProfile={studentProfile}
             userPlan={plan}
             onOpenPricing={() => setIsPricingOpen(true)}
             onRecordSubmission={(sub) => {
@@ -605,9 +779,13 @@ export function AprovaLensApp() {
             metrics={metrics}
             selectedExam={selectedExam}
             flashcards={flashcards}
+            studentProfile={studentProfile}
             onReviewFlashcard={handleReviewFlashcard}
             onAddNewFlashcard={handleAddFlashcard}
-            onGoToSimulator={() => setActiveTab('simulator')}
+            onGoToSimulator={(subj) => {
+              setActiveTab('simulator');
+              if (subj) showToast(`Atacando vulnerabilidade na Arena: ${subj}`);
+            }}
             onNavigateTab={(tab) => setActiveTab(tab)}
           />
         )}
@@ -618,6 +796,7 @@ export function AprovaLensApp() {
             onRecordAttempt={handleRecordAttempt}
             onGoToSimulator={() => setActiveTab('simulator')}
             onGoToMistakes={() => setActiveTab('mistakes')}
+            studentProfile={studentProfile}
           />
         )}
 
@@ -632,12 +811,14 @@ export function AprovaLensApp() {
 
           {activeTab === 'radar' && (
             <ConcursosRadarTab
+              selectedExam={selectedExam}
+              onSetDefaultExam={handleSetDefaultExam}
+              exams={exams}
               onSelectExamNotice={(noticeId) => {
                 const matched = exams.find((e) => e.id === noticeId);
                 if (matched) {
-                  setSelectedExam(matched);
+                  handleSetDefaultExam(matched);
                   setActiveTab('edital');
-                  showToast(`Edital ${matched.title} carregado na Matriz de Pesos!`);
                 } else {
                   setActiveTab('edital');
                 }
@@ -657,6 +838,7 @@ export function AprovaLensApp() {
                 setPlan(p);
                 setActiveTab('checkout');
               }}
+              onRestartOnboarding={() => setIsOnboardingTerminalOpen(true)}
               showToast={showToast}
             />
           )}
@@ -749,37 +931,95 @@ export function AprovaLensApp() {
         }}
       />
 
-      {/* Premium Avatar Onboarding Modal */}
-      <AvatarOnboardingModal
+      {/* Premium Gamified Cognitive Onboarding Modal */}
+      <UserOnboardingModal
         isOpen={isOnboardingTerminalOpen}
-        onComplete={(guardianId, warName) => {
+        onClose={() => setIsOnboardingTerminalOpen(false)}
+        currentProfile={studentProfile}
+        onOpenPricing={() => setIsPricingOpen(true)}
+        onComplete={(partialProfile, destinationTab) => {
           setIsOnboardingTerminalOpen(false);
-          const newProfile = {
+          const newProfile: StudentProfile = {
             ...studentProfile,
-            guardianAnimalId: guardianId as any,
-            warName,
+            ...partialProfile,
             updatedAt: new Date().toISOString()
           };
           setStudentProfile(newProfile);
           try {
             localStorage.setItem('aprovalens_student_profile', JSON.stringify(newProfile));
+            localStorage.setItem('learning_ai_onboarding_completed', 'true');
           } catch {}
-          showToast(`Bem-vindo, ${warName}! Guardião ativado com sucesso.`);
+
+          // Atualizar Zustand store
+          try {
+            useAuthStore.getState().updateProfile(newProfile);
+          } catch {}
+
+          // Sincronizar com Supabase se houver usuário autenticado
+          try {
+            const authUser = useAuthStore.getState().user;
+            if (authUser?.id) {
+              SupabaseService.syncStudentProfile(authUser.id, newProfile);
+            }
+          } catch {}
+
+          // Sincronizar Edital Alvo com os exames disponíveis e torná-lo o edital padrão
+          if (partialProfile.targetExamTitle) {
+            const matchedExam = exams.find(e => 
+              e.title.toLowerCase().includes((partialProfile.targetExamTitle || '').toLowerCase()) ||
+              (partialProfile.targetExamTitle || '').toLowerCase().includes(e.title.toLowerCase())
+            );
+            if (matchedExam) {
+              handleSetDefaultExam(matchedExam);
+            }
+          }
+
+          if (destinationTab) {
+            setActiveTab(destinationTab);
+          }
+
+          showToast(`🎯 Passaporte Cognitivo ativado! Bem-vindo(a), ${newProfile.warName || newProfile.name}!`);
+        }}
+      />
+
+      {/* Pesquisa de PMF In-App - Sean Ellis Test */}
+      <SeanEllisSurveyModal
+        isOpen={isSeanEllisSurveyOpen}
+        onClose={() => setIsSeanEllisSurveyOpen(false)}
+        onSubmitted={() => {
+          showToast('❤️ Muito obrigado por ajudar a calibrar o AprovaLens!');
         }}
       />
 
       {/* Botão Flutuante de Rolagem Suave para o Topo */}
       <ScrollToTop />
 
-      {/* Dock Flutuante Inferior (Opção 3) */}
-      {navMode === 'dock' && (
-        <FloatingDockNavigation
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          theme={theme}
-          pendingMistakesCount={pendingMistakesCount}
-        />
-      )}
+      {/* Botão Flutuante Temporário para Testar e Iniciar o Onboarding a Qualquer Momento */}
+      <div className="fixed top-20 right-4 sm:top-22 sm:right-6 z-[60] flex items-center gap-2">
+        <button
+          onClick={() => setIsOnboardingTerminalOpen(true)}
+          className="group relative flex items-center gap-2 px-3.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white font-black text-xs tracking-wide shadow-xl shadow-blue-500/30 border border-white/20 transition-all transform hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-md"
+          title="Clique para testar e abrir o Onboarding do Usuário a qualquer momento"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+          </span>
+          <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+          <span>Testar Onboarding</span>
+          <span className="px-1.5 py-0.2 rounded bg-white/20 text-[9px] font-mono font-bold uppercase tracking-wider">
+            DEV
+          </span>
+        </button>
+      </div>
+
+      {/* Dock Flutuante Inferior Exclusivo */}
+      <FloatingDockNavigation
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        theme={theme}
+        pendingMistakesCount={pendingMistakesCount}
+      />
 
         </div>
       </div>

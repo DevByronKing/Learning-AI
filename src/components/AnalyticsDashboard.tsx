@@ -19,7 +19,8 @@ import {
   Calendar,
   Trophy
 } from 'lucide-react';
-import { UserMetrics, ExamNotice, Flashcard } from '@/lib/types';
+import { UserMetrics, ExamNotice, Flashcard, StudentProfile } from '@/lib/types';
+import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
 import { getStatusColor } from '@/lib/utils';
 import { SRSFlashcardPlayer } from './SRSFlashcardPlayer';
 import { StudentAchievements } from './StudentAchievements';
@@ -47,6 +48,7 @@ interface AnalyticsDashboardProps {
   metrics: UserMetrics;
   selectedExam: ExamNotice;
   flashcards: Flashcard[];
+  studentProfile?: StudentProfile;
   onReviewFlashcard: (flashcardId: string, rating: 'facil' | 'bom' | 'dificil' | 'errei') => void;
   onAddNewFlashcard?: (card: Flashcard) => void;
   onGoToSimulator: (subjectId?: string) => void;
@@ -57,11 +59,13 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   metrics,
   selectedExam,
   flashcards,
+  studentProfile,
   onReviewFlashcard,
   onAddNewFlashcard,
   onGoToSimulator,
   onNavigateTab
 }) => {
+  const guardian = GUARDIAN_ANIMALS.find((g) => g.id === studentProfile?.guardianAnimalId) || GUARDIAN_ANIMALS[0];
   const [activeSubTab, setActiveSubTab] = useState<'journey' | 'technical' | 'retention'>('journey');
   const [showSRSPlayer, setShowSRSPlayer] = useState(false);
   const [selectedTopicForFocus, setSelectedTopicForFocus] = useState<string | null>(null);
@@ -149,6 +153,91 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Card de Diretriz Tática Hiper-Personalizada do Guardião */}
+      {studentProfile && (
+        <div className="mt-6 relative overflow-hidden rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-white/10 bg-gradient-to-br from-white via-slate-50 to-blue-50/40 dark:from-[#0f172a] dark:via-[#0c1322] dark:to-blue-950/20 shadow-xl shadow-slate-900/5">
+          {/* Ambient Glow */}
+          <div
+            className="absolute top-0 right-0 -mt-16 -mr-16 w-80 h-80 rounded-full blur-3xl opacity-20 pointer-events-none"
+            style={{ backgroundColor: guardian.glowColor }}
+          />
+
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            {/* Lado Esquerdo: Identidade do Aluno & Guardião */}
+            <div className="flex items-start sm:items-center gap-4">
+              <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shrink-0 border-2 border-amber-400/40 shadow-lg bg-slate-100 dark:bg-slate-950 flex items-center justify-center text-3xl">
+                {guardian.avatar3dUrl ? (
+                  <img
+                    src={guardian.avatar3dUrl}
+                    alt={guardian.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span>{guardian.emoji}</span>
+                )}
+                <span className="absolute bottom-1 right-1 text-xs">🛡️</span>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+                    {studentProfile.warName || studentProfile.name || 'Guerreiro(a)'}
+                  </h2>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                    {guardian.name} • {guardian.title}
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-600 dark:text-slate-400">
+                  <span>🎯 Alvo: <strong className="text-slate-900 dark:text-white">{studentProfile.targetExamTitle || selectedExam.title}</strong></span>
+                  <span>•</span>
+                  <span>🏛️ Banca: <strong className="text-blue-600 dark:text-blue-400">{studentProfile.targetBanca || selectedExam.banca || 'Geral'}</strong></span>
+                  <span>•</span>
+                  <span>⏱️ Meta: <strong className="text-emerald-600 dark:text-emerald-400">{studentProfile.dailyHoursGoal || 4}h/dia</strong></span>
+                </div>
+
+                <p className="text-xs text-slate-500 dark:text-slate-400 italic pt-0.5">
+                  &ldquo;{guardian.motto}&rdquo;
+                </p>
+              </div>
+            </div>
+
+            {/* Lado Direito: Calcanhar de Aquiles & Ações Rápidas */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+              <div className="px-4 py-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 space-y-0.5">
+                <div className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 text-[11px] font-black uppercase tracking-wider">
+                  <AlertTriangle className="w-3.5 h-3.5" />
+                  <span>Calcanhar de Aquiles Declarado</span>
+                </div>
+                <p className="text-sm font-black text-slate-900 dark:text-white">
+                  {studentProfile.weakSubject || 'Direito Administrativo'}
+                </p>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                  Prioridade 60/40 no Ciclo e na Arena
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => onGoToSimulator(studentProfile.weakSubject || 'Direito Administrativo')}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-black shadow-lg shadow-blue-500/25 active:scale-95 transition-all cursor-pointer"
+                >
+                  <Zap className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Atacar na Arena</span>
+                </button>
+                <button
+                  onClick={() => onNavigateTab?.('cycle')}
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-slate-200 text-xs font-bold border border-slate-200 dark:border-white/10 active:scale-95 transition-all cursor-pointer"
+                >
+                  <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Ver Grade de {studentProfile.dailyHoursGoal || 4}h</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Sub-tab Navigation (Jornada vs Diagnóstico Técnico) */}
       <div className="mt-6 flex items-center p-1 rounded-2xl bg-slate-100 dark:bg-dark-surface border border-slate-200 dark:border-white/10 w-fit">

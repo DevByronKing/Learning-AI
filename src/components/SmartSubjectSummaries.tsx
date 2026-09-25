@@ -24,7 +24,7 @@ import {
   Send,
   Loader2
 } from 'lucide-react';
-import { SmartSubjectSummary, Flashcard, SubscriptionPlan } from '@/lib/types';
+import { SmartSubjectSummary, Flashcard, SubscriptionPlan, ExamNotice, StudentProfile } from '@/lib/types';
 import { INITIAL_MICRO_SUMMARIES } from '@/lib/mockData';
 
 interface SmartSubjectSummariesProps {
@@ -34,6 +34,8 @@ interface SmartSubjectSummariesProps {
   userPlan?: SubscriptionPlan;
   onOpenPricing?: () => void;
   showToast: (msg: string) => void;
+  selectedExam?: ExamNotice;
+  studentProfile?: StudentProfile;
 }
 
 export const SmartSubjectSummaries: React.FC<SmartSubjectSummariesProps> = ({
@@ -42,7 +44,9 @@ export const SmartSubjectSummaries: React.FC<SmartSubjectSummariesProps> = ({
   onGoToSimulator,
   userPlan = 'pro',
   onOpenPricing,
-  showToast
+  showToast,
+  selectedExam,
+  studentProfile
 }) => {
   const [summaries, setSummaries] = useState<SmartSubjectSummary[]>(INITIAL_MICRO_SUMMARIES);
   const [searchQuery, setSearchQuery] = useState('');
@@ -55,10 +59,11 @@ export const SmartSubjectSummaries: React.FC<SmartSubjectSummariesProps> = ({
 
   // AI Generator Form State
   const [isGeneratingModalOpen, setIsGeneratingModalOpen] = useState(false);
-  const [genSubject, setGenSubject] = useState('Direito Administrativo');
+  const [genSubject, setGenSubject] = useState(selectedExam?.subjects[0]?.name || 'Direito Constitucional');
   const [genTopic, setGenTopic] = useState('');
-  const [genBanca, setGenBanca] = useState('Cebraspe / FGV');
+  const [genBanca, setGenBanca] = useState(selectedExam?.banca || 'Cebraspe / FGV');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [filterOnlyActiveExam, setFilterOnlyActiveExam] = useState(false);
 
   // Available subjects for filtering
   const availableSubjects = useMemo(() => {
@@ -81,9 +86,18 @@ export const SmartSubjectSummaries: React.FC<SmartSubjectSummariesProps> = ({
       const matchesBanca = selectedBanca === 'todas' || s.banca.toLowerCase().includes(selectedBanca.toLowerCase());
       const matchesIncidence = selectedIncidence === 'todas' || (s.incidence && s.incidence.toLowerCase().includes(selectedIncidence.toLowerCase()));
 
-      return matchesSearch && matchesSubject && matchesBanca && matchesIncidence;
+      let matchesExam = true;
+      if (filterOnlyActiveExam && selectedExam) {
+        matchesExam = selectedExam.subjects.some(sub => 
+          sub.name.toLowerCase().includes(s.subjectName.toLowerCase()) || 
+          s.subjectName.toLowerCase().includes(sub.name.toLowerCase()) ||
+          (s.tags && s.tags.some(t => sub.name.toLowerCase().includes(t.toLowerCase())))
+        );
+      }
+
+      return matchesSearch && matchesSubject && matchesBanca && matchesIncidence && matchesExam;
     });
-  }, [summaries, searchQuery, selectedSubject, selectedBanca, selectedIncidence]);
+  }, [summaries, searchQuery, selectedSubject, selectedBanca, selectedIncidence, filterOnlyActiveExam, selectedExam]);
 
   // Audio Speech Synthesis
   const handleToggleSpeech = (summary: SmartSubjectSummary) => {
@@ -215,6 +229,29 @@ export const SmartSubjectSummaries: React.FC<SmartSubjectSummariesProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Banner do Concurso Ativo */}
+      {selectedExam && (
+        <div className="p-3.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="text-base">📑</span>
+            <span className="font-black text-indigo-700 dark:text-indigo-300">
+              Resumos Ponderados para seu Concurso: {selectedExam.title} ({selectedExam.banca})
+            </span>
+          </div>
+          <button
+            onClick={() => setFilterOnlyActiveExam(!filterOnlyActiveExam)}
+            className={`px-3 py-1.5 rounded-xl font-extrabold text-xs transition-all cursor-pointer ${
+              filterOnlyActiveExam
+                ? 'bg-indigo-600 text-white shadow-sm ring-2 ring-indigo-400/40'
+                : 'bg-white dark:bg-dark-surface text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10'
+            }`}
+          >
+            <span>⭐</span>
+            <span>{filterOnlyActiveExam ? 'Exibindo Apenas Matérias do Edital (Ativo ✓)' : 'Filtrar Matérias do seu Edital'}</span>
+          </button>
+        </div>
+      )}
 
       {/* BARRA DE PESQUISA & FILTROS MULTIDIMENSIONAIS */}
       <div className="bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/10 rounded-3xl p-5 shadow-sm space-y-4">

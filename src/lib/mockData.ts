@@ -106,6 +106,308 @@ export const INITIAL_EXAMS: ExamNotice[] = [
         ]
       }
     ]
+  },
+  {
+    id: 'exam-pf-2026',
+    title: 'Polícia Federal - Agente & Escrivão',
+    institution: 'Polícia Federal',
+    banca: 'Cebraspe',
+    role: 'Agente e Escrivão de Polícia Federal',
+    salary: 'R$ 13.900,54',
+    vacancies: 1800,
+    examDate: '2026-12-10',
+    daysRemaining: 102,
+    pdfFileName: 'Edital_Abertura_PF_2026.pdf',
+    uploadedAt: '2026-08-25',
+    subjects: [
+      {
+        id: 'sub-pf-penal',
+        name: 'Direito Penal & Legislação Especial Extravagante',
+        weight: 3,
+        relevancePercentage: 35.0,
+        totalTopics: 3,
+        topics: [
+          { id: 'top-pf-pen-1', name: 'Crimes Contra a Administração Pública e Tráfico', frequencyInBanca: 'Alta', accuracyRate: 58, status: 'Ponto Cego', articlesOrLaws: ['Arts. 312 a 327 do CP', 'Lei 11.343/06'] },
+          { id: 'top-pf-pen-2', name: 'Crimes Cibernéticos e Crimes Contra o Sistema Financeiro', frequencyInBanca: 'Alta', accuracyRate: 46, status: 'Ponto Cego', articlesOrLaws: ['Lei 7.492/86', 'Lei 14.155/21'] },
+          { id: 'top-pf-pen-3', name: 'Organizações Criminosas e Lavagem de Capitais', frequencyInBanca: 'Alta', accuracyRate: 72, status: 'Instável', articlesOrLaws: ['Lei 12.850/13', 'Lei 9.613/98'] }
+        ]
+      },
+      {
+        id: 'sub-pf-ti',
+        name: 'Informática Aplicada & Segurança da Informação',
+        weight: 3,
+        relevancePercentage: 30.0,
+        totalTopics: 3,
+        topics: [
+          { id: 'top-pf-ti-1', name: 'Redes de Computadores, Criptografia e Ransomware', frequencyInBanca: 'Alta', accuracyRate: 51, status: 'Ponto Cego' },
+          { id: 'top-pf-ti-2', name: 'Banco de Dados (SQL e NoSQL) & Big Data', frequencyInBanca: 'Alta', accuracyRate: 63, status: 'Instável' },
+          { id: 'top-pf-ti-3', name: 'Programação Básica em Python e R', frequencyInBanca: 'Alta', accuracyRate: 44, status: 'Ponto Cego' }
+        ]
+      },
+      {
+        id: 'sub-pf-processo-penal',
+        name: 'Direito Processual Penal',
+        weight: 2,
+        relevancePercentage: 15.0,
+        totalTopics: 2,
+        topics: [
+          { id: 'top-pf-proc-1', name: 'Inquérito Policial, Características e Sigilo', frequencyInBanca: 'Alta', accuracyRate: 82, status: 'Dominado', articlesOrLaws: ['Arts. 4º a 23 do CPP'] },
+          { id: 'top-pf-proc-2', name: 'Cadeia de Custódia e Meios de Obtenção de Prova', frequencyInBanca: 'Alta', accuracyRate: 49, status: 'Ponto Cego', articlesOrLaws: ['Arts. 158-A a 158-F do CPP'] }
+        ]
+      },
+      {
+        id: 'sub-pf-adm-const',
+        name: 'Direito Administrativo e Constitucional',
+        weight: 2,
+        relevancePercentage: 12.0,
+        totalTopics: 2,
+        topics: [
+          { id: 'top-pf-adm-1', name: 'Regime Jurídico Disciplinar e Abuso de Autoridade', frequencyInBanca: 'Alta', accuracyRate: 68, status: 'Instável', articlesOrLaws: ['Lei 8.112/90', 'Lei 13.869/19'] },
+          { id: 'top-pf-adm-2', name: 'Segurança Pública na CF/88 (Art. 144) e Direitos Fundamentais', frequencyInBanca: 'Alta', accuracyRate: 88, status: 'Dominado', articlesOrLaws: ['Art. 144, CF/88'] }
+        ]
+      },
+      {
+        id: 'sub-pf-portugues',
+        name: 'Língua Portuguesa & RLM',
+        weight: 1,
+        relevancePercentage: 8.0,
+        totalTopics: 1,
+        topics: [
+          { id: 'top-pf-port-1', name: 'Interpretação e Inferência Cebraspe (Certo/Errado)', frequencyInBanca: 'Alta', accuracyRate: 62, status: 'Instável' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'exam-prf-2026',
+    title: 'PRF - Policial Rodoviário Federal',
+    institution: 'Polícia Rodoviária Federal',
+    banca: 'Cebraspe',
+    role: 'Policial Rodoviário Federal',
+    salary: 'R$ 12.600,00',
+    vacancies: 1200,
+    examDate: '2026-11-20',
+    daysRemaining: 85,
+    pdfFileName: 'Edital_Abertura_PRF_2026.pdf',
+    uploadedAt: '2026-08-22',
+    subjects: [
+      {
+        id: 'sub-prf-ctb',
+        name: 'Legislação de Trânsito (CTB)',
+        weight: 3,
+        relevancePercentage: 42.0,
+        totalTopics: 3,
+        topics: [
+          { id: 'top-prf-ctb-1', name: 'Normas Gerais de Circulação e Conduta', frequencyInBanca: 'Alta', accuracyRate: 74, status: 'Instável', articlesOrLaws: ['Arts. 26 a 67 do CTB'] },
+          { id: 'top-prf-ctb-2', name: 'Crimes de Trânsito e Embriaguez ao Volante', frequencyInBanca: 'Alta', accuracyRate: 53, status: 'Ponto Cego', articlesOrLaws: ['Arts. 291 a 312-B do CTB'] },
+          { id: 'top-prf-ctb-3', name: 'Resoluções do CONTRAN em Vigor', frequencyInBanca: 'Alta', accuracyRate: 46, status: 'Ponto Cego' }
+        ]
+      },
+      {
+        id: 'sub-prf-penal',
+        name: 'Direito Penal & Processo Penal',
+        weight: 2,
+        relevancePercentage: 25.0,
+        totalTopics: 2,
+        topics: [
+          { id: 'top-prf-pen-1', name: 'Crimes Contra a Vida e Patrimônio', frequencyInBanca: 'Alta', accuracyRate: 78, status: 'Dominado' },
+          { id: 'top-prf-pen-2', name: 'Prisão em Flagrante e Perícia de Trânsito', frequencyInBanca: 'Alta', accuracyRate: 60, status: 'Instável' }
+        ]
+      },
+      {
+        id: 'sub-prf-geral',
+        name: 'Física Aplicada & Língua Portuguesa',
+        weight: 2,
+        relevancePercentage: 20.0,
+        totalTopics: 1,
+        topics: [
+          { id: 'top-prf-fis-1', name: 'Cinemática, Dinâmica e Atrito de Veículos', frequencyInBanca: 'Alta', accuracyRate: 41, status: 'Ponto Cego' }
+        ]
+      },
+      {
+        id: 'sub-prf-humanos',
+        name: 'Direitos Humanos & Cidadania',
+        weight: 1,
+        relevancePercentage: 13.0,
+        totalTopics: 1,
+        topics: [
+          { id: 'top-prf-dh-1', name: 'Convenção Americana e Proteção aos Direitos Humanos', frequencyInBanca: 'Alta', accuracyRate: 85, status: 'Dominado' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'exam-receita-2026',
+    title: 'Receita Federal - Auditor-Fiscal',
+    institution: 'Secretaria Especial da Receita Federal do Brasil',
+    banca: 'FGV',
+    role: 'Auditor-Fiscal da Receita Federal (AFRFB)',
+    salary: 'R$ 24.250,00',
+    vacancies: 699,
+    examDate: '2026-12-05',
+    daysRemaining: 98,
+    pdfFileName: 'Edital_Auditor_Receita_Federal_2026.pdf',
+    uploadedAt: '2026-08-20',
+    subjects: [
+      {
+        id: 'sub-rec-trib',
+        name: 'Direito Tributário & Legislação Aduaneira',
+        weight: 3,
+        relevancePercentage: 32.0,
+        totalTopics: 3,
+        topics: [
+          { id: 'top-rec-trib-1', name: 'Obrigação, Lançamento e Crédito Tributário', frequencyInBanca: 'Alta', accuracyRate: 59, status: 'Ponto Cego', articlesOrLaws: ['Arts. 113 a 193 do CTN'] },
+          { id: 'top-rec-trib-2', name: 'Impostos Federais (IR, IPI, PIS, COFINS) e Reforma Tributária', frequencyInBanca: 'Alta', accuracyRate: 45, status: 'Ponto Cego', articlesOrLaws: ['EC 132/2023'] },
+          { id: 'top-rec-trib-3', name: 'Processo Administrativo Fiscal (Dec. 70.235/72)', frequencyInBanca: 'Alta', accuracyRate: 70, status: 'Instável' }
+        ]
+      },
+      {
+        id: 'sub-rec-contab',
+        name: 'Contabilidade Geral, Avançada & Custos',
+        weight: 3,
+        relevancePercentage: 30.0,
+        totalTopics: 2,
+        topics: [
+          { id: 'top-rec-cont-1', name: 'Pronunciamentos CPC (CPC 00, 16, 27, 25)', frequencyInBanca: 'Alta', accuracyRate: 48, status: 'Ponto Cego' },
+          { id: 'top-rec-cont-2', name: 'DVA, DFC e Consolidação de Demonstrações', frequencyInBanca: 'Alta', accuracyRate: 64, status: 'Instável' }
+        ]
+      },
+      {
+        id: 'sub-rec-aduana',
+        name: 'Legislação Aduaneira & Comércio Internacional',
+        weight: 2,
+        relevancePercentage: 18.0,
+        totalTopics: 1,
+        topics: [
+          { id: 'top-rec-adu-1', name: 'Regulamento Aduaneiro e Regimes Aduaneiros Especiais', frequencyInBanca: 'Alta', accuracyRate: 52, status: 'Ponto Cego', articlesOrLaws: ['Dec. 6.759/09'] }
+        ]
+      },
+      {
+        id: 'sub-rec-dados',
+        name: 'Fluência em Dados, Auditoria Digital & TI',
+        weight: 2,
+        relevancePercentage: 20.0,
+        totalTopics: 1,
+        topics: [
+          { id: 'top-rec-ti-1', name: 'Manipulação de Dados SQL, PowerBI e Análise Preditiva', frequencyInBanca: 'Alta', accuracyRate: 56, status: 'Instável' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'exam-tjsp-2026',
+    title: 'TJ-SP - Escrevente Técnico Judiciário',
+    institution: 'Tribunal de Justiça do Estado de São Paulo',
+    banca: 'Vunesp',
+    role: 'Escrevente Técnico Judiciário',
+    salary: 'R$ 7.200,00',
+    vacancies: 572,
+    examDate: '2026-10-18',
+    daysRemaining: 48,
+    pdfFileName: 'Edital_TJSP_Escrevente_2026.pdf',
+    uploadedAt: '2026-08-10',
+    subjects: [
+      {
+        id: 'sub-tj-normas',
+        name: 'Normas da Corregedoria Geral da Justiça (NSCGJ)',
+        weight: 3,
+        relevancePercentage: 28.0,
+        totalTopics: 2,
+        topics: [
+          { id: 'top-tj-norm-1', name: 'Ofícios de Justiça, Escrituração e Livros Obrigatórios', frequencyInBanca: 'Alta', accuracyRate: 62, status: 'Instável', articlesOrLaws: ['Tomo I das NSCGJ'] },
+          { id: 'top-tj-norm-2', name: 'Processo Eletrônico e Protocolo de Petições no SAJ', frequencyInBanca: 'Alta', accuracyRate: 75, status: 'Dominado' }
+        ]
+      },
+      {
+        id: 'sub-tj-processo',
+        name: 'Direito Processual Civil & Processual Penal',
+        weight: 3,
+        relevancePercentage: 30.0,
+        totalTopics: 2,
+        topics: [
+          { id: 'top-tj-proc-1', name: 'Atos Processuais, Prazos e Citações no CPC', frequencyInBanca: 'Alta', accuracyRate: 51, status: 'Ponto Cego', articlesOrLaws: ['Arts. 212 a 250 do CPC'] },
+          { id: 'top-tj-proc-2', name: 'Prisão em Flagrante e Procedimento do CPP', frequencyInBanca: 'Alta', accuracyRate: 78, status: 'Dominado' }
+        ]
+      },
+      {
+        id: 'sub-tj-portugues',
+        name: 'Língua Portuguesa Vunesp',
+        weight: 3,
+        relevancePercentage: 24.0,
+        totalTopics: 2,
+        topics: [
+          { id: 'top-tj-port-1', name: 'Sentido Próprio e Figurado, Sinônimos e Antônimos', frequencyInBanca: 'Alta', accuracyRate: 88, status: 'Dominado' },
+          { id: 'top-tj-port-2', name: 'Crase, Colocação Pronominal e Regência', frequencyInBanca: 'Alta', accuracyRate: 58, status: 'Instável' }
+        ]
+      },
+      {
+        id: 'sub-tj-rlm-ti',
+        name: 'Raciocínio Lógico & Informática Aplicada',
+        weight: 1,
+        relevancePercentage: 18.0,
+        totalTopics: 1,
+        topics: [
+          { id: 'top-tj-rlm-1', name: 'Tabelas-Verdade, Equivalências e Diagramas Lógicos', frequencyInBanca: 'Alta', accuracyRate: 64, status: 'Instável' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'exam-cnu-2026',
+    title: 'CNU - Concurso Nacional Unificado',
+    institution: 'Ministério da Gestão e Inovação em Serviços Públicos',
+    banca: 'Outra',
+    role: 'Analista de Gestão Pública e Carreiras Federais',
+    salary: 'R$ 9.800,00',
+    vacancies: 6640,
+    examDate: '2026-11-28',
+    daysRemaining: 92,
+    pdfFileName: 'Edital_CNU_Bloco_Consolidado.pdf',
+    uploadedAt: '2026-08-24',
+    subjects: [
+      {
+        id: 'sub-cnu-politicas',
+        name: 'Políticas Públicas & Gestão Governamental',
+        weight: 3,
+        relevancePercentage: 35.0,
+        totalTopics: 2,
+        topics: [
+          { id: 'top-cnu-pol-1', name: 'Ciclo de Políticas Públicas: Formulação, Implementação e Avaliação', frequencyInBanca: 'Alta', accuracyRate: 55, status: 'Ponto Cego' },
+          { id: 'top-cnu-pol-2', name: 'Planejamento Governamental: PPA, LDO e LOA', frequencyInBanca: 'Alta', accuracyRate: 68, status: 'Instável' }
+        ]
+      },
+      {
+        id: 'sub-cnu-estado',
+        name: 'Desafios do Estado de Direito, Ética & Integridade',
+        weight: 2,
+        relevancePercentage: 25.0,
+        totalTopics: 2,
+        topics: [
+          { id: 'top-cnu-est-1', name: 'Estado Democrático de Direito e Combate à Corrupção', frequencyInBanca: 'Alta', accuracyRate: 80, status: 'Dominado' },
+          { id: 'top-cnu-est-2', name: 'Governança Pública e Lei de Acesso à Informação', frequencyInBanca: 'Alta', accuracyRate: 72, status: 'Instável', articlesOrLaws: ['Lei 12.527/11'] }
+        ]
+      },
+      {
+        id: 'sub-cnu-diversidade',
+        name: 'Diversidade, Direitos Humanos & Inclusão',
+        weight: 2,
+        relevancePercentage: 20.0,
+        totalTopics: 1,
+        topics: [
+          { id: 'top-cnu-div-1', name: 'Estatuto da Igualdade Racial e Direitos das Minorias', frequencyInBanca: 'Alta', accuracyRate: 84, status: 'Dominado', articlesOrLaws: ['Lei 12.288/10'] }
+        ]
+      },
+      {
+        id: 'sub-cnu-realidade',
+        name: 'Realidade Brasileira & Administração Pública Federal',
+        weight: 2,
+        relevancePercentage: 20.0,
+        totalTopics: 1,
+        topics: [
+          { id: 'top-cnu-real-1', name: 'Desenvolvimento Socioeconômico e Dinâmica Demográfica', frequencyInBanca: 'Alta', accuracyRate: 62, status: 'Instável' }
+        ]
+      }
+    ]
   }
 ];
 
@@ -1773,6 +2075,51 @@ export const INITIAL_VADE_MECUM: VadeMecumArticle[] = [
     trapKeywords: ['independentemente de contribuições', 'até 12 meses', 'prorrogado para até 24 meses', 'mais de 120 contribuições', 'acrescidos de 12 meses para o segurado desempregado'],
     bancaTrapNote: 'O período de graça do desempregado com mais de 120 contribuições pode chegar a incríveis 36 meses (12 + 12 + 12). A Cebraspe adora fazer contas com essas prorrogações!',
     tags: ['Direito Previdenciário', 'INSS', 'Seguridade Social']
+  },
+  {
+    id: 'vm-eaoab-28',
+    diploma: 'Lei 8.906/94 (Estatuto OAB)',
+    numberStr: 'Art. 28',
+    title: 'Incompatibilidades Absolutas com o Exercício da Advocacia',
+    text: 'A advocacia é incompatível, mesmo em causa própria, com as seguintes atividades: I - chefe do Poder Executivo e membros da Mesa do Poder Legislativo; II - membros de órgãos do Poder Judiciário e do Ministério Público; III - ocupantes de cargos ou funções de direção em órgãos da Administração Pública direta ou indireta, em fundações e em empresas públicas ou de economia mista, com competência de decisão ou ordenamento de despesa; IV - ocupantes de cargos vinculados à atividade policial de qualquer natureza; V - militares de qualquer corporação na ativa.',
+    incidence: 'Alta',
+    trapKeywords: ['mesmo em causa própria', 'competência de decisão ou ordenamento de despesa', 'atividade policial de qualquer natureza', 'militares na ativa'],
+    bancaTrapNote: 'Pegadinha obrigatória da FGV: A incompatibilidade é TOTAL (não pode advogar nem em causa própria!). Policiais e ocupantes de cargos com poder decisório/ordenamento de despesa são 100% incompatíveis.',
+    relatedQuestionId: 'q-5',
+    tags: ['Ética Profissional', 'OAB', 'Estatuto da OAB', 'Jurídica', 'FGV']
+  },
+  {
+    id: 'vm-cp-312',
+    diploma: 'Código Penal (CP)',
+    numberStr: 'Art. 312',
+    title: 'Crime de Peculato (Apropriação, Desvio e Culposo)',
+    text: 'Apropriar-se o funcionário público de dinheiro, valor ou qualquer outro bem móvel, público ou particular, de que tem a posse em razão do cargo, ou desviá-lo, em proveito próprio ou alheio: Pena - reclusão, de dois a doze anos, e multa. § 1º Aplica-se a mesma pena se o funcionário público, embora não tendo a posse do bem, o subtrai, ou concorre para que seja subtraído (peculato-furto). § 2º Se o funcionário concorre culposamente para o crime de outrem (peculato culposo): Pena - detenção, de três meses a um ano. § 3º No peculato culposo, a reparação do dano, se precede à sentença irrecorrível, extingue a punibilidade; se lhe é posterior, reduz de metade a pena imposta.',
+    incidence: 'Alta',
+    trapKeywords: ['público ou particular', 'em razão do cargo', 'peculato-furto', 'peculato culposo', 'extingue a punibilidade se precede à sentença irrecorrível'],
+    bancaTrapNote: 'Atenção máxima do Cebraspe/FGV para carreiras policiais e fiscais: O bem pode ser PARTICULAR (desde que sob custódia da repartição). A reparação do dano SÓ EXTINGUE A PUNIBILIDADE no peculato CULPOSO; no peculato doloso apenas atenua a pena!',
+    tags: ['Direito Penal', 'Crimes Funcionais', 'Policial', 'PF', 'PRF', 'Cebraspe']
+  },
+  {
+    id: 'vm-ctn-151',
+    diploma: 'Código Tributário Nacional (CTN)',
+    numberStr: 'Art. 151',
+    title: 'Causas de Suspensão da Exigibilidade do Crédito Tributário (MODIFICA)',
+    text: 'Suspendem a exigibilidade do crédito tributário: I - moratória; II - o depósito do seu montante integral; III - as reclamações e os recursos, nos termos das leis reguladoras do processo tributário administrativo; IV - a concessão de medida liminar em mandado de segurança; V - a concessão de medida liminar ou de tutela antecipada, em outras espécies de ação judicial; VI - o parcelamento.',
+    incidence: 'Alta',
+    trapKeywords: ['moratória', 'depósito do seu montante integral', 'recursos administrativos', 'liminar em mandado de segurança', 'parcelamento'],
+    bancaTrapNote: 'Mnemônico consagrado MODIFICA: Moratória, Depósito integral, Impugnações/recursos, Liminar em MS, Liminar/tutela em ação judicial, Parcelamento. A FGV tenta trocar depósito integral por depósito parcial (não suspende!) ou incluir compensação (que extingue, não suspende).',
+    tags: ['Direito Tributário', 'Crédito Tributário', 'Fiscal', 'Receita Federal', 'FGV']
+  },
+  {
+    id: 'vm-cpc-300',
+    diploma: 'Código de Processo Civil (CPC)',
+    numberStr: 'Art. 300',
+    title: 'Requisitos da Tutela Provisória de Urgência',
+    text: 'A tutela de urgência será concedida quando houver elementos que evidenciem a probabilidade do direito e o perigo de dano ou o risco ao resultado útil do processo. § 1º Para a concessão da tutela de urgência, o juiz pode, conforme o caso, exigir caução real ou fidejussória idônea para ressarcir os danos que a outra parte possa vir a sofrer, podendo a caução ser dispensada se a parte economicamente hipossuficiente não puder oferecê-la. § 3º A tutela de urgência de natureza antecipada não será concedida quando houver perigo de irreversibilidade dos efeitos da decisão.',
+    incidence: 'Alta',
+    trapKeywords: ['probabilidade do direito', 'perigo de dano', 'resultado útil do processo', 'caução', 'vedada quando houver perigo de irreversibilidade'],
+    bancaTrapNote: 'Cai em peso na Vunesp e FCC para Tribunais: A vedação de irreversibilidade (§ 3º) incide APENAS na tutela antecipada (satisfativa), não na cautelar. E a caução pode ser dispensada para o hipossuficiente!',
+    tags: ['Direito Processual Civil', 'Tutelas Provisórias', 'Tribunais', 'TJ-SP', 'Vunesp']
   }
 ];
 

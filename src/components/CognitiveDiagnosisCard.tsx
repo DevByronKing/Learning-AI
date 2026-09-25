@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { Question, ErrorType, Flashcard, SubscriptionPlan } from '@/lib/types';
 import { RewardedAdModal } from './RewardedAdModal';
+import { AIFeedbackVote } from './AIFeedbackVote';
 
 interface CognitiveDiagnosisCardProps {
   question: Question;
@@ -231,6 +232,13 @@ export const CognitiveDiagnosisCard: React.FC<CognitiveDiagnosisCardProps> = ({
               </div>
             </div>
           )}
+
+          {/* Micro-Feedback Transacional da Explicação da IA */}
+          <AIFeedbackVote
+            questionId={question.id}
+            banca={question.banca}
+            subject={question.subjectName}
+          />
 
         </div>
 

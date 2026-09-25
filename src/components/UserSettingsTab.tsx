@@ -21,7 +21,9 @@ import {
   Flame,
   Award,
   AlertTriangle,
-  FileSpreadsheet
+  FileSpreadsheet,
+  RotateCcw,
+  HeartHandshake
 } from 'lucide-react';
 import { StudentProfile, SubscriptionPlan, GuardianAnimalId } from '@/lib/types';
 import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
@@ -33,6 +35,7 @@ interface UserSettingsTabProps {
   onOpenPricing: () => void;
   onOpenCheckout?: (plan: SubscriptionPlan) => void;
   showToast: (msg: string) => void;
+  onRestartOnboarding?: () => void;
 }
 
 export const UserSettingsTab: React.FC<UserSettingsTabProps> = ({
@@ -41,7 +44,8 @@ export const UserSettingsTab: React.FC<UserSettingsTabProps> = ({
   currentPlan,
   onOpenPricing,
   onOpenCheckout,
-  showToast
+  showToast,
+  onRestartOnboarding
 }) => {
   const [activeSubTab, setActiveSubTab] = useState<'profile' | 'tiers' | 'ai_preferences' | 'privacy'>('profile');
 
@@ -52,7 +56,7 @@ export const UserSettingsTab: React.FC<UserSettingsTabProps> = ({
   const [targetExamTitle, setTargetExamTitle] = useState(studentProfile.targetExamTitle || '');
   const [dailyHoursGoal, setDailyHoursGoal] = useState(studentProfile.dailyHoursGoal || 4);
   const [experienceLevel, setExperienceLevel] = useState(studentProfile.experienceLevel || 'intermediario');
-  const [guardianAnimalId, setGuardianAnimalId] = useState<GuardianAnimalId>(studentProfile.guardianAnimalId || 'falcao');
+  const [guardianAnimalId, setGuardianAnimalId] = useState<GuardianAnimalId>(studentProfile.guardianAnimalId || 'coruja');
 
   // AI & Study Preferences
   const [aiExplanationStyle, setAiExplanationStyle] = useState<'direto' | 'socratico' | 'jurisprudencial'>('direto');
@@ -220,11 +224,38 @@ export const UserSettingsTab: React.FC<UserSettingsTabProps> = ({
 
       {/* ABA 1: PERFIL & CARREIRA */}
       {activeSubTab === 'profile' && (
-        <form onSubmit={handleSave} className="bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
-          <div>
-            <h2 className="text-xl font-black text-slate-900 dark:text-white">Dados do Estudante</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Personalize sua identidade e direcionamento estratégico de estudos.</p>
-          </div>
+        <div className="space-y-6">
+          {/* Card de Refazer Onboarding */}
+          {onRestartOnboarding && (
+            <div className="p-5 rounded-3xl bg-gradient-to-r from-blue-600/10 via-indigo-600/10 to-emerald-600/10 border border-blue-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5">
+                <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                  <RotateCcw className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-black text-slate-900 dark:text-white">
+                    Protocolo de Iniciação & Onboarding Cognitivo
+                  </h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Deseja recalibrar seu concurso alvo, redefinir suas metas e emitir um novo Passaporte Cognitivo?
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={onRestartOnboarding}
+                className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs uppercase tracking-wider whitespace-nowrap shadow-sm shadow-blue-600/20 active:scale-95 transition-all"
+              >
+                Refazer Diagnóstico
+              </button>
+            </div>
+          )}
+
+          <form onSubmit={handleSave} className="bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+            <div>
+              <h2 className="text-xl font-black text-slate-900 dark:text-white">Dados do Estudante</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Personalize sua identidade e direcionamento estratégico de estudos.</p>
+            </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
@@ -363,6 +394,7 @@ export const UserSettingsTab: React.FC<UserSettingsTabProps> = ({
             </button>
           </div>
         </form>
+        </div>
       )}
 
       {/* ABA 2: OPÇÕES POR PLANO (FREEMIUM / PRO / ELITE) */}
@@ -794,6 +826,43 @@ export const UserSettingsTab: React.FC<UserSettingsTabProps> = ({
                     : 'bg-slate-300 dark:bg-slate-800 opacity-50 cursor-not-allowed'
                 }`}></div>
               </label>
+            </div>
+          </div>
+
+          {/* Ciclo de Feedback & Pesquisa de PMF */}
+          <div className="pt-6 border-t border-slate-200 dark:border-slate-800 space-y-4">
+            <div>
+              <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <HeartHandshake className="w-5 h-5 text-indigo-500" />
+                <span>Avaliação de Produto & Melhoria Contínua</span>
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Sua opinião direta orienta o desenvolvimento das próximas ferramentas e calibrações do AprovaLens.
+              </p>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-50/50 via-indigo-50/40 to-slate-50 dark:from-blue-950/20 dark:via-indigo-950/20 dark:to-slate-900/40 border border-blue-200/60 dark:border-blue-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-md bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 text-[10px] font-mono font-bold uppercase">
+                    Sean Ellis PMF Test
+                  </span>
+                  <p className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">Pesquisa de Experiência do Estudante</p>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
+                  Conte-nos se a plataforma está sendo indispensável na sua preparação e o que podemos calibrar nos simuladores e no caderno de erros.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('open-pmf-survey'));
+                }}
+                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shrink-0 shadow-md shadow-blue-500/20 transition-all flex items-center gap-1.5 active:scale-95"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span>Responder Pesquisa</span>
+              </button>
             </div>
           </div>
 

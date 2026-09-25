@@ -25,7 +25,7 @@ import {
   MapPin,
   Layers
 } from 'lucide-react';
-import { ConcursoRadarItem, ConcursoStatus, ConcursoCategory, BrazilRegion } from '@/lib/types';
+import { ConcursoRadarItem, ConcursoStatus, ConcursoCategory, BrazilRegion, ExamNotice } from '@/lib/types';
 import { 
   CONCURSOS_RADAR_DATA, 
   OAB_CALENDAR_DATA, 
@@ -37,12 +37,18 @@ interface ConcursosRadarTabProps {
   onSelectExamNotice?: (noticeId: string) => void;
   onGoToDiscursivas?: () => void;
   showToast: (msg: string) => void;
+  selectedExam?: ExamNotice;
+  onSetDefaultExam?: (exam: ExamNotice) => void;
+  exams?: ExamNotice[];
 }
 
 export const ConcursosRadarTab: React.FC<ConcursosRadarTabProps> = ({
   onSelectExamNotice,
   onGoToDiscursivas,
-  showToast
+  showToast,
+  selectedExam,
+  onSetDefaultExam,
+  exams = []
 }) => {
   const [mainView, setMainView] = useState<'concursos' | 'oab' | 'enem'>('concursos');
   const [statusFilter, setStatusFilter] = useState<'todos' | ConcursoStatus>('todos');
@@ -70,6 +76,17 @@ export const ConcursosRadarTab: React.FC<ConcursosRadarTabProps> = ({
       showToast(`🎯 Edital de ${title || 'concurso'} carregado na Matriz de Pesos!`);
     } else {
       showToast(`Edital pré-carregado no radar! Importação verticalizada disponível no menu Edital IA.`);
+    }
+  };
+
+  const handleSetDefault = (editalId: string, title: string) => {
+    const matched = exams.find(e => e.id === editalId);
+    if (matched && onSetDefaultExam) {
+      onSetDefaultExam(matched);
+      showToast(`⭐ ${matched.title} definido como Concurso Padrão do seu Ecossistema!`);
+    } else if (onSelectExamNotice) {
+      onSelectExamNotice(editalId);
+      showToast(`🎯 ${title} carregado no seu Ecossistema!`);
     }
   };
 
@@ -251,120 +268,146 @@ export const ConcursosRadarTab: React.FC<ConcursosRadarTabProps> = ({
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredConcursos.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/10 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
-                >
-                  <div className="space-y-4">
-                    {/* Header do Card */}
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider inline-flex items-center gap-1 ${
-                          item.status === 'publicado'
-                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-                            : item.status === 'previsto'
-                            ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
-                            : 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20'
-                        }`}>
-                          {item.status === 'publicado' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />}
-                          {item.status === 'publicado' ? 'Edital Publicado' : item.status === 'previsto' ? 'Previsto' : 'Rumor'}
+              {filteredConcursos.map((item) => {
+                const isCurrentActiveExam = selectedExam && (
+                  item.matchedEditalId === selectedExam.id ||
+                  selectedExam.title.toLowerCase().includes(item.title.toLowerCase()) ||
+                  item.title.toLowerCase().includes(selectedExam.title.toLowerCase())
+                );
+
+                return (
+                  <div
+                    key={item.id}
+                    className={`bg-white dark:bg-dark-surface rounded-3xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group ${
+                      isCurrentActiveExam
+                        ? 'border-2 border-amber-500 dark:border-amber-400 shadow-amber-500/10 ring-2 ring-amber-400/20'
+                        : 'border border-slate-200 dark:border-white/10'
+                    }`}
+                  >
+                    <div className="space-y-4">
+                      {/* Header do Card */}
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {isCurrentActiveExam && (
+                            <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider inline-flex items-center gap-1 bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40">
+                              ⭐ CONCURSO ATIVO
+                            </span>
+                          )}
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider inline-flex items-center gap-1 ${
+                            item.status === 'publicado'
+                              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                              : item.status === 'previsto'
+                              ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+                              : 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20'
+                          }`}>
+                            {item.status === 'publicado' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />}
+                            {item.status === 'publicado' ? 'Edital Publicado' : item.status === 'previsto' ? 'Previsto' : 'Rumor'}
+                          </span>
+                          <p className="text-xs text-slate-400 mt-1 font-bold flex items-center gap-1 w-full">
+                            <MapPin className="w-3 h-3 text-slate-400" />
+                            {item.location} ({item.scope})
+                          </p>
+                        </div>
+
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-xl border border-slate-200 dark:border-slate-700">
+                          {item.banca}
                         </span>
-                        <p className="text-xs text-slate-400 mt-2 font-bold flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-slate-400" />
-                          {item.location} ({item.scope})
-                        </p>
                       </div>
 
-                      <span className="text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-xl border border-slate-200 dark:border-slate-700">
-                        {item.banca}
-                      </span>
-                    </div>
-
-                    {/* Título e Cargo */}
-                    <div>
-                      <h3 className="text-lg font-black text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{item.institution}</p>
-                    </div>
-
-                    {/* Salário e Vagas */}
-                    <div className="grid grid-cols-2 gap-2 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-100 dark:border-slate-800/80">
+                      {/* Título e Cargo */}
                       <div>
-                        <p className="text-[10px] text-slate-400 uppercase font-black">Remuneração</p>
-                        <p className="text-sm font-black text-emerald-600 dark:text-emerald-400">{item.salary}</p>
+                        <h3 className="text-lg font-black text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
+                          {item.title}
+                        </h3>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{item.institution}</p>
                       </div>
-                      <div>
-                        <p className="text-[10px] text-slate-400 uppercase font-black">Vagas</p>
-                        <p className="text-sm font-black text-slate-800 dark:text-slate-200">{item.vacancies}</p>
+
+                      {/* Salário e Vagas */}
+                      <div className="grid grid-cols-2 gap-2 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-100 dark:border-slate-800/80">
+                        <div>
+                          <p className="text-[10px] text-slate-400 uppercase font-black">Remuneração</p>
+                          <p className="text-sm font-black text-emerald-600 dark:text-emerald-400">{item.salary}</p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-slate-400 uppercase font-black">Vagas</p>
+                          <p className="text-sm font-black text-slate-800 dark:text-slate-200">{item.vacancies}</p>
+                        </div>
+                      </div>
+
+                      {/* Datas Críticas */}
+                      <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
+                        {item.registrationPeriod && (
+                          <p className="flex items-center gap-2">
+                            <Clock className="w-3.5 h-3.5 text-blue-500" />
+                            <span>Inscrições: <strong>{item.registrationPeriod}</strong></span>
+                          </p>
+                        )}
+                        {item.examDate && (
+                          <p className="flex items-center gap-2">
+                            <Calendar className="w-3.5 h-3.5 text-amber-500" />
+                            <span>Data da Prova: <strong className="text-slate-900 dark:text-white">{item.examDate}</strong></span>
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Destaques e Matérias Estratégicas */}
+                      <div className="space-y-1 pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <p className="text-[10px] font-black uppercase text-slate-400 tracking-wider">
+                          Estratégia da Banca:
+                        </p>
+                        {item.keyHighlights.slice(0, 2).map((h, idx) => (
+                          <p key={idx} className="text-[11px] text-slate-500 dark:text-slate-400 flex items-start gap-1.5 leading-snug">
+                            <span className="text-blue-500 font-bold">•</span>
+                            <span>{h}</span>
+                          </p>
+                        ))}
                       </div>
                     </div>
 
-                    {/* Datas Críticas */}
-                    <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
-                      {item.registrationPeriod && (
-                        <p className="flex items-center gap-2">
-                          <Clock className="w-3.5 h-3.5 text-blue-500" />
-                          <span>Inscrições: <strong>{item.registrationPeriod}</strong></span>
-                        </p>
+                    {/* Ações do Card */}
+                    <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                      {isCurrentActiveExam ? (
+                        <button
+                          disabled
+                          className="flex-1 py-2.5 px-3 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-800 dark:text-amber-200 text-xs font-black flex items-center justify-center gap-1.5 cursor-default"
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                          <span>Concurso Ativo no Ecossistema</span>
+                        </button>
+                      ) : item.matchedEditalId ? (
+                        <button
+                          onClick={() => handleSetDefault(item.matchedEditalId!, item.title)}
+                          className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-blue-600/20 active:scale-95 transition-all"
+                          title="Definir como Concurso Padrão e calibrar todo o ecossistema"
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Definir como Concurso Padrão</span>
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleImportToEdital(undefined, item.title)}
+                          className="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
+                        >
+                          <BookOpen className="w-3.5 h-3.5" />
+                          <span>Ver Matriz de Matérias</span>
+                        </button>
                       )}
-                      {item.examDate && (
-                        <p className="flex items-center gap-2">
-                          <Calendar className="w-3.5 h-3.5 text-amber-500" />
-                          <span>Data da Prova: <strong className="text-slate-900 dark:text-white">{item.examDate}</strong></span>
-                        </p>
-                      )}
-                    </div>
 
-                    {/* Destaques e Matérias Estratégicas */}
-                    <div className="space-y-1 pt-2 border-t border-slate-100 dark:border-slate-800">
-                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-wider">
-                        Estratégia da Banca:
-                      </p>
-                      {item.keyHighlights.slice(0, 2).map((h, idx) => (
-                        <p key={idx} className="text-[11px] text-slate-500 dark:text-slate-400 flex items-start gap-1.5 leading-snug">
-                          <span className="text-blue-500 font-bold">•</span>
-                          <span>{h}</span>
-                        </p>
-                      ))}
+                      {item.officialNoticeUrl && (
+                        <a
+                          href={item.officialNoticeUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors"
+                          title="Abrir página oficial da banca"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      )}
                     </div>
                   </div>
-
-                  {/* Ações do Card */}
-                  <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
-                    {item.matchedEditalId ? (
-                      <button
-                        onClick={() => handleImportToEdital(item.matchedEditalId, item.title)}
-                        className="flex-1 py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-blue-600/20 active:scale-95 transition-all"
-                      >
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span>Carregar no Learning AI</span>
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleImportToEdital(undefined, item.title)}
-                        className="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
-                      >
-                        <BookOpen className="w-3.5 h-3.5" />
-                        <span>Ver Matriz de Matérias</span>
-                      </button>
-                    )}
-
-                    {item.officialNoticeUrl && (
-                      <a
-                        href={item.officialNoticeUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors"
-                        title="Abrir página oficial da banca"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

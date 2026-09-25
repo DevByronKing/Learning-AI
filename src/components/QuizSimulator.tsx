@@ -21,12 +21,14 @@ import {
   Scissors,
   Keyboard,
   BookOpen,
-  ArrowRight
+  ArrowRight,
+  AlertTriangle
 } from 'lucide-react';
-import { Question, QuestionAttempt, Flashcard, UserMetrics } from '@/lib/types';
+import { Question, QuestionAttempt, Flashcard, UserMetrics, StudentProfile } from '@/lib/types';
 import { MOCK_QUESTIONS } from '@/lib/mockData';
 import { CognitiveDiagnosisCard } from './CognitiveDiagnosisCard';
 import { FullMockExamSimulator } from './FullMockExamSimulator';
+import { AIFeedbackVote } from './AIFeedbackVote';
 import { ExamNotice, SubscriptionPlan } from '@/lib/types';
 import { useStudyStore } from '@/store/useStudyStore';
 
@@ -41,6 +43,7 @@ interface QuizSimulatorProps {
   userPlan?: SubscriptionPlan;
   dailyAiCount?: number;
   onOpenPricing?: () => void;
+  studentProfile?: StudentProfile;
 }
 
 export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
@@ -53,7 +56,8 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
   onSelectExam,
   userPlan = 'aspirante',
   dailyAiCount = 0,
-  onOpenPricing
+  onOpenPricing,
+  studentProfile
 }) => {
   const [simulatorMode, setSimulatorMode] = useState<'quick' | 'full_mock' | 'ai_generator'>('quick');
   const [bonusAiCredits, setBonusAiCredits] = useState<number>(0);
@@ -80,9 +84,23 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
   const [aiSelectedOptionId, setAiSelectedOptionId] = useState<string | null>(null);
   const [aiIsAnswered, setAiIsAnswered] = useState<boolean>(false);
 
-  // Filter questions
-  const filteredByExam = selectedExam 
-    ? questions.filter(q => q.banca === selectedExam.banca) // Simulação: filtra por banca do concurso
+  // Sync AI generator with selectedExam
+  useEffect(() => {
+    if (selectedExam) {
+      const validBancas: Array<'Cebraspe' | 'FGV' | 'FCC' | 'Vunesp'> = ['Cebraspe', 'FGV', 'FCC', 'Vunesp'];
+      const matchedBanca = validBancas.find(b => b.toLowerCase() === selectedExam.banca.toLowerCase());
+      if (matchedBanca) {
+        setAiBanca(matchedBanca);
+      }
+      if (selectedExam.subjects && selectedExam.subjects.length > 0) {
+        setAiSubject(selectedExam.subjects[0].name);
+      }
+    }
+  }, [selectedExam]);
+
+  // Filter questions with safe fallback
+  const filteredByExam = (selectedExam && questions.some(q => q.banca.toLowerCase() === selectedExam.banca.toLowerCase()))
+    ? questions.filter(q => q.banca.toLowerCase() === selectedExam.banca.toLowerCase())
     : questions;
 
   const filteredQuestions = selectedSubjectFilter === 'todas'
@@ -577,6 +595,13 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                     </div>
                   </div>
 
+                  {/* Micro-Feedback Transacional na questão gerada por IA */}
+                  <AIFeedbackVote
+                    questionId={generatedQuestion.id}
+                    banca={generatedQuestion.banca}
+                    subject={generatedQuestion.subjectName}
+                  />
+
                   <div className="flex items-center justify-between gap-3">
                     <button
                       onClick={() => onAddFlashcard({
@@ -665,12 +690,68 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
             className="px-3 py-2 rounded-xl glass-input text-xs text-slate-900 dark:text-white font-medium cursor-pointer"
           >
             <option value="todas">Todas as Disciplinas</option>
-            <option value="sub-dir-prev">Direito Previdenciário (Peso 3)</option>
-            <option value="sub-dir-adm">Direito Administrativo</option>
-            <option value="sub-oab-etica">Ética da OAB</option>
+            {selectedExam && selectedExam.subjects.map(sub => (
+              <option key={sub.id} value={sub.name}>
+                ⭐ {sub.name} (Peso {sub.weight || 1})
+              </option>
+            ))}
+            {Array.from(new Set(questions.map(q => q.subjectName)))
+              .filter(sName => !selectedExam?.subjects.some(sub => sub.name.toLowerCase() === sName.toLowerCase()))
+              .map(sName => (
+                <option key={sName} value={sName}>{sName}</option>
+              ))
+            }
           </select>
+
+          {/* Botão Rápido de Calcanhar de Aquiles do Onboarding */}
+          {studentProfile?.weakSubject && (
+            <button
+              onClick={() => {
+                const targetSub = selectedSubjectFilter.toLowerCase().includes((studentProfile.weakSubject || '').toLowerCase())
+                  ? 'todas'
+                  : studentProfile.weakSubject || 'todas';
+                setSelectedSubjectFilter(targetSub);
+                setCurrentIndex(0);
+                setIsAnswered(false);
+                setSelectedOptionId(null);
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black transition-all border cursor-pointer ${
+                selectedSubjectFilter.toLowerCase().includes((studentProfile.weakSubject || '').toLowerCase())
+                  ? 'bg-rose-600 text-white border-rose-700 shadow-md shadow-rose-600/30'
+                  : 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-500/20 hover:bg-rose-100 dark:hover:bg-rose-500/20'
+              }`}
+              title="Filtrar instantaneamente questões da disciplina declarada no Onboarding"
+            >
+              <AlertTriangle className="w-3.5 h-3.5" />
+              <span>Calcanhar de Aquiles: {studentProfile.weakSubject}</span>
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Banner Tático do Guardião na Arena */}
+      {studentProfile && (
+        <div className="mt-4 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-blue-900/30 via-indigo-900/20 to-purple-900/30 border border-blue-500/20 flex flex-wrap items-center justify-between gap-3 text-xs backdrop-blur-sm">
+          <div className="flex items-center gap-2.5">
+            <span className="text-xl">🎯</span>
+            <div>
+              <span className="font-black text-slate-900 dark:text-white">
+                Arena Calibrada para {studentProfile.warName || studentProfile.name}
+              </span>
+              <span className="text-slate-600 dark:text-slate-400 ml-2">
+                • Alvo: <strong className="text-blue-600 dark:text-blue-400">{studentProfile.targetExamTitle || selectedExam?.title}</strong> ({studentProfile.targetBanca || selectedExam?.banca || 'Cebraspe'})
+              </span>
+            </div>
+          </div>
+          {studentProfile.weakSubject && (
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-rose-600 dark:text-rose-300 bg-rose-500/10 px-3 py-1 rounded-lg border border-rose-500/20">
+                🛡️ Foco de Blindagem: {studentProfile.weakSubject}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
 
       {currentQuestion ? (
         <div className="mt-6">
@@ -1001,7 +1082,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
 
       {/* OVERLAY DO MODO FOCO TOTAL (ZEN MODE) */}
       {isZenMode && currentQuestion && (
-        <div className="fixed inset-0 z-50 bg-slate-950/98 text-white p-6 sm:p-12 overflow-y-auto flex flex-col justify-between animate-fadeIn backdrop-blur-xl">
+        <div className="fixed inset-0 z-50 bg-slate-950/98 text-white p-6 sm:p-12 overflow-y-auto flex flex-col justify-between animate-fadeIn backdrop-blur-xl preserve-dark">
           
           {/* Zen Mode Header */}
           <div className="max-w-4xl w-full mx-auto flex items-center justify-between pb-4 border-b border-slate-800">

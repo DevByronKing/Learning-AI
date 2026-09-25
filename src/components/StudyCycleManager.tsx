@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BookOpen, 
   RotateCcw, 
@@ -18,124 +18,49 @@ import {
   Sliders,
   Printer
 } from 'lucide-react';
-import { ExamNotice, StudyMethodology, DailyScheduleItem } from '@/lib/types';
+import { ExamNotice, StudyMethodology, DailyScheduleItem, StudentProfile } from '@/lib/types';
 
 interface StudyCycleManagerProps {
   selectedExam: ExamNotice;
   onGoToSimulator: (subjectId?: string) => void;
+  studentProfile?: StudentProfile;
 }
+
+import { generateDynamicSchedule } from '@/lib/studyCycleUtils';
+export { generateDynamicSchedule };
 
 export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
   selectedExam,
-  onGoToSimulator
+  onGoToSimulator,
+  studentProfile
 }) => {
   const [methodology, setMethodology] = useState<StudyMethodology>('ciclo_meirelles');
-  const [dailyHours, setDailyHours] = useState(3.5);
+  const [dailyHours, setDailyHours] = useState(studentProfile?.dailyHoursGoal || 3.5);
   const [isRebalancing, setIsRebalancing] = useState(false);
   const [rebalanceMessage, setRebalanceMessage] = useState<string | null>(null);
   const [currentWeek, setCurrentWeek] = useState(1);
 
-  // Initial Schedule State
-  const [schedule, setSchedule] = useState<DailyScheduleItem[]>([
-    {
-      id: 'day-1',
-      dayOfWeek: 'Hoje (Segunda-feira)',
-      dateStr: '01 Set 2026',
-      blocks: [
-        {
-          id: 'b-1',
-          subjectId: 'sub-dir-prev',
-          subjectName: 'Direito Previdenciário',
-          topicName: 'Segurados Obrigatórios e Facultativos (Ponto Cego)',
-          durationMinutes: 75,
-          method: 'Estudo Teórico Focado + Lei 8.213/91',
-          status: 'concluido',
-          questionsTarget: 15,
-          completedQuestions: 15
-        },
-        {
-          id: 'b-2',
-          subjectId: 'sub-dir-adm',
-          subjectName: 'Direito Administrativo',
-          topicName: 'Improbidade Administrativa (Lei 14.230/21)',
-          durationMinutes: 60,
-          method: 'Simulador de Questões FGV/Cebraspe',
-          status: 'pendente',
-          questionsTarget: 20,
-          completedQuestions: 5
-        },
-        {
-          id: 'b-3',
-          subjectId: 'sub-portugues',
-          subjectName: 'Língua Portuguesa',
-          topicName: 'Crase e Regência Nominal',
-          durationMinutes: 45,
-          method: 'Revisão Espaçada (SRS 7 dias)',
-          status: 'pendente',
-          questionsTarget: 10,
-          completedQuestions: 0
-        }
-      ]
-    },
-    {
-      id: 'day-2',
-      dayOfWeek: 'Amanhã (Terça-feira)',
-      dateStr: '02 Set 2026',
-      blocks: [
-        {
-          id: 'b-4',
-          subjectId: 'sub-dir-prev',
-          subjectName: 'Direito Previdenciário',
-          topicName: 'Período de Graça e Qualidade de Segurado',
-          durationMinutes: 90,
-          method: 'Ciclo Ponderado Peso 3',
-          status: 'pendente',
-          questionsTarget: 25,
-          completedQuestions: 0
-        },
-        {
-          id: 'b-5',
-          subjectId: 'sub-dir-const',
-          subjectName: 'Direito Constitucional',
-          topicName: 'Administração Pública na CF/88 (Art. 37 ao 41)',
-          durationMinutes: 60,
-          method: 'Estudo Reverso por Questões',
-          status: 'pendente',
-          questionsTarget: 15,
-          completedQuestions: 0
-        }
-      ]
-    },
-    {
-      id: 'day-3',
-      dayOfWeek: 'Quarta-feira',
-      dateStr: '03 Set 2026',
-      blocks: [
-        {
-          id: 'b-6',
-          subjectId: 'sub-dir-adm',
-          subjectName: 'Direito Administrativo',
-          topicName: 'Atos Administrativos (Anulação vs Revogação)',
-          durationMinutes: 75,
-          method: 'Mapa Mental + Questões FCC',
-          status: 'pendente',
-          questionsTarget: 20,
-          completedQuestions: 0
-        },
-        {
-          id: 'b-7',
-          subjectId: 'sub-portugues',
-          subjectName: 'Língua Portuguesa',
-          topicName: 'Interpretação e Tipologia Textual Cebraspe',
-          durationMinutes: 60,
-          method: 'Análise de Distratores da Banca',
-          status: 'pendente',
-          questionsTarget: 15,
-          completedQuestions: 0
-        }
-      ]
+  // Initial Schedule State gerado dinamicamente pelo edital selecionado
+  const [schedule, setSchedule] = useState<DailyScheduleItem[]>(() =>
+    generateDynamicSchedule(
+      selectedExam,
+      studentProfile?.dailyHoursGoal || dailyHours,
+      studentProfile?.weakSubject
+    )
+  );
+
+  // Recalcular ciclo dinamicamente sempre que o concurso alvo ou perfil mudar
+  useEffect(() => {
+    if (selectedExam) {
+      setSchedule(
+        generateDynamicSchedule(
+          selectedExam,
+          studentProfile?.dailyHoursGoal || dailyHours,
+          studentProfile?.weakSubject
+        )
+      );
     }
-  ]);
+  }, [selectedExam, studentProfile?.dailyHoursGoal, studentProfile?.weakSubject]);
 
   const toggleBlockStatus = (dayId: string, blockId: string) => {
     setSchedule((prev) =>
@@ -162,11 +87,18 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
     setRebalanceMessage(null);
 
     setTimeout(() => {
+      setSchedule(
+        generateDynamicSchedule(
+          selectedExam,
+          studentProfile?.dailyHoursGoal || dailyHours,
+          studentProfile?.weakSubject
+        )
+      );
       setIsRebalancing(false);
       setRebalanceMessage(
-        '✓ Ciclo de estudos recalibrado com sucesso! As disciplinas de maior peso no edital foram redistribuídas para otimizar sua retenção cognitiva.'
+        `✓ Ciclo de estudos recalibrado para "${selectedExam.title}"! As disciplinas de maior peso da banca ${selectedExam.banca} foram redistribuídas para otimizar sua retenção.`
       );
-    }, 1200);
+    }, 800);
   };
 
   const handlePrintCycle = () => {
@@ -221,6 +153,37 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Banner Tático do Guardião no Ciclo */}
+      {studentProfile && (
+        <div className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-emerald-900/30 via-teal-900/20 to-blue-900/30 border border-emerald-500/20 flex flex-wrap items-center justify-between gap-4 text-xs backdrop-blur-sm shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">📅</span>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-black text-slate-900 dark:text-white">
+                  Ciclo Calibrado para {studentProfile.warName || studentProfile.name}
+                </span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  {studentProfile.dailyHoursGoal || dailyHours}h Diárias
+                </span>
+              </div>
+              <p className="text-slate-600 dark:text-slate-400 mt-0.5">
+                Alvo: <strong className="text-emerald-600 dark:text-emerald-400">{studentProfile.targetExamTitle || selectedExam?.title}</strong> | Prioridade de blindagem: <strong className="text-rose-500 dark:text-rose-400">{studentProfile.weakSubject || 'Direito Administrativo'}</strong>
+              </p>
+            </div>
+          </div>
+          {studentProfile.weakSubject && (
+            <button
+              onClick={() => onGoToSimulator(studentProfile.weakSubject)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow-md shadow-rose-600/20 active:scale-95 transition-all cursor-pointer"
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-300" />
+              <span>Treinar {studentProfile.weakSubject} na Arena</span>
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Auto-rebalance Success Alert */}
       {rebalanceMessage && (

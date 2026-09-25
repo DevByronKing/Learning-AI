@@ -79,23 +79,23 @@ export const ConsistencyHeatmap: React.FC<ConsistencyHeatmapProps> = ({
 
   const getColorClass = (level: number) => {
     if (level === 0) {
-      return 'bg-slate-200 dark:bg-slate-800/70 border-slate-300/40 dark:border-white/5';
+      return 'bg-slate-200/80 dark:bg-slate-800/70 border-slate-300/40 dark:border-white/5';
     }
     if (palette === 'emerald') {
       switch (level) {
-        case 1: return 'bg-emerald-900/60 border-emerald-700/50 shadow-[0_0_4px_rgba(16,185,129,0.2)]';
-        case 2: return 'bg-emerald-600 border-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)]';
-        case 3: return 'bg-emerald-500 border-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.6)]';
-        case 4: return 'bg-emerald-400 border-white shadow-[0_0_12px_rgba(52,211,153,0.9)] scale-105';
-        default: return 'bg-slate-200 dark:bg-slate-800/70';
+        case 1: return 'bg-emerald-200 dark:bg-emerald-950/80 border-emerald-300 dark:border-emerald-700/50 shadow-sm';
+        case 2: return 'bg-emerald-300 dark:bg-emerald-700 border-emerald-400 dark:border-emerald-600 shadow-sm';
+        case 3: return 'bg-emerald-500 dark:bg-emerald-500 border-emerald-600 dark:border-emerald-400 shadow-[0_0_6px_rgba(16,185,129,0.5)]';
+        case 4: return 'bg-emerald-600 dark:bg-emerald-400 border-emerald-700 dark:border-white shadow-[0_0_10px_rgba(52,211,153,0.8)] scale-105';
+        default: return 'bg-slate-200/80 dark:bg-slate-800/70';
       }
     } else {
       switch (level) {
-        case 1: return 'bg-purple-900/60 border-purple-700/50 shadow-[0_0_4px_rgba(168,85,247,0.2)]';
-        case 2: return 'bg-purple-600 border-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.4)]';
-        case 3: return 'bg-purple-500 border-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.6)]';
-        case 4: return 'bg-fuchsia-400 border-white shadow-[0_0_12px_rgba(232,121,249,0.9)] scale-105';
-        default: return 'bg-slate-200 dark:bg-slate-800/70';
+        case 1: return 'bg-purple-200 dark:bg-purple-950/80 border-purple-300 dark:border-purple-700/50 shadow-sm';
+        case 2: return 'bg-purple-300 dark:bg-purple-700 border-purple-400 dark:border-purple-600 shadow-sm';
+        case 3: return 'bg-purple-500 dark:bg-purple-500 border-purple-600 dark:border-purple-400 shadow-[0_0_6px_rgba(168,85,247,0.5)]';
+        case 4: return 'bg-purple-600 dark:bg-fuchsia-400 border-purple-700 dark:border-white shadow-[0_0_10px_rgba(232,121,249,0.8)] scale-105';
+        default: return 'bg-slate-200/80 dark:bg-slate-800/70';
       }
     }
   };

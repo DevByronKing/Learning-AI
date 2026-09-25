@@ -133,7 +133,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
     }
   ];
 
-  const handleSendPrompt = (textToSend?: string) => {
+  const handleSendPrompt = async (textToSend?: string) => {
     const query = textToSend || inputQuery;
     if (!query.trim()) return;
 
@@ -148,11 +148,39 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
     if (!textToSend) setInputQuery('');
     setIsTyping(true);
 
-    // Simulate AI cognitive response
-    setTimeout(() => {
+    // Chama a API de IA Real (Gemini) do Copiloto
+    try {
+      const res = await fetch('/api/copilot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query,
+          studentProfile: profile,
+          examContext: selectedExam,
+          history: messages.slice(-4)
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.text) {
+          const botMsg: CopilotMessage = {
+            id: `bot-${Date.now()}`,
+            sender: 'assistant',
+            text: data.text,
+            timestamp: 'Agora',
+            quickAction: data.quickAction
+          };
+          setMessages(prev => [...prev, botMsg]);
+          setIsTyping(false);
+          return;
+        }
+      }
+      throw new Error('Falha na resposta da API');
+    } catch {
+      // Fallback cognitivo resiliente em caso de falha de rede
       let botResponse = '';
       let actionRecommendation: { label: string; actionTab: string } | undefined = undefined;
-
       const lower = query.toLowerCase();
 
       if (lower.includes('cebraspe') || lower.includes('fgv') || lower.includes('banca')) {
@@ -161,11 +189,8 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
       } else if (lower.includes('8.112') || lower.includes('posse') || lower.includes('exercício')) {
         botResponse = `### Mnemônico de Prazos — Lei 8.112/90:\n\n* **Nomeação ➔ Posse**: **30 dias** (improrrogáveis). Se não tomar posse: ato tornado sem efeito.\n* **Posse ➔ Exercício**: **15 dias** (improrrogáveis). Se não entrar em exercício: **DEMISSÃO? NÃO!** O servidor é **EXONERADO**!\n\n💡 **Mnemônico**: *P-O-S-S-E (30 dias) ➔ E-X-E-R-C-Í-C-I-O (15 dias)*.\n⚠️ *Pegadinha favorita da banca*: Dizer que quem não entra em exercício é demitido. Lembre-se: ainda não é estável nem iniciou, logo é exoneração!`;
         actionRecommendation = { label: 'Ver Artigos no Vade Mecum', actionTab: 'vademecum' };
-      } else if (lower.includes('14.230') || lower.includes('improbidade') || lower.includes('lia')) {
-        botResponse = `### As 3 Armadilhas da Reforma da LIA (Lei 14.230/21):\n\n1. **Fim da Culpa**: Não existe mais ato de improbidade culposo nem por culpa grave. Exige-se sempre **dolo específico** (vontade livre e consciente de alcançar o ilícito).\n2. **Rol do Art. 11 agora é TAXATIVO**: Antes era exemplificativo. Hoje, se não estiver na lista expressa do art. 11, não é ato ímprobo que atenta contra princípios.\n3. **Prescrição Geral Unificada**: 8 anos contados da data do fato (não mais do término do mandato).`;
-        actionRecommendation = { label: 'Revisar no Caderno de Erros', actionTab: 'mistakes' };
       } else {
-        botResponse = `Com base nas estatísticas das bancas para concursos federais:\n\n* **Regra de Ouro**: Mais de 70% das assertivas reproduzem fielmente o texto da lei seca com alteração de conectivos restritivos (*"sempre"*, *"nunca"*, *"salvo"*, *"exclusivamente"*).\n* **Estratégia Recomendada para Hoje**: Dedique 20 minutos à resolução de 10 questões do seu tópico fraco (**${blindSpotTopic?.name || 'Administração Pública'}**) e revise os flashcards agendados para consolidar a curva de esquecimento.`;
+        botResponse = `Olá, **${profile?.warName || profile?.name || 'Guerreiro(a)'}**! Com base nas estatísticas das bancas para concursos federais:\n\n* **Regra de Ouro**: Mais de 70% das assertivas reproduzem fielmente o texto da lei seca com alteração de conectivos restritivos (*"sempre"*, *"nunca"*, *"salvo"*, *"exclusivamente"*).\n* **Estratégia Recomendada para Hoje**: Dedique 20 minutos à resolução de 10 questões do seu tópico vulnerável (**${profile?.weakSubject || blindSpotTopic?.name || 'Direito Administrativo'}**) e revise os flashcards agendados para consolidar a curva de esquecimento.`;
         actionRecommendation = { label: 'Ir para a Missão do Dia', actionTab: 'cycle' };
       }
 
@@ -179,7 +204,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
 
       setMessages(prev => [...prev, botMsg]);
       setIsTyping(false);
-    }, 600);
+    }
   };
 
   if (!isOpen) return null;

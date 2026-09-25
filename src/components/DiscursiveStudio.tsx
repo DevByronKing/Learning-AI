@@ -27,19 +27,23 @@ import {
   Crown,
   Lock
 } from 'lucide-react';
-import { DiscursivePrompt, DiscursiveEvaluation, DiscursiveSubmission, SubscriptionPlan } from '@/lib/types';
+import { DiscursivePrompt, DiscursiveEvaluation, DiscursiveSubmission, SubscriptionPlan, ExamNotice, StudentProfile } from '@/lib/types';
 import { MOCK_DISCURSIVE_PROMPTS } from '@/lib/mockData';
 
 interface DiscursiveStudioProps {
   onRecordSubmission?: (submission: DiscursiveSubmission) => void;
   userPlan?: SubscriptionPlan;
   onOpenPricing?: () => void;
+  selectedExam?: ExamNotice;
+  studentProfile?: StudentProfile;
 }
 
 export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({ 
   onRecordSubmission,
   userPlan = 'aspirante',
-  onOpenPricing
+  onOpenPricing,
+  selectedExam,
+  studentProfile
 }) => {
   const [prompts] = useState<DiscursivePrompt[]>(MOCK_DISCURSIVE_PROMPTS);
   const [selectedPromptId, setSelectedPromptId] = useState<string>(prompts[0].id);
@@ -58,6 +62,30 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
   const evaluationRef = useRef<HTMLDivElement>(null);
 
   const currentPrompt = prompts.find((p) => p.id === selectedPromptId) || prompts[0];
+
+  // Auto-calibrar proposta de acordo com o concurso/OAB ativo
+  useEffect(() => {
+    if (!selectedExam) return;
+    const lower = (selectedExam.title + ' ' + selectedExam.institution + ' ' + selectedExam.role).toLowerCase();
+
+    if (lower.includes('oab') || lower.includes('advoga')) {
+      setSelectedAreaFilter('Jurídica');
+      const oabPrompt = prompts.find(p => p.id === 'disc-oab-seguranca');
+      if (oabPrompt) setSelectedPromptId(oabPrompt.id);
+    } else if (lower.includes('polic') || lower.includes('pf') || lower.includes('prf')) {
+      setSelectedAreaFilter('Policial');
+      const pfPrompt = prompts.find(p => p.id === 'disc-pf-2026');
+      if (pfPrompt) setSelectedPromptId(pfPrompt.id);
+    } else if (lower.includes('fiscal') || lower.includes('receita')) {
+      setSelectedAreaFilter('Fiscal');
+      const recPrompt = prompts.find(p => p.id === 'disc-fgv-receita');
+      if (recPrompt) setSelectedPromptId(recPrompt.id);
+    } else if (lower.includes('tribunal') || lower.includes('tj') || lower.includes('trt') || lower.includes('trf')) {
+      setSelectedAreaFilter('Tribunais');
+      const trtPrompt = prompts.find(p => p.id === 'disc-fcc-trt');
+      if (trtPrompt) setSelectedPromptId(trtPrompt.id);
+    }
+  }, [selectedExam]);
 
   // Filtered prompts
   const filteredPrompts = selectedAreaFilter === 'todas'
@@ -323,6 +351,21 @@ Por derradeiro, a lavagem de dinheiro (Lei nº 9.613/1998) consubstancia tipo pe
           </select>
         </div>
       </div>
+
+      {/* Active Exam Adaptive Discursive Banner */}
+      {selectedExam && (
+        <div className="mt-4 p-3.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="text-base">🎯</span>
+            <span className="font-black text-indigo-700 dark:text-indigo-300">
+              Estúdio Calibrado para seu Edital: {selectedExam.title} ({selectedExam.banca})
+            </span>
+          </div>
+          <span className="text-slate-600 dark:text-slate-400">
+            Régua e critérios de avaliação configurados para o estilo de cobrança da banca <strong>{selectedExam.banca}</strong>
+          </span>
+        </div>
+      )}
 
       {/* Prompts Preset Bar */}
       <div className="mt-6 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">

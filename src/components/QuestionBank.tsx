@@ -25,7 +25,7 @@ import {
   Info,
   ShieldCheck
 } from 'lucide-react';
-import { Question, QuestionAttempt, Flashcard, QuestionBankFilter, PsychometricDistractorType } from '@/lib/types';
+import { Question, QuestionAttempt, Flashcard, QuestionBankFilter, PsychometricDistractorType, StudentProfile } from '@/lib/types';
 import { MOCK_QUESTIONS, MASCOTS_DATA } from '@/lib/mockData';
 import { PSYCHOMETRIC_DISTRACTORS, BANCA_PSYCHOMETRIC_PROFILES } from '@/lib/psychometricsData';
 
@@ -34,6 +34,7 @@ interface QuestionBankProps {
   onRecordAttempt: (attempt: QuestionAttempt) => void;
   onGoToSimulator?: () => void;
   onGoToMistakes?: () => void;
+  studentProfile?: StudentProfile;
 }
 
 // Classificação psicométrica e parâmetros TRI para a questão
@@ -85,17 +86,28 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
   onAddFlashcard,
   onRecordAttempt,
   onGoToSimulator,
-  onGoToMistakes
+  onGoToMistakes,
+  studentProfile
 }) => {
-  const [filter, setFilter] = useState<QuestionBankFilter>({
+  const [filter, setFilter] = useState<QuestionBankFilter>(() => ({
     searchQuery: '',
-    banca: 'todas',
+    banca: (studentProfile?.targetBanca && studentProfile.targetBanca !== 'Outra') ? studentProfile.targetBanca : 'todas',
     subject: 'todas',
     topic: 'todos',
     year: 'todos',
     difficulty: 'todas',
     status: 'todas'
-  });
+  }));
+
+  // Sincronizar banca do filtro quando o perfil do aluno ou edital padrão for alterado
+  useEffect(() => {
+    if (studentProfile?.targetBanca && studentProfile.targetBanca !== 'Outra') {
+      setFilter((prev) => ({
+        ...prev,
+        banca: studentProfile.targetBanca as any
+      }));
+    }
+  }, [studentProfile?.targetBanca]);
 
   // Respostas locais para o banco
   const [userAnswers, setUserAnswers] = useState<Record<string, { selectedOptionId: string; isCorrect: boolean; confirmed: boolean }>>({});
@@ -356,6 +368,45 @@ export const QuestionBank: React.FC<QuestionBankProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Banner de Calibração Pessoal do Aluno */}
+      {studentProfile && (
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-blue-900/30 via-indigo-900/20 to-purple-900/30 border border-blue-500/20 flex flex-wrap items-center justify-between gap-3 text-xs backdrop-blur-sm">
+          <div className="flex items-center gap-2.5">
+            <span className="text-xl">🎯</span>
+            <div>
+              <span className="font-black text-slate-900 dark:text-white">
+                Filtros Calibrados para {studentProfile.warName || studentProfile.name}
+              </span>
+              <span className="text-slate-600 dark:text-slate-400 ml-2">
+                • Alvo: <strong className="text-blue-600 dark:text-blue-400">{studentProfile.targetExamTitle}</strong> ({studentProfile.targetBanca || 'Geral'})
+              </span>
+            </div>
+          </div>
+
+          {studentProfile.weakSubject && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setFilter(prev => ({
+                    ...prev,
+                    searchQuery: prev.searchQuery === studentProfile.weakSubject ? '' : studentProfile.weakSubject || ''
+                  }));
+                  setCurrentPage(1);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs border transition-all cursor-pointer ${
+                  filter.searchQuery === studentProfile.weakSubject
+                    ? 'bg-rose-600 text-white border-rose-700 shadow-md shadow-rose-600/30'
+                    : 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-500/20 hover:bg-rose-100 dark:hover:bg-rose-500/20'
+                }`}
+              >
+                <AlertCircle className="w-3.5 h-3.5" />
+                <span>Isolar Calcanhar de Aquiles: {studentProfile.weakSubject}</span>
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Barra de Busca e Filtros Multicritério */}
       <div className="p-4 sm:p-5 rounded-2xl glass-panel bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-sm space-y-4">

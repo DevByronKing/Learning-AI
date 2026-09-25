@@ -133,13 +133,13 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
                 onClick={() => setIsMascotSelectorOpen(!isMascotSelectorOpen)}
                 title="Clique para escolher seu Mascote Companheiro"
               >
-                <div className="w-full h-full bg-slate-900 rounded-[22px] flex items-center justify-center text-4xl sm:text-5xl shadow-inner">
+                <div className="w-full h-full bg-slate-100 dark:bg-slate-900 rounded-[22px] flex items-center justify-center text-4xl sm:text-5xl shadow-inner">
                   {currentMascot.avatarEmoji}
                 </div>
               </div>
               <button 
                 onClick={() => setIsMascotSelectorOpen(!isMascotSelectorOpen)}
-                className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded-full bg-slate-800 border border-white/20 text-[10px] font-bold text-amber-300 shadow-md hover:bg-slate-700 transition-colors"
+                className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/20 text-[10px] font-bold text-amber-700 dark:text-amber-300 shadow-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
               >
                 Trocar
               </button>
@@ -235,7 +235,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
                       : 'border-slate-200 dark:border-white/5 hover:border-indigo-400/30 bg-slate-50 dark:bg-dark-surface'
                   }`}
                 >
-                  <div className="text-3xl p-2 rounded-xl bg-slate-900/50 shrink-0">
+                  <div className="text-3xl p-2 rounded-xl bg-slate-200 dark:bg-slate-900/50 shrink-0">
                     {mascot.avatarEmoji}
                   </div>
                   <div className="min-w-0">

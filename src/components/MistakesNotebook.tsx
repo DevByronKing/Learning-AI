@@ -21,26 +21,34 @@ import {
   ArrowRight,
   ShieldCheck,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Scale
 } from 'lucide-react';
-import { MistakeEntry, ErrorType, Question } from '@/lib/types';
+import { MistakeEntry, ErrorType, Question, ExamNotice } from '@/lib/types';
 
 interface MistakesNotebookProps {
   mistakes: MistakeEntry[];
   onUpdateMistakeNote: (mistakeId: string, note: string) => void;
   onResolveMistakeInRevanche: (mistakeId: string, isCorrect: boolean) => void;
   onGoToSimulator: () => void;
+  selectedExam?: ExamNotice;
+  onGoToVadeMecum?: (lawQuery?: string) => void;
+  onGoToEdital?: () => void;
 }
 
 export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
   mistakes,
   onUpdateMistakeNote,
   onResolveMistakeInRevanche,
-  onGoToSimulator
+  onGoToSimulator,
+  selectedExam,
+  onGoToVadeMecum,
+  onGoToEdital
 }) => {
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'overcome'>('pending');
   const [filterErrorType, setFilterErrorType] = useState<string>('all');
   const [selectedSubject, setSelectedSubject] = useState<string>('all');
+  const [filterOnlyActiveExam, setFilterOnlyActiveExam] = useState<boolean>(false);
   
   // Note editing state
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
@@ -88,6 +96,14 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
     if (filterStatus === 'overcome' && !m.isOvercome) return false;
     if (filterErrorType !== 'all' && m.errorType !== filterErrorType) return false;
     if (selectedSubject !== 'all' && m.question.subjectName !== selectedSubject) return false;
+    if (filterOnlyActiveExam && selectedExam) {
+      const matchBanca = m.question.banca.toLowerCase() === selectedExam.banca.toLowerCase();
+      const matchSubject = selectedExam.subjects.some(sub =>
+        sub.name.toLowerCase().includes(m.question.subjectName.toLowerCase()) ||
+        m.question.subjectName.toLowerCase().includes(sub.name.toLowerCase())
+      );
+      if (!matchBanca && !matchSubject) return false;
+    }
     return true;
   });
 
@@ -342,6 +358,22 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
             </div>
           )}
 
+          {/* Active Exam Filter Toggle */}
+          {selectedExam && (
+            <button
+              onClick={() => setFilterOnlyActiveExam(!filterOnlyActiveExam)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+                filterOnlyActiveExam
+                  ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-500/40 shadow-sm'
+                  : 'bg-white dark:bg-dark-bg text-slate-600 dark:text-slate-400 border-slate-300 dark:border-white/10 hover:border-amber-400'
+              }`}
+              title="Filtrar erros das matérias e banca do seu concurso ativo"
+            >
+              <span>⭐</span>
+              <span>{filterOnlyActiveExam ? 'Filtrando: ' : 'Filtrar: '}{selectedExam.title.split(' ')[0]} ({selectedExam.banca})</span>
+            </button>
+          )}
+
         </div>
       </div>
 
@@ -404,6 +436,17 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                       <span className="text-xs text-slate-600 dark:text-slate-300 font-medium">
                         {mistake.question.topicName}
                       </span>
+
+                      {onGoToEdital && (
+                        <button
+                          type="button"
+                          onClick={onGoToEdital}
+                          className="inline-flex items-center gap-1 text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline font-semibold cursor-pointer"
+                          title="Ver peso e tópicos deste assunto no seu Edital Ativo"
+                        >
+                          <span>🎯 Ver no Edital</span>
+                        </button>
+                      )}
 
                       {/* Error Type Badge */}
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${badge.bg}`}>
@@ -495,8 +538,21 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                       </div>
 
                       {mistake.question.codeCitation && (
-                        <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                          📖 <strong>Base Legal:</strong> {mistake.question.codeCitation}
+                        <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 dark:text-slate-400">
+                          <div>
+                            📖 <strong>Base Legal:</strong> {mistake.question.codeCitation}
+                          </div>
+                          {onGoToVadeMecum && (
+                            <button
+                              type="button"
+                              onClick={() => onGoToVadeMecum(mistake.question.codeCitation)}
+                              className="text-amber-600 dark:text-amber-400 font-bold hover:underline flex items-center gap-1 cursor-pointer"
+                              title="Consultar lei seca no Vade Mecum Inteligente"
+                            >
+                              <Scale className="w-3.5 h-3.5" />
+                              <span>Consultar no Vade Mecum</span>
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>

@@ -1,3 +1,27 @@
+@font-face {
+  font-family: 'Outfit';
+  src: url('/fonts/Outfit-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('/fonts/Outfit-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('/fonts/Outfit-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -48,7 +72,7 @@
   }
 
   html {
-    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     font-size: 15px; /* Tamanho padrão do site: densidade e leitura de alta performance */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -413,47 +437,150 @@ html.light .bg-white\/10 {
   background-color: rgba(226, 232, 240, 0.85) !important;
 }
 
-/* Textos de títulos e parágrafos adaptados no Modo Claro */
-html.light h1,
-html.light h2,
-html.light h3,
-html.light h4,
-html.light h5,
-html.light h6 {
-  color: #0f172a !important;
+/* Textos de títulos e parágrafos adaptados no Modo Claro (exceto containers preservados escuros, botões e elementos com cor específica) */
+html.light h1:not(.preserve-dark *):not(.passport-card *):not([class*="from-"]):not(button *):not([class*="text-"]):not([class*="bg-clip-text"]),
+html.light h2:not(.preserve-dark *):not(.passport-card *):not([class*="from-"]):not(button *):not([class*="text-"]):not([class*="bg-clip-text"]),
+html.light h3:not(.preserve-dark *):not(.passport-card *):not([class*="from-"]):not(button *):not([class*="text-"]):not([class*="bg-clip-text"]),
+html.light h4:not(.preserve-dark *):not(.passport-card *):not([class*="from-"]):not(button *):not([class*="text-"]):not([class*="bg-clip-text"]),
+html.light h5:not(.preserve-dark *):not(.passport-card *):not([class*="from-"]):not(button *):not([class*="text-"]):not([class*="bg-clip-text"]),
+html.light h6:not(.preserve-dark *):not(.passport-card *):not([class*="from-"]):not(button *):not([class*="text-"]):not([class*="bg-clip-text"]) {
+  color: #0f172a;
 }
 
-/* Ajusta textos claros/apagados para tons escuros legíveis no Modo Claro */
-html.light .text-slate-200,
-html.light .text-slate-300 {
-  color: #334155 !important;
+/* Ajusta textos claros/apagados para tons escuros legíveis no Modo Claro (exceto containers escuros, botões e docks) */
+html.light .text-slate-200:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not([class*="bg-indigo-600"] *):not([class*="bg-blue-600"] *):not(.dock-nav *),
+html.light .text-slate-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not([class*="bg-indigo-600"] *):not([class*="bg-blue-600"] *):not(.dock-nav *) {
+  color: #334155;
 }
 
-html.light .text-slate-400 {
-  color: #475569 !important;
+html.light .text-slate-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not([class*="bg-indigo-600"] *):not([class*="bg-blue-600"] *):not(.dock-nav *) {
+  color: #475569;
+}
+
+/* Proteção Absoluta de Gradientes em Texto (bg-clip-text) em Ambos os Modos */
+[class*="bg-clip-text"],
+html.light [class*="bg-clip-text"],
+html.light h1 [class*="bg-clip-text"],
+html.light h2 [class*="bg-clip-text"],
+html.light h3 [class*="bg-clip-text"],
+html.light p [class*="bg-clip-text"],
+html.light span[class*="bg-clip-text"] {
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
 }
 
 /* Números de métricas e estatísticas com alto contraste no Modo Claro */
-html.light .text-indigo-300,
-html.light .text-blue-300 {
+html.light .text-indigo-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *),
+html.light .text-blue-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *) {
   color: #1d4ed8 !important;
 }
-html.light .text-cyan-300 {
+html.light .text-cyan-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *) {
   color: #0891b2 !important;
 }
-html.light .text-emerald-300 {
+html.light .text-emerald-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *) {
   color: #059669 !important;
 }
-html.light .text-amber-300 {
+html.light .text-amber-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *) {
   color: #d97706 !important;
 }
-html.light .text-purple-300 {
+html.light .text-purple-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *) {
   color: #2563eb !important;
 }
 
-/* CATCH-ALL: qualquer .text-white no modo claro fica escuro por padrão */
-html.light .text-white {
+/* Mapeamento de tons neon 400 para cores acessíveis de alto contraste no Modo Claro */
+html.light .text-indigo-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *),
+html.light .text-blue-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+  color: #1d4ed8 !important;
+}
+html.light .text-cyan-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+  color: #0284c7 !important;
+}
+html.light .text-emerald-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+  color: #059669 !important;
+}
+html.light .text-amber-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+  color: #b45309 !important;
+}
+html.light .text-rose-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+  color: #e11d48 !important;
+}
+html.light .text-purple-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+  color: #7c3aed !important;
+}
+
+/* CATCH-ALL: qualquer .text-white no modo claro sem fundo colorido fica escuro por padrão */
+html.light .text-white:not([class*="bg-"]):not([class*="from-"]):not(button):not(button *):not(a[class*="bg-"]):not(a[class*="from-"]):not(.dock-nav *):not(.preserve-dark *):not(.passport-card *):not(.force-white):not(.preserve-white):not([class*="badge"]) {
   color: #0f172a;
+}
+
+/* Regras explícitas para containers escuros (Passport Card, Dark Islands, Banners) no Modo Claro */
+html.light .preserve-dark,
+html.light .preserve-dark *,
+html.light .passport-card,
+html.light .passport-card * {
+  color-scheme: dark;
+}
+
+html.light .preserve-dark:not([class*="bg-"]),
+html.light .passport-card {
+  background: linear-gradient(135deg, #020617 0%, #0e1428 50%, #0f172a 100%) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+html.light .preserve-dark {
+  color: #ffffff !important;
+}
+
+html.light .preserve-dark h1,
+html.light .preserve-dark h2,
+html.light .preserve-dark h3,
+html.light .preserve-dark h4,
+html.light .preserve-dark h5,
+html.light .preserve-dark h6,
+html.light .preserve-dark .text-white,
+html.light .passport-card h1,
+html.light .passport-card h2,
+html.light .passport-card h3,
+html.light .passport-card h4,
+html.light .passport-card .text-white {
+  color: #ffffff !important;
+}
+
+html.light .preserve-dark .text-slate-200,
+html.light .passport-card .text-slate-200 {
+  color: #e2e8f0 !important;
+}
+
+html.light .preserve-dark .text-slate-300,
+html.light .passport-card .text-slate-300 {
+  color: #cbd5e1 !important;
+}
+
+html.light .preserve-dark .text-slate-400,
+html.light .passport-card .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+html.light .preserve-dark .text-indigo-300,
+html.light .passport-card .text-indigo-300 {
+  color: #a5b4fc !important;
+}
+
+html.light .preserve-dark .text-blue-400,
+html.light .passport-card .text-blue-400 {
+  color: #60a5fa !important;
+}
+
+html.light .preserve-dark .text-emerald-400,
+html.light .passport-card .text-emerald-400 {
+  color: #34d399 !important;
+}
+
+html.light .preserve-dark .text-amber-400,
+html.light .passport-card .text-amber-400 {
+  color: #fbbf24 !important;
 }
 
 /* Preserva .text-white dentro de botões/links com fundo colorido saturado */
@@ -582,13 +709,13 @@ html.light [class*="bg-emerald-100"] {
   color: #065f46 !important;
 }
 
-/* Progress bars e backgrounds cinza-escuro invertem para cinza-claro */
-html.light .bg-slate-800 {
-  background-color: #e2e8f0 !important;
+/* Progress bars e backgrounds cinza-escuro invertem para cinza-claro em elementos neutros */
+html.light .bg-slate-800:not(button):not(button *):not(a):not(.preserve-dark):not(.preserve-dark *):not(.passport-card):not(.passport-card *):not(.dock-nav):not(.dock-nav *):not([class*="text-white"]):not([class*="text-amber"]) {
+  background-color: #e2e8f0;
 }
 
-html.light .bg-slate-900 {
-  background-color: #f1f5f9 !important;
+html.light .bg-slate-900:not(button):not(button *):not(a):not(.preserve-dark):not(.preserve-dark *):not(.passport-card):not(.passport-card *):not(.dock-nav):not(.dock-nav *):not([class*="text-white"]):not([class*="text-amber"]) {
+  background-color: #f1f5f9;
 }
 
 /* Animações e Utilitários */

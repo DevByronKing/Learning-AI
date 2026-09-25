@@ -58,29 +58,29 @@ export const VerticalizedEditalProgress: React.FC<VerticalizedEditalProgressProp
     <div className="space-y-8">
       
       {/* 1. Métrica Agressiva de Blindagem da Banca */}
-      <div className="glass-panel bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950 p-6 sm:p-8 rounded-3xl border border-indigo-500/30 shadow-xl text-white">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+      <div className="glass-panel bg-gradient-to-r from-indigo-50/90 via-sky-50/70 to-blue-50/90 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950 p-6 sm:p-8 rounded-3xl border border-indigo-200/80 dark:border-indigo-500/30 shadow-md text-slate-900 dark:text-white transition-all">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-indigo-100 dark:border-white/10">
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-cyan-400" />
+              <span className="px-3 py-1 rounded-full bg-cyan-100/80 dark:bg-cyan-500/20 text-cyan-800 dark:text-cyan-300 border border-cyan-300/80 dark:border-cyan-500/30 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                 Métrica Implacável: Blindagem da Banca
               </span>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-slate-500 dark:text-slate-400">
                 (Substitui taxas genéricas de acerto)
               </span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-black text-white mt-1">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
               Índice de Resistência a Armadilhas por Banca
             </h3>
-            <p className="text-xs text-slate-300 mt-1">
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
               Avalia não apenas se você acerta, mas se sua pontuação resiste aos distratores mais perversos da banca.
             </p>
           </div>
 
-          <div className="flex items-baseline gap-2 shrink-0 bg-white/5 px-4 py-2.5 rounded-2xl border border-white/10">
-            <span className="text-xs text-slate-400 font-bold">Blindagem Global:</span>
-            <span className="text-2xl font-black text-cyan-400">80.2%</span>
+          <div className="flex items-baseline gap-2 shrink-0 bg-white/90 dark:bg-white/5 px-4 py-2.5 rounded-2xl border border-indigo-100 dark:border-white/10 shadow-2xs">
+            <span className="text-xs text-slate-600 dark:text-slate-400 font-bold">Blindagem Global:</span>
+            <span className="text-2xl font-black text-cyan-600 dark:text-cyan-400">80.2%</span>
           </div>
         </div>
 
@@ -88,29 +88,29 @@ export const VerticalizedEditalProgress: React.FC<VerticalizedEditalProgressProp
           {bancaShields.map((shield, i) => (
             <div
               key={i}
-              className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3 hover:border-cyan-500/40 transition-all"
+              className="p-4 rounded-2xl bg-white/90 dark:bg-white/5 border border-indigo-100/80 dark:border-white/10 space-y-3 hover:border-cyan-500/40 transition-all shadow-2xs dark:shadow-none"
             >
               <div className="flex items-center justify-between">
-                <span className="text-sm font-black text-white">{shield.banca}</span>
+                <span className="text-sm font-black text-slate-900 dark:text-white">{shield.banca}</span>
                 <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full border ${shield.statusColor}`}>
                   {shield.status}
                 </span>
               </div>
 
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-white">{shield.shieldPercent}%</span>
-                <span className="text-xs text-slate-400 font-mono">índice de blindagem</span>
+                <span className="text-3xl font-black text-slate-900 dark:text-white">{shield.shieldPercent}%</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">índice de blindagem</span>
               </div>
 
               {/* Progress bar */}
-              <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
                 <div
                   className={`h-full rounded-full ${shield.shieldPercent >= 75 ? 'bg-gradient-to-r from-emerald-500 to-cyan-400' : 'bg-gradient-to-r from-amber-500 to-orange-500'}`}
                   style={{ width: `${shield.shieldPercent}%` }}
                 />
               </div>
 
-              <p className="text-[11px] text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                 {shield.description}
               </p>
             </div>

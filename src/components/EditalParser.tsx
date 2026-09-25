@@ -37,7 +37,9 @@ import { getStatusColor } from '@/lib/utils';
 interface EditalParserProps {
   exams: ExamNotice[];
   selectedExam: ExamNotice;
+  defaultExamId?: string;
   onSelectExam: (exam: ExamNotice) => void;
+  onSetDefaultExam?: (exam: ExamNotice) => void;
   onGenerateCycle: (exam: ExamNotice) => void;
   onAddCustomExam: (newExam: ExamNotice) => void;
 }
@@ -282,7 +284,9 @@ const generateSyllabusByArea = (
 export const EditalParser: React.FC<EditalParserProps> = ({
   exams,
   selectedExam,
+  defaultExamId,
   onSelectExam,
+  onSetDefaultExam,
   onGenerateCycle,
   onAddCustomExam
 }) => {
@@ -303,6 +307,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
   const [vacanciesInput, setVacanciesInput] = useState('180');
   const [uploadText, setUploadText] = useState('');
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [setAsDefaultExam, setSetAsDefaultExam] = useState<boolean>(true);
   
   // Edital Q&A State
   const [editalQuestion, setEditalQuestion] = useState('');
@@ -537,12 +542,16 @@ export const EditalParser: React.FC<EditalParserProps> = ({
 
             onAddCustomExam(newExam);
             onSelectExam(newExam);
+            if (setAsDefaultExam && onSetDefaultExam) {
+              onSetDefaultExam(newExam);
+            }
 
             // Clean up state
             setUploadedFile(null);
             setExamTitleInput('');
             setRoleInput('');
             setUploadText('');
+            setSetAsDefaultExam(true);
           });
           return 3;
         }
@@ -671,10 +680,17 @@ export const EditalParser: React.FC<EditalParserProps> = ({
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-1.5">
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-                        {area}
-                      </span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-dark-surface border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 font-bold">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                          {area}
+                        </span>
+                        {exam.id === defaultExamId && (
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center gap-0.5 shrink-0" title="Seu Edital Padrão ativo">
+                            ⭐ Padrão
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-dark-surface border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 font-bold shrink-0">
                         {exam.banca}
                       </span>
                     </div>
@@ -744,14 +760,32 @@ export const EditalParser: React.FC<EditalParserProps> = ({
                 </div>
               </div>
 
-              <button
-                onClick={() => onGenerateCycle(selectedExam)}
-                className="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-xs tracking-wide shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all glow-emerald"
-              >
-                <BookOpen className="w-4 h-4" />
-                <span>Estruturar Ciclo de Estudos</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                {defaultExamId === selectedExam.id ? (
+                  <span className="px-3.5 py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-extrabold text-xs tracking-wide flex items-center gap-1.5 shadow-sm">
+                    <span>⭐</span>
+                    <span>Edital Padrão Ativo</span>
+                  </span>
+                ) : onSetDefaultExam ? (
+                  <button
+                    onClick={() => onSetDefaultExam(selectedExam)}
+                    className="px-3.5 py-2.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-600 dark:text-indigo-300 hover:text-indigo-700 dark:hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+                    title="Definir este concurso como seu edital padrão em toda a plataforma"
+                  >
+                    <span>⭐</span>
+                    <span>Definir como Edital Padrão</span>
+                  </button>
+                ) : null}
+
+                <button
+                  onClick={() => onGenerateCycle(selectedExam)}
+                  className="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-xs tracking-wide shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all glow-emerald"
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span>Estruturar Ciclo de Estudos</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
 
             {/* Quick Metrics Bar */}
@@ -1288,6 +1322,23 @@ export const EditalParser: React.FC<EditalParserProps> = ({
                   placeholder="Se desejar, você também pode colar aqui trechos do edital, matérias específicas ou artigos de lei exigidos pela banca..."
                   className="w-full p-3 rounded-xl glass-input text-xs text-slate-900 dark:text-white placeholder-slate-500"
                 />
+              </div>
+
+              {/* Set as Default Exam Option */}
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20">
+                <input
+                  type="checkbox"
+                  id="setAsDefaultExamCheckbox"
+                  checked={setAsDefaultExam}
+                  onChange={(e) => setSetAsDefaultExam(e.target.checked)}
+                  className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-white/20 bg-white dark:bg-dark-surface cursor-pointer"
+                />
+                <label htmlFor="setAsDefaultExamCheckbox" className="text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer flex-1">
+                  <span className="font-bold text-indigo-600 dark:text-indigo-400">⭐ Definir como meu Edital Padrão ativo</span>
+                  <span className="block text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    Sincroniza automaticamente o ciclo de estudos semanal, simulados adaptativos e banco de questões para este concurso.
+                  </span>
+                </label>
               </div>
 
               {/* Error Banner */}

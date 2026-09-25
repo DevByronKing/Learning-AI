@@ -29,7 +29,7 @@ export const CONCURSOS_RADAR_DATA: ConcursoRadarItem[] = [
     location: 'Nacional',
     scope: 'Nacional',
     region: 'Nacional',
-    matchedEditalId: 'inss-tecnico-seguro-social-2026',
+    matchedEditalId: 'exam-inss-2026',
     keyHighlights: [
       'Direito Previdenciário representa 60% do total de pontos da prova',
       'Banca Cebraspe: modelo Certo ou Errado (uma errada anula uma certa)',
@@ -54,7 +54,7 @@ export const CONCURSOS_RADAR_DATA: ConcursoRadarItem[] = [
     scope: 'Estadual',
     region: 'Sudeste',
     stateCode: 'SP',
-    matchedEditalId: 'tjsp-escrevente-tecnico-judiciario-2026',
+    matchedEditalId: 'exam-tjsp-2026',
     keyHighlights: [
       'Maior tribunal do mundo com nomeações históricas acima das vagas',
       'Português e Normas da Corregedoria decidem a nota de corte (85%+)',
@@ -78,7 +78,7 @@ export const CONCURSOS_RADAR_DATA: ConcursoRadarItem[] = [
     location: 'Nacional',
     scope: 'Nacional',
     region: 'Nacional',
-    matchedEditalId: 'prf-policial-rodoviario-federal-2026',
+    matchedEditalId: 'exam-prf-2026',
     keyHighlights: [
       'Legislação de Trânsito (CTB e Resoluções CONTRAN) é a matéria-chave',
       'Física aplicada a colisões e Direitos Humanos com peso estratégico',
@@ -330,6 +330,7 @@ export const CONCURSOS_RADAR_DATA: ConcursoRadarItem[] = [
     location: 'Nacional (Fronteiras e Capitais)',
     scope: 'Nacional',
     region: 'Nacional',
+    matchedEditalId: 'exam-receita-2026',
     keyHighlights: [
       'Pedido formalizado junto ao MGI para reforço urgente aduaneiro',
       'Disciplinas críticas: Legislação Tributária, Aduaneira e Fluência em Dados',
@@ -352,6 +353,7 @@ export const CONCURSOS_RADAR_DATA: ConcursoRadarItem[] = [
     location: 'Nacional',
     scope: 'Nacional',
     region: 'Nacional',
+    matchedEditalId: 'exam-pf-2026',
     keyHighlights: [
       'TI (Redes, Banco de Dados e Python) e Contabilidade Geral decidem vagas',
       '120 questões estilo Certo/Errado + Redação de Atualidades de Segurança',

@@ -28,18 +28,18 @@ export function formatDateBR(dateString: string): string {
 export function getStatusColor(status: string) {
   switch (status) {
     case 'Dominado':
-      return 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+      return 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-500/30';
     case 'Instável':
-      return 'bg-amber-500/15 text-amber-400 border-amber-500/30';
+      return 'bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-400 border-amber-300 dark:border-amber-500/30';
     case 'Ponto Cego':
-      return 'bg-rose-500/15 text-rose-400 border-rose-500/30 animate-pulse';
+      return 'bg-rose-50 dark:bg-rose-500/15 text-rose-700 dark:text-rose-400 border-rose-300 dark:border-rose-500/30 animate-pulse';
     default:
-      return 'bg-slate-700/20 text-slate-400 border-slate-700/30';
+      return 'bg-slate-100 dark:bg-slate-700/20 text-slate-700 dark:text-slate-400 border-slate-300 dark:border-slate-700/30';
   }
 }
 
 export function getAccuracyBadgeColor(accuracy: number) {
-  if (accuracy >= 80) return 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20';
-  if (accuracy >= 60) return 'text-amber-400 bg-amber-500/10 border-amber-500/20';
-  return 'text-rose-400 bg-rose-500/10 border-rose-500/20';
+  if (accuracy >= 80) return 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border-emerald-300 dark:border-emerald-500/20';
+  if (accuracy >= 60) return 'text-amber-800 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border-amber-300 dark:border-amber-500/20';
+  return 'text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 border-rose-300 dark:border-rose-500/20';
 }

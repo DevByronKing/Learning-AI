@@ -1,8 +1,28 @@
 import { NextResponse } from 'next/server';
 import { AIEngine, LegalDiagnosticRequest } from '@/lib/aiEngine';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimiter';
 
 export async function POST(req: Request) {
   try {
+    const ip = getClientIp(req);
+    const { allowed, resetTime } = checkRateLimit(ip, 30, 60000);
+
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Muitas requisições de diagnóstico consecutivas. Aguarde 1 minuto.',
+          retryAfterSeconds: Math.ceil((resetTime - Date.now()) / 1000)
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil((resetTime - Date.now()) / 1000))
+          }
+        }
+      );
+    }
+
     const body = await req.json();
 
     const diagnosticReq: LegalDiagnosticRequest = {

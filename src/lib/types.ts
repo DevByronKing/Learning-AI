@@ -297,9 +297,22 @@ export type MistakeEntry = {
   revancheAttemptsCount: number;
 };
 
+export type VadeMecumDiploma =
+  | 'CF/88'
+  | 'Lei 8.112/90'
+  | 'Lei 14.230/21 (LIA)'
+  | 'Lei 14.133/21 (Licitações)'
+  | 'Lei 8.213/91 (Previdência)'
+  | 'Código Penal'
+  | 'Lei 8.906/94 (Estatuto OAB)'
+  | 'Código Penal (CP)'
+  | 'Código Tributário Nacional (CTN)'
+  | 'Código de Processo Civil (CPC)'
+  | string;
+
 export type VadeMecumArticle = {
   id: string;
-  diploma: 'CF/88' | 'Lei 8.112/90' | 'Lei 14.230/21 (LIA)' | 'Lei 14.133/21 (Licitações)' | 'Lei 8.213/91 (Previdência)' | 'Código Penal';
+  diploma: VadeMecumDiploma;
   numberStr: string;
   title: string;
   text: string;
@@ -457,6 +470,8 @@ export interface StudentProfile {
   warName?: string;
   targetCareer: 'policial' | 'fiscal' | 'tribunais' | 'administrativa' | 'juridica' | 'controle' | 'outra';
   targetExamTitle?: string;
+  targetBanca?: string;
+  weakSubject?: string;
   dailyHoursGoal: number;
   experienceLevel: 'iniciante' | 'intermediario' | 'veterano';
   guardianAnimalId: GuardianAnimalId;
