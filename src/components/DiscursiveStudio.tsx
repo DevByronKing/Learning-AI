@@ -45,8 +45,8 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
   selectedExam,
   studentProfile
 }) => {
-  const [prompts] = useState<DiscursivePrompt[]>(MOCK_DISCURSIVE_PROMPTS);
-  const [selectedPromptId, setSelectedPromptId] = useState<string>(prompts[0].id);
+  const [prompts] = useState<DiscursivePrompt[]>(MOCK_DISCURSIVE_PROMPTS || []);
+  const [selectedPromptId, setSelectedPromptId] = useState<string>(prompts[0]?.id || '');
   const [selectedAreaFilter, setSelectedAreaFilter] = useState<string>('todas');
   const [essayText, setEssayText] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -61,7 +61,15 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
 
   const evaluationRef = useRef<HTMLDivElement>(null);
 
-  const currentPrompt = prompts.find((p) => p.id === selectedPromptId) || prompts[0];
+  // Filtered prompts
+  const filteredPrompts = selectedAreaFilter === 'todas'
+    ? prompts
+    : prompts.filter((p) => p.area === selectedAreaFilter);
+
+  const currentPrompt = filteredPrompts.find((p) => p.id === selectedPromptId) 
+    || prompts.find((p) => p.id === selectedPromptId) 
+    || filteredPrompts[0] 
+    || prompts[0];
 
   // Auto-calibrar proposta de acordo com o concurso/OAB ativo
   useEffect(() => {
@@ -86,11 +94,6 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
       if (trtPrompt) setSelectedPromptId(trtPrompt.id);
     }
   }, [selectedExam]);
-
-  // Filtered prompts
-  const filteredPrompts = selectedAreaFilter === 'todas'
-    ? prompts
-    : prompts.filter((p) => p.area === selectedAreaFilter);
 
   // Timer interval
   useEffect(() => {

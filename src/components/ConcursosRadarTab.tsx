@@ -61,12 +61,14 @@ export const ConcursosRadarTab: React.FC<ConcursosRadarTabProps> = ({
     const matchesStatus = statusFilter === 'todos' || item.status === statusFilter;
     const matchesCategory = categoryFilter === 'todas' || item.category === categoryFilter;
     const matchesRegion = selectedRegion === 'todos' || item.region === selectedRegion;
+    const q = (searchQuery || '').toLowerCase();
     const matchesSearch = 
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.institution.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.banca.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.location.toLowerCase().includes(searchQuery.toLowerCase());
+      !q ||
+      (item.title || '').toLowerCase().includes(q) ||
+      (item.institution || '').toLowerCase().includes(q) ||
+      (item.role || '').toLowerCase().includes(q) ||
+      (item.banca || '').toLowerCase().includes(q) ||
+      (item.location || '').toLowerCase().includes(q);
     return matchesStatus && matchesCategory && matchesRegion && matchesSearch;
   });
 

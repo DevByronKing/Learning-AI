@@ -391,26 +391,32 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
 
   // Helper to highlight trap keywords in the text
   const renderHighlightedText = (text: string, keywords: string[]) => {
-    if (!keywords || keywords.length === 0) return text;
+    if (!text) return '';
+    const validKeywords = (keywords || []).filter((k) => typeof k === 'string' && k.trim().length > 0);
+    if (validKeywords.length === 0) return text;
 
-    const regex = new RegExp(`(${keywords.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi');
-    const parts = text.split(regex);
+    try {
+      const regex = new RegExp(`(${validKeywords.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi');
+      const parts = text.split(regex);
 
-    return parts.map((part, i) => {
-      const isKeyword = keywords.some(k => k.toLowerCase() === part.toLowerCase());
-      if (isKeyword) {
-        return (
-          <mark 
-            key={i} 
-            className="bg-amber-100 dark:bg-amber-400/25 text-amber-800 dark:text-amber-300 font-bold px-1 py-0.5 rounded border-b-2 border-amber-400 inline-block"
-            title="Palavra com altíssimo índice de adulteração pelas bancas!"
-          >
-            {part}
-          </mark>
-        );
-      }
-      return part;
-    });
+      return parts.map((part, i) => {
+        const isKeyword = validKeywords.some((k) => k.toLowerCase() === (part || '').toLowerCase());
+        if (isKeyword) {
+          return (
+            <mark 
+              key={i} 
+              className="bg-amber-100 dark:bg-amber-400/25 text-amber-800 dark:text-amber-300 font-bold px-1 py-0.5 rounded border-b-2 border-amber-400 inline-block"
+              title="Palavra com altíssimo índice de adulteração pelas bancas!"
+            >
+              {part}
+            </mark>
+          );
+        }
+        return part;
+      });
+    } catch {
+      return text;
+    }
   };
 
   // Trap Hunter Interactive Word Click

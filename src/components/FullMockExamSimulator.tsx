@@ -28,6 +28,7 @@ import {
   GraduationCap
 } from 'lucide-react';
 import { MockExam, MockExamAnswer, MockExamResult, MockExamSubjectBreakdown, Question, Flashcard, SubscriptionPlan } from '@/lib/types';
+import { calculateExamScore } from '@/lib/examScoring';
 import { MOCK_FULL_EXAMS } from '@/lib/mockData';
 
 interface FullMockExamSimulatorProps {
@@ -146,52 +147,38 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
     setIsTimerActive(false);
     setShowConfirmModal(false);
 
-    let correctCount = 0;
-    let wrongCount = 0;
-    let blankCount = 0;
-
-    const subjectsMap: Record<string, { total: number; correct: number; wrong: number; blank: number }> = {};
-
-    selectedExam.questions.forEach((q) => {
-      const ans = answers[q.id];
-      const correctOption = q.options.find((o) => o.isCorrect);
-
-      if (!subjectsMap[q.subjectName]) {
-        subjectsMap[q.subjectName] = { total: 0, correct: 0, wrong: 0, blank: 0 };
-      }
-      subjectsMap[q.subjectName].total += 1;
-
-      if (!ans || ans.selectedOptionId === null) {
-        blankCount += 1;
-        subjectsMap[q.subjectName].blank += 1;
-      } else if (ans.selectedOptionId === correctOption?.id) {
-        correctCount += 1;
-        subjectsMap[q.subjectName].correct += 1;
-      } else {
-        wrongCount += 1;
-        subjectsMap[q.subjectName].wrong += 1;
-      }
+    const scoreOutput = calculateExamScore({
+      examId: selectedExam.id,
+      examTitle: selectedExam.title,
+      banca: selectedExam.banca,
+      totalQuestions: selectedExam.questions.length,
+      scoringRule: selectedExam.scoringRule,
+      cutoffScore: selectedExam.estimatedCutoffScore,
+      answers: selectedExam.questions.map((q) => {
+        const ans = answers[q.id];
+        const correctOption = q.options.find((o) => o.isCorrect);
+        return {
+          questionId: q.id,
+          subjectName: q.subjectName,
+          selectedOption: ans?.selectedOptionId || null,
+          officialAnswer: correctOption?.id || '',
+        };
+      }),
     });
 
-    const totalQuestions = selectedExam.questions.length;
-    const answeredCount = correctCount + wrongCount;
-
-    let grossScore = 0;
-    let penaltyDeductions = 0;
-    let netScore = 0;
-
-    if (selectedExam.scoringRule === 'cebraspe_uma_anula_uma') {
-      grossScore = correctCount;
-      penaltyDeductions = wrongCount;
-      netScore = Math.max(0, correctCount - wrongCount);
-    } else {
-      grossScore = correctCount;
-      penaltyDeductions = 0;
-      netScore = correctCount;
-    }
-
-    const percentage = Math.round((netScore / totalQuestions) * 100);
-    const isAboveCutoff = percentage >= selectedExam.estimatedCutoffScore;
+    const {
+      totalQuestions,
+      answeredCount,
+      correctCount,
+      wrongCount,
+      blankCount,
+      grossScore,
+      penaltyDeductions,
+      netScore,
+      percentage,
+      isAboveCutoff,
+      subjectBreakdown,
+    } = scoreOutput;
 
     // Simulated Ranking generation
     const totalCandidates = 1420;
@@ -201,24 +188,6 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
     else if (percentage >= 70) simulatedRank = Math.floor(Math.random() * 80) + 35;
     else if (percentage >= 50) simulatedRank = Math.floor(Math.random() * 300) + 150;
     else simulatedRank = Math.floor(Math.random() * 600) + 600;
-
-    // Subject breakdown
-    const subjectBreakdown: MockExamSubjectBreakdown[] = Object.entries(subjectsMap).map(([name, data]) => {
-      const subjNet = selectedExam.scoringRule === 'cebraspe_uma_anula_uma' 
-        ? Math.max(0, data.correct - data.wrong)
-        : data.correct;
-
-      return {
-        subjectName: name,
-        total: data.total,
-        correct: data.correct,
-        wrong: data.wrong,
-        blank: data.blank,
-        grossScore: data.correct,
-        penaltyDeductions: selectedExam.scoringRule === 'cebraspe_uma_anula_uma' ? data.wrong : 0,
-        netScore: subjNet
-      };
-    });
 
     const examResult: MockExamResult = {
       mockExamId: selectedExam.id,

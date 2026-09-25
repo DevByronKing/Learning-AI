@@ -39,7 +39,9 @@ interface QuestionBankProps {
 
 // Classificação psicométrica e parâmetros TRI para a questão
 const getQuestionPsychometrics = (q: Question) => {
-  const trapText = (q.cognitiveAnalysis.commonTrap + ' ' + q.options.map(o => o.distractorReason || '').join(' ')).toLowerCase();
+  const commonTrap = q.cognitiveAnalysis?.commonTrap || '';
+  const distractorReasons = (q.options || []).map((o) => o?.distractorReason || '').join(' ');
+  const trapText = `${commonTrap} ${distractorReasons}`.toLowerCase();
   
   let distractorType: PsychometricDistractorType = 'meia_verdade';
   if (trapText.includes('absolut') || trapText.includes('sempre') || trapText.includes('nunca') || trapText.includes('exclusiv') || trapText.includes('generaliza')) {
@@ -60,16 +62,17 @@ const getQuestionPsychometrics = (q: Question) => {
 
   const distractorDef = PSYCHOMETRIC_DISTRACTORS.find(d => d.id === distractorType) || PSYCHOMETRIC_DISTRACTORS[0];
 
-  const isCebraspe = q.banca === 'Cebraspe';
+  const isCebraspe = (q.banca || '').toLowerCase().includes('cebraspe');
   const isDiff = q.difficulty === 'Difícil';
   const isEasy = q.difficulty === 'Fácil';
 
   const triDifficulty = isDiff ? 820 : isEasy ? 440 : 660; // Parâmetro b
   const triDiscrimination = isDiff ? 2.18 : isEasy ? 1.25 : 1.75; // Parâmetro a
-  const triGuessing = isCebraspe ? 0.05 : (q.options.length === 4 ? 0.25 : 0.20); // Parâmetro c
+  const triGuessing = isCebraspe ? 0.05 : ((q.options?.length || 5) === 4 ? 0.25 : 0.20); // Parâmetro c
   const trapRiskScore = isDiff ? 8.9 : isEasy ? 4.1 : 7.2;
 
-  const bancaProfile = BANCA_PSYCHOMETRIC_PROFILES.find(b => b.banca.toLowerCase() === q.banca.toLowerCase());
+  const qBanca = (q.banca || '').toLowerCase();
+  const bancaProfile = BANCA_PSYCHOMETRIC_PROFILES.find(b => (b.banca || '').toLowerCase() === qBanca);
 
   return {
     distractorType,
