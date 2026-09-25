@@ -12,7 +12,7 @@ const ipCache = new Map<string, RateLimitRecord>();
 
 // Limpeza automática periódica de IPs inativos para prevenção de vazamento de memória (RAM)
 if (typeof setInterval !== 'undefined') {
-  setInterval(() => {
+  const timer = setInterval(() => {
     const now = Date.now();
     for (const [ip, record] of ipCache.entries()) {
       if (now > record.resetTime) {
@@ -20,6 +20,9 @@ if (typeof setInterval !== 'undefined') {
       }
     }
   }, 300000); // Executa a cada 5 minutos
+  if (timer && typeof timer.unref === 'function') {
+    timer.unref();
+  }
 }
 
 /**
