@@ -20,6 +20,9 @@ import {
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
 import { trackConversion } from '@/components/TrackingScripts';
+import { analytics } from '@/lib/analytics';
+import { useExperiment, isFreemiumAllowed } from '@/lib/abTesting';
+import { useCurrency } from '@/lib/currency';
 
 interface PricingModalProps {
   isOpen: boolean;
@@ -34,16 +37,62 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   currentPlan,
   onUpgradePlan
 }) => {
+  const { currency, setCurrency, currencies, formatPrice, getPlanPrice } = useCurrency();
   const [activeTab, setActiveTab] = useState<'plans' | 'checkout'>('plans');
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('annual');
   const [selectedPlanToBuy, setSelectedPlanToBuy] = useState<SubscriptionPlan>('pro');
-  const [paymentMethod, setPaymentMethod] = useState<'pix' | 'card'>('pix');
+  const [paymentMethod, setPaymentMethod] = useState<'pix' | 'card'>('card');
+  const [commitmentMode, setCommitmentMode] = useState<'direct_charge' | 'card_trial'>('card_trial');
   const [isCopied, setIsCopied] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [transactionId, setTransactionId] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<'pending_payment' | 'confirmed'>('pending_payment');
   const [pixCode, setPixCode] = useState("00020126580014br.gov.bcb.pix0136learning-ai-concursos-pix-key520400005303986540539.905802BR5925LEARNING AI TECNOLOGIA LTDA6009SAO PAULO62070503***6304E8A9");
   const [qrCodeImg, setQrCodeImg] = useState<string | null>("https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020126580014br.gov.bcb.pix0136learning-ai-concursos-pix-key520400005303986540539.905802BR5925LEARNINGAI");
+
+  // Ativação do Trial com Cartão de Crédito Obrigatório (Pilar 1 - Opção b)
+  const handleStartCardTrial = async () => {
+    setIsProcessing(true);
+    const txId = `trial_${Date.now()}`;
+    const trialEndsAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    
+    // Cookie de autorização Edge para liberar o middleware
+    document.cookie = `learning_ai_user_access=${encodeURIComponent(JSON.stringify({
+      status: 'trial_ativo',
+      isPayingOrCommitted: true,
+      trialEndsAt,
+      planId: selectedPlanToBuy
+    }))}; Path=/; Max-Age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+
+    try {
+      localStorage.setItem('learning_ai_subscription_detail', JSON.stringify({
+        planId: selectedPlanToBuy,
+        status: 'trial_ativo',
+        trialEndsAt,
+        isPayingOrCommitted: true,
+        currentPeriodEnd: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR'),
+        autoRenew: true,
+        billingCycle: 'mensal',
+        paymentMethodDesc: 'Cartão de Crédito •••• 8821 (Trial 7 Dias)',
+        invoices: []
+      }));
+    } catch {}
+
+    analytics.track('subscription_activated', {
+      planId: selectedPlanToBuy,
+      type: 'trial_credit_card',
+      amount: 0,
+      isTrial: true,
+      trialDurationDays: 7,
+      provider: 'stripe_card_validation'
+    });
+
+    onUpgradePlan(selectedPlanToBuy);
+    setTimeout(() => {
+      setIsProcessing(false);
+      onClose();
+    }, 1200);
+  };
 
   // Buscar / Criar cobrança ao abrir ou alternar parâmetros
   useEffect(() => {
@@ -115,6 +164,11 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
   const handleSelectPlanAndGoToCheckout = (plan: SubscriptionPlan) => {
     setSelectedPlanToBuy(plan);
+    analytics.track('paywall_cta_clicked', {
+      planId: plan,
+      billingCycle,
+      source: 'pricing_modal',
+    });
     if (plan === 'aspirante') {
       onUpgradePlan('aspirante');
       onClose();
@@ -126,16 +180,45 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   // Disparo do Webhook de confirmação (simulação de retorno bancário)
   const handleTriggerWebhook = async () => {
     setIsProcessing(true);
+    const txId = transactionId || `tx_${Date.now()}`;
     try {
       await fetch('/api/webhooks/payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           action: 'simulate_confirmation', 
-          transactionId: transactionId || `tx_${Date.now()}` 
+          transactionId: txId 
         })
       });
       setPaymentStatus('confirmed');
+
+      // Cookie de autorização Edge para liberar o middleware com assinatura ativa
+      document.cookie = `learning_ai_user_access=${encodeURIComponent(JSON.stringify({
+        status: 'ativa',
+        isPayingOrCommitted: true,
+        planId: selectedPlanToBuy
+      }))}; Path=/; Max-Age=${30 * 24 * 60 * 60}; SameSite=Lax`;
+
+      try {
+        localStorage.setItem('learning_ai_subscription_detail', JSON.stringify({
+          planId: selectedPlanToBuy,
+          status: 'ativa',
+          isPayingOrCommitted: true,
+          currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR'),
+          autoRenew: true,
+          billingCycle,
+          paymentMethodDesc: paymentMethod === 'pix' ? 'Pix Imediato' : 'Cartão de Crédito',
+          invoices: []
+        }));
+      } catch {}
+
+      analytics.track('subscription_activated', {
+        planId: selectedPlanToBuy,
+        transactionId: txId,
+        provider: paymentMethod === 'pix' ? 'pix_asaas' : 'stripe_direct_card',
+        amount: selectedPlanToBuy === 'pro' ? 29.90 : selectedPlanToBuy === 'elite' ? 49.90 : 97.00,
+        isTrial: false,
+      });
       onUpgradePlan(selectedPlanToBuy);
       setTimeout(() => {
         setIsProcessing(false);
@@ -146,32 +229,35 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     }
   };
 
+  const proPricing = getPlanPrice('pro', billingCycle);
+  const elitePricing = getPlanPrice('elite', billingCycle);
+
   const planPrices: Record<SubscriptionPlan, { price: string; period: string; annualTotal: string }> = {
-    aspirante: { price: 'R$ 0', period: '/ sempre', annualTotal: 'Totalmente gratuito' },
+    aspirante: { price: formatPrice(0), period: '/ sempre', annualTotal: 'Totalmente gratuito' },
     lancamento: {
-      price: 'R$ 97',
+      price: formatPrice(currency === 'BRL' ? 97 : currency === 'USD' ? 29 : 27),
       period: 'único',
       annualTotal: 'Passe de Lançamento: Acesso total até a sua prova (200 vagas)'
     },
     pro: {
-      price: billingCycle === 'annual' ? 'R$ 39,90' : 'R$ 59,90',
+      price: proPricing.formatted,
       period: '/ mês',
-      annualTotal: billingCycle === 'annual' ? 'R$ 478,80/ano no Pix/Cartão' : 'Cobrança mensal sem fidelidade'
+      annualTotal: billingCycle === 'annual' ? `${formatPrice(proPricing.value * 12)}/ano no Pix/Cartão` : 'Cobrança mensal sem fidelidade'
     },
     elite: {
-      price: billingCycle === 'annual' ? 'R$ 89,90' : 'R$ 129,90',
+      price: elitePricing.formatted,
       period: '/ mês',
-      annualTotal: billingCycle === 'annual' ? 'R$ 1.078,80/ano no Pix/Cartão' : 'Cobrança mensal sem fidelidade'
+      annualTotal: billingCycle === 'annual' ? `${formatPrice(elitePricing.value * 12)}/ano no Pix/Cartão` : 'Cobrança mensal sem fidelidade'
     },
     black: {
-      price: 'R$ 1.497',
+      price: formatPrice(currency === 'BRL' ? 1497 : currency === 'USD' ? 297 : 279),
       period: 'único',
-      annualTotal: 'Acesso Vitalício até a posse (12x R$ 149,70 ou R$ 197/mês)'
+      annualTotal: 'Acesso Vitalício até a posse (12x sem juros)'
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-fadeIn">
+    <div className="fixed inset-0 z-[110] bg-slate-900/60 dark:bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-fadeIn">
       <div className="glass-panel w-full max-w-5xl rounded-3xl border border-slate-200 dark:border-indigo-500/30 relative shadow-2xl my-auto overflow-hidden bg-white/95 dark:bg-dark-surface/95 transition-all">
         
         {/* Close Button */}
@@ -198,33 +284,54 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             </div>
           </div>
 
-          {/* Tab Pill Switcher */}
-          <div className="inline-flex p-1 rounded-2xl bg-slate-100 dark:bg-dark-card border border-slate-200 dark:border-white/10 self-start sm:self-auto">
-            <button
-              onClick={() => setActiveTab('plans')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                activeTab === 'plans'
-                  ? 'bg-indigo-600 text-white shadow-md'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>1. Escolher Plano</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('checkout')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                activeTab === 'checkout'
-                  ? 'bg-indigo-600 text-white shadow-md'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <BadgeCheck className="w-3.5 h-3.5" />
-              <span>2. Checklist & Pagamento</span>
-              {selectedPlanToBuy !== 'aspirante' && (
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              )}
-            </button>
+          <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+            {/* Multi-Currency Selector */}
+            <div className="inline-flex p-1 rounded-2xl bg-slate-100 dark:bg-dark-card border border-slate-200 dark:border-white/10">
+              {currencies.map((curr) => (
+                <button
+                  key={curr.code}
+                  onClick={() => setCurrency(curr.code)}
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 ${
+                    currency === curr.code
+                      ? 'bg-indigo-600 text-white shadow-sm'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                  title={curr.name}
+                >
+                  <span className="text-xs">{curr.flag}</span>
+                  <span className="font-mono text-[11px]">{curr.code}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Tab Pill Switcher */}
+            <div className="inline-flex p-1 rounded-2xl bg-slate-100 dark:bg-dark-card border border-slate-200 dark:border-white/10">
+              <button
+                onClick={() => setActiveTab('plans')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  activeTab === 'plans'
+                    ? 'bg-indigo-600 text-white shadow-md'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>1. Escolher Plano</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('checkout')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  activeTab === 'checkout'
+                    ? 'bg-indigo-600 text-white shadow-md'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <BadgeCheck className="w-3.5 h-3.5" />
+                <span>2. Checklist & Pagamento</span>
+                {selectedPlanToBuy !== 'aspirante' && (
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -437,7 +544,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
               {/* PLANO BLACK VITALÍCIO (MEMBRO FUNDADOR) */}
               <div
-                className="p-6 rounded-3xl border-2 border-amber-400 bg-gradient-to-b from-slate-950 via-[#0c1222] to-slate-950 text-white relative shadow-2xl flex flex-col justify-between"
+                className="preserve-dark p-6 rounded-3xl border-2 border-amber-400 bg-gradient-to-b from-slate-950 via-[#0c1222] to-slate-950 text-white relative shadow-2xl flex flex-col justify-between"
               >
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-lg flex items-center gap-1">
                   <Sparkles className="w-3 h-3 fill-slate-950" />
@@ -499,15 +606,17 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
             </div>
 
-            {/* Link para versão gratuita no rodapé */}
-            <div className="text-center pt-2">
-              <button
-                onClick={() => handleSelectPlanAndGoToCheckout('aspirante')}
-                className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 underline font-medium"
-              >
-                Prefere apenas testar? Continuar com o Plano Gratuito Aspirante (10 questões/dia)
-              </button>
-            </div>
+            {/* Link para versão gratuita no rodapé - Bloqueado por Padrão pela Trava de Escala (Pilar 4) */}
+            {isFreemiumAllowed() && (
+              <div className="text-center pt-2">
+                <button
+                  onClick={() => handleSelectPlanAndGoToCheckout('aspirante')}
+                  className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 underline font-medium"
+                >
+                  Prefere apenas testar? Continuar com o Plano Gratuito Aspirante (10 questões/dia)
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -543,6 +652,46 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Trocar Plano</span>
               </button>
+            </div>
+
+            {/* Pilar 1: Duas Opções de Compromisso Financeiro (Direta vs. Trial com Cartão) */}
+            <div className="p-4 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider block">
+                  Modelo de Compromisso Inicial:
+                </span>
+                <span className="text-[11px] text-slate-600 dark:text-slate-400">
+                  {commitmentMode === 'card_trial'
+                    ? 'Opção B: 7 Dias Grátis com Cartão Obrigatório (R$ 0,00 hoje, cancele quando quiser)'
+                    : 'Opção A: Assinatura Direta (Cobrança imediata com 7 dias de garantia incondicional CDC)'}
+                </span>
+              </div>
+              <div className="inline-flex p-1 rounded-2xl bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/10 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => { setCommitmentMode('card_trial'); setPaymentMethod('card'); }}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    commitmentMode === 'card_trial'
+                      ? 'bg-indigo-600 text-white shadow-md'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <CreditCard className="w-3.5 h-3.5" />
+                  <span>Free Trial (Cartão Obrigatório)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCommitmentMode('direct_charge')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    commitmentMode === 'direct_charge'
+                      ? 'bg-indigo-600 text-white shadow-md'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <Zap className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Assinatura Direta</span>
+                </button>
+              </div>
             </div>
 
             {/* Grid 2 Columns: Checklist (Left) & Payment Form (Right) */}
@@ -707,9 +856,31 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                   </div>
                 )}
 
-                {/* CARD FLOW */}
+                {/* CARD FLOW (Assinatura Direta vs. Free Trial com Cartão Obrigatório) */}
                 {paymentMethod === 'card' && (
-                  <div className="space-y-3">
+                  <div className="space-y-4">
+                    {commitmentMode === 'card_trial' ? (
+                      <div className="p-3.5 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-500/30 space-y-1.5 text-xs">
+                        <div className="flex items-center gap-1.5 text-indigo-700 dark:text-indigo-300 font-black">
+                          <CreditCard className="w-4 h-4 text-indigo-500" />
+                          <span>Validação Antifraude Obrigatória • R$ 0,00 Hoje</span>
+                        </div>
+                        <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                          Para mantermos o foco exclusivo em alunos comprometidos e sustentar nossos modelos de IA, exigimos validação de cartão de crédito. Cobrança de <strong>{planPrices[selectedPlanToBuy].price}</strong> apenas no 7º dia. Cancele em 1 clique no painel a qualquer momento.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="p-3.5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-500/30 space-y-1 text-xs">
+                        <div className="flex items-center gap-1.5 text-emerald-800 dark:text-emerald-300 font-black">
+                          <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                          <span>Cobrança Imediata com Garantia Incondicional</span>
+                        </div>
+                        <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                          Acesso completo liberado instantaneamente. Garantia incondicional de reembolso integral em até 7 dias (Art. 49 CDC).
+                        </p>
+                      </div>
+                    )}
+
                     <div className="space-y-2">
                       <input
                         type="text"
@@ -739,14 +910,45 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                       </div>
                     </div>
 
-                    <button
-                      onClick={handleTriggerWebhook}
-                      disabled={isProcessing}
-                      className="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all"
-                    >
-                      <Crown className="w-4 h-4" />
-                      <span>Concluir Assinatura Segura</span>
-                    </button>
+                    {commitmentMode === 'card_trial' ? (
+                      <button
+                        type="button"
+                        onClick={handleStartCardTrial}
+                        disabled={isProcessing}
+                        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-extrabold text-xs shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"
+                      >
+                        {isProcessing ? (
+                          <>
+                            <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <span>Validando Cartão no Gateway...</span>
+                          </>
+                        ) : (
+                          <>
+                            <CreditCard className="w-4 h-4 text-emerald-300" />
+                            <span>Validar Cartão & Iniciar 7 Dias Grátis (R$ 0 Hoje)</span>
+                          </>
+                        )}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleTriggerWebhook}
+                        disabled={isProcessing}
+                        className="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"
+                      >
+                        {isProcessing ? (
+                          <>
+                            <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <span>Processando Cobrança...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Crown className="w-4 h-4 text-amber-300" />
+                            <span>Concluir Assinatura Imediata ({planPrices[selectedPlanToBuy].price})</span>
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
                 )}
 

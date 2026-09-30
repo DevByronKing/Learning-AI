@@ -85,4 +85,50 @@ describe('Ciclo de Feedback & Teste de PMF (Sean Ellis)', () => {
     expect(savedSkip).toBeGreaterThan(now);
     expect(savedSkip - now).toBeLessThanOrEqual(twoDaysMs);
   });
+
+  it('Pilar 2: deve anexar is_paying_or_committed nos tickets de suporte para qualificação', () => {
+    const ticket = {
+      id: 'ticket-001',
+      date: new Date().toISOString(),
+      studentName: 'Lucas Pagante',
+      targetExam: 'Polícia Federal',
+      currentTab: 'Simulado',
+      category: 'Dúvida na questão',
+      rating: 5,
+      message: 'Explicação do Copiloto no simulado',
+      is_paying_or_committed: true,
+      prioritySla: 'alta_prioridade_1h',
+    };
+
+    localStorage.setItem('learning_ai_support_tickets', JSON.stringify([ticket]));
+
+    const tickets = JSON.parse(localStorage.getItem('learning_ai_support_tickets') || '[]');
+    expect(tickets.length).toBe(1);
+    expect(tickets[0].is_paying_or_committed).toBe(true);
+    expect(tickets[0].prioritySla).toBe('alta_prioridade_1h');
+  });
+
+  it('Pilar 3: deve estruturar e persistir o diagnóstico de churn com módulo e motivo', () => {
+    const churnPayload = {
+      userId: 'user_123',
+      planId: 'pro',
+      isTrial: true,
+      daysActive: 6,
+      failedModule: 'copiloto_cognitivo',
+      churnReason: 'explicacao_ia_insuficiente',
+      feedbackText: 'Faltou aprofundar na jurisprudência do STJ',
+      retentionOfferPresented: true,
+      retentionOfferAccepted: false,
+      timestamp: new Date().toISOString(),
+    };
+
+    localStorage.setItem('learning_ai_churn_diagnostics', JSON.stringify([churnPayload]));
+
+    const stored = JSON.parse(localStorage.getItem('learning_ai_churn_diagnostics') || '[]');
+    expect(stored.length).toBe(1);
+    expect(stored[0].failedModule).toBe('copiloto_cognitivo');
+    expect(stored[0].churnReason).toBe('explicacao_ia_insuficiente');
+    expect(stored[0].retentionOfferAccepted).toBe(false);
+  });
 });
+

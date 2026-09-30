@@ -38,6 +38,14 @@ export async function POST(req: NextRequest) {
 
     // 2. Webhook Oficial Asaas (https://docs.asaas.com/docs/webhook-para-cobrancas)
     if (body.event && body.payment) {
+      // Validação de Segurança Criptográfica do Token do Asaas em Produção
+      const asaasToken = req.headers.get('asaas-access-token');
+      const expectedToken = process.env.ASAAS_WEBHOOK_SECRET;
+      if (process.env.NODE_ENV === 'production' && expectedToken && asaasToken !== expectedToken) {
+        console.warn('[Asaas Webhook Security] Token de webhook inválido ou ausente:', asaasToken);
+        return NextResponse.json({ success: false, error: 'Assinatura de webhook não autorizada.' }, { status: 401 });
+      }
+
       const { event, payment } = body;
       const eventId = body.id || `asaas_${payment.id}_${event}`;
       console.log(`[Asaas Webhook] Evento recebido: ${event} para pagamento ${payment.id} (EventID: ${eventId})`);

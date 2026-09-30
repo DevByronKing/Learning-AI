@@ -467,6 +467,7 @@ export interface GuardianAnimal {
 
 export interface StudentProfile {
   name: string;
+  email?: string;
   warName?: string;
   targetCareer: 'policial' | 'fiscal' | 'tribunais' | 'administrativa' | 'juridica' | 'controle' | 'outra';
   targetExamTitle?: string;
@@ -620,12 +621,27 @@ export interface InvoiceEntry {
 
 export interface SubscriptionDetail {
   planId: SubscriptionPlan;
-  status: 'ativa' | 'cancelada' | 'expirada' | 'pendente';
+  status: 'ativa' | 'cancelada' | 'expirada' | 'pendente' | 'trial_ativo';
   currentPeriodEnd: string;
   autoRenew: boolean;
   billingCycle: 'mensal' | 'trimestral' | 'anual' | 'vitalicio';
   paymentMethodDesc: string;
+  trialEndsAt?: string;
+  isPayingOrCommitted?: boolean;
   invoices: InvoiceEntry[];
+}
+
+export interface PaidUserChurnFeedback {
+  userId?: string;
+  planId: SubscriptionPlan;
+  isTrial: boolean;
+  daysActive?: number;
+  failedModule: string;
+  churnReason: string;
+  feedbackText: string;
+  retentionOfferPresented: boolean;
+  retentionOfferAccepted: boolean;
+  timestamp: string;
 }
 
 export interface CouponDiscount {

@@ -46,10 +46,15 @@ export const RetentionFunnelDashboard: React.FC = () => {
     setRecentEvents(analytics.getEvents().slice(0, 8));
 
     const unsubscribe = analytics.subscribe((newEvent) => {
-      setEventCounts(prev => ({
-        ...prev,
-        [newEvent.event]: (prev[newEvent.event] || 0) + 1,
-      }));
+      setEventCounts(prev => {
+        if (newEvent.event in prev) {
+          return {
+            ...prev,
+            [newEvent.event]: ((prev as any)[newEvent.event] || 0) + 1,
+          };
+        }
+        return prev;
+      });
       setRecentEvents(prev => [newEvent, ...prev].slice(0, 8));
     });
 

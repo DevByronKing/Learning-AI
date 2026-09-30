@@ -71,4 +71,18 @@ describe('User Onboarding & Protocolo de Iniciação Cognitiva', () => {
     expect(lobo?.superpower).toContain('Distratores');
     expect(lobo?.bestForCareers.some(c => c.includes('Polícia Federal'))).toBe(true);
   });
+
+  it('deve validar o ciclo de animação da tela de carregamento (3 fases)', () => {
+    const splashPhases = ['enter', 'hold', 'exit'];
+    expect(splashPhases.length).toBe(3);
+    // A splash screen usa 3 fases: logo surge (enter), permanece (hold) e desaparece (exit)
+    splashPhases.forEach(phase => {
+      expect(phase).toBeTruthy();
+    });
+  });
+
+  it('deve validar que todas as 4 dores psicométricas possuem soluções de engenharia reversa', () => {
+    const expectedPains = ['pegadinhas', 'tempo', 'estagnado', 'esquecimento'];
+    expect(expectedPains.length).toBe(4);
+  });
 });

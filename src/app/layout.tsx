@@ -85,7 +85,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang="pt-BR" data-theme="light" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -97,9 +97,10 @@ export default function RootLayout({
               (function() {
                 try {
                   var saved = localStorage.getItem('learning_ai_theme');
-                  var theme = saved || 'dark';
+                  var theme = saved || 'light';
                   document.documentElement.classList.remove('light', 'dark');
                   document.documentElement.classList.add(theme);
+                  document.documentElement.setAttribute('data-theme', theme);
                 } catch(e) {}
               })();
             `,

@@ -247,17 +247,17 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
       </div>
 
       {/* CARD VIP: PLANO BLACK VITALÍCIO */}
-      <div className="mt-12 relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950/40 border-2 border-amber-500/50 text-white shadow-2xl">
+      <div className="preserve-dark mt-12 relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950/40 border-2 border-amber-500/50 text-white shadow-2xl">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-black uppercase tracking-wider">
               <Crown className="w-3.5 h-3.5 fill-amber-300" />
               <span>Acesso Até a Posse • Edição Black</span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-white">
+            <h3 className="text-2xl sm:text-3xl font-black text-white drop-shadow-sm">
               Plano BLACK VITALÍCIO
             </h3>
-            <p className="text-slate-300 text-xs sm:text-sm max-w-2xl leading-relaxed">
+            <p className="text-slate-200 text-xs sm:text-sm max-w-2xl leading-relaxed font-medium">
               Pague uma única vez e nunca mais compre cursos ou plataformas. Tenha acesso perpétuo irrestrito a todas as ferramentas, IAs e atualizações até ser nomeado no Diário Oficial.
             </p>
           </div>
@@ -269,7 +269,7 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
                 <span className="text-4xl font-black text-white">R$ 1.497</span>
                 <span className="text-xs font-bold text-amber-400">/ único</span>
               </div>
-              <p className="text-[11px] text-slate-400">ou R$ 197/mês no plano recorrente</p>
+              <p className="text-[11px] text-amber-200/90 font-medium">ou R$ 197/mês no plano recorrente</p>
             </div>
 
             <button
@@ -280,7 +280,7 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
               }}
               className="w-full lg:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-sm tracking-wide shadow-lg shadow-amber-500/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-4 h-4 fill-slate-950" />
               <span>Garantir Acesso Vitalício Black</span>
             </button>
           </div>

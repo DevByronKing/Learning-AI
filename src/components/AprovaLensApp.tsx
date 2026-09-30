@@ -15,6 +15,9 @@ import { FloatingDockNavigation } from '@/components/FloatingDockNavigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Sparkles } from 'lucide-react';
 import { GlobalExamContextBar } from '@/components/GlobalExamContextBar';
+import { FloatingContactSupport } from '@/components/FloatingContactSupport';
+import { InitialLoadingScreen } from '@/components/InitialLoadingScreen';
+import { analytics } from '@/lib/analytics';
 
 // Code Splitting Dinâmico de Abas Pesadas (Performance Otimizada)
 const EditalParser = dynamic(
@@ -122,7 +125,7 @@ export function AprovaLensApp() {
   const [flashcards, setFlashcards] = useState<Flashcard[]>(INITIAL_FLASHCARDS);
   const [mistakes, setMistakes] = useState<MistakeEntry[]>(INITIAL_MISTAKES);
   const [plan, setPlan] = useState<SubscriptionPlan>('aspirante');
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [theme, setTheme] = useState<'dark' | 'light'>('light');
   const [isPricingOpen, setIsPricingOpen] = useState(false);
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [isAdminIngestOpen, setIsAdminIngestOpen] = useState(false);
@@ -138,6 +141,35 @@ export function AprovaLensApp() {
   // Navigation Style Mode: 'sidebar' (Opção 1) | 'megamenu' (Opção 2) | 'dock' (Opção 3)
   const [navMode, setNavMode] = useState<'sidebar' | 'megamenu' | 'dock'>('dock');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  // Tela de Carregamento Inicial (5s com a Logo Oficial do Site)
+  const [showInitialSplash, setShowInitialSplash] = useState(true);
+
+  const handleFinishSplash = () => {
+    setShowInitialSplash(false);
+    try {
+      sessionStorage.setItem('learning_ai_splash_shown', 'true');
+    } catch {}
+
+    // Em modo de testes automatizados (Playwright/CI), não abre modal sem clique explícito
+    const isTestEnv = typeof window !== 'undefined' && Boolean(
+      window.navigator.webdriver ||
+      window.location.search.includes('test=1') ||
+      (window as any).__E2E__
+    );
+
+    if (!isTestEnv) {
+      try {
+        const onboardingCompleted = localStorage.getItem('learning_ai_onboarding_completed');
+        const savedProfile = localStorage.getItem('aprovalens_student_profile');
+        if (!onboardingCompleted && !savedProfile) {
+          setTimeout(() => {
+            setIsOnboardingTerminalOpen(true);
+          }, 1000);
+        }
+      } catch {}
+    }
+  };
 
   // Load from LocalStorage if available
   useEffect(() => {
@@ -189,8 +221,8 @@ export function AprovaLensApp() {
         setDailyAiCount(parseInt(savedCount, 10) || 0);
       }
 
-      // Carregar preferência de tema (Claro / Escuro)
-      const savedTheme = (localStorage.getItem('learning_ai_theme') as 'dark' | 'light') || 'dark';
+      // Carregar preferência de tema (Claro / Escuro - Padrão: Claro)
+      const savedTheme = (localStorage.getItem('learning_ai_theme') as 'dark' | 'light') || 'light';
       setTheme(savedTheme);
       // Aplica classes de tema: 'dark' para Tailwind dark: + CSS vars, 'light' para CSS vars html.light
       document.documentElement.classList.remove('light', 'dark');
@@ -224,14 +256,13 @@ export function AprovaLensApp() {
             showToast(`Edital carregado: ${matchingExam.title}`);
           }
         }
-      }
 
-      // Se for a primeira visita do concurseiro, acolher com o Onboarding automaticamente após breve delay
-      const onboardingCompleted = localStorage.getItem('learning_ai_onboarding_completed');
-      if (!onboardingCompleted && !savedProfile) {
-        setTimeout(() => {
-          setIsOnboardingTerminalOpen(true);
-        }, 1200);
+        // Se o middleware redirecionar exigindo paywall
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('paywall') === 'required') {
+          setIsPricingOpen(true);
+          showToast('🔒 Acesso exclusivo: Assine ou inicie seu período de 7 dias com cartão.');
+        }
       }
 
       // Listener para abertura manual da pesquisa de PMF (via Configurações/Ajuda)
@@ -252,13 +283,41 @@ export function AprovaLensApp() {
     showToast(`Estilo alterado para: ${label}`);
   };
 
-  // Transição de abas: Rolagem suave automática para o topo ao trocar de módulo
+  // Transição de abas: Rolagem suave automática para o topo e atualização dinâmica do título da página
   useEffect(() => {
     if (typeof window !== 'undefined') {
       window.scrollTo({
         top: 0,
         left: 0,
         behavior: 'smooth',
+      });
+      const titles: Record<string, string> = {
+        landing: 'Learning AI — O Copiloto Cognitivo para Concursos, OAB e ENEM',
+        dashboard: 'Cockpit de Dados & Heatmap 365d | Learning AI',
+        simulator: 'Arena de Combate (Simulador 60/40) | Learning AI',
+        flashcards: 'SRS Flashcards 3D (Repetição Espaçada) | Learning AI',
+        mistakes: 'Caderno de Erros Inteligente & Revanche | Learning AI',
+        vademecum: 'Smart Vade Mecum & Lei Seca | Learning AI',
+        questions: 'Banco de Questões Comentadas | Learning AI',
+        edital: 'Edital Verticalizado por IA | Learning AI',
+        cycle: 'Ciclos de Estudo Adaptativos (Meirelles) | Learning AI',
+        discursivas: 'Estúdio de Redação & Peças OAB | Learning AI',
+        summaries: 'Resumos Inteligentes 80/20 | Learning AI',
+        resumos: 'Resumos Inteligentes 80/20 | Learning AI',
+        psychometrics: 'Psicometria TRI da Banca | Learning AI',
+        radar: 'Radar de Concursos 2026 | Learning AI',
+        guide: 'Guia do Aluno & Metodologia | Learning AI',
+        'pricing-plans': 'Planos & Assinaturas | Learning AI',
+        settings: 'Configurações do Aluno | Learning AI',
+        checkout: 'Checkout Seguro | Learning AI',
+        subscription: 'Gerenciar Assinatura | Learning AI',
+        help: 'Ajuda & Suporte | Learning AI',
+      };
+      const pageTitle = titles[activeTab] || 'Learning AI — Copiloto Cognitivo';
+      document.title = pageTitle;
+      analytics.track('pageview', {
+        tab: activeTab,
+        title: pageTitle,
       });
     }
   }, [activeTab]);
@@ -974,13 +1033,20 @@ export function AprovaLensApp() {
             }
           }
 
-          if (destinationTab) {
-            setActiveTab(destinationTab);
-          }
-
-          showToast(`🎯 Passaporte Cognitivo ativado! Bem-vindo(a), ${newProfile.warName || newProfile.name}!`);
+          // DIRETRIZ DE PRODUTO (Pilar 1): Funil 100% Linear sem Ramificações Gratuitas
+          // Ao concluir o onboarding, direciona 100% dos usuários imediatamente para a tela de conversão
+          setIsPricingOpen(true);
+          showToast(`🎯 Diagnóstico concluído! Escolha seu plano com garantia de 7 dias ou teste com cartão de crédito.`);
         }}
       />
+
+      {/* Splash: Logo surge animado e desaparece */}
+      {showInitialSplash && (
+        <InitialLoadingScreen
+          durationMs={3000}
+          onFinish={handleFinishSplash}
+        />
+      )}
 
       {/* Pesquisa de PMF In-App - Sean Ellis Test */}
       <SeanEllisSurveyModal
@@ -994,24 +1060,35 @@ export function AprovaLensApp() {
       {/* Botão Flutuante de Rolagem Suave para o Topo */}
       <ScrollToTop />
 
-      {/* Botão Flutuante Temporário para Testar e Iniciar o Onboarding a Qualquer Momento */}
-      <div className="fixed top-20 right-4 sm:top-22 sm:right-6 z-[60] flex items-center gap-2">
-        <button
-          onClick={() => setIsOnboardingTerminalOpen(true)}
-          className="group relative flex items-center gap-2 px-3.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white font-black text-xs tracking-wide shadow-xl shadow-blue-500/30 border border-white/20 transition-all transform hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-md"
-          title="Clique para testar e abrir o Onboarding do Usuário a qualquer momento"
-        >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
-          </span>
-          <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-          <span>Testar Onboarding</span>
-          <span className="px-1.5 py-0.2 rounded bg-white/20 text-[9px] font-mono font-bold uppercase tracking-wider">
-            DEV
-          </span>
-        </button>
-      </div>
+      {/* Suporte Direto 1-a-1 & Floating WhatsApp (Pilar 2: Qualificação com is_paying_or_committed) */}
+      <FloatingContactSupport
+        currentTab={activeTab}
+        targetExam={selectedExam?.title || studentProfile?.targetExamTitle || 'Concurso Público'}
+        studentName={studentProfile?.warName || studentProfile?.name || 'Estudante'}
+        theme={theme}
+        isPayingOrCommitted={plan !== 'aspirante'}
+      />
+
+      {/* Botão Flutuante de Onboarding: Apenas para testes com flag explícita na URL (?dev=1) */}
+      {typeof window !== 'undefined' && window.location.search.includes('dev=1') && (
+        <div className="fixed top-20 right-4 sm:top-22 sm:right-6 z-[60] flex items-center gap-2">
+          <button
+            onClick={() => setIsOnboardingTerminalOpen(true)}
+            className="group relative flex items-center gap-2 px-3.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white font-black text-xs tracking-wide shadow-xl shadow-blue-500/30 border border-white/20 transition-all transform hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-md"
+            title="Clique para testar e abrir o Onboarding do Usuário a qualquer momento"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+            </span>
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span>Testar Onboarding</span>
+            <span className="px-1.5 py-0.2 rounded bg-white/20 text-[9px] font-mono font-bold uppercase tracking-wider">
+              DEV
+            </span>
+          </button>
+        </div>
+      )}
 
       {/* Dock Flutuante Inferior Exclusivo */}
       <FloatingDockNavigation

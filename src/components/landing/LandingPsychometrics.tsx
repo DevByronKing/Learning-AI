@@ -1,5 +1,5 @@
 import React from 'react';
-import { Microscope, BrainCircuit, Target, ShieldCheck, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Microscope, BrainCircuit, Target, ShieldCheck, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
 
 interface LandingPsychometricsProps {
   onOpenPsychometrics?: () => void;
@@ -86,34 +86,67 @@ export const LandingPsychometrics: React.FC<LandingPsychometricsProps> = ({
       </div>
 
       {/* Interactive Showcase Banner */}
-      <div className="glass-panel p-8 sm:p-12 rounded-[2rem] border border-cyan-500/30 bg-gradient-to-r from-slate-900/90 via-indigo-950/50 to-slate-900/90 shadow-2xl relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-10">
-        <div className="space-y-4 text-center sm:text-left flex-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-cyan-500/20 text-cyan-300 text-xs font-bold uppercase tracking-wider">
-            ★ Módulo Inédito no Brasil
+      <div className="preserve-dark p-8 sm:p-12 rounded-[2.5rem] border-2 border-cyan-500/40 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
+        {/* Glow behind */}
+        <div className="absolute -right-20 -top-20 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="space-y-4 text-center sm:text-left flex-1 relative z-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-xs font-black uppercase tracking-wider shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-300" />
+            <span>Módulo Inédito no Brasil</span>
           </div>
-          <h4 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white leading-tight">
+          <h4 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white leading-tight drop-shadow-sm">
             Conheça o Laboratório de Psicometria das Bancas
           </h4>
-          <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed font-medium">
             Compare a distribuição dos distratores, visualize sua taxa de vulnerabilidade pessoal e veja os antídotos em ação com análise preditiva.
           </p>
-          <div className="flex flex-wrap items-center gap-5 pt-4 text-sm font-medium text-slate-400 justify-center sm:justify-start">
-            <span className="flex items-center gap-1.5"><span className="text-xl">🔬</span> <strong className="text-white">18.400+</strong> Itens Classificados</span>
-            <span className="opacity-50">•</span>
-            <span className="flex items-center gap-1.5"><span className="text-xl">⚡</span> <strong className="text-white">8</strong> Tipos Decodificados</span>
-            <span className="opacity-50">•</span>
-            <span className="flex items-center gap-1.5"><span className="text-xl">🛡️</span> <strong className="text-white">-34%</strong> Erros por Desatenção</span>
+          <div className="flex flex-wrap items-center gap-3 pt-3 text-xs font-bold text-slate-200 justify-center sm:justify-start">
+            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 shadow-sm">
+              <span>🔬</span> <strong className="text-cyan-300">18.400+</strong> Itens Classificados
+            </span>
+            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 shadow-sm">
+              <span>⚡</span> <strong className="text-amber-300">8</strong> Tipos Decodificados
+            </span>
+            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 shadow-sm">
+              <span>🛡️</span> <strong className="text-emerald-300">-34%</strong> Erros por Desatenção
+            </span>
           </div>
         </div>
 
-        <button
-          onClick={onOpenPsychometrics || onStartEdital}
-          className="shrink-0 px-8 py-5 rounded-2xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-lg flex items-center gap-3 shadow-xl shadow-cyan-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] glow-brand"
-        >
-          <Microscope className="w-5 h-5" />
-          <span>Explorar Psicometria</span>
-          <ArrowRight className="w-5 h-5" />
-        </button>
+        {/* Live Visual Preview & CTA on the right */}
+        <div className="flex flex-col sm:flex-row lg:flex-col items-center gap-4 shrink-0 w-full sm:w-auto relative z-10">
+          <div className="w-full sm:w-72 p-4 rounded-2xl bg-white/[0.08] backdrop-blur-md border border-cyan-400/30 text-xs space-y-2.5 shadow-xl">
+            <div className="flex items-center justify-between text-[11px] font-mono font-bold text-cyan-300">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                MODELO TRI 3PL
+              </span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-200 border border-cyan-400/30 font-bold">CALIBRADO</span>
+            </div>
+            <div className="flex items-baseline justify-between pt-1">
+              <span className="text-slate-300 text-xs font-medium">Score Psicométrico:</span>
+              <span className="text-xl font-black text-white font-mono">842.5 <span className="text-[11px] text-cyan-300 font-normal">pts</span></span>
+            </div>
+            <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden border border-white/10">
+              <div className="h-full bg-gradient-to-r from-cyan-400 to-indigo-400 rounded-full w-[88%]" />
+            </div>
+            <div className="text-[11px] text-slate-300 flex justify-between pt-0.5">
+              <span>Distratores Decodificados</span>
+              <span className="font-bold text-emerald-400">100% Imunizado</span>
+            </div>
+          </div>
+
+          <button
+            onClick={onOpenPsychometrics || onStartEdital}
+            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-base flex items-center justify-center gap-3 shadow-xl shadow-cyan-500/25 transition-all hover:scale-105 active:scale-95"
+          >
+            <Microscope className="w-5 h-5 text-cyan-200" />
+            <span>Explorar Psicometria</span>
+            <ArrowRight className="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </section>
   );

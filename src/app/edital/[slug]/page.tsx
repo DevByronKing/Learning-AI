@@ -47,7 +47,8 @@ export async function generateMetadata({ params }: EditalPageProps): Promise<Met
     };
   }
 
-  const pageUrl = `https://aprovalens.ai/edital/${edital.slug}`;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://learningai.app';
+  const pageUrl = `${baseUrl}/edital/${edital.slug}`;
 
   return {
     title: `${edital.title} — Baixar Edital Verticalizado Grátis`,

@@ -1,8 +1,23 @@
 import { NextResponse } from 'next/server';
 import { DiscursiveEvaluation } from '@/lib/types';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimiter';
 
 export async function POST(req: Request) {
   try {
+    // 0. Proteção contra esgotamento de cota Gemini (máx 5 correções por minuto por IP)
+    const ip = getClientIp(req);
+    const { allowed, resetTime } = checkRateLimit(`discursive_${ip}`, 5, 60000);
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Muitas correções de discursiva consecutivas. Aguarde 1 minuto para enviar nova peça.',
+          retryAfterSeconds: Math.ceil((resetTime - Date.now()) / 1000),
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await req.json();
     const {
       essayText = '',

@@ -11,15 +11,9 @@ export default defineConfig({
   workers: 1,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://127.0.0.1:3000',
     trace: 'on-first-retry',
     channel: 'chrome', // Utiliza o Google Chrome nativo do Windows (evita download de binários)
     headless: true,
-  },
-  webServer: {
-    command: 'npm run start',
-    url: 'http://localhost:3000',
-    reuseExistingServer: true,
-    timeout: 60000,
   },
 });

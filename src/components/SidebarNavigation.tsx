@@ -24,6 +24,7 @@ import {
   Flame,
   LayoutGrid
 } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
 import { StudentProfile, SubscriptionPlan } from '@/lib/types';
 import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
 
@@ -178,13 +179,7 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
           className="flex items-center gap-3 cursor-pointer overflow-hidden"
           title="Ir para o início"
         >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 p-[1.5px] glow-brand shadow-sm shrink-0">
-            <div className={`w-full h-full rounded-[10px] flex items-center justify-center ${
-              isLight ? 'bg-white' : 'bg-[#0d1322]'
-            }`}>
-              <BrainCircuit className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            </div>
-          </div>
+          <BrandLogo size={36} showGlow />
 
           {!isCollapsed && (
             <div className="flex items-center gap-1.5 whitespace-nowrap animate-fadeIn">

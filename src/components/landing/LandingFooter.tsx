@@ -1,13 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
-import { BrainCircuit, ShieldCheck, Lock } from 'lucide-react';
+import { ShieldCheck, Lock } from 'lucide-react';
+import { BrandLogo } from '../BrandLogo';
 
 export const LandingFooter: React.FC = () => {
   return (
     <footer className="border-t border-slate-200 dark:border-white/5 py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center text-sm text-slate-500 transition-colors">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-2">
-          <BrainCircuit className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
+        <div className="flex items-center gap-2.5">
+          <BrandLogo size={24} />
           <span className="font-extrabold text-slate-900 dark:text-white">Learning AI</span>
           <span className="hidden sm:inline text-slate-400 dark:text-slate-500">• O Copiloto Cognitivo para Concursos</span>
         </div>

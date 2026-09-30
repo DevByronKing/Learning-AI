@@ -75,13 +75,13 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
+    <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in overflow-y-auto">
       <div 
-        className="relative w-full max-w-3xl my-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[92vh] transition-colors"
+        className="relative w-full max-w-3xl my-4 sm:my-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[92vh] transition-colors"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header Banner with Selected Animal's Aesthetic */}
-        <div className={`p-6 sm:p-7 bg-gradient-to-r ${selectedAnimal.colorGradient} relative overflow-hidden transition-all duration-500`}>
+        <div className={`p-6 sm:p-7 bg-gradient-to-r ${selectedAnimal.colorGradient} relative overflow-hidden transition-all duration-500 shrink-0`}>
           <div className="absolute -right-8 -bottom-8 opacity-20 text-9xl select-none pointer-events-none filter blur-[1px]">
             {selectedAnimal.emoji}
           </div>
@@ -173,7 +173,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
             <button
               type="button"
               onClick={() => { onClose(); onOpenPricing(); }}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-black hover:opacity-95 transition-opacity"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-black hover:opacity-95 transition-opacity shadow-sm"
             >
               <Crown className="w-3.5 h-3.5 fill-black" />
               <span>UPGRADE PRO</span>
@@ -181,82 +181,136 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
           )}
         </div>
 
-        {/* Modal Body with Scroll */}
-        <form onSubmit={handleSave} className="p-6 overflow-y-auto space-y-6 flex-1 text-slate-800 dark:text-slate-200">
+        {/* Form with Flex Layout and Sticky Footer */}
+        <form onSubmit={handleSave} className="flex flex-col flex-1 overflow-hidden">
           
-          {activeSubTab === 'animal' && (
-            <div className="space-y-5">
-              <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <BrainCircuit className="w-4 h-4 text-indigo-500" />
-                  <span>Escolha o Arquétipo que Representa sua Jornada de Concurseiro:</span>
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                  Cada animal guardião confere uma identidade cognitiva, foco estratégico e frase-guia personalizada no painel e nos simulados.
-                </p>
-              </div>
+          {/* Scrollable Body */}
+          <div className="p-5 sm:p-6 overflow-y-auto space-y-6 flex-1 text-slate-800 dark:text-slate-200">
+            {activeSubTab === 'animal' && (
+              <div className="space-y-5">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <BrainCircuit className="w-4 h-4 text-indigo-500" />
+                    <span>Escolha o Arquétipo que Representa sua Jornada de Concurseiro:</span>
+                  </h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                    Cada animal guardião confere uma identidade cognitiva, foco estratégico e frase-guia personalizada no painel e nos simulados.
+                  </p>
+                </div>
 
-              {/* Grid of 6 Animals */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
-                {GUARDIAN_ANIMALS.map((animal) => {
-                  const isSelected = selectedAnimalId === animal.id;
+                {/* Grid of Standard 6 Animals */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
+                  {GUARDIAN_ANIMALS.filter(a => a.id !== 'fenix').map((animal) => {
+                    const isSelected = selectedAnimalId === animal.id;
+                    return (
+                      <div
+                        key={animal.id}
+                        onClick={() => setSelectedAnimalId(animal.id)}
+                        className={`p-4 rounded-2xl border cursor-pointer transition-all relative flex flex-col justify-between ${
+                          isSelected
+                            ? 'bg-indigo-50/90 border-indigo-500 ring-2 ring-indigo-500/40 shadow-md dark:bg-indigo-950/40 dark:border-indigo-400 dark:ring-indigo-500/50'
+                            : 'bg-slate-50/80 hover:bg-slate-100 border-slate-200 dark:bg-slate-800/60 dark:border-slate-700/70 dark:hover:bg-slate-800 dark:hover:border-slate-600'
+                        }`}
+                      >
+                        {isSelected && (
+                          <span className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] font-black shadow">
+                            ✓
+                          </span>
+                        )}
+
+                        <div>
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-11 h-11 rounded-xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-white/10 shrink-0 shadow-sm relative">
+                              {animal.avatar3dUrl ? (
+                                <img src={animal.avatar3dUrl} alt={animal.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <span className="text-2xl flex items-center justify-center h-full">{animal.emoji}</span>
+                              )}
+                            </div>
+                            <div className="min-w-0">
+                              <h4 className="text-xs font-black text-slate-900 dark:text-white truncate">{animal.name}</h4>
+                              <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold block truncate">{animal.archetype}</span>
+                            </div>
+                          </div>
+
+                          <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-2.5 leading-relaxed line-clamp-2 font-medium">
+                            {animal.superpower}
+                          </p>
+                        </div>
+
+                        {/* Small stats bars */}
+                        <div className="mt-3 pt-2.5 border-t border-slate-200 dark:border-white/5 space-y-1 text-[9px] font-mono">
+                          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
+                            <span>Foco</span>
+                            <span className="text-emerald-600 dark:text-emerald-400 font-bold">{animal.stats.foco}%</span>
+                          </div>
+                          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div className="h-full bg-emerald-500 dark:bg-emerald-400" style={{ width: `${animal.stats.foco}%` }} />
+                          </div>
+                          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
+                            <span>Velocidade</span>
+                            <span className="text-cyan-600 dark:text-cyan-400 font-bold">{animal.stats.velocidade}%</span>
+                          </div>
+                          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div className="h-full bg-cyan-500 dark:bg-cyan-400" style={{ width: `${animal.stats.velocidade}%` }} />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Featured 7th Mythic Animal: Fênix Dourada (Full Width Banner Card) */}
+                {(() => {
+                  const fenix = GUARDIAN_ANIMALS.find(a => a.id === 'fenix');
+                  if (!fenix) return null;
+                  const isFenixSelected = selectedAnimalId === 'fenix';
                   return (
                     <div
-                      key={animal.id}
-                      onClick={() => setSelectedAnimalId(animal.id)}
-                      className={`p-4 rounded-2xl border cursor-pointer transition-all relative flex flex-col justify-between ${
-                        isSelected
-                          ? 'bg-indigo-50/80 border-indigo-500 ring-2 ring-indigo-500/40 shadow-md dark:bg-indigo-950/40 dark:border-indigo-400 dark:ring-indigo-500/50'
-                          : 'bg-slate-50 hover:bg-slate-100/80 border-slate-200 dark:bg-slate-800/60 dark:border-slate-700/70 dark:hover:bg-slate-800 dark:hover:border-slate-600'
+                      onClick={() => setSelectedAnimalId('fenix')}
+                      className={`p-4 sm:p-5 rounded-2xl border-2 cursor-pointer transition-all relative flex flex-col sm:flex-row items-center justify-between gap-4 ${
+                        isFenixSelected
+                          ? 'border-amber-400 bg-gradient-to-r from-amber-500/20 via-yellow-500/10 to-amber-500/20 ring-2 ring-amber-400/50 shadow-lg'
+                          : 'border-amber-500/40 bg-gradient-to-r from-amber-500/10 via-yellow-500/5 to-slate-50 dark:to-slate-800/80 hover:border-amber-400'
                       }`}
                     >
-                      {isSelected && (
-                        <span className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] font-black shadow">
-                          ✓
-                        </span>
-                      )}
-
-                      <div>
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-11 h-11 rounded-xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-white/10 shrink-0 shadow-sm relative">
-                            {animal.avatar3dUrl ? (
-                              <img src={animal.avatar3dUrl} alt={animal.name} className="w-full h-full object-cover" />
-                            ) : (
-                              <span className="text-2xl flex items-center justify-center h-full">{animal.emoji}</span>
-                            )}
-                          </div>
-                          <div className="min-w-0">
-                            <h4 className="text-xs font-black text-slate-900 dark:text-white truncate">{animal.name}</h4>
-                            <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold block truncate">{animal.archetype}</span>
-                          </div>
+                      <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                        <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-900 border-2 border-amber-400 shrink-0 shadow-md relative">
+                          {fenix.avatar3dUrl ? (
+                            <img src={fenix.avatar3dUrl} alt={fenix.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-3xl flex items-center justify-center h-full">{fenix.emoji}</span>
+                          )}
                         </div>
-
-                        <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-2.5 leading-relaxed line-clamp-2 font-medium">
-                          {animal.superpower}
-                        </p>
+                        <div className="min-w-0 space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h4 className="text-sm font-black text-slate-900 dark:text-white truncate">{fenix.name}</h4>
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-sm">
+                              👑 Arquétipo Mítico • Acesso Black
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+                            {fenix.superpower} — Domínio total das bancas FGV, Cebraspe, FCC e Vunesp.
+                          </p>
+                        </div>
                       </div>
 
-                      {/* Small stats bars */}
-                      <div className="mt-3 pt-2.5 border-t border-slate-200 dark:border-white/5 space-y-1 text-[9px] font-mono">
-                        <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-                          <span>Foco</span>
-                          <span className="text-emerald-600 dark:text-emerald-400 font-bold">{animal.stats.foco}%</span>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <div className="hidden sm:flex flex-col gap-1 text-[10px] font-mono font-bold text-amber-700 dark:text-amber-300 text-right">
+                          <span>Foco: 100%</span>
+                          <span>Velocidade: 100%</span>
                         </div>
-                        <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                          <div className="h-full bg-emerald-500 dark:bg-emerald-400" style={{ width: `${animal.stats.foco}%` }} />
-                        </div>
-                        <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-                          <span>Velocidade</span>
-                          <span className="text-cyan-600 dark:text-cyan-400 font-bold">{animal.stats.velocidade}%</span>
-                        </div>
-                        <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                          <div className="h-full bg-cyan-500 dark:bg-cyan-400" style={{ width: `${animal.stats.velocidade}%` }} />
+                        <div className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                          isFenixSelected
+                            ? 'bg-amber-500 text-slate-950 shadow-md'
+                            : 'bg-white dark:bg-white/10 text-slate-700 dark:text-white border border-slate-200 dark:border-white/10 hover:border-amber-400'
+                        }`}>
+                          {isFenixSelected ? '✓ Selecionado' : 'Selecionar'}
                         </div>
                       </div>
                     </div>
                   );
-                })}
-              </div>
+                })()}
 
               {/* Detailed Breakdown with Interactive 3D Holographic Card */}
               <div className="p-5 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-500/30 flex flex-col sm:flex-row items-center gap-6">
@@ -474,19 +528,21 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
             </div>
           )}
 
-          {/* Footer Save Button */}
-          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-end gap-3 shrink-0">
+          </div>
+
+          {/* Sticky Footer Save Button */}
+          <div className="p-4 sm:p-5 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90 flex items-center justify-end gap-3 shrink-0">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold transition-colors"
+              className="px-5 py-2.5 rounded-xl bg-slate-200/80 hover:bg-slate-300/80 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold transition-colors"
             >
               Cancelar
             </button>
 
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white text-xs font-black shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white text-xs font-black shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all hover:scale-105 active:scale-95"
             >
               <Check className="w-4 h-4" />
               <span>Salvar Passaporte Cognitivo</span>

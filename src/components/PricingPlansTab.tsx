@@ -321,7 +321,7 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
               key={p.id}
               className={`rounded-3xl p-6 border transition-all flex flex-col justify-between relative ${
                 isBlack
-                  ? 'bg-gradient-to-b from-slate-900 via-slate-950 to-amber-950/40 border-2 border-amber-400 ring-2 ring-amber-400/20 shadow-2xl text-white'
+                  ? 'bg-gradient-to-b from-slate-900 via-slate-950 to-amber-950/40 border-2 border-amber-400 ring-2 ring-amber-400/20 shadow-2xl text-white preserve-dark'
                   : p.isPopular
                   ? 'bg-white dark:bg-dark-surface border-blue-500 ring-2 ring-blue-500/20 shadow-xl'
                   : p.id === 'elite'
@@ -336,7 +336,7 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
               )}
 
               {isBlack && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 text-xs font-black uppercase tracking-wider shadow-lg flex items-center gap-1">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 text-xs font-black uppercase tracking-wider shadow-lg flex items-center gap-1 font-mono">
                   <span>👑 Até a Posse</span>
                 </div>
               )}
@@ -356,20 +356,20 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
 
                   <h3 className={`text-2xl font-black mt-3 ${
                     isBlack 
-                      ? 'text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-200' 
+                      ? 'text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-200 drop-shadow-sm' 
                       : 'text-slate-900 dark:text-white'
                   }`}>
                     {p.name}
                   </h3>
                   <p className={`text-xs mt-1 min-h-[36px] ${
-                    isBlack ? 'text-slate-300' : 'text-slate-500 dark:text-slate-400'
+                    isBlack ? 'text-slate-200' : 'text-slate-500 dark:text-slate-400'
                   }`}>
                     {p.description}
                   </p>
                 </div>
 
                 {/* Preço */}
-                <div className="pb-4 border-b border-slate-100 dark:border-slate-800">
+                <div className={`pb-4 border-b ${isBlack ? 'border-amber-400/20' : 'border-slate-100 dark:border-slate-800'}`}>
                   {isBlack ? (
                     isAnnual ? (
                       <div>
@@ -382,9 +382,9 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
                       <div>
                         <div className="flex items-baseline gap-1">
                           <span className="text-4xl font-black text-white">R$ 197</span>
-                          <span className="text-xs font-bold text-slate-400">/mês</span>
+                          <span className="text-xs font-bold text-amber-300">/mês</span>
                         </div>
-                        <p className="text-[11px] text-slate-400 mt-1">Sem fidelidade ou carência</p>
+                        <p className="text-[11px] text-slate-300 mt-1 font-medium">Sem fidelidade ou carência</p>
                       </div>
                     )
                   ) : (
@@ -409,13 +409,13 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
                 {/* Lista de Recursos */}
                 <div className="space-y-2.5 text-xs">
                   <p className={`font-bold uppercase tracking-wider text-[11px] ${
-                    isBlack ? 'text-amber-400' : 'text-slate-800 dark:text-slate-200'
+                    isBlack ? 'text-amber-400 font-black' : 'text-slate-800 dark:text-slate-200'
                   }`}>
                     Recursos Inclusos:
                   </p>
                   {p.features.map((feat, idx) => (
                     <div key={idx} className={`flex items-start gap-2 ${
-                      isBlack ? 'text-slate-200' : 'text-slate-700 dark:text-slate-300'
+                      isBlack ? 'text-slate-100 font-medium' : 'text-slate-700 dark:text-slate-300'
                     }`}>
                       <Check className={`w-4 h-4 shrink-0 mt-0.5 ${
                         isBlack ? 'text-amber-400' : 'text-emerald-500'

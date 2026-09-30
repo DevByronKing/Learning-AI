@@ -39,6 +39,7 @@ import {
 import { SubscriptionPlan, StudentProfile } from '@/lib/types';
 import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
 import { MobileAppModal } from './MobileAppModal';
+import { BrandLogo } from './BrandLogo';
 
 interface NavbarProps {
   activeTab: string;
@@ -221,7 +222,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       badge: '80/20',
       badgeColor: 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30',
       category: 'Preparação & Editais',
-      hotkey: 'R'
+      hotkey: 'U'
     },
     {
       id: 'discursivas',
@@ -368,13 +369,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleTabClick('landing')}
                 title="Ir para o início"
               >
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 p-[1.5px] glow-brand shadow-sm">
-                  <div className={`w-full h-full rounded-[10px] flex items-center justify-center transition-colors ${
-                    isLight ? 'bg-white' : 'bg-[#0d1322]'
-                  }`}>
-                    <BrainCircuit className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                  </div>
-                </div>
+                <BrandLogo size={38} showGlow />
                 <div className="flex items-center gap-1.5">
                   <span className={`text-base sm:text-lg xl:text-xl font-black tracking-tight transition-colors ${
                     isLight ? 'text-slate-900' : 'text-white'

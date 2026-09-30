@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ExamNotice, ExamSubject } from '@/lib/types';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimiter';
 
 const generateBackendSyllabus = (title: string, role: string, banca: string, rawText: string = ''): ExamSubject[] => {
   const combined = `${title} ${role} ${rawText}`.toLowerCase();
@@ -176,6 +177,20 @@ const generateBackendSyllabus = (title: string, role: string, banca: string, raw
 
 export async function POST(req: Request) {
   try {
+    // 0. Proteção contra esgotamento de tokens Gemini (máx 5 editais processados por minuto por IP)
+    const ip = getClientIp(req);
+    const { allowed, resetTime } = checkRateLimit(`edital_${ip}`, 5, 60000);
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Muitos processamentos de edital consecutivos. Aguarde 1 minuto para enviar novo arquivo.',
+          retryAfterSeconds: Math.ceil((resetTime - Date.now()) / 1000),
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await req.json();
     const { 
       examTitle = 'Edital Analisado por IA',
