@@ -72,7 +72,7 @@ describe('Auditoria de Segurança de Backend & Resiliência de APIs', () => {
     });
   });
 
-  describe('Rota de Registro (/api/auth/register)', () => {
+  describe('Rota de Registro (/api/auth/register) e Verificação de Idade (ECA Digital & LGPD)', () => {
     it('deve validar comprimento mínimo de senha de 6 caracteres', async () => {
       const req = new Request('http://localhost:3000/api/auth/register', {
         method: 'POST',
@@ -84,6 +84,123 @@ describe('Auditoria de Segurança de Backend & Resiliência de APIs', () => {
       expect(res.status).toBe(400);
       const data = await res.json();
       expect(data.error).toContain('mínimo 6 caracteres');
+    });
+
+    it('deve exigir data de nascimento para verificação etária (ECA Digital / LGPD)', async () => {
+      const req = new Request('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: 'maior@exemplo.com',
+          password: 'senhaSegura123',
+        }),
+      });
+
+      const res = await registerHandler(req);
+      expect(res.status).toBe(400);
+      const data = await res.json();
+      expect(data.code).toBe('BIRTHDATE_REQUIRED');
+      expect(data.error).toContain('ECA Digital');
+    });
+
+    it('deve bloquear menores de 16 anos desacompanhados com status 403 (ECA Digital / CC Art. 3º)', async () => {
+      // Data de nascimento indicando ~14 anos
+      const under16Date = new Date();
+      under16Date.setFullYear(under16Date.getFullYear() - 14);
+
+      const req = new Request('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-forwarded-for': '198.51.100.14',
+        },
+        body: JSON.stringify({
+          email: 'jovem14@exemplo.com',
+          password: 'senhaSegura123',
+          birthDate: under16Date.toISOString().split('T')[0],
+        }),
+      });
+
+      const res = await registerHandler(req);
+      expect(res.status).toBe(403);
+      const data = await res.json();
+      expect(data.code).toBe('ECA_UNDER_16_RESTRICTED');
+      expect(data.error).toContain('ECA Digital');
+    });
+
+    it('deve exigir consentimento e dados do responsável legal para jovens de 16-17 anos', async () => {
+      const age17Date = new Date();
+      age17Date.setFullYear(age17Date.getFullYear() - 17);
+
+      // Sem consentimento do responsável
+      const reqWithoutParent = new Request('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-forwarded-for': '198.51.100.17',
+        },
+        body: JSON.stringify({
+          email: 'jovem17@exemplo.com',
+          password: 'senhaSegura123',
+          birthDate: age17Date.toISOString().split('T')[0],
+          parentalConsent: false,
+        }),
+      });
+
+      const res1 = await registerHandler(reqWithoutParent);
+      expect(res1.status).toBe(400);
+      const data1 = await res1.json();
+      expect(data1.code).toBe('PARENTAL_CONSENT_REQUIRED');
+
+      // Com consentimento e dados válidos do responsável
+      const reqWithParent = new Request('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-forwarded-for': '198.51.100.18',
+        },
+        body: JSON.stringify({
+          email: 'jovem17@exemplo.com',
+          password: 'senhaSegura123',
+          birthDate: age17Date.toISOString().split('T')[0],
+          parentalConsent: true,
+          guardianName: 'Maria Silva da Costa',
+          guardianContact: 'mae.maria@exemplo.com',
+        }),
+      });
+
+      const res2 = await registerHandler(reqWithParent);
+      expect(res2.status).toBe(200);
+      const data2 = await res2.json();
+      expect(data2.success).toBe(true);
+      expect(data2.user.legalCapacity).toBe('relativamente_incapaz_assistido');
+    });
+
+    it('deve aprovar registro de usuário maior de 18 anos com auditoria de conformidade', async () => {
+      const adultDate = new Date();
+      adultDate.setFullYear(adultDate.getFullYear() - 24);
+
+      const req = new Request('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-forwarded-for': '198.51.100.24',
+        },
+        body: JSON.stringify({
+          email: 'advogado.concursando@exemplo.com',
+          password: 'senhaForteMaster2026',
+          fullName: 'Dra. Luiza Martins',
+          birthDate: adultDate.toISOString().split('T')[0],
+        }),
+      });
+
+      const res = await registerHandler(req);
+      expect(res.status).toBe(200);
+      const data = await res.json();
+      expect(data.success).toBe(true);
+      expect(data.user.legalCapacity).toBe('plena_maioridade');
+      expect(data.user.ageVerified).toBe(true);
+      expect(data.user.calculatedAge).toBeGreaterThanOrEqual(18);
     });
   });
 

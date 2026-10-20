@@ -1,6 +1,6 @@
-import { AprovaLensApp } from '@/components/AprovaLensApp';
+import { ArgusApp } from '@/components/ArgusApp';
 
 export default function Page() {
-  return <AprovaLensApp />;
+  return <ArgusApp />;
 }
 

@@ -107,7 +107,7 @@ export const LandingLeadMagnet: React.FC<LandingLeadMagnetProps> = ({ onStartEdi
         <form onSubmit={handleCalculate} className="mt-8 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
             <div className="sm:col-span-8">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1.5">
                 Concurso ou Cargo Alvo:
               </label>
               <input
@@ -183,7 +183,7 @@ export const LandingLeadMagnet: React.FC<LandingLeadMagnetProps> = ({ onStartEdi
           <div className="mt-8 p-6 sm:p-8 rounded-3xl bg-slate-50 dark:bg-dark-card border border-emerald-500/40 shadow-xl shadow-emerald-500/10 animate-fadeIn space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 dark:border-white/10 gap-3">
               <div>
-                <span className="text-xs font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Diagnóstico do Edital: {leadResult.examTitle}
                 </span>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -200,7 +200,7 @@ export const LandingLeadMagnet: React.FC<LandingLeadMagnetProps> = ({ onStartEdi
               
               {/* Disciplinas 80/20 com horas estimadas */}
               <div>
-                <h4 className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-amber-500" />
                   Distribuição 80/20 Recomendada:
                 </h4>
@@ -225,7 +225,7 @@ export const LandingLeadMagnet: React.FC<LandingLeadMagnetProps> = ({ onStartEdi
               {/* Banca Trap Index */}
               <div className="p-5 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-500/30 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center gap-1.5 text-xs font-black text-indigo-700 dark:text-indigo-300 uppercase tracking-wide">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-700 dark:text-indigo-300">
                     <ShieldAlert className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                     <span>Perfil de Pegadinhas da {leadResult.banca}:</span>
                   </div>

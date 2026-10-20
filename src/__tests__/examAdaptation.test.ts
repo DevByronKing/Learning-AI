@@ -92,9 +92,9 @@ describe('Edital Padrão & Adaptação Sistêmica da Plataforma', () => {
 
   it('deve persistir e restaurar o edital padrão ativo em localStorage', () => {
     const targetExamId = 'exam-prf-2026';
-    localStorage.setItem('aprovalens_default_exam_id', targetExamId);
+    localStorage.setItem('argus_default_exam_id', targetExamId);
 
-    const savedId = localStorage.getItem('aprovalens_default_exam_id');
+    const savedId = localStorage.getItem('argus_default_exam_id');
     expect(savedId).toBe('exam-prf-2026');
 
     // Simulação de lista de editais customizados persistidos
@@ -106,9 +106,9 @@ describe('Edital Padrão & Adaptação Sistêmica da Plataforma', () => {
         banca: 'Cebraspe'
       }
     ];
-    localStorage.setItem('aprovalens_custom_exams', JSON.stringify(customExams));
+    localStorage.setItem('argus_custom_exams', JSON.stringify(customExams));
 
-    const retrievedCustom = JSON.parse(localStorage.getItem('aprovalens_custom_exams') || '[]');
+    const retrievedCustom = JSON.parse(localStorage.getItem('argus_custom_exams') || '[]');
     expect(retrievedCustom).toHaveLength(1);
     expect(retrievedCustom[0].id).toBe('custom-tse-2026');
   });

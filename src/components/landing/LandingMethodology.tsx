@@ -5,7 +5,7 @@ export const LandingMethodology: React.FC = () => {
   return (
     <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       <div className="text-center mb-16">
-        <h2 className="text-sm font-bold uppercase tracking-widest text-indigo-500 dark:text-indigo-400 mb-3">
+        <h2 className="text-sm font-bold tracking-tight text-indigo-600 dark:text-indigo-400 mb-3">
           A Diferença na Sua Rotina de Estudos
         </h2>
         <p className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight">
@@ -43,14 +43,14 @@ export const LandingMethodology: React.FC = () => {
           </ul>
         </div>
 
-        {/* O Método Learning AI */}
+        {/* O Método Argus */}
         <div className="glass-panel p-8 sm:p-10 rounded-3xl border border-emerald-500/40 relative glow-emerald shadow-xl shadow-emerald-500/5 md:-translate-y-2 transition-transform">
           <div className="flex items-center gap-4 mb-8">
             <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 flex items-center justify-center text-emerald-500 dark:text-emerald-400 shrink-0">
               <CheckCircle2 className="w-7 h-7" />
             </div>
             <div>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Método Learning AI</h3>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Método Argus</h3>
               <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-1">Preparação Adaptativa e Cognitiva</p>
             </div>
           </div>

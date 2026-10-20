@@ -21,6 +21,7 @@ import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
 import { HolographicAvatar3D } from '@/components/HolographicAvatar3D';
 import { useAuthStore } from '@/store/useAuthStore';
 import { SupabaseService } from '@/lib/supabaseService';
+import { GoogleSignInButton, GoogleIcon } from '@/components/GoogleSignInButton';
 
 interface StudentProfileModalProps {
   isOpen: boolean;
@@ -460,18 +461,82 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
             </div>
           )}
 
-          {/* SubTab 3: Conta & Sessão JWT */}
+          {/* SubTab 3: Conta & Autenticação Google / Supabase */}
           {activeSubTab === 'conta' && (
-            <div className="space-y-6 animate-fade-in">
+            <div className="space-y-5 animate-fade-in">
+              {/* Card Destaque: Login com Google */}
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-blue-50/80 via-indigo-50/40 to-white dark:from-blue-950/30 dark:via-slate-900/60 dark:to-slate-900 border border-blue-200/80 dark:border-blue-900/40 shadow-xs">
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
+                      <GoogleIcon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-black text-slate-900 dark:text-white">
+                        Autenticação com Google
+                      </h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        Acesso em 1 clique sem necessidade de senhas.
+                      </p>
+                    </div>
+                  </div>
+
+                  {user && user.id !== 'usr_default_demo' && !user.email.includes('argus.app.br') && !user.email.includes('learningai.com.br') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 text-[11px] font-bold flex items-center gap-1">
+                      <Check className="w-3 h-3" />
+                      Vinculado
+                    </span>
+                  ) : (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-800 text-[11px] font-bold">
+                      Modo Demonstração
+                    </span>
+                  )}
+                </div>
+
+                <p className="text-xs text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
+                  Conecte sua conta Google oficial para salvar e sincronizar seu Caderno de Erros, histórico de simulados, ofensiva diária e passaporte cognitivo em qualquer dispositivo (PC, tablet ou celular).
+                </p>
+
+                {user && user.id !== 'usr_default_demo' && !user.email.includes('argus.app.br') && !user.email.includes('learningai.com.br') ? (
+                  <div className="p-3 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 overflow-hidden">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                      <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
+                        {user.email}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-mono">
+                      Google OAuth2
+                    </span>
+                  </div>
+                ) : (
+                  <div className="w-full">
+                    <GoogleSignInButton
+                      text="Fazer login com Google"
+                      variant="standard"
+                      size="md"
+                      fullWidth
+                      onSuccess={() => {
+                        console.log('Iniciando redirecionamento para o Google OAuth...');
+                      }}
+                    />
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-2">
+                      🔒 Autenticação oficial segura criptografada via Supabase Auth & Google Cloud.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Informações Técnicas de Sessão */}
               <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                       <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                      Status da Autenticação & Sessão
+                      Status da Sessão Atual
                     </h3>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                      Gerenciamento de sessão com tokens de autenticação criptografados.
+                      Gerenciamento de sessão criptografada JWT.
                     </p>
                   </div>
                   <span className="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 text-[11px] font-bold">
@@ -483,7 +548,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                   <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                     <span className="text-[10px] uppercase font-bold text-slate-400">Email Autenticado</span>
                     <p className="font-mono font-semibold text-slate-800 dark:text-slate-200 mt-1 truncate">
-                      {user?.email || 'aluno@learningai.com.br'}
+                      {user?.email || 'aluno@argus.app.br'}
                     </p>
                   </div>
 
@@ -506,6 +571,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                 </div>
               </div>
 
+              {/* Botão de Logout */}
               <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 flex items-center justify-between gap-3 text-xs">
                 <div>
                   <p className="font-bold text-slate-800 dark:text-amber-300">Desconectar Dispositivo</p>
@@ -520,7 +586,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                     SupabaseService.signOut();
                     onClose();
                   }}
-                  className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md shrink-0 transition-colors"
+                  className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md shrink-0 transition-colors cursor-pointer"
                 >
                   Sair da Conta
                 </button>

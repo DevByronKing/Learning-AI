@@ -228,6 +228,69 @@ export class SupabaseService {
   }
 
   /**
+   * Envia link mágico (OTP) para login sem senha por e-mail
+   */
+  static async signInWithEmail(email: string, redirectTo?: string): Promise<{ success: boolean; error?: string }> {
+    if (!isSupabaseConfigured()) {
+      return { success: false, error: 'Supabase não configurado. Verifique NEXT_PUBLIC_SUPABASE_URL.' };
+    }
+
+    try {
+      const client = getSupabase();
+      if (!client) return { success: false, error: 'Cliente Supabase indisponível' };
+
+      const callbackUrl = redirectTo || (typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined);
+
+      const { error } = await client.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: callbackUrl,
+        },
+      });
+
+      if (error) throw error;
+      return { success: true };
+    } catch (err: any) {
+      console.error('Erro no login por email:', err);
+      return { success: false, error: err?.message || 'Falha ao enviar link de acesso' };
+    }
+  }
+
+  /**
+   * Autenticação com 1 clique via Google OAuth
+   */
+  static async signInWithGoogle(redirectTo?: string): Promise<{ success: boolean; url?: string; error?: string }> {
+    if (!isSupabaseConfigured()) {
+      return { success: false, error: 'Supabase não configurado. Verifique NEXT_PUBLIC_SUPABASE_URL.' };
+    }
+
+    try {
+      const client = getSupabase();
+      if (!client) return { success: false, error: 'Cliente Supabase indisponível' };
+
+      const callbackUrl = redirectTo || (typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined);
+
+      const { data, error } = await client.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: callbackUrl,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      return { success: true, url: data?.url };
+    } catch (err: any) {
+      console.error('Erro na autenticação com Google:', err);
+      return { success: false, error: err?.message || 'Falha ao conectar com o Google' };
+    }
+  }
+
+  /**
    * Encerra a sessão ativa.
    */
   static async signOut(): Promise<{ success: boolean }> {

@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { ArrowLeft, ShieldCheck, Scale, FileText, CheckCircle2 } from 'lucide-react';
 
 export const metadata = {
-  title: 'Termos e Condições de Uso | Learning AI',
-  description: 'Termos de Serviço, condições de assinatura e regras de utilização da plataforma Learning AI.',
+  title: 'Termos e Condições de Uso | Argus',
+  description: 'Termos de Serviço, condições de assinatura e regras de utilização da plataforma Argus.',
 };
 
 export default function TermosPage() {
@@ -24,7 +24,7 @@ export default function TermosPage() {
           <div className="flex items-center gap-2">
             <Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             <span className="font-extrabold text-sm text-slate-900 dark:text-white">
-              Learning <span className="text-indigo-600 dark:text-indigo-400">AI</span>
+              Argus <span className="text-indigo-600 dark:text-indigo-400">Inteligência</span>
             </span>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function TermosPage() {
                 <span>1. Objeto e Aceitação dos Termos</span>
               </h2>
               <p>
-                Ao acessar, cadastrar-se ou utilizar a plataforma <strong>Learning AI</strong>, você concorda expressamente com os presentes Termos e Condições de Uso. A plataforma oferece ferramentas tecnológicas de inteligência artificial aplicada ao estudo cognitivo para concursos públicos, OAB e exames acadêmicos, incluindo verticalização de editais, simulados psicométricos, cadernos de erros inteligentes e repetição espaçada.
+                Ao acessar, cadastrar-se ou utilizar a plataforma <strong>Argus</strong>, você concorda expressamente com os presentes Termos e Condições de Uso. A plataforma oferece ferramentas tecnológicas de inteligência artificial aplicada ao estudo cognitivo para concursos públicos, OAB e exames acadêmicos, incluindo verticalização de editais, simulados psicométricos, cadernos de erros inteligentes e repetição espaçada.
               </p>
             </section>
 
@@ -100,7 +100,7 @@ export default function TermosPage() {
                 <span>5. Natureza das Respostas de Inteligência Artificial</span>
               </h2>
               <p>
-                A tecnologia da Learning AI utiliza modelos avançados de linguagem natural (LLMs) ajustados com heurísticas psicométricas das bancas examinadoras (Cebraspe, FGV, FCC, Vunesp). Embora a precisão das explicações e gabaritos seja continuamente auditada, a plataforma não substitui a leitura oficial de publicações no Diário Oficial da União e editais oficiais dos órgãos promotores.
+                A tecnologia do Argus utiliza modelos avançados de linguagem natural (LLMs) ajustados com heurísticas psicométricas das bancas examinadoras (Cebraspe, FGV, FCC, Vunesp). Embora a precisão das explicações e gabaritos seja continuamente auditada, a plataforma não substitui a leitura oficial de publicações no Diário Oficial da União e editais oficiais dos órgãos promotores.
               </p>
             </section>
 
@@ -110,7 +110,7 @@ export default function TermosPage() {
                 <span>6. Propriedade Intelectual</span>
               </h2>
               <p>
-                Todo o código-fonte, algoritmos de cálculo de distratores, design system, logotipos, banco de dados proprietário e animais guardiões são de titularidade exclusiva da <strong>Learning AI</strong>. É terminantemente proibida a engenharia reversa, raspagem massiva automatizada (web scraping) não autorizada ou comercialização de contas de acesso.
+                Todo o código-fonte, algoritmos de cálculo de distratores, design system, logotipos, banco de dados proprietário e animais guardiões são de titularidade exclusiva do <strong>Argus</strong>. É terminantemente proibida a engenharia reversa, raspagem massiva automatizada (web scraping) não autorizada ou comercialização de contas de acesso.
               </p>
             </section>
 
@@ -120,7 +120,7 @@ export default function TermosPage() {
                 <span>7. Canal de Atendimento e Suporte ao Aluno</span>
               </h2>
               <p>
-                Para dúvidas jurídicas, cancelamentos, estornos ou suporte técnico, disponibilizamos atendimento através do email oficial: <strong className="text-indigo-600 dark:text-indigo-400">suporte@learningai.com.br</strong> com tempo de resposta em até 24 horas úteis.
+                Para dúvidas jurídicas, cancelamentos, estornos ou suporte técnico, disponibilizamos atendimento através do email oficial: <strong className="text-indigo-600 dark:text-indigo-400">contato@argusconcursos.com.br</strong> com tempo de resposta em até 24 horas úteis.
               </p>
             </section>
           </div>

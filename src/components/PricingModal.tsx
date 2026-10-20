@@ -47,8 +47,8 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [transactionId, setTransactionId] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<'pending_payment' | 'confirmed'>('pending_payment');
-  const [pixCode, setPixCode] = useState("00020126580014br.gov.bcb.pix0136learning-ai-concursos-pix-key520400005303986540539.905802BR5925LEARNING AI TECNOLOGIA LTDA6009SAO PAULO62070503***6304E8A9");
-  const [qrCodeImg, setQrCodeImg] = useState<string | null>("https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020126580014br.gov.bcb.pix0136learning-ai-concursos-pix-key520400005303986540539.905802BR5925LEARNINGAI");
+  const [pixCode, setPixCode] = useState("00020126580014br.gov.bcb.pix0136argus-concursos-pix-key520400005303986540539.905802BR5925ARGUS TECNOLOGIA LTDA6009SAO PAULO62070503***6304E8A9");
+  const [qrCodeImg, setQrCodeImg] = useState<string | null>("https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020126580014br.gov.bcb.pix0136argus-concursos-pix-key520400005303986540539.905802BR5925ARGUS");
 
   // Ativação do Trial com Cartão de Crédito Obrigatório (Pilar 1 - Opção b)
   const handleStartCardTrial = async () => {
@@ -242,12 +242,12 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     pro: {
       price: proPricing.formatted,
       period: '/ mês',
-      annualTotal: billingCycle === 'annual' ? `${formatPrice(proPricing.value * 12)}/ano no Pix/Cartão` : 'Cobrança mensal sem fidelidade'
+      annualTotal: billingCycle === 'annual' ? `De R$ 99/mês • ${formatPrice(proPricing.value * 12)}/ano (51% OFF)` : 'Plano avulso • No Anual pague só R$ 49/mês'
     },
     elite: {
       price: elitePricing.formatted,
       period: '/ mês',
-      annualTotal: billingCycle === 'annual' ? `${formatPrice(elitePricing.value * 12)}/ano no Pix/Cartão` : 'Cobrança mensal sem fidelidade'
+      annualTotal: billingCycle === 'annual' ? `De R$ 189/mês • ${formatPrice(elitePricing.value * 12)}/ano (53% OFF)` : 'Plano avulso • No Anual pague só R$ 89/mês'
     },
     black: {
       price: formatPrice(currency === 'BRL' ? 1497 : currency === 'USD' ? 297 : 279),
@@ -407,7 +407,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                 >
                   <span>Anual</span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500 text-black font-black">
-                    -40% OFF
+                    51% OFF
                   </span>
                 </button>
               </div>

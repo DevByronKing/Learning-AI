@@ -26,7 +26,7 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: {
         id: 'usr_default_demo',
-        email: 'concurseiro@learningai.com.br',
+        email: 'concurseiro@argus.app.br',
         name: 'Aluno Alta Performance',
         role: 'student',
       },
@@ -57,7 +57,7 @@ export const useAuthStore = create<AuthState>()(
         }),
     }),
     {
-      name: 'learning-ai-auth-storage',
+      name: 'argus-auth-storage',
       partialize: (state) => ({
         user: state.user,
         token: state.token,

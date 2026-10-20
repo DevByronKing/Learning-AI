@@ -1,12 +1,12 @@
-# Learning AI
+# Argus
 
-> O Copiloto Cognitivo para Concursos Públicos, OAB e ENEM — Dissecção de Editais, Caderno de Erros, Simulador com IA e Ciclos Adaptativos de Estudo.
+> O Copiloto Cognitivo para Concursos Públicos, OAB e Carreiras Jurídicas — Dissecção de Editais, Caderno de Erros, Simulador com IA e Ciclos Adaptativos de Estudo.
 
 ---
 
 ## 🚀 Visão Geral
 
-O **Learning AI** é uma plataforma educacional de alta performance desenvolvida para concurseiros e estudantes de exames de ordem (OAB). O sistema transcende métodos tradicionais de estudo ao incorporar:
+O **Argus** é uma plataforma educacional de alta performance desenvolvida para concurseiros e estudantes de exames de ordem (OAB). O sistema transcende métodos tradicionais de estudo ao incorporar:
 
 1. **Parser & Verticalizador de Editais por IA:** Extração automatizada de disciplinas, pesos e cálculo de relevância estatística da banca (Cebraspe, FGV, Vunesp, FCC).
 2. **Simulador com Diagnóstico Cognitivo:** Análise de causa-raiz do erro do aluno (Pegadinha de Banca, Lacuna Teórica, Leitura Apressada, Curva de Esquecimento) com jurisprudência e artigos vinculados.

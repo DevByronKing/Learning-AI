@@ -142,7 +142,7 @@ export const useStudyStore = create<StudyState>()(
         })),
     }),
     {
-      name: 'learning-ai-study-storage',
+      name: 'argus-study-storage',
       partialize: (state) => ({
         mistakes: state.mistakes,
         metrics: state.metrics,

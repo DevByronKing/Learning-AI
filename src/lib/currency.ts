@@ -1,5 +1,5 @@
 /**
- * Learning AI - Motor de Multi-Moeda & Internacionalização de Checkout
+ * Argus - Motor de Multi-Moeda & Internacionalização de Checkout
  * Suporta cobranças em Real (BRL), Dólar (USD) e Euro (EUR)
  */
 
@@ -51,21 +51,23 @@ export interface PlanTierPricing {
 export const PLAN_PRICES: Record<SupportedCurrency, Record<string, PlanTierPricing>> = {
   BRL: {
     aspirante: { monthly: 0, annual: 0 },
-    pro: { monthly: 49.90, annual: 39.90 },
-    elite: { monthly: 89.90, annual: 69.90 },
-    black: { monthly: 149.90, annual: 119.90, lifetime: 297.00 },
+    // Estratégia do Plano "Isca" (Âncora de Contraste vs Anual Vencedor):
+    // Mensal R$ 99/mês (âncora proposital) vs Anual R$ 49/mês (12x cobrado anual = R$ 588)
+    pro: { monthly: 99.00, annual: 49.00 },
+    elite: { monthly: 189.00, annual: 89.00 },
+    black: { monthly: 249.00, annual: 124.75, lifetime: 1497.00 },
   },
   USD: {
     aspirante: { monthly: 0, annual: 0 },
-    pro: { monthly: 14.90, annual: 11.90 },
-    elite: { monthly: 24.90, annual: 19.90 },
-    black: { monthly: 39.90, annual: 32.90, lifetime: 89.00 },
+    pro: { monthly: 29.90, annual: 14.90 },
+    elite: { monthly: 49.90, annual: 24.90 },
+    black: { monthly: 69.90, annual: 34.90, lifetime: 297.00 },
   },
   EUR: {
     aspirante: { monthly: 0, annual: 0 },
-    pro: { monthly: 13.90, annual: 10.90 },
-    elite: { monthly: 22.90, annual: 17.90 },
-    black: { monthly: 36.90, annual: 29.90, lifetime: 79.00 },
+    pro: { monthly: 27.90, annual: 13.90 },
+    elite: { monthly: 46.90, annual: 22.90 },
+    black: { monthly: 64.90, annual: 32.90, lifetime: 279.00 },
   },
 };
 

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Jornada do Aluno & Playbook de Conversão E2E (Learning AI)', () => {
+test.describe('Jornada do Aluno & Playbook de Conversão E2E (Argus)', () => {
   test.beforeEach(async ({ page }) => {
     // Escuta logs do console para garantir ausência de erros fatais
     page.on('console', (msg) => {
@@ -18,7 +18,7 @@ test.describe('Jornada do Aluno & Playbook de Conversão E2E (Learning AI)', () 
     await page.goto('/');
 
     // Valida título da aplicação
-    await expect(page).toHaveTitle(/Learning AI|AprovaLens/i);
+    await expect(page).toHaveTitle(/Argus/i);
 
     // Valida visibilidade do container principal
     const body = page.locator('body');
@@ -150,7 +150,7 @@ test.describe('Jornada do Aluno & Playbook de Conversão E2E (Learning AI)', () 
 
     // Configura usuário pagante/com compromisso no localStorage
     await page.evaluate(() => {
-      localStorage.setItem('aprovalens_plan', 'pro');
+      localStorage.setItem('argus_plan', 'pro');
       localStorage.setItem('learning_ai_user_access', JSON.stringify({
         status: 'ativa',
         isPayingOrCommitted: true
@@ -207,7 +207,7 @@ test.describe('Jornada do Aluno & Playbook de Conversão E2E (Learning AI)', () 
 
     // Configura usuário pagante simulado no localStorage e abre a aba de gerenciamento
     await page.evaluate(() => {
-      localStorage.setItem('aprovalens_plan', 'pro');
+      localStorage.setItem('argus_plan', 'pro');
       localStorage.setItem('learning_ai_subscription_detail', JSON.stringify({
         planId: 'pro',
         status: 'ativa',

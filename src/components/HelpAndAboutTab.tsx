@@ -85,7 +85,7 @@ export const HelpAndAboutTab: React.FC<HelpAndAboutTabProps> = ({
             <span>Central do Aluno & Institucional</span>
           </div>
           <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-            Precisa de Ajuda? Conheça a Learning AI
+            Precisa de Ajuda? Conheça o Argus
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">
             Suporte humanizado, segurança dos seus dados, nossa história, redes sociais e canal oficial de combate à pirataria.
@@ -224,7 +224,7 @@ export const HelpAndAboutTab: React.FC<HelpAndAboutTabProps> = ({
             <div className="bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/10 rounded-3xl p-6 shadow-sm space-y-3 text-xs">
               <p className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Mail className="w-4 h-4 text-blue-500" />
-                <span>suporte@learningai.com.br</span>
+                <span>suporte@argus.app.br</span>
               </p>
               <p className="text-slate-500 dark:text-slate-400">
                 Horário de Atendimento: Segunda a Sábado das 08h às 22h (Horário de Brasília).
@@ -247,7 +247,7 @@ export const HelpAndAboutTab: React.FC<HelpAndAboutTabProps> = ({
               Democratizando a Inteligência de Bancas para Concurseiros de Todo o Brasil
             </h2>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              O <strong>Learning AI</strong> nasceu da frustração de quem viveu na pele o sofrimento do concurseiro: passar horas assistindo a videoaulas intermináveis, acumulando pilhas de PDFs de 200 páginas e, no domingo de prova, cair nas mesmas pegadinhas semânticas das bancas examinadoras.
+              O <strong>Argus</strong> nasceu da frustração de quem viveu na pele o sofrimento do concurseiro: passar horas assistindo a videoaulas intermináveis, acumulando pilhas de PDFs de 200 páginas e, no domingo de prova, cair nas mesmas pegadinhas semânticas das bancas examinadoras.
             </p>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               Nossa equipe reúne auditores fiscais da Receita Federal, ex-examinadores de bancas, engenheiros de inteligência artificial e neurocientistas cognitivos. Unimos a metodologia comprovada do <strong>Ciclo de Estudos Meirelles</strong> com a potência de modelos neurais avançados (Google Gemini) para criar o primeiro copiloto educacional verdadeiramente adaptativo do país.
@@ -350,7 +350,7 @@ export const HelpAndAboutTab: React.FC<HelpAndAboutTabProps> = ({
             <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-xs text-amber-900 dark:text-amber-300 flex items-start gap-3">
               <Gift className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-amber-950 dark:text-amber-200">Recompensa Oficial do Learning AI:</strong> Toda denúncia com link ativo e comprovação que resulte na derrubada de grupos de rateio garante ao denunciante <strong>1 ANO COMPLETO DE ACESSO AO PLANO ELITE VIP</strong> de forma sigilosa e imediata!
+                <strong className="text-amber-950 dark:text-amber-200">Recompensa Oficial do Argus:</strong> Toda denúncia com link ativo e comprovação que resulte na derrubada de grupos de rateio garante ao denunciante <strong>1 ANO COMPLETO DE ACESSO AO PLANO ELITE VIP</strong> de forma sigilosa e imediata!
               </div>
             </div>
           </div>
@@ -435,7 +435,7 @@ export const HelpAndAboutTab: React.FC<HelpAndAboutTabProps> = ({
         <div className="space-y-6">
           <div className="bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/10 rounded-3xl p-6 sm:p-10 shadow-sm space-y-4">
             <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-              Faça Parte da Comunidade Learning AI
+              Faça Parte da Comunidade Argus
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
               Acompanhe novidades de editais, resoluções comentadas e eventos ao vivo com nossos professores e especialistas.
@@ -458,7 +458,7 @@ export const HelpAndAboutTab: React.FC<HelpAndAboutTabProps> = ({
                   Dicas rápidas de pegadinhas de bancas, enquetes diárias e motivação para os estudos.
                 </p>
                 <span className="text-xs font-bold text-pink-600 dark:text-pink-400 inline-flex items-center gap-1">
-                  <span>@learningai.oficial</span>
+                  <span>@argus.oficial</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </span>
               </a>

@@ -112,7 +112,7 @@ export const ConcursosRadarTab: React.FC<ConcursosRadarTabProps> = ({
 
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
             Monitore editais publicados, bancas contratadas, concursos autorizados e rumores de comissões formadas. 
-            Importe o edital verticalizado para a IA do Learning AI com <strong>apenas 1 clique</strong>.
+            Importe o edital verticalizado para a IA do Argus com <strong>apenas 1 clique</strong>.
           </p>
 
           {/* Mini Estatísticas do Radar */}

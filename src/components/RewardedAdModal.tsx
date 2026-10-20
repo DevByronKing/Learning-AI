@@ -70,14 +70,14 @@ export const RewardedAdModal: React.FC<RewardedAdModalProps> = ({
   const progressPercentage = Math.round(((15 - countdown) / 15) * 100);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-[70] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
       <div className="w-full max-w-lg glass-panel p-6 rounded-3xl border border-blue-500/40 relative glow-brand shadow-2xl overflow-hidden flex flex-col">
         
         {/* Top Header */}
         <div className="flex items-center justify-between pb-3 border-b border-white/10 text-xs">
           <div className="flex items-center gap-2 text-blue-300">
             <Sparkles className="w-4 h-4 text-blue-400 animate-pulse" />
-            <span className="font-bold uppercase tracking-wider">Patrocinador do Learning AI</span>
+            <span className="font-bold uppercase tracking-wider">Patrocinador do Argus</span>
           </div>
 
           <div className="flex items-center gap-2">

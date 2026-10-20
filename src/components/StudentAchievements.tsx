@@ -113,7 +113,7 @@ export const StudentAchievements: React.FC<StudentAchievementsProps> = ({
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-indigo-600 text-white text-xs font-bold shadow-2xl shadow-indigo-600/40 border border-amber-300/40 animate-fadeIn flex items-center gap-2">
+        <div className="fixed top-20 right-4 sm:top-20 sm:right-6 z-50 px-4 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-indigo-600 text-white text-xs font-bold shadow-2xl shadow-indigo-600/40 border border-amber-300/40 animate-fadeIn flex items-center gap-2">
           <span>✨</span>
           <span>{toastMessage}</span>
         </div>

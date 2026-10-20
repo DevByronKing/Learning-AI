@@ -35,7 +35,7 @@ export const AIFeedbackVote: React.FC<AIFeedbackVoteProps> = ({
   // Carregar voto anterior se houver
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('aprovalens_ai_feedback_votes');
+      const stored = localStorage.getItem('argus_ai_feedback_votes') || localStorage.getItem('aprovalens_ai_feedback_votes');
       if (stored) {
         const votes = JSON.parse(stored);
         const existing = votes.find((v: any) => v.questionId === questionId);
@@ -49,7 +49,7 @@ export const AIFeedbackVote: React.FC<AIFeedbackVoteProps> = ({
 
   const saveVoteLocally = (vote: 'up' | 'down', tags: string[] = [], textComment: string = '') => {
     try {
-      const stored = localStorage.getItem('aprovalens_ai_feedback_votes');
+      const stored = localStorage.getItem('argus_ai_feedback_votes') || localStorage.getItem('aprovalens_ai_feedback_votes');
       const votes: any[] = stored ? JSON.parse(stored) : [];
       const updated = votes.filter((v: any) => v.questionId !== questionId);
       updated.push({
@@ -62,7 +62,7 @@ export const AIFeedbackVote: React.FC<AIFeedbackVoteProps> = ({
         comment: textComment,
         timestamp: new Date().toISOString()
       });
-      localStorage.setItem('aprovalens_ai_feedback_votes', JSON.stringify(updated));
+      localStorage.setItem('argus_ai_feedback_votes', JSON.stringify(updated));
     } catch (err) {
       console.warn('Erro ao salvar voto de feedback local:', err);
     }

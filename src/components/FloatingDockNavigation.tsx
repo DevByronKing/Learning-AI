@@ -19,7 +19,9 @@ import {
   Crown,
   Settings,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  ChevronUp,
+  ChevronDown
 } from 'lucide-react';
 
 interface FloatingDockNavigationProps {
@@ -27,6 +29,7 @@ interface FloatingDockNavigationProps {
   setActiveTab: (tab: string) => void;
   theme?: 'dark' | 'light';
   pendingMistakesCount?: number;
+  isOverlayOpen?: boolean;
 }
 
 interface DockItem {
@@ -43,170 +46,216 @@ export const FloatingDockNavigation: React.FC<FloatingDockNavigationProps> = ({
   activeTab,
   setActiveTab,
   theme = 'dark',
-  pendingMistakesCount = 0
+  pendingMistakesCount = 0,
+  isOverlayOpen = false
 }) => {
   const isLight = theme === 'light';
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const activeItemRef = useRef<HTMLButtonElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [hasDomOverlay, setHasDomOverlay] = useState(false);
+  const [isScrolledDown, setIsScrolledDown] = useState(false);
+  const lastScrollY = useRef(0);
 
-  // Catálogo completo com as 16 abas em ordem natural e intuitiva (Início primeiro)
+  // Carregar preferência de dock minimizado
+  useEffect(() => {
+    try {
+      if (localStorage.getItem('learning_ai_dock_collapsed') === 'true') {
+        setIsCollapsed(true);
+      }
+    } catch {}
+  }, []);
+
+  const handleToggleCollapse = (val: boolean) => {
+    setIsCollapsed(val);
+    try {
+      localStorage.setItem('learning_ai_dock_collapsed', String(val));
+    } catch {}
+  };
+
+  // Detecção Universal de Modais e Gavetas em Todo o Site
+  useEffect(() => {
+    const checkOverlays = () => {
+      if (typeof document === 'undefined') return;
+      const overlays = document.querySelectorAll(
+        '[role="dialog"], [aria-modal="true"], .fixed.inset-0:not(.pointer-events-none):not(.z-0):not([aria-hidden="true"])'
+      );
+      
+      let isVisibleOverlay = false;
+      overlays.forEach((el) => {
+        if (el instanceof HTMLElement && !el.closest('.dock-nav') && !el.closest('aside[aria-label="Controle de navegação minimizado"]')) {
+          const style = window.getComputedStyle(el);
+          if (style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0') {
+            if (el.offsetWidth > 120 && el.offsetHeight > 120) {
+              isVisibleOverlay = true;
+            }
+          }
+        }
+      });
+
+      setHasDomOverlay(isVisibleOverlay);
+    };
+
+    let rafId: number | null = null;
+    const throttledCheckOverlays = () => {
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(() => {
+        checkOverlays();
+        rafId = null;
+      });
+    };
+
+    checkOverlays();
+    const observer = new MutationObserver(throttledCheckOverlays);
+    observer.observe(document.body, { 
+      childList: true, 
+      subtree: true, 
+      attributes: true, 
+      attributeFilter: ['style', 'class', 'hidden', 'aria-hidden'] 
+    });
+
+    window.addEventListener('app:overlay-change', throttledCheckOverlays);
+    return () => {
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+      observer.disconnect();
+      window.removeEventListener('app:overlay-change', throttledCheckOverlays);
+    };
+  }, []);
+
+  // Auto-hide Inteligente ao Rolar a Página para Baixo (não bloqueia leitura de abas)
+  useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY || document.documentElement.scrollTop;
+      const scrollDiff = currentScrollY - lastScrollY.current;
+
+      // Se rolou para baixo mais de 35px e já desceu do topo
+      if (scrollDiff > 35 && currentScrollY > 160) {
+        setIsScrolledDown(true);
+      } else if (scrollDiff < -20 || currentScrollY < 80) {
+        // Rolando para cima ou voltou ao topo
+        setIsScrolledDown(false);
+      }
+
+      lastScrollY.current = currentScrollY;
+
+      // Restaura automaticamente após 2s sem rolar
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        setIsScrolledDown(false);
+      }, 2000);
+    };
+
+    // Revela ao aproximar o mouse da borda inferior da tela
+    const handleMouseMove = (e: MouseEvent) => {
+      if (typeof window !== 'undefined' && e.clientY > window.innerHeight - 70) {
+        setIsScrolledDown(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+      clearTimeout(scrollTimeout);
+    };
+  }, []);
+
+  // Catálogo simplificado e intuitivo estruturado nos 4 Pilares da Aprovação
   const dockGroups: { groupName: string; items: DockItem[] }[] = [
     {
-      groupName: 'Visão Geral',
-      items: [
-        {
-          id: 'landing',
-          label: 'Início',
-          fullName: 'Página Inicial & Apresentação',
-          category: 'Visão Geral',
-          icon: Compass,
-          badge: null
-        },
-        {
-          id: 'dashboard',
-          label: 'Cockpit',
-          fullName: 'Cockpit de Dados & Heatmap',
-          category: 'Visão Geral',
-          icon: Activity,
-          badge: 'HEATMAP',
-          badgeColor: 'bg-emerald-500 text-white'
-        }
-      ]
-    },
-    {
-      groupName: 'Núcleo de Estudo',
+      groupName: 'Praticar',
       items: [
         {
           id: 'simulator',
           label: 'Arena',
-          fullName: 'Arena de Combate 60/40',
-          category: 'Núcleo de Estudo',
+          fullName: 'Arena de Questões & Provas',
+          category: 'Praticar',
           icon: Crosshair,
-          badge: '60/40',
-          badgeColor: 'bg-blue-500 text-white'
-        },
-        {
-          id: 'flashcards',
-          label: 'Cards 3D',
-          fullName: 'SRS Flashcards 3D',
-          category: 'Núcleo de Estudo',
-          icon: Layers,
-          badge: '3D',
-          badgeColor: 'bg-purple-500 text-white'
+          badge: null
         },
         {
           id: 'mistakes',
           label: 'Erros',
-          fullName: 'Caderno de Erros Cognitivo',
-          category: 'Núcleo de Estudo',
+          fullName: 'Caderno de Erros & Revanche',
+          category: 'Praticar',
           icon: ShieldAlert,
           badge: pendingMistakesCount > 0 ? `${pendingMistakesCount}` : null,
-          badgeColor: 'bg-rose-500 text-white shadow-rose-500/50'
+          badgeColor: 'bg-rose-500 text-white shadow-xs'
         },
         {
-          id: 'vademecum',
-          label: 'Vade Mecum',
-          fullName: 'Smart Vade Mecum & Links',
-          category: 'Núcleo de Estudo',
-          icon: Scale,
-          badge: 'LINKS',
-          badgeColor: 'bg-amber-500 text-white'
-        },
-        {
-          id: 'questions',
-          label: 'Questões',
-          fullName: 'Banco de Questões Comentadas',
-          category: 'Núcleo de Estudo',
-          icon: BookCheck,
+          id: 'flashcards',
+          label: 'Flashcards',
+          fullName: 'Repetição Espaçada (SRS)',
+          category: 'Praticar',
+          icon: Layers,
           badge: null
         }
       ]
     },
     {
-      groupName: 'Estratégia & IA',
+      groupName: 'Conteúdo',
       items: [
         {
-          id: 'edital',
-          label: 'Edital IA',
-          fullName: 'Edital Verticalizado IA',
-          category: 'Estratégia & IA',
-          icon: ScrollText,
-          badge: 'IA',
-          badgeColor: 'bg-cyan-500 text-white'
-        },
-        {
-          id: 'cycle',
-          label: 'Ciclos',
-          fullName: 'Ciclos de Estudo Dinâmicos',
-          category: 'Estratégia & IA',
-          icon: CalendarClock,
-          badge: null
-        },
-        {
-          id: 'discursivas',
-          label: 'Redação',
-          fullName: 'Estúdio Discursivo & Feedback',
-          category: 'Estratégia & IA',
-          icon: Feather,
+          id: 'vademecum',
+          label: 'Vade Mecum',
+          fullName: 'Smart Vade Mecum & Leis',
+          category: 'Conteúdo',
+          icon: Scale,
           badge: null
         },
         {
           id: 'summaries',
           label: 'Resumos',
-          fullName: 'Resumos Sintéticos 80/20',
-          category: 'Estratégia & IA',
+          fullName: 'Resumos Inteligentes 80/20',
+          category: 'Conteúdo',
           icon: BookOpen,
-          badge: '80/20',
-          badgeColor: 'bg-indigo-500 text-white'
+          badge: null
         },
         {
-          id: 'psychometrics',
-          label: 'Psico TRI',
-          fullName: 'Psicometria & Teoria TRI',
-          category: 'Estratégia & IA',
-          icon: Microscope,
-          badge: 'TRI',
-          badgeColor: 'bg-teal-500 text-white'
-        },
-        {
-          id: 'radar',
-          label: 'Radar 2026',
-          fullName: 'Radar de Concursos 2026',
-          category: 'Estratégia & IA',
-          icon: Radar,
-          badge: 'NOVO',
-          badgeColor: 'bg-emerald-500 text-white'
+          id: 'discursivas',
+          label: 'Redação',
+          fullName: 'Estúdio Discursivo & Peças',
+          category: 'Conteúdo',
+          icon: Feather,
+          badge: null
         }
       ]
     },
     {
-      groupName: 'Plataforma',
+      groupName: 'Planejar',
       items: [
         {
-          id: 'guide',
-          label: 'Guia',
-          fullName: 'Guia & Metodologia do Aluno',
-          category: 'Plataforma',
-          icon: GraduationCap,
+          id: 'edital',
+          label: 'Edital IA',
+          fullName: 'Edital Verticalizado & Radar',
+          category: 'Planejar',
+          icon: ScrollText,
           badge: null
         },
         {
-          id: 'pricing-plans',
-          label: 'Planos',
-          fullName: 'Planos & Assinatura PRO',
-          category: 'Plataforma',
-          icon: Crown,
-          badge: 'PRO',
-          badgeColor: 'bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black'
-        },
+          id: 'cycle',
+          label: 'Ciclos',
+          fullName: 'Ciclo de Estudos Meirelles',
+          category: 'Planejar',
+          icon: CalendarClock,
+          badge: null
+        }
+      ]
+    },
+    {
+      groupName: 'Evolução',
+      items: [
         {
-          id: 'settings',
-          label: 'Ajustes',
-          fullName: 'Configurações da Conta & Sistema',
-          category: 'Plataforma',
-          icon: Settings,
+          id: 'dashboard',
+          label: 'Cockpit',
+          fullName: 'Cockpit de Dados & Heatmap',
+          category: 'Evolução',
+          icon: Activity,
           badge: null
         }
       ]
@@ -229,15 +278,13 @@ export const FloatingDockNavigation: React.FC<FloatingDockNavigationProps> = ({
     return () => window.removeEventListener('resize', checkScrollState);
   }, []);
 
-  // Rolar suavemente somente quando houver overflow real no container
+  // Rolar suavemente somente quando houver overflow real no container interno da dock
   useEffect(() => {
     const el = scrollContainerRef.current;
-    if (el && el.scrollWidth > el.clientWidth && activeItemRef.current) {
-      activeItemRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'nearest'
-      });
+    const item = activeItemRef.current;
+    if (el && item && el.scrollWidth > el.clientWidth) {
+      const targetLeft = item.offsetLeft - (el.clientWidth / 2) + (item.clientWidth / 2);
+      el.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
     }
     checkScrollState();
   }, [activeTab]);
@@ -251,10 +298,45 @@ export const FloatingDockNavigation: React.FC<FloatingDockNavigationProps> = ({
     }
   };
 
+  const currentActiveItem = dockGroups.flatMap(g => g.items).find(i => i.id === activeTab) || dockGroups[0].items[0];
+  const CurrentIcon = currentActiveItem.icon;
+
+  // Não renderizar o Dock na Landing Page pública nem quando houver modais/overlays abertos
+  if (isOverlayOpen || hasDomOverlay || activeTab === 'landing') return null;
+
+  if (isCollapsed) {
+    return (
+      <aside
+        aria-label="Controle de navegação minimizado"
+        className={`fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 select-none transition-all duration-300 ${
+          isScrolledDown ? 'translate-y-20 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
+        }`}
+      >
+        <button
+          onClick={() => handleToggleCollapse(false)}
+          className={`group flex items-center gap-2 px-3.5 py-2 rounded-full border shadow-xl backdrop-blur-2xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer ${
+            isLight
+              ? 'bg-white/95 border-slate-200 shadow-slate-300/40 text-slate-800 hover:bg-slate-50 ring-1 ring-slate-900/5'
+              : 'bg-[#080d1a]/95 border-white/10 shadow-black/80 text-white hover:bg-[#0f172a] ring-1 ring-white/15'
+          }`}
+          title="Expandir barra de navegação das abas"
+          aria-label="Expandir barra de navegação das abas"
+        >
+          <CurrentIcon className="w-4 h-4 text-blue-500 shrink-0" />
+          <span className="text-xs font-black tracking-tight">{currentActiveItem.label}</span>
+          <span className="text-[10px] text-slate-400 font-medium">| Ver Abas</span>
+          <ChevronUp className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors" />
+        </button>
+      </aside>
+    );
+  }
+
   return (
     <nav
       aria-label="Navegação principal da plataforma"
-      className="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-50 select-none w-auto max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-2rem)] lg:max-w-fit animate-fadeIn"
+      className={`fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 select-none w-auto max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-2rem)] lg:max-w-fit transition-all duration-300 ${
+        isScrolledDown ? 'translate-y-28 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
+      }`}
     >
       {/* Container Principal do Dock com altura adequada para NUNCA cortar badges */}
       <div
@@ -429,6 +511,20 @@ export const FloatingDockNavigation: React.FC<FloatingDockNavigationProps> = ({
             <ChevronRight className="w-4 h-4" />
           </button>
         )}
+
+        {/* Botão de Minimizar Dock para visão total das abas */}
+        <button
+          onClick={() => handleToggleCollapse(true)}
+          className={`flex items-center justify-center w-7 h-7 rounded-xl border shrink-0 ml-1 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none ${
+            isLight
+              ? 'bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-500 hover:text-slate-800'
+              : 'bg-white/5 hover:bg-white/15 border-white/10 text-slate-400 hover:text-white'
+          }`}
+          title="Minimizar barra para visualizar todo o conteúdo da aba"
+          aria-label="Minimizar barra de abas"
+        >
+          <ChevronDown className="w-4 h-4" />
+        </button>
       </div>
     </nav>
   );

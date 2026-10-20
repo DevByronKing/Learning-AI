@@ -16,14 +16,20 @@ import {
   Crown, 
   AlertCircle, 
   CheckCircle2, 
-  Shield, 
   ShoppingBag,
   Gift,
-  Flame
+  Flame,
+  UserCheck,
+  Mail,
+  Phone,
+  FileText,
+  Shield
 } from 'lucide-react';
 import { SubscriptionPlan } from '@/lib/types';
 import { AVAILABLE_COUPONS } from '@/lib/concursosData';
 import { trackConversion } from '@/components/TrackingScripts';
+import { useAuthStore } from '@/store/useAuthStore';
+import { GoogleIcon } from './GoogleSignInButton';
 
 interface CheckoutCartTabProps {
   initialPlan?: SubscriptionPlan;
@@ -40,7 +46,7 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
 }) => {
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan>(initialPlan === 'aspirante' ? 'pro' : initialPlan);
   const [billingCycle, setBillingCycle] = useState<'mensal' | 'trimestral' | 'anual' | 'vitalicio'>(
-    initialPlan === 'black' ? 'vitalicio' : 'mensal'
+    initialPlan === 'black' ? 'vitalicio' : 'anual'
   );
   const [paymentMethod, setPaymentMethod] = useState<'pix' | 'cartao'>('pix');
   
@@ -60,15 +66,40 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
   const [cardCvv, setCardCvv] = useState('');
   const [installments, setInstallments] = useState(1);
 
+  // Customer Identification State
+  const { user } = useAuthStore();
+  const [customerName, setCustomerName] = useState(user?.name || '');
+  const [customerEmail, setCustomerEmail] = useState(user?.email || '');
+  const [customerCpf, setCustomerCpf] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [customerError, setCustomerError] = useState<string | null>(null);
+
+  const formatCpf = (val: string) => {
+    return val
+      .replace(/\D/g, '')
+      .slice(0, 11)
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  };
+
+  const formatPhone = (val: string) => {
+    return val
+      .replace(/\D/g, '')
+      .slice(0, 11)
+      .replace(/^(\d{2})(\d)/g, '($1) $2')
+      .replace(/(\d{5})(\d{4})$/, '$1-$2');
+  };
+
   // Status
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPaymentConfirmed, setIsPaymentConfirmed] = useState(false);
 
   // Preços Base Reposicionados
   const baseMonthlyPrices: Record<'pro' | 'elite' | 'black' | 'lancamento', number> = {
-    pro: 59.90,
-    elite: 129.90,
-    black: 197.00,
+    pro: 99.00,
+    elite: 189.00,
+    black: 249.00,
     lancamento: 97.00
   };
 
@@ -97,7 +128,7 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
       cycleDiscountValue = 0;
     }
   } else {
-    const basePrice = baseMonthlyPrices[selectedPlan as 'pro' | 'elite'] || 59.90;
+    const basePrice = baseMonthlyPrices[selectedPlan as 'pro' | 'elite'] || 99.00;
     if (billingCycle === 'trimestral') {
       rawTotal = basePrice * 3;
       cycleDiscountPercent = 15; // 15% OFF
@@ -105,7 +136,7 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
     } else if (billingCycle === 'anual') {
       // PRO: R$ 39,90/mês (R$ 478,80/ano) | ELITE: R$ 89,90/mês (R$ 1.078,80/ano)
       rawTotal = basePrice * 12;
-      const targetAnual = selectedPlan === 'elite' ? 1078.80 : 478.80;
+      const targetAnual = selectedPlan === 'elite' ? 1068.00 : 588.00;
       cycleDiscountValue = rawTotal - targetAnual;
       cycleDiscountPercent = Math.round((cycleDiscountValue / rawTotal) * 100);
     } else {
@@ -120,12 +151,12 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
   const finalPrice = Math.max(0, totalAfterCycle - couponDiscountValue);
 
   // Pix Code Simulado mas Realista
-  const pixCode = `00020126580014br.gov.bcb.pix0136learningai-pagamentos-asaas-2026520400005303986540${finalPrice.toFixed(2).replace('.', '')}5802BR5920LEARNING AI SAAS LTDA6009SAO PAULO62070503***6304E8A9`;
+  const pixCode = `00020126580014br.gov.bcb.pix0136argus-pagamentos-asaas-2026520400005303986540${finalPrice.toFixed(2).replace('.', '')}5802BR5920ARGUS SAAS LTDA6009SAO PAULO62070503***6304E8A9`;
 
   // Disparo de InitiateCheckout de Anúncios
   useEffect(() => {
     trackConversion.initiateCheckout(selectedPlan, finalPrice);
-  }, [selectedPlan]);
+  }, [selectedPlan, finalPrice]);
 
   // Timer Pix
   useEffect(() => {
@@ -164,6 +195,17 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
   };
 
   const handleConfirmPayment = () => {
+    if (!customerEmail || !customerEmail.includes('@')) {
+      setCustomerError('Por favor, informe um e-mail válido para receber o acesso.');
+      showToast('Informe seu e-mail de acesso antes de continuar.');
+      return;
+    }
+    if (!customerName || customerName.trim().length < 3) {
+      setCustomerError('Por favor, informe seu nome completo.');
+      showToast('Informe seu nome completo.');
+      return;
+    }
+    setCustomerError(null);
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
@@ -276,8 +318,8 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                     </span>
                     {selectedPlan === 'pro' && <CheckCircle2 className="w-4 h-4 text-blue-600" />}
                   </div>
-                  <p className="text-xl font-black text-slate-900 dark:text-white">R$ 59,90 <span className="text-xs font-normal text-slate-400">/mês</span></p>
-                  <p className="text-[11px] text-blue-500 font-bold mt-0.5">ou R$ 39,90/mês no anual</p>
+                  <p className="text-xl font-black text-slate-900 dark:text-white">R$ 49,00 <span className="text-xs font-normal text-slate-400">/mês no anual</span></p>
+                  <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-extrabold mt-0.5">51% OFF • De R$ 99/mês no avulso</p>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">IA Flash Ilimitada + Caderno SM-2 + até 4 Editais.</p>
                 </button>
 
@@ -300,8 +342,8 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                     </span>
                     {selectedPlan === 'elite' && <CheckCircle2 className="w-4 h-4 text-indigo-500" />}
                   </div>
-                  <p className="text-xl font-black text-slate-900 dark:text-white">R$ 129,90 <span className="text-xs font-normal text-slate-400">/mês</span></p>
-                  <p className="text-[11px] text-indigo-500 font-bold mt-0.5">ou R$ 89,90/mês no anual</p>
+                  <p className="text-xl font-black text-slate-900 dark:text-white">R$ 89,00 <span className="text-xs font-normal text-slate-400">/mês no anual</span></p>
+                  <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-extrabold mt-0.5">53% OFF • De R$ 189/mês no avulso</p>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Psicometria TRI + 10 Peças OAB/mês + Gemini Pro.</p>
                 </button>
 
@@ -415,7 +457,7 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                       }`}
                     >
                       <span>Anual</span>
-                      <span className="block text-[9px] text-amber-300 font-extrabold">-33% OFF</span>
+                      <span className="block text-[9px] text-amber-300 font-extrabold">-51% OFF</span>
                     </button>
                   </div>
                 )}
@@ -423,11 +465,112 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
             )}
           </div>
 
+          {/* Etapa 2: Identificação do Aluno & Envio do Acesso */}
+          <div className="bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/10 rounded-3xl p-6 shadow-sm space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <UserCheck className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                2. Seus Dados de Acesso & Emissão
+              </h2>
+              {user && user.id !== 'usr_default_demo' && !user.email.includes('argus.app.br') && !user.email.includes('learningai.com.br') && (
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-[11px] font-bold flex items-center gap-1.5">
+                  <GoogleIcon className="w-3 h-3" />
+                  Conta Google
+                </span>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
+                  Nome Completo
+                </label>
+                <input
+                  type="text"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  placeholder="Ex: Carlos Eduardo de Souza"
+                  data-clarity-mask="true"
+                  data-mask="true"
+                  data-private="true"
+                  autoComplete="name"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-medium focus:outline-none focus:border-blue-500 transition-colors"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
+                  E-mail para Liberação do Acesso
+                </label>
+                <input
+                  type="email"
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  placeholder="exemplo@gmail.com"
+                  data-clarity-mask="true"
+                  data-mask="true"
+                  data-private="true"
+                  autoComplete="email"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-medium focus:outline-none focus:border-blue-500 transition-colors"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
+                  CPF do Titular (Obrigatório Asaas / Pix)
+                </label>
+                <input
+                  type="text"
+                  maxLength={14}
+                  value={customerCpf}
+                  onChange={(e) => setCustomerCpf(formatCpf(e.target.value))}
+                  placeholder="000.000.000-00"
+                  data-clarity-mask="true"
+                  data-mask="true"
+                  data-private="true"
+                  autoComplete="off"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-mono focus:outline-none focus:border-blue-500 transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
+                  WhatsApp com DDD (Comprovante Instantâneo)
+                </label>
+                <input
+                  type="text"
+                  maxLength={15}
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(formatPhone(e.target.value))}
+                  placeholder="(11) 99999-9999"
+                  data-clarity-mask="true"
+                  data-mask="true"
+                  data-private="true"
+                  autoComplete="tel"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-mono focus:outline-none focus:border-blue-500 transition-colors"
+                />
+              </div>
+            </div>
+
+            {customerError && (
+              <p className="text-xs font-semibold text-rose-500 dark:text-rose-400 flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                <span>{customerError}</span>
+              </p>
+            )}
+
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 leading-relaxed pt-1">
+              🔒 Seus dados cadastrais são tratados de acordo com a LGPD (Lei nº 13.709/2018) e processados pela infraestrutura certificada Asaas & Banco Central do Brasil.
+            </p>
+          </div>
+
           {/* Seletor de Forma de Pagamento */}
           <div className="bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/10 rounded-3xl p-6 shadow-sm space-y-4">
             <h2 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              2. Forma de Pagamento
+              3. Forma de Pagamento
             </h2>
 
             <div className="grid grid-cols-2 gap-3">
@@ -550,6 +693,25 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                     </>
                   )}
                 </button>
+
+                {/* Transparência Jurídica CDC Art. 39 & Jurisprudência STJ */}
+                <div className="p-3 rounded-xl bg-slate-100/90 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/70 text-[11px] text-slate-600 dark:text-slate-300 space-y-1.5 mt-3">
+                  <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <span>Condições da Assinatura (Art. 39 CDC / Transparência):</span>
+                  </div>
+                  <p className="leading-relaxed">
+                    <strong>Preço & Periodicidade:</strong> {selectedPlan === 'black' && billingCycle === 'vitalicio' ? 'R$ 1.497 à vista ou 12x de R$ 124,75 (pagamento único com vigência vitalícia até a posse).' : billingCycle === 'mensal' ? `R$ ${finalPrice.toFixed(2)}/mês cobrado a cada 30 dias com renovação automática.` : `12x de R$ ${(finalPrice / 12).toFixed(2)} (Total de R$ ${finalPrice.toFixed(2)}/ano) com renovação anual.`}
+                  </p>
+                  {billingCycle !== 'vitalicio' && selectedPlan !== 'lancamento' && (
+                    <p className="leading-relaxed">
+                      <strong>Regra de Renovação & Aviso Prévio:</strong> O plano renova automaticamente ao final do ciclo contratado. Você receberá <strong>aviso prévio formal por e-mail com 30 dias e 7 dias de antecedência</strong> antes de cada renovação para decidir se deseja continuar ou pausar o plano. O cancelamento pode ser efetuado com 1 clique a qualquer momento no seu painel sem multas residuais.
+                    </p>
+                  )}
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                    🛡️ Garantia incondicional de 7 dias com devolução de 100% do valor pago (Art. 49 CDC).
+                  </p>
+                </div>
               </div>
             )}
 
@@ -566,6 +728,10 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                     value={cardNumber}
                     onChange={(e) => setCardNumber(e.target.value)}
                     placeholder="0000 0000 0000 0000"
+                    data-clarity-mask="true"
+                    data-mask="true"
+                    data-private="true"
+                    autoComplete="cc-number"
                     className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-mono focus:outline-none focus:border-blue-500"
                   />
                 </div>
@@ -579,6 +745,10 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                     value={cardHolder}
                     onChange={(e) => setCardHolder(e.target.value)}
                     placeholder="Ex: CARLOS E SOUZA"
+                    data-clarity-mask="true"
+                    data-mask="true"
+                    data-private="true"
+                    autoComplete="cc-name"
                     className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm uppercase focus:outline-none focus:border-blue-500 font-bold"
                   />
                 </div>
@@ -594,6 +764,10 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                       value={cardExpiry}
                       onChange={(e) => setCardExpiry(e.target.value)}
                       placeholder="MM/AA"
+                      data-clarity-mask="true"
+                      data-mask="true"
+                      data-private="true"
+                      autoComplete="cc-exp"
                       className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-mono focus:outline-none focus:border-blue-500"
                     />
                   </div>
@@ -608,6 +782,10 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                       value={cardCvv}
                       onChange={(e) => setCardCvv(e.target.value)}
                       placeholder="123"
+                      data-clarity-mask="true"
+                      data-mask="true"
+                      data-private="true"
+                      autoComplete="cc-csc"
                       className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-mono focus:outline-none focus:border-blue-500"
                     />
                   </div>
@@ -660,6 +838,25 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                     </>
                   )}
                 </button>
+
+                {/* Transparência Jurídica CDC Art. 39 & Jurisprudência STJ */}
+                <div className="p-3 rounded-xl bg-slate-100/90 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/70 text-[11px] text-slate-600 dark:text-slate-300 space-y-1.5 mt-3">
+                  <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <span>Condições da Assinatura (Art. 39 CDC / Transparência):</span>
+                  </div>
+                  <p className="leading-relaxed">
+                    <strong>Preço & Periodicidade:</strong> {selectedPlan === 'black' && billingCycle === 'vitalicio' ? 'R$ 1.497 à vista ou até 12x de R$ 149,70 (pagamento único sem renovação).' : billingCycle === 'mensal' ? `R$ ${finalPrice.toFixed(2)}/mês com renovação mensal recorrente.` : `12x de R$ ${(finalPrice / 12).toFixed(2)} (Total de R$ ${finalPrice.toFixed(2)}/ano) com renovação anual.`}
+                  </p>
+                  {billingCycle !== 'vitalicio' && selectedPlan !== 'lancamento' && (
+                    <p className="leading-relaxed">
+                      <strong>Regra de Renovação & Aviso Prévio:</strong> Renovação automática ao término de cada período. Em cumprimento ao CDC, você receberá <strong>aviso prévio formal por e-mail com 30 dias e 7 dias de antecedência</strong> da data de renovação. O cancelamento pode ser efetuado com 1 clique a qualquer momento no seu painel de usuário sem taxas residuais.
+                    </p>
+                  )}
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                    🛡️ Garantia incondicional de 7 dias com devolução de 100% do valor pago (Art. 49 CDC).
+                  </p>
+                </div>
               </div>
             )}
           </div>

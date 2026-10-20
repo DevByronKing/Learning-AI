@@ -26,10 +26,10 @@ export function FloatingContactSupport({
   const [feedbackMessage, setFeedbackMessage] = useState<string>('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Qualificação do aluno: Verifica se é pagante ou possui trial com cartão validado
   const isCommittedUser = isPayingOrCommitted || (typeof window !== 'undefined' && (
-    (localStorage.getItem('aprovalens_plan') && localStorage.getItem('aprovalens_plan') !== 'aspirante') ||
-    Boolean(localStorage.getItem('learning_ai_subscription_detail')) ||
+    ((localStorage.getItem('argus_plan') || localStorage.getItem('aprovalens_plan')) && (localStorage.getItem('argus_plan') || localStorage.getItem('aprovalens_plan')) !== 'aspirante') ||
+    Boolean(localStorage.getItem('argus_subscription_detail') || localStorage.getItem('learning_ai_subscription_detail')) ||
+    document.cookie.includes('argus_user_access') ||
     document.cookie.includes('learning_ai_user_access')
   ));
 
@@ -38,7 +38,7 @@ export function FloatingContactSupport({
     const phone = '5511999999999'; // Número oficial de suporte da operação
     const statusTag = isCommittedUser ? '[CLIENTE VIP • ASSINANTE / TRIAL VALIDADO]' : '[VISITANTE]';
     const text = encodeURIComponent(
-      `Olá equipe de Engenharia do AprovaLens! Sou ${studentName}.\n` +
+      `Olá equipe de Engenharia do Argus! Sou ${studentName}.\n` +
       `${statusTag}\n` +
       `Estou na aba "${currentTab}" me preparando para: ${targetExam}.\n` +
       `Preciso de ajuda com o seguinte ponto:`
@@ -103,7 +103,7 @@ export function FloatingContactSupport({
   return (
     <>
       {/* Botão Gatilho Flutuante */}
-      <div className="fixed bottom-24 right-4 sm:bottom-28 sm:right-6 z-[60] flex flex-col items-end">
+      <div className="fixed bottom-16 right-3 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end">
         {!isOpen && (
           <button
             onClick={() => {

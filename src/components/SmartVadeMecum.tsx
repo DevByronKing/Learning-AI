@@ -460,7 +460,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
               Vade Mecum Inteligente & Grifos de Risco
             </h1>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Mais de <strong>75% das questões</strong> em concursos federais, estaduais e OAB são resolvidas exclusivamente pela literalidade da lei. O Learning AI destaca os termos exatos que os examinadores adulteram para te induzir ao erro.
+              Mais de <strong>75% das questões</strong> em concursos federais, estaduais e OAB são resolvidas exclusivamente pela literalidade da lei. O Argus destaca os termos exatos que os examinadores adulteram para te induzir ao erro.
             </p>
           </div>
 
@@ -853,7 +853,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
 
       {/* SLIDE-OVER DRAWER DE BACKLINKS BIDIRECIONAIS (ESTILO OBSIDIAN / NOTION) */}
       {selectedBacklinkArticle && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm animate-fadeIn">
+        <div role="dialog" aria-modal="true" className="fixed inset-0 z-[60] flex justify-end bg-black/70 backdrop-blur-sm animate-fadeIn">
           <div className="w-full max-w-xl bg-white dark:bg-[#0e1117] h-full shadow-2xl border-l border-slate-200 dark:border-rose-500/30 flex flex-col justify-between overflow-hidden animate-slideInRight">
             
             {/* Drawer Header */}

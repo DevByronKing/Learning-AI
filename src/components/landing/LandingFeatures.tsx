@@ -13,7 +13,7 @@ export const LandingFeatures: React.FC<LandingFeaturesProps> = ({
   return (
     <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       <div className="text-center mb-20">
-        <h2 className="text-sm font-bold uppercase tracking-widest text-indigo-500 dark:text-indigo-400 mb-3">
+        <h2 className="text-sm font-bold tracking-tight text-indigo-600 dark:text-indigo-400 mb-3">
           Recursos Projetados para Aprovação
         </h2>
         <p className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight">

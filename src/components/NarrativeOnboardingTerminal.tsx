@@ -107,7 +107,7 @@ export const NarrativeOnboardingTerminal: React.FC<NarrativeOnboardingTerminalPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/60 dark:bg-black/85 backdrop-blur-md overflow-y-auto animate-fadeIn font-sans">
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-6 bg-slate-900/60 dark:bg-black/85 backdrop-blur-md overflow-y-auto animate-fadeIn font-sans">
       <div className="relative w-full max-w-2xl bg-white dark:bg-[#090D16] border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col font-mono text-xs transition-colors">
         
         {/* Terminal Header Bar */}
@@ -120,7 +120,7 @@ export const NarrativeOnboardingTerminal: React.FC<NarrativeOnboardingTerminalPr
             </div>
             <span className="text-slate-600 dark:text-slate-400 font-mono text-[11px] ml-2 flex items-center gap-1.5 font-bold">
               <Terminal className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-              learning-ai-kernel://onboarding-copilot
+              argus-kernel://onboarding-copilot
             </span>
           </div>
 

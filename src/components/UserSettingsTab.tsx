@@ -23,10 +23,17 @@ import {
   AlertTriangle,
   FileSpreadsheet,
   RotateCcw,
-  HeartHandshake
+  HeartHandshake,
+  ShieldCheck,
+  Check
 } from 'lucide-react';
 import { StudentProfile, SubscriptionPlan, GuardianAnimalId } from '@/lib/types';
 import { GUARDIAN_ANIMALS } from '@/lib/guardianAnimals';
+import { useAuthStore } from '@/store/useAuthStore';
+import { SupabaseService } from '@/lib/supabaseService';
+import { GoogleSignInButton, GoogleIcon } from './GoogleSignInButton';
+import { TwoFactorAuthModal } from './TwoFactorAuthModal';
+import { getTwoFactorState, saveTwoFactorState } from '@/lib/twoFactorAuth';
 
 interface UserSettingsTabProps {
   studentProfile: StudentProfile;
@@ -47,7 +54,10 @@ export const UserSettingsTab: React.FC<UserSettingsTabProps> = ({
   showToast,
   onRestartOnboarding
 }) => {
-  const [activeSubTab, setActiveSubTab] = useState<'profile' | 'tiers' | 'ai_preferences' | 'privacy'>('profile');
+  const [activeSubTab, setActiveSubTab] = useState<'profile' | 'account' | 'tiers' | 'ai_preferences' | 'privacy'>('profile');
+  const { user, token, logout } = useAuthStore();
+  const [is2FaModalOpen, setIs2FaModalOpen] = useState(false);
+  const [twoFactorState, setTwoFactorState] = useState<ReturnType<typeof getTwoFactorState>>(getTwoFactorState());
 
   // Form State
   const [name, setName] = useState(studentProfile.name || '');
@@ -90,13 +100,13 @@ export const UserSettingsTab: React.FC<UserSettingsTabProps> = ({
         profile: studentProfile,
         plan: currentPlan,
         exportedAt: new Date().toISOString(),
-        system: 'Learning AI - LGPD Data Portability (Art. 18)'
+        system: 'Argus - LGPD Data Portability (Art. 18)'
       };
       const blob = new Blob([JSON.stringify(exportObject, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `learning_ai_meus_dados_${studentProfile.warName || 'aluno'}.json`;
+      a.download = `argus_meus_dados_${studentProfile.warName || 'aluno'}.json`;
       a.click();
       URL.revokeObjectURL(url);
       showToast('Dados exportados com sucesso em conformidade com a LGPD.');
@@ -183,6 +193,18 @@ export const UserSettingsTab: React.FC<UserSettingsTabProps> = ({
         >
           <User className="w-4 h-4" />
           <span>Perfil & Carreira</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSubTab('account')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap ${
+            activeSubTab === 'account'
+              ? 'bg-blue-600 text-white shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5'
+          }`}
+        >
+          <GoogleIcon className="w-4 h-4" />
+          <span>Conta & Login Google</span>
         </button>
 
         <button
@@ -837,7 +859,7 @@ export const UserSettingsTab: React.FC<UserSettingsTabProps> = ({
                 <span>Avaliação de Produto & Melhoria Contínua</span>
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Sua opinião direta orienta o desenvolvimento das próximas ferramentas e calibrações do AprovaLens.
+                Sua opinião direta orienta o desenvolvimento das próximas ferramentas e calibrações do Argus.
               </p>
             </div>
 
@@ -930,11 +952,219 @@ export const UserSettingsTab: React.FC<UserSettingsTabProps> = ({
           <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-500/20 text-xs text-emerald-800 dark:text-emerald-300 flex items-start gap-3">
             <Shield className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
             <div>
-              <strong>Segurança de Ponta a Ponta:</strong> Todos os seus dados são criptografados em trânsito (TLS 1.3) e em repouso nos nossos servidores com backup diário no Supabase. O Learning AI nunca vende seus dados para terceiros.
+              <strong>Segurança de Ponta a Ponta:</strong> Todos os seus dados são criptografados em trânsito (TLS 1.3) e em repouso nos nossos servidores com backup diário no Supabase. O Argus nunca vende seus dados para terceiros.
             </div>
           </div>
         </div>
       )}
+
+      {/* ABA: CONTA & AUTENTICAÇÃO GOOGLE */}
+      {activeSubTab === 'account' && (
+        <div className="bg-white dark:bg-dark-surface border border-slate-200 dark:border-white/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+          <div>
+            <h2 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-emerald-500" />
+              <span>Conta & Sincronização em Nuvem</span>
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Conecte sua conta Google para salvar e sincronizar seu histórico em múltiplos dispositivos.
+            </p>
+          </div>
+
+          {/* Card Google OAuth */}
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-50/80 via-indigo-50/40 to-white dark:from-blue-950/30 dark:via-slate-900/60 dark:to-slate-900 border border-blue-200/80 dark:border-blue-900/40 shadow-xs">
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
+                  <GoogleIcon className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-slate-900 dark:text-white">
+                    Autenticação Oficial Google
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Acesso seguro em 1 clique sem necessidade de senhas.
+                  </p>
+                </div>
+              </div>
+
+              {user && user.id !== 'usr_default_demo' && !user.email.includes('argus.app.br') && !user.email.includes('learningai.com.br') ? (
+                <span className="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 text-xs font-bold flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5" />
+                  Vinculado
+                </span>
+              ) : (
+                <span className="px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-800 text-xs font-bold">
+                  Modo Demonstração
+                </span>
+              )}
+            </div>
+
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-5 leading-relaxed">
+              Ao vincular sua conta Google, seu Caderno de Erros, histórico de simulados, ofensiva (streak) diária e metas de estudo ficam salvos com backup contínuo na nuvem via Supabase.
+            </p>
+
+            {user && user.id !== 'usr_default_demo' && !user.email.includes('argus.app.br') && !user.email.includes('learningai.com.br') ? (
+              <div className="p-4 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                  <div>
+                    <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                      {user.name || 'Estudante'}
+                    </p>
+                    <p className="text-xs text-slate-500 font-mono">
+                      {user.email}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-md">
+                  Google OAuth2 Ativo
+                </span>
+              </div>
+            ) : (
+              <div className="max-w-md">
+                <GoogleSignInButton
+                  text="Fazer login com Google"
+                  variant="standard"
+                  size="md"
+                  fullWidth
+                  onSuccess={() => {
+                    showToast('Redirecionando para login seguro no Google...');
+                  }}
+                />
+                <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-2">
+                  🔒 Criptografia SSL ponta a ponta via Supabase Auth & Google Cloud.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Detalhes de Sessão JWT */}
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-4">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-500" />
+              Sessão Criptografada Ativa
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] uppercase font-bold text-slate-400">E-mail Conectado</span>
+                <p className="font-mono font-semibold text-slate-800 dark:text-slate-200 mt-1 truncate">
+                  {user?.email || 'aluno@argus.app.br'}
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] uppercase font-bold text-slate-400">ID de Aluno</span>
+                <p className="font-mono text-slate-800 dark:text-slate-200 mt-1 truncate">
+                  {user?.id || 'usr_default_demo'}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs">
+              <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Token de Sessão JWT</span>
+              <p className="font-mono text-[11px] text-slate-500 break-all bg-slate-50 dark:bg-slate-900 p-2 rounded-lg">
+                {token ? `${token.slice(0, 50)}...` : 'jwt_mock_active_session_argus'}
+              </p>
+            </div>
+          </div>
+
+          {/* Autenticação em Dois Fatores (2FA / MFA - Pilar 6: Segurança Reforçada) */}
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>Autenticação em Dois Fatores (2FA / TOTP)</span>
+                    {twoFactorState.enabled ? (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                        Ativado
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                        Recomendado
+                      </span>
+                    )}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Exige código de 6 dígitos gerado no Google Authenticator ou Authy para login e painéis administrativos.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                {twoFactorState.enabled ? (
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIs2FaModalOpen(true)}
+                      className="px-3.5 py-2 rounded-xl bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 text-xs font-bold transition-all cursor-pointer"
+                    >
+                      Ver Códigos
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        saveTwoFactorState({ enabled: false });
+                        setTwoFactorState({ enabled: false });
+                        showToast('2FA desativado nesta conta.');
+                      }}
+                      className="px-3.5 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 text-xs font-bold transition-all cursor-pointer"
+                    >
+                      Desativar
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setIs2FaModalOpen(true)}
+                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-black shadow-md shadow-blue-500/25 transition-all cursor-pointer"
+                  >
+                    Ativar 2FA Agora
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Desconectar */}
+          <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 flex items-center justify-between gap-4 text-xs">
+            <div>
+              <p className="font-bold text-slate-800 dark:text-amber-300">Desconectar da Plataforma</p>
+              <p className="text-slate-600 dark:text-slate-400 text-[11px] mt-0.5">
+                Encerra a sessão atual e remove as credenciais locais deste navegador.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                logout();
+                SupabaseService.signOut();
+                showToast('Você saiu da sua conta.');
+              }}
+              className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md shrink-0 transition-colors cursor-pointer"
+            >
+              Sair da Conta
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Configuração de 2FA */}
+      <TwoFactorAuthModal
+        isOpen={is2FaModalOpen}
+        onClose={() => setIs2FaModalOpen(false)}
+        mode="setup"
+        userEmail={user?.email || 'aluno@argus.app.br'}
+        onSuccess={() => {
+          setTwoFactorState(getTwoFactorState());
+          showToast('🛡️ 2FA configurado com sucesso! Sua conta está blindada.');
+        }}
+      />
 
     </div>
   );

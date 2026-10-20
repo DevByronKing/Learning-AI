@@ -12,16 +12,16 @@ export async function POST(req: NextRequest) {
       planId = 'pro', 
       billingCycle = 'annual', 
       paymentMethod = 'pix', 
-      userEmail = 'aluno@learningai.app', 
+      userEmail = 'aluno@argus.app.br', 
       userName = 'Concurseiro' 
     } = body;
 
-    // Cálculo de preços baseado em ciclo (Value-Based Pricing)
+    // Cálculo de preços baseado em ciclo (Estratégia do Plano Isca / Âncora de Preço)
     const prices: Record<string, { name: string; monthly: number; annual: number }> = {
       aspirante: { name: 'Aspirante (Gratuito)', monthly: 0, annual: 0 },
-      pro: { name: 'Concurseiro PRO (Copiloto Cognitivo)', monthly: 59.90, annual: 478.80 },
-      elite: { name: 'Carreiras Elite & Discursivas com IA', monthly: 129.90, annual: 1078.80 },
-      black: { name: 'Black Vitalício (Até a Posse)', monthly: 197.00, annual: 1497.00 },
+      pro: { name: 'Concurseiro PRO (Copiloto Cognitivo)', monthly: 99.00, annual: 588.00 }, // R$ 49/mês no anual (R$ 588/ano)
+      elite: { name: 'Carreiras Elite & Discursivas com IA', monthly: 189.00, annual: 1068.00 }, // R$ 89/mês no anual (R$ 1.068/ano)
+      black: { name: 'Black Vitalício (Até a Posse)', monthly: 249.00, annual: 1497.00 },
       lancamento: { name: 'Oferta Fechada: Passe Até a Prova (Lote 1)', monthly: 97.00, annual: 97.00 },
     };
 
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       amount,
       userEmail,
       userName,
-      description: `Learning AI - Assinatura ${planConfig.name} (${billingCycle === 'annual' ? 'Anual' : 'Mensal'})`,
+      description: `Argus - Assinatura ${planConfig.name} (${billingCycle === 'annual' ? 'Anual' : 'Mensal'})`,
     });
 
     // Registrar no TransactionManager

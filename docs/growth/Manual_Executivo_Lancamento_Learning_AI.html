@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Learning AI — Manual Executivo de Lançamento, Oferta & Guia de Guerra</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    @page {
+      size: A4;
+      margin: 14mm 15mm 15mm 15mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #0f172a;
+      background-color: #ffffff;
+      line-height: 1.5;
+      font-size: 10.5pt;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page-break {
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .no-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* Cover Page */
+    .cover {
+      min-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 2px solid #0f172a;
+      padding: 38px;
+      border-radius: 8px;
+      background: radial-gradient(circle at top right, #f8fafc 0%, #ffffff 70%);
+      margin-bottom: 20px;
+    }
+
+    .cover-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-primary {
+      background-color: #0f172a;
+      color: #ffffff;
+    }
+
+    .badge-accent {
+      background-color: #e0e7ff;
+      color: #3730a3;
+      border: 1px solid #c7d2fe;
+    }
+
+    .badge-emerald {
+      background-color: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .cover-title-area {
+      margin: 35px 0;
+    }
+
+    .cover-tagline {
+      font-size: 12.5pt;
+      font-weight: 700;
+      color: #4f46e5;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    .cover-title {
+      font-size: 30pt;
+      font-weight: 850;
+      line-height: 1.1;
+      color: #0f172a;
+      margin: 0 0 16px 0;
+      letter-spacing: -0.03em;
+    }
+
+    .cover-subtitle {
+      font-size: 13.5pt;
+      color: #475569;
+      line-height: 1.45;
+      max-width: 90%;
+      margin-bottom: 24px;
+    }
+
+    .cover-mantra {
+      background: #f1f5f9;
+      border-left: 4px solid #4f46e5;
+      padding: 16px 20px;
+      border-radius: 0 6px 6px 0;
+      font-size: 10.5pt;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .cover-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      border-top: 2px solid #e2e8f0;
+      padding-top: 20px;
+    }
+
+    .meta-box h4 {
+      margin: 0 0 4px 0;
+      font-size: 8.5pt;
+      text-transform: uppercase;
+      color: #64748b;
+      letter-spacing: 0.05em;
+    }
+
+    .meta-box p {
+      margin: 0;
+      font-size: 11pt;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    /* Headings */
+    h1, h2, h3, h4 {
+      color: #0f172a;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 16pt;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 6px;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h3 {
+      font-size: 12.5pt;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      color: #1e293b;
+    }
+
+    p {
+      margin: 0 0 10px 0;
+    }
+
+    /* Callouts & Alert Boxes */
+    .callout {
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin: 12px 0;
+      font-size: 9.8pt;
+    }
+
+    .callout-info {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #0284c7;
+    }
+
+    .callout-warning {
+      background-color: #fffbeb;
+      border: 1px solid #fde68a;
+      border-left: 4px solid #d97706;
+    }
+
+    .callout-success {
+      background-color: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+    }
+
+    .callout-dark {
+      background-color: #0f172a;
+      color: #f8fafc;
+      border-left: 4px solid #6366f1;
+    }
+
+    .callout-dark strong {
+      color: #38bdf8;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 9.5pt;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 7px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    /* Checklist Styles */
+    .checklist {
+      margin: 8px 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 7px;
+      font-size: 9.8pt;
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      break-inside: avoid;
+    }
+
+    .check-box {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #4f46e5;
+      border-radius: 3px;
+      margin-right: 10px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      display: inline-block;
+      background: #fafafa;
+    }
+
+    .check-content strong {
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .check-desc {
+      color: #64748b;
+      font-size: 9pt;
+      margin-top: 2px;
+    }
+
+    /* Script Cards (Copy/Roteiros) */
+    .script-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background-color: #f8fafc;
+      padding: 11px 13px;
+      margin: 11px 0;
+      break-inside: avoid;
+    }
+
+    .script-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 5px;
+      margin-bottom: 7px;
+    }
+
+    .script-title {
+      font-weight: 800;
+      font-size: 10pt;
+      color: #1e293b;
+    }
+
+    .script-badge {
+      font-size: 8pt;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 6px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .script-line {
+      margin-bottom: 5px;
+      font-size: 9.3pt;
+      line-height: 1.45;
+    }
+
+    .script-label {
+      font-weight: 700;
+      color: #4f46e5;
+      font-size: 8.5pt;
+      text-transform: uppercase;
+      display: inline-block;
+      width: 90px;
+    }
+
+    /* Flow diagram boxes */
+    .flow-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 12px 0;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-left: 4px solid #4f46e5;
+      padding: 8px 12px;
+      border-radius: 0 4px 4px 0;
+      font-size: 9.5pt;
+    }
+
+    .flow-step-num {
+      font-weight: 800;
+      color: #4f46e5;
+      margin-right: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11pt;
+    }
+
+    /* Footer on print */
+    .page-footer {
+      border-top: 1px solid #e2e8f0;
+      padding-top: 6px;
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 8pt;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5pt;
+      background-color: #f1f5f9;
+      padding: 1px 4px;
+      border-radius: 3px;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CAPA -->
+  <div class="cover">
+    <div class="cover-top">
+      <span class="badge badge-primary">DOCUMENTO EXECUTIVO DE OPERAÇÕES</span>
+      <span class="badge badge-emerald">PRONTO PARA IMPRESSÃO & EXECUÇÃO</span>
+    </div>
+
+    <div class="cover-title-area">
+      <div class="cover-tagline">Manual de Guerra & Crescimento de EdTech</div>
+      <h1 class="cover-title">LEARNING AI:<br>PLANO DE PUBLICAÇÃO, OFERTA & ESCALA</h1>
+      <div class="cover-subtitle">
+        O manual tático e operacional para colocar o sistema no ar, atrair os primeiros 50 alunos pagantes, ativar canais orgânicos sem custo e escalar até R$ 50.000 MRR.
+      </div>
+
+      <div class="cover-mantra">
+        🎯 <strong>Mantra de Produto (Fase 1):</strong> "Nas primeiras 6 semanas de lançamento, nenhuma nova funcionalidade deve ser escrita. O foco total e irrestrito é destravar atritos de onboarding, gerar conversão e reter com o Caderno de Erros."
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <div class="meta-box">
+        <h4>Produto</h4>
+        <p>Learning AI (Concursos & OAB)</p>
+      </div>
+      <div class="meta-box">
+        <h4>Horizonte de Validação</h4>
+        <p>30 a 60 Dias (SaaS Bootstrapped)</p>
+      </div>
+      <div class="meta-box">
+        <h4>Meta Financeira Fase 1</h4>
+        <p>50 Alfas ➔ R$ 10k ➔ R$ 50k MRR</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- CAPÍTULO 1 -->
+  <h2>1. O Funil Mínimo Viável: O Core Loop de 5 Minutos</h2>
+  <p>
+    O principal erro de novos fundadores de EdTech é tentar exibir 100% dos recursos no primeiro contato. O concurseiro vive sob ansiedade crônica e sobrecarga de material. Ele precisa de um <strong>"Aha! Moment" imediato</strong> para perceber que sua ferramenta é infinitamente superior aos bancos legados.
+  </p>
+
+  <div class="flow-container no-break">
+    <div class="flow-step">
+      <span class="flow-step-num">01</span>
+      <div><strong>Acesso Imediato:</strong> Visitante chega na Landing Page e não vê formulários burocráticos.</div>
+    </div>
+    <div class="flow-step">
+      <span class="flow-step-num">02</span>
+      <div><strong>Micro-Compromisso:</strong> Escolhe o cargo/carreira (ex: PF, Tribunais, OAB) e a banca foco (FGV, Cebraspe, FCC).</div>
+    </div>
+    <div class="flow-step">
+      <span class="flow-step-num">03</span>
+      <div><strong>O Teste de Fogo (Minuto 2 a 3):</strong> Responde 3 a 5 questões clássicas com pegadinhas históricas.</div>
+    </div>
+    <div class="flow-step">
+      <span class="flow-step-num">04</span>
+      <div><strong>O Choque Cognitivo (Minuto 4):</strong> A IA explica o erro não com teoria abstrata, mas apontando o distrator psicológico da banca.</div>
+    </div>
+    <div class="flow-step">
+      <span class="flow-step-num">05</span>
+      <div><strong>Paywall Suave:</strong> "Gostaria de salvar este ponto cego no seu Caderno de Erros com Repetição Espaçada e garantir que não errará na prova?"</div>
+    </div>
+  </div>
+
+  <div class="no-break">
+    <h3>O que Ativar no Dia 1 vs. O que Congelar (Feature Freeze)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Módulo do Sistema</th>
+          <th>Status</th>
+          <th>Racional Estratégico</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Diagnóstico de Cargo & Banca</strong></td>
+          <td><span class="badge badge-emerald">ATIVO</span></td>
+          <td>Gera personalização instantânea e sensação de que a ferramenta foi feita sob medida.</td>
+        </tr>
+        <tr>
+          <td><strong>Banco de Questões + Feedback IA</strong></td>
+          <td><span class="badge badge-emerald">ATIVO</span></td>
+          <td>O loop central diário. A IA disseca o distrator (pegadinha de banca vs. falta de lei).</td>
+        </tr>
+        <tr>
+          <td><strong>Caderno de Erros (Modo Revanche)</strong></td>
+          <td><span class="badge badge-emerald">ATIVO</span></td>
+          <td><strong>O pilar de retenção inegociável.</strong> Se o aluno acumula 80 erros lá, ele não cancela.</td>
+        </tr>
+        <tr>
+          <td><strong>Animal Guardião / Mascote 3D</strong></td>
+          <td><span class="badge badge-emerald">ATIVO</span></td>
+          <td>Identidade visual, gamificação e gatilho de compartilhamento em redes sociais.</td>
+        </tr>
+        <tr>
+          <td><em>Estúdio de Redação Discursiva</em></td>
+          <td><span class="badge badge-accent">CONGELAR</span></td>
+          <td>Alto custo de tokens, complexidade de suporte no início e ciclo de uso espaçado.</td>
+        </tr>
+        <tr>
+          <td><em>Smart Vade Mecum Completo</em></td>
+          <td><span class="badge badge-accent">CONGELAR</span></td>
+          <td>Nenhum aluno paga mensalidade por Vade Mecum; ele paga para acertar mais questões.</td>
+        </tr>
+        <tr>
+          <td><em>Simulados Longos (120 itens)</em></td>
+          <td><span class="badge badge-accent">CONGELAR</span></td>
+          <td>Gera atrito e exaustão no início. Priorize micro-sessões de 10 a 15 questões rápidas.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning no-break">
+    ⚠️ <strong>Alerta contra o Feature Creep:</strong> Continuar programando features adicionais antes de 50 pessoas pagarem pelo que já está pronto é uma forma disfarçada de procrastinação. Seu código já é superior ao da maioria dos concorrentes de mercado.
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- CAPÍTULO 2 -->
+  <h2>2. Checklists Operacionais de Lançamento</h2>
+  <p>Imprima e tique fisicamente cada caixa de verificação conforme for executando as etapas:</p>
+
+  <div class="no-break">
+    <h3>Fase 0: Setup Técnico & Segurança (Semana 1)</h3>
+    <ul class="checklist">
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Validar Gateway de Pagamento (Asaas Pix / Cartão):</strong>
+          <div class="check-desc">Realizar 1 compra real de teste no Pix (R$ 1,00 ou plano de teste) e certificar que o webhook libera o plano imediatamente.</div>
+        </div>
+      </li>
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Proteção PII & Sanitização de Dados:</strong>
+          <div class="check-desc">Garantir que endpoints de captura de leads e auth não exponham dados sensíveis e tenham rate limiting ativo (como já implementado).</div>
+        </div>
+      </li>
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Cache de Respostas da IA no Supabase:</strong>
+          <div class="check-desc">Certificar que a explicação de uma questão gerada pela IA fica salva no banco de dados para nunca chamar o LLM duas vezes para a mesma questão.</div>
+        </div>
+      </li>
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Pixel de Rastreamento & Analytics:</strong>
+          <div class="check-desc">Instalar Meta Pixel (para registrar PageView e InitiateCheckout) e Google Tag Manager/PostHog para ver onde o usuário desiste no onboarding.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="no-break">
+    <h3>Fase 1: Recrutamento do Grupo Alfa Fechado (Semana 2)</h3>
+    <ul class="checklist">
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Mapear 5 Comunidades Ativas:</strong>
+          <div class="check-desc">Identificar 3 grupos de Telegram de concursos quentes (ex: PF, TJ-SP, INSS) e o subreddit <code>r/concursospublicos</code>.</div>
+        </div>
+      </li>
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Recrutar 50 Usuários Alfa (Sem Venda Direta):</strong>
+          <div class="check-desc">Oferecer 30 dias grátis da plataforma em troca de uma chamada de feedback de 10 minutos após 7 dias de uso.</div>
+        </div>
+      </li>
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Criar Grupo VIP no WhatsApp ("Conselho de Fundadores"):</strong>
+          <div class="check-desc">Canal de contato direto com você para reportar bugs em 5 minutos e sugerir pequenos ajustes de usabilidade.</div>
+        </div>
+      </li>
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Aplicar o Teste de Sean Ellis no 7º Dia:</strong>
+          <div class="check-desc">"Como você se sentiria se o Learning AI deixasse de existir amanhã?" (Mire em &gt;40% respondendo 'Muito desapontado').</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="no-break">
+    <h3>Fase 2: Motor de Conteúdo & Viralidade Orgânica (Semana 3)</h3>
+    <ul class="checklist">
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Gravar 10 Vídeos Curtos com Câmera Frontal:</strong>
+          <div class="check-desc">Gravar no celular usando os 4 roteiros prontos deste manual, mostrando a tela do app no momento do erro da banca.</div>
+        </div>
+      </li>
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Publicar 2 Vídeos por Dia (TikTok, Reels e YouTube Shorts):</strong>
+          <div class="check-desc">Horários recomendados para concurseiros: 12h15 (almoço) e 21h30 (pós-estudo).</div>
+        </div>
+      </li>
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Lançar Isca Digital ("Edital Verticalizado Ninja por IA"):</strong>
+          <div class="check-desc">Disponibilizar página onde o aluno sobe o PDF do edital e recebe a divisão de Pareto dos temas mais cobrados em troca do WhatsApp.</div>
+        </div>
+      </li>
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Série "Building in Public" no LinkedIn e X:</strong>
+          <div class="check-desc">Compartilhar lições reais de como uma IA está sendo treinada para bater as bancas Cebraspe e FGV.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="no-break">
+    <h3>Fase 3: Oferta de Abertura & Primeiros Pagantes (Semana 4)</h3>
+    <ul class="checklist">
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Ativar Oferta de Lançamento (Fundadores):</strong>
+          <div class="check-desc">Liberar Plano Anual ou Vitalício por R$ 97,00 (ou R$ 34,90/mês) limitado aos 100 primeiros estudantes com contador regressivo real.</div>
+        </div>
+      </li>
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Campanha de Retargeting para Abandono de Checkout:</strong>
+          <div class="check-desc">Disparo automático de WhatsApp/e-mail 15 minutos após o abandono oferecendo cupom de 10% para fechar via Pix.</div>
+        </div>
+      </li>
+      <li class="check-item">
+        <span class="check-box"></span>
+        <div class="check-content">
+          <strong>Primeira Campanha Meta Ads (Exclusiva para iOS):</strong>
+          <div class="check-desc">Orçamento de validação de R$ 30 a R$ 50/dia direcionado para usuários de iPhone interessados em Carreiras Jurídicas ou Policiais.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- CAPÍTULO 3 -->
+  <h2>3. Roteiros de Vídeo, Copies e Templates Prontos</h2>
+  <p>Use estes roteiros validados para gravar conteúdos com o celular sem necessidade de equipamentos caros:</p>
+
+  <div class="script-card no-break">
+    <div class="script-header">
+      <span class="script-title">Roteiro 1: "O Golpe das 500 Horas de Videoaula"</span>
+      <span class="script-badge">REELS / TIKTOK / SHORTS • 35s</span>
+    </div>
+    <div class="script-line"><span class="script-label">Ângulo:</span> Quebra de crença limitante sobre estudo passivo.</div>
+    <div class="script-line"><span class="script-label">Visual:</span> Criador na frente do computador mostrando um cursinho com centenas de aulas pendentes.</div>
+    <div class="script-line"><span class="script-label">[00-04s] Gancho:</span> "Se você acha que vai passar em concurso assistindo 500 horas de videoaula, você só tá pagando o salário dos donos de cursinho."</div>
+    <div class="script-line"><span class="script-label">[05-15s] Conflito:</span> "A verdade que ninguém te conta: a banca Cebraspe e a FGV não querem saber se você leu a doutrina. Elas colocam uma pegadinha de leitura rápida pra você errar por cansaço. Assistir aula não treina seu cérebro pra malícia da banca."</div>
+    <div class="script-line"><span class="script-label">[16-26s] Demonstração:</span> <em>(Corte para tela do celular)</em> "Olha esse copiloto com IA aqui. Ele pega a questão que você errou e te diz exatamente: 'Você errou porque caiu na indução do distrator C'. E já joga pro seu Caderno de Erros com repetição espaçada."</div>
+    <div class="script-line"><span class="script-label">[27-35s] CTA:</span> "Para de acumular PDF que você nunca vai ler. Clica no link da bio e faz o diagnóstico gratuito de 3 minutos da sua banca."</div>
+  </div>
+
+  <div class="script-card no-break">
+    <div class="script-header">
+      <span class="script-title">Roteiro 2: "A Pegadinha Cruel da FGV / Cebraspe"</span>
+      <span class="script-badge">REELS / TIKTOK / SHORTS • 30s</span>
+    </div>
+    <div class="script-line"><span class="script-label">Ângulo:</span> Dor específica da reprovação por detalhes bobos.</div>
+    <div class="script-line"><span class="script-label">Visual:</span> Print de uma questão real na tela e você apontando com o dedo para a palavra trocada.</div>
+    <div class="script-line"><span class="script-label">[00-03s] Gancho:</span> "Olha como a banca FGV te reprova trocando UMA palavra no meio de um texto gigante."</div>
+    <div class="script-line"><span class="script-label">[04-14s] Conflito:</span> "Você leu o enunciado inteiro, achou fácil e marcou B. Aí vai ver o gabarito oficial: ERRADO. Por quê? Porque no finalzinho tava escrito 'salvo exceção legal' e seu cérebro ignorou por cansaço mental."</div>
+    <div class="script-line"><span class="script-label">[15-23s] Solução:</span> "Essa IA aqui mapeia o padrão psicológico dos examinadores e te treina no 'Modo Revanche' até seu cérebro não cair mais em nenhuma pegadinha."</div>
+    <div class="script-line"><span class="script-label">[24-30s] CTA:</span> "Comenta 'BANCA' que eu te mando o link para testar as 5 maiores pegadinhas do seu concurso de graça."</div>
+  </div>
+
+  <div class="script-card no-break">
+    <div class="script-header">
+      <span class="script-title">Roteiro 3: "O Fim do Caderno de Erros no Word / Notion"</span>
+      <span class="script-badge">REELS / TIKTOK / SHORTS • 30s</span>
+    </div>
+    <div class="script-line"><span class="script-label">Ângulo:</span> Economia brutal de tempo e organização.</div>
+    <div class="script-line"><span class="script-label">Visual:</span> Segurando o celular na mão com o app aberto mostrando o painel de erros.</div>
+    <div class="script-line"><span class="script-label">[00-03s] Gancho:</span> "Todo aprovado fala que passou por causa do Caderno de Erros. Mas ninguém aguenta perder 2 horas copiando e colando print no Notion."</div>
+    <div class="script-line"><span class="script-label">[04-14s] Conflito:</span> "Você passa mais tempo organizando resumo bonito do que realmente memorizando a lei seca. E na semana da prova você nem lembra o que errou há 1 mês."</div>
+    <div class="script-line"><span class="script-label">[15-22s] Solução:</span> "No Learning AI, cada questão errada vira automaticamente um card com a causa-raiz do erro e o artigo de lei. Todo dia de manhã ele te cobra a revisão dos pontos fracos."</div>
+    <div class="script-line"><span class="script-label">[23-30s] CTA:</span> "Se você estuda para concurso ou OAB, teste isso antes do próximo edital sair. Link no perfil."</div>
+  </div>
+
+  <div class="no-break">
+    <h3>Template de Mensagem para Grupos de Concurso (Sem Parecer Spam)</h3>
+    <div class="callout callout-info">
+      <p><strong>Para postar em grupos de Telegram / WhatsApp / Fóruns:</strong></p>
+      <p style="font-style: italic; margin-bottom: 0;">
+        "Fala pessoal, beleza? Desenvolvi nos últimos meses uma ferramenta para ajudar concurseiros a quebrarem as pegadinhas da [Banca, ex: FGV / Cebraspe]. Ela analisa a questão que você errou e diz se o erro foi por pegadinha de banca, falta de lei seca ou interpretação, e joga direto para um caderno de erros com repetição espaçada.<br><br>
+        Liberei 50 acessos totalmente gratuitos para quem quiser testar na prática e me ajudar com feedbacks sinceros de melhoria. Quem tiver estudando para [Concurso X] e quiser testar, me chama no privado que eu envio o link de acesso VIP!"
+      </p>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- CAPÍTULO 4 -->
+  <h2>4. Estratégias Extras de Tração, Monetização & Oceano Azul</h2>
+
+  <div class="no-break">
+    <h3>A. O Modelo B2B / White-Label para Mentores de Concurso</h3>
+    <p>
+      O Brasil tem milhares de mentores e pequenos cursinhos de concurso com 30 a 200 alunos. Eles não têm tecnologia própria e gerenciam alunos em planilhas do Excel.
+    </p>
+    <div class="callout callout-success">
+      <strong>Como oferecer:</strong> Ofereça um painel de mentor onde ele consegue ver o raio-x de erros de cada aluno da turma dele.<br>
+      <strong>Ticket:</strong> Cobrar <strong>R$ 497 a R$ 1.500/mês</strong> por mentor/cursinho.<br>
+      <strong>Impacto:</strong> Apenas 10 mentores pagando R$ 997 já garantem <strong>R$ 10.000 MRR previsível</strong> sem depender de tráfego pago massivo.
+    </div>
+  </div>
+
+  <div class="no-break">
+    <h3>B. Programa de Afiliados dos Sonhos para "Studygrams"</h3>
+    <p>
+      Perfis de estudantes no Instagram (#studygram) com 5k a 50k seguidores têm alta taxa de engajamento e quase nunca ganham dinheiro com o perfil.
+    </p>
+    <ul>
+      <li><strong>A Oferta de Parceria:</strong> Ofereça <strong>30% a 40% de comissão recorrente</strong> em cada mensalidade que vier pelo link deles.</li>
+      <li><strong>Kit do Afiliado:</strong> Entregue os roteiros prontos de gravação e os prints do aplicativo para que eles só precisem postar nos Stories.</li>
+      <li><strong>Resultado:</strong> 20 micro-influenciadores postando semanalmente geram um fluxo contínuo de novos alunos sem custo de anúncio antecipado.</li>
+    </ul>
+  </div>
+
+  <div class="no-break">
+    <h3>C. A Tese "iOS First" (Por que Priorizar Usuários de iPhone)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Critério de Negócio</th>
+          <th>Ecossistema iOS (Apple)</th>
+          <th>Ecossistema Android</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Disposição a Pagar</strong></td>
+          <td>Altíssima. Concentração em classes A/B (público de carreiras de alto salário).</td>
+          <td>Média a baixa. Alta sensibilidade e resistência a tickets &gt; R$ 30.</td>
+        </tr>
+        <tr>
+          <td><strong>Atrito no Checkout</strong></td>
+          <td><strong>Zero:</strong> 2 cliques com Face ID / Apple Pay. Conversão 3x superior.</td>
+          <td>Preenchimento manual de dados de cartão ou abertura de app do banco para Pix.</td>
+        </tr>
+        <tr>
+          <td><strong>Inadimplência Recorrente</strong></td>
+          <td>Mínima. Cartões sempre válidos associados ao Apple ID.</td>
+          <td>Taxa de churn por falta de limite ou falha de cobrança até 40% superior.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="no-break">
+    <h3>D. Notificação Matinal de WhatsApp "Anti-Branco"</h3>
+    <p>
+      O gatilho que transforma o Learning AI em um hábito matinal indispensável:
+    </p>
+    <div class="callout callout-dark">
+      <strong>Disparo às 07:15 da manhã:</strong><br>
+      "Bom dia, guerreiro. Você tem <strong>4 pegadinhas</strong> no seu Caderno de Erros que você errou há 7 dias. Seu cérebro tem 68% de chance de errar isso de novo no dia da prova. Faça o 'Modo Revanche' agora (leva apenas 3 minutos)."<br>
+      👉 <code>[Botão direto para o mini-simulado de revanche]</code>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- CAPÍTULO 5 -->
+  <h2>5. Cronograma de 30 Dias & Projeção até R$ 50k MRR</h2>
+
+  <div class="no-break">
+    <h3>Roadmap Executivo de 30 Dias (Semana a Semana)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Semana</th>
+          <th>Foco de Ataque</th>
+          <th>Entregáveis e Metas Concretas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Semana 1</strong><br>(Dias 1 a 7)</td>
+          <td><strong>Setup & Validação Técnica</strong></td>
+          <td>
+            • Fazer 1 transação real de teste no Pix.<br>
+            • Validar que o fluxo de 6 telas com 5 questões conduz ao paywall.<br>
+            • Instalar pixels de conversão.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Semana 2</strong><br>(Dias 8 a 14)</td>
+          <td><strong>Operação Grupo Alfa (50 Usuários)</strong></td>
+          <td>
+            • Recrutar 50 estudantes em comunidades com acesso grátis.<br>
+            • Criar grupo VIP de feedback no WhatsApp.<br>
+            • Realizar 5 entrevistas rápidas de 10 minutos para matar atritos.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Semana 3</strong><br>(Dias 15 a 21)</td>
+          <td><strong>Ativação da Máquina Orgânica</strong></td>
+          <td>
+            • Postar 2 vídeos/dia usando os roteiros deste manual (Reels/TikTok).<br>
+            • Lançar página pública do "Edital Verticalizado Ninja por IA".<br>
+            • Fechar as primeiras 5 parcerias com Studygrams.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Semana 4</strong><br>(Dias 22 a 30)</td>
+          <td><strong>Oferta Oficial de Fundadores</strong></td>
+          <td>
+            • Liberar plano especial de lançamento (R$ 97 / ano ou vitalício).<br>
+            • Aplicar o teste de Sean Ellis para medir Product-Market Fit (&gt;40%).<br>
+            • Testar primeiros anúncios direcionados exclusivamente para iOS (R$ 30/dia).
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="no-break">
+    <h3>A Rota até R$ 50.000 MRR & Potencial de Exit (M&A)</h3>
+    <p>
+      Com infraestrutura de custo quase zero (Supabase + cache estático de questões e leis), sua margem operacional se mantém <strong>acima de 85%</strong>.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Fase</th>
+          <th>Estratégia Predominante</th>
+          <th>Novos / Mês</th>
+          <th>Assinantes Ativos</th>
+          <th>MRR Estimado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mês 1 a 3</strong></td>
+          <td>Nicho específico (ex: OAB 1ª Fase ou Tribunais) + UGC</td>
+          <td>+100</td>
+          <td>220</td>
+          <td><strong>R$ 9.240</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Mês 4 a 6</strong></td>
+          <td>Isca de Edital Verticalizado + Afiliados Studygrams</td>
+          <td>+200</td>
+          <td>600</td>
+          <td><strong>R$ 25.200</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Mês 7 a 9</strong></td>
+          <td>Parcerias B2B com Mentores + Tráfego Pago iOS</td>
+          <td>+250</td>
+          <td>950</td>
+          <td><strong>R$ 39.900</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Mês 10 a 12</strong></td>
+          <td>Consolidação dos planos anuais + expansão de bancas</td>
+          <td>+280</td>
+          <td><strong>1.220</strong></td>
+          <td><strong>R$ 51.240</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-info">
+      💼 <strong>Tese de Venda da Empresa (Exit para Grandes Grupos):</strong><br>
+      Ao atingir <strong>R$ 50.000 MRR (R$ 600.000 ARR)</strong> com margem líquida alta e produto validado, o Learning AI torna-se o alvo ideal para aquisição estratégica por gigantes do setor (Gran Cursos, Estratégia, QConcursos, Ceisc, Damásio).<br>
+      • <strong>Múltiplo de Mercado SaaS no Brasil:</strong> 3x a 5x ARR.<br>
+      • <strong>Potencial de Valuation à Vista:</strong> <strong>R$ 1.800.000 a R$ 3.000.000</strong>.
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Learning AI • Documento Executivo de Lançamento & Operações</span>
+    <span>Confidencial • Uso Estratégico</span>
+  </div>
+
+</body>
+</html>

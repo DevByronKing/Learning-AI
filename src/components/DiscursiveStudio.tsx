@@ -93,7 +93,7 @@ export const DiscursiveStudio: React.FC<DiscursiveStudioProps> = ({
       const trtPrompt = prompts.find(p => p.id === 'disc-fcc-trt');
       if (trtPrompt) setSelectedPromptId(trtPrompt.id);
     }
-  }, [selectedExam]);
+  }, [selectedExam, prompts]);
 
   // Timer interval
   useEffect(() => {

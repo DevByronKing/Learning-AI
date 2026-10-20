@@ -309,20 +309,31 @@ export const EditalParser: React.FC<EditalParserProps> = ({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [setAsDefaultExam, setSetAsDefaultExam] = useState<boolean>(true);
   
-  // Edital Q&A State
+  // Copiloto Jurídico do Edital - Chat Conversacional
+  interface EditalChatMessage {
+    id: string;
+    sender: 'user' | 'assistant';
+    text: string;
+    itemReference?: string;
+    timestamp: string;
+  }
+
   const [editalQuestion, setEditalQuestion] = useState('');
   const [isAnswering, setIsAnswering] = useState(false);
-  const [editalQAList, setEditalQAList] = useState<{
-    id: string;
-    question: string;
-    answer: string;
-    itemReference: string;
-    timestamp: string;
-  }[]>([
+  const chatBottomRef = useRef<HTMLDivElement>(null);
+
+  const [editalChatMessages, setEditalChatMessages] = useState<EditalChatMessage[]>([
     {
-      id: 'qa-default-1',
-      question: 'Quais são as matérias com maior peso e nota de corte?',
-      answer: `Neste concurso para ${selectedExam.role} (${selectedExam.institution}), as disciplinas com maior relevância ponderada são ${selectedExam.subjects.map(s => `${s.name} (Peso ${s.weight})`).slice(0, 2).join(' e ')}. Juntas, elas definem mais de 65% do ponto de corte da prova objetiva.`,
+      id: 'msg-welcome',
+      sender: 'assistant',
+      text: `Olá! Eu sou o seu Copiloto Jurídico do Edital, treinado nas regras e normas deste certame (${selectedExam.role} • ${selectedExam.institution} • Banca ${selectedExam.banca}). Posso responder tudo sobre pesos das disciplinas, regras de eliminação, prova discursiva, cronograma e notas mínimas. Como posso ajudar na sua estratégia?`,
+      itemReference: 'Edital Consolidado & Diário Oficial',
+      timestamp: 'Sistema'
+    },
+    {
+      id: 'msg-tip-1',
+      sender: 'assistant',
+      text: `Dica de largada: As disciplinas com maior peso e relevância neste edital são ${selectedExam.subjects.map(s => `${s.name} (Peso ${s.weight})`).slice(0, 2).join(' e ')}. Juntas, elas definem mais de 65% do ponto de corte da prova objetiva.`,
       itemReference: 'Item 8.2 - Do Quadro de Provas Objetivas',
       timestamp: 'Sugerida'
     }
@@ -330,9 +341,26 @@ export const EditalParser: React.FC<EditalParserProps> = ({
 
   const handleAskEditalQuestion = (queryText: string) => {
     const q = queryText.trim();
-    if (!q) return;
+    if (!q || isAnswering) return;
 
+    const currentTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+    // 1. Adicionar mensagem do usuário
+    const userMsg: EditalChatMessage = {
+      id: `usr-${Date.now()}`,
+      sender: 'user',
+      text: q,
+      timestamp: currentTime
+    };
+
+    setEditalChatMessages(prev => [...prev, userMsg]);
+    setEditalQuestion('');
     setIsAnswering(true);
+
+    setTimeout(() => {
+      chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+
     setTimeout(() => {
       setIsAnswering(false);
       const lower = q.toLowerCase();
@@ -343,37 +371,40 @@ export const EditalParser: React.FC<EditalParserProps> = ({
         answer = `Para não ser eliminado neste certame da banca ${selectedExam.banca}, o candidato deve obter no mínimo 50% de aproveitamento geral nas questões objetivas e não obter nota zero em nenhuma das disciplinas de peso maior (${selectedExam.subjects[0]?.name || 'Conhecimentos Específicos'}).`;
         itemRef = 'Item 9.1 - Dos Critérios de Habilitação e Eliminação';
       } else if (lower.includes('discursiv') || lower.includes('redação') || lower.includes('peça')) {
-        answer = `A prova discursiva possui caráter eliminatório e classificatório. A banca ${selectedExam.banca} avaliará domínio técnico-jurídico, clareza lógica e citação de dispositivos legais pertinentes. Serão corrigidas as redações até ${Number(selectedExam.vacancies) * 3 || 300}ª posição da lista de classificação ampla.`;
+        answer = `A prova discursiva possui caráter eliminatório e classificatório. A banca ${selectedExam.banca} avaliará domínio técnico-jurídico, clareza lógica e citação de dispositivos legais pertinentes. Serão corrigidas as redações até a ${Number(selectedExam.vacancies) * 3 || 300}ª posição da lista de classificação ampla.`;
         itemRef = 'Item 10.4 - Da Correção da Prova Discursiva';
       } else if (lower.includes('remunera') || lower.includes('salário') || lower.includes('salario') || lower.includes('benefício') || lower.includes('ganha')) {
         answer = `A remuneração inicial fixada no edital é de ${selectedExam.salary} para carga de 40 horas semanais, somando-se auxílio-alimentação e adicionais por qualificação funcional do órgão (${selectedExam.institution}).`;
         itemRef = 'Item 2.1 - Da Carreira, Remuneração e Carga Horária';
       } else if (lower.includes('data') || lower.includes('quando') || lower.includes('prazo') || lower.includes('dia') || lower.includes('inscrição')) {
-        answer = `A aplicação da prova objetiva está prevista para ${selectedExam.examDate} (aproximadamente ${selectedExam.daysRemaining} dias até a prova). Fique atento aos prazos de pagamento de boleto bancário e locais de prova no portal da banca ${selectedExam.banca}.`;
+        answer = `A aplicação da prova objetiva está prevista para ${selectedExam.examDate} (aproximadamente ${selectedExam.daysRemaining} dias até a prova). Fique atento aos prazos de pagamento de taxa e consulta aos locais de prova no portal da banca ${selectedExam.banca}.`;
         itemRef = 'Anexo I - Cronograma Oficial de Atividades';
       } else if (lower.includes('peso') || lower.includes('matéria') || lower.includes('disciplina')) {
         const topSub = [...selectedExam.subjects].sort((a, b) => b.weight - a.weight)[0];
-        answer = `A matéria de maior impacto estratégico é ${topSub?.name} com peso ${topSub?.weight} e ${topSub?.relevancePercentage}% da prova. Recomendamos alocar no mínimo 40% dos ciclos semanais nesta matéria.`;
+        answer = `A disciplina de maior impacto estratégico é "${topSub?.name}" com peso ${topSub?.weight} e ${topSub?.relevancePercentage}% da pontuação total da prova. Recomendamos alocar no mínimo 40% dos ciclos semanais nesta matéria.`;
         itemRef = 'Anexo II - Quadro de Disciplinas e Conteúdos Programáticos';
       } else if (lower.includes('taf') || lower.includes('físico') || lower.includes('título')) {
-        answer = `O edital de ${selectedExam.role} estabelece etapas sucessivas após a fase objetiva, incluindo avaliação de títulos comprobatórios e exames pré-admissionais. Consulte o subitem específico das etapas complementares.`;
+        answer = `O edital de ${selectedExam.role} estabelece etapas sucessivas após a fase objetiva, incluindo avaliação de títulos comprobatórios e exames pré-admissionais de aptidão. Consulte o subitem específico das etapas complementares.`;
         itemRef = 'Item 12.1 - Das Etapas Sucessivas do Concurso';
       } else {
-        answer = `Analisando o texto consolidado do edital de ${selectedExam.title} (Banca ${selectedExam.banca}), para o cargo de ${selectedExam.role}, orientamos dar foco em ${selectedExam.subjects.map(s => s.name).slice(0, 3).join(', ')}. A banca prioriza questões com aplicação prática de jurisprudência e raciocínio analítico.`;
+        answer = `Analisando o texto consolidado do edital de ${selectedExam.title} (Banca ${selectedExam.banca}) para o cargo de ${selectedExam.role}, orientamos dar foco em ${selectedExam.subjects.map(s => s.name).slice(0, 3).join(', ')}. A banca prioriza questões com aplicação prática de jurisprudência e raciocínio analítico.`;
         itemRef = `Item Específico da Banca ${selectedExam.banca}`;
       }
 
-      const newQA = {
-        id: `qa-${Date.now()}`,
-        question: q,
-        answer,
+      const botMsg: EditalChatMessage = {
+        id: `bot-${Date.now()}`,
+        sender: 'assistant',
+        text: answer,
         itemReference: itemRef,
-        timestamp: 'Agora'
+        timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
       };
 
-      setEditalQAList((prev) => [newQA, ...prev]);
-      setEditalQuestion('');
-    }, 600);
+      setEditalChatMessages((prev) => [...prev, botMsg]);
+
+      setTimeout(() => {
+        chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+    }, 550);
   };
   
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -879,51 +910,124 @@ export const EditalParser: React.FC<EditalParserProps> = ({
         </div>
       )}
 
-      {/* Tira-Dúvidas com IA sobre o Edital Selecionado */}
+      {/* Chat do Copiloto Jurídico do Edital */}
       {!isProcessing && (
-        <div className="mt-8 glass-panel bg-white/80 dark:bg-dark-card/60 backdrop-blur-md p-6 sm:p-7 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-white/10">
+        <div className="mt-8 glass-panel bg-white/90 dark:bg-dark-card/80 backdrop-blur-xl rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl overflow-hidden flex flex-col">
+          {/* Chat Header */}
+          <div className="px-5 sm:px-7 py-4 bg-gradient-to-r from-indigo-600/10 via-blue-600/10 to-transparent border-b border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-indigo-600/20 shrink-0">
-                <MessageSquare className="w-5 h-5" />
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-indigo-600/25 shrink-0">
+                <Bot className="w-6 h-6 animate-pulse" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 text-[10px] font-black uppercase tracking-wider">
+                  <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 text-[10px] font-black uppercase tracking-wider">
                     Copiloto Jurídico do Edital
                   </span>
-                  <span className="text-xs text-slate-500 dark:text-slate-400">Banca {selectedExam.banca}</span>
+                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                    Online • {selectedExam.banca}
+                  </span>
                 </div>
-                <h3 className="text-lg font-black text-slate-900 dark:text-white mt-0.5">
-                  Tire Dúvidas com IA sobre o Edital de {selectedExam.role}
+                <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white mt-0.5">
+                  Chat com IA sobre o Edital de {selectedExam.role}
                 </h3>
               </div>
             </div>
 
-            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-              Consulta contextualizada baseada nas normas oficiais
-            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setEditalChatMessages([
+                  {
+                    id: 'msg-welcome-reset',
+                    sender: 'assistant',
+                    text: `Chat reiniciado! Pode me fazer qualquer nova pergunta sobre as regras, matérias ou pesos do certame de **${selectedExam.role}** (${selectedExam.institution}).`,
+                    itemReference: 'Edital Consolidado',
+                    timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+                  }
+                ])}
+                className="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all cursor-pointer"
+                title="Limpar histórico de mensagens"
+              >
+                Limpar Chat
+              </button>
+            </div>
           </div>
 
-          {/* Quick Questions Chips */}
-          <div>
-            <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider block mb-2">
-              Perguntas Frequentes Sugeridas:
+          {/* Chat Messages Feed */}
+          <div className="p-4 sm:p-6 space-y-4 max-h-[460px] overflow-y-auto no-scrollbar">
+            {editalChatMessages.map((msg) => {
+              const isUser = msg.sender === 'user';
+              return (
+                <div
+                  key={msg.id}
+                  className={`flex items-start gap-3 animate-fadeIn ${isUser ? 'justify-end' : 'justify-start'}`}
+                >
+                  {!isUser && (
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center text-white shrink-0 mt-0.5 shadow-sm">
+                      <Bot className="w-4 h-4" />
+                    </div>
+                  )}
+
+                  <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-4 text-xs sm:text-sm ${
+                    isUser
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-600/20 rounded-tr-xs'
+                      : 'bg-slate-50 dark:bg-dark-surface border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 shadow-xs rounded-tl-xs space-y-2'
+                  }`}>
+                    <div className="leading-relaxed font-medium whitespace-pre-line">
+                      {msg.text}
+                    </div>
+
+                    <div className={`flex items-center justify-between gap-3 pt-1 text-[10px] ${
+                      isUser ? 'text-blue-100/80 justify-end' : 'text-slate-400 border-t border-slate-200/60 dark:border-white/5'
+                    }`}>
+                      {!isUser && msg.itemReference && (
+                        <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                          📜 {msg.itemReference}
+                        </span>
+                      )}
+                      <span className="font-mono shrink-0">{msg.timestamp}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {isAnswering && (
+              <div className="flex items-start gap-3 animate-fadeIn">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center text-white shrink-0 mt-0.5">
+                  <Bot className="w-4 h-4 animate-spin" />
+                </div>
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-dark-surface border border-slate-200 dark:border-white/10 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-indigo-500 animate-ping" />
+                  <span>Copiloto Jurídico consultando regras do edital...</span>
+                </div>
+              </div>
+            )}
+
+            <div ref={chatBottomRef} />
+          </div>
+
+          {/* Suggested Quick Questions Chips */}
+          <div className="px-4 sm:px-6 py-2.5 bg-slate-50/60 dark:bg-white/[0.02] border-t border-slate-200/80 dark:border-white/5">
+            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+              Perguntas Frequentes (Clique para Enviar):
             </span>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {[
                 'Quais os critérios de eliminação e nota mínima?',
                 'Como funciona a prova discursiva e pontuação?',
-                'Quais as disciplinas com maior peso na nota?',
-                'Qual a remuneração inicial e benefícios?',
-                'Quando será a prova e quais os prazos?'
+                'Quais as matérias de maior peso na nota?',
+                'Qual o salário e benefícios?',
+                'Quando será a prova e prazos?'
               ].map((chip) => (
                 <button
                   key={chip}
                   type="button"
                   onClick={() => handleAskEditalQuestion(chip)}
                   disabled={isAnswering}
-                  className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 dark:bg-dark-card dark:hover:bg-dark-hover dark:hover:text-indigo-300 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 text-xs font-semibold transition-colors disabled:opacity-50"
+                  className="px-3 py-1 rounded-xl bg-white dark:bg-dark-card hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-300 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 text-xs font-semibold transition-all cursor-pointer disabled:opacity-50"
                 >
                   {chip}
                 </button>
@@ -931,73 +1035,32 @@ export const EditalParser: React.FC<EditalParserProps> = ({
             </div>
           </div>
 
-          {/* Form de Pergunta Livre */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleAskEditalQuestion(editalQuestion);
-            }}
-            className="flex items-center gap-2"
-          >
-            <input
-              type="text"
-              placeholder={`Pergunte algo sobre este edital (ex: "Exige prática jurídica?", "Tem TAF?", "Como funciona a pontuação da banca ${selectedExam.banca}?")`}
-              value={editalQuestion}
-              onChange={(e) => setEditalQuestion(e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-dark-card border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 font-medium focus:outline-none focus:border-indigo-500 transition-colors"
-            />
-            <button
-              type="submit"
-              disabled={isAnswering || !editalQuestion.trim()}
-              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-black shadow-md shadow-indigo-600/20 flex items-center gap-2 shrink-0 transition-all disabled:opacity-40"
+          {/* Chat Input Bar */}
+          <div className="p-4 sm:p-5 bg-white dark:bg-dark-card border-t border-slate-200 dark:border-white/10">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAskEditalQuestion(editalQuestion);
+              }}
+              className="flex items-center gap-2"
             >
-              {isAnswering ? (
-                <>
-                  <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span>Analisando...</span>
-                </>
-              ) : (
-                <>
-                  <Send className="w-3.5 h-3.5" />
-                  <span>Perguntar</span>
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Respostas Anteriores */}
-          <div className="space-y-3 pt-2">
-            {editalQAList.map((item) => (
-              <div
-                key={item.id}
-                className="p-4 rounded-2xl bg-slate-50 dark:bg-dark-surface border border-slate-200 dark:border-white/5 space-y-2 text-xs shadow-sm animate-fadeIn"
+              <input
+                type="text"
+                placeholder={`Pergunte algo sobre o edital de ${selectedExam.role} (ex: "Exige prática jurídica?", "Tem TAF?", "Critérios de correção da ${selectedExam.banca}")...`}
+                value={editalQuestion}
+                onChange={(e) => setEditalQuestion(e.target.value)}
+                disabled={isAnswering}
+                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-dark-surface border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 font-medium focus:outline-none focus:border-indigo-500 transition-colors"
+              />
+              <button
+                type="submit"
+                disabled={isAnswering || !editalQuestion.trim()}
+                className="px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-black shadow-md shadow-indigo-600/20 flex items-center gap-2 shrink-0 transition-all disabled:opacity-40 cursor-pointer"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
-                    <span className="w-5 h-5 rounded-lg bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 flex items-center justify-center text-[10px] shrink-0 font-black">
-                      Q
-                    </span>
-                    <span>{item.question}</span>
-                  </div>
-                  <span className="text-[10px] text-slate-400 shrink-0 font-mono">
-                    {item.timestamp}
-                  </span>
-                </div>
-
-                <div className="pl-7 text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
-                  {item.answer}
-                </div>
-
-                <div className="pl-7 pt-1 flex items-center gap-2">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 font-mono">
-                    📜 {item.itemReference}
-                  </span>
-                  <span className="text-[10px] text-slate-400">
-                    Fonte: Edital Consolidado • Banca {selectedExam.banca}
-                  </span>
-                </div>
-              </div>
-            ))}
+                <Send className="w-4 h-4" />
+                <span className="hidden sm:inline">Enviar</span>
+              </button>
+            </form>
           </div>
         </div>
       )}
@@ -1115,7 +1178,7 @@ export const EditalParser: React.FC<EditalParserProps> = ({
 
       {/* Upload Custom Edital Modal */}
       {showUploadModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div role="dialog" aria-modal="true" className="fixed inset-0 z-[70] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
           <div className="w-full max-w-xl p-6 rounded-3xl bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-indigo-500/40 shadow-2xl relative my-8">
             
             {/* Modal Header */}

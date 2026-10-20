@@ -3,10 +3,10 @@ import { SupabaseService } from '../lib/supabaseService';
 
 describe('Fluxo de Autenticação e Sessão', () => {
   it('quando o Supabase não está configurado, SupabaseService.signIn deve fornecer fallback mock seguro', async () => {
-    const result = await SupabaseService.signIn('teste@learningai.com.br', 'senha123456');
+    const result = await SupabaseService.signIn('teste@argus.app.br', 'senha123456');
     expect(result.success).toBe(true);
     expect(result.user).toBeDefined();
-    expect(result.user.email).toBe('teste@learningai.com.br');
+    expect(result.user.email).toBe('teste@argus.app.br');
     expect(result.token).toBeDefined();
     expect(result.token?.startsWith('jwt_mock_')).toBe(true);
   });

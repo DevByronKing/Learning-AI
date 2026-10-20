@@ -116,7 +116,7 @@ export const SeanEllisSurveyModal: React.FC<SeanEllisSurveyModalProps> = ({
                 <span>Pesquisa de Ajuste de Produto (Sean Ellis PMF)</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                Como está sendo sua preparação com o AprovaLens?
+                Como está sendo sua preparação com o Argus?
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                 Leva apenas 45 segundos e ajuda a moldar a plataforma para garantir que você passe na frente da concorrência.
@@ -126,7 +126,7 @@ export const SeanEllisSurveyModal: React.FC<SeanEllisSurveyModalProps> = ({
             {/* Pergunta 1: Sean Ellis Core */}
             <div className="space-y-2.5">
               <label className="block text-xs font-extrabold text-slate-800 dark:text-slate-200">
-                1. Como você se sentiria se NÃO pudesse mais usar o AprovaLens amanhã? *
+                1. Como você se sentiria se NÃO pudesse mais usar o Argus amanhã? *
               </label>
               <div className="space-y-2">
                 {[

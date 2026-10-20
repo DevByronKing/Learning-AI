@@ -30,7 +30,7 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
   onSelectPlanForCheckout,
   showToast
 }) => {
-  const [isAnnual, setIsAnnual] = useState(false);
+  const [isAnnual, setIsAnnual] = useState(true);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
   const plans = [
@@ -66,8 +66,8 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
       name: 'Plano PRO',
       badge: 'Mais Escolhido',
       badgeColor: 'bg-blue-500/20 text-blue-600 dark:text-blue-300 border-blue-500/30',
-      priceMonthly: 59.90,
-      priceAnnualPerMonth: 39.90,
+      priceMonthly: 99.00,
+      priceAnnualPerMonth: 49.00,
       description: 'Para o concurseiro que quer consistência, velocidade e diagnósticos ilimitados.',
       features: [
         'Diagnósticos Cognitivos Ilimitados (Flash)',
@@ -93,8 +93,8 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
       name: 'ELITE VIP',
       badge: 'Alta Performance',
       badgeColor: 'bg-amber-500/20 text-amber-600 dark:text-amber-300 border-amber-500/30',
-      priceMonthly: 129.90,
-      priceAnnualPerMonth: 89.90,
+      priceMonthly: 189.00,
+      priceAnnualPerMonth: 89.00,
       description: 'Para quem busca os primeiros lugares em carreiras fiscais, policiais, tribunais e OAB.',
       features: [
         'Tudo do Plano PRO liberado sem restrições',
@@ -191,7 +191,7 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
   const faqs = [
     {
       q: 'Como funciona a garantia incondicional de 7 dias?',
-      a: 'Conforme o Artigo 49 do Código de Defesa do Consumidor (CDC), você pode assinar qualquer plano pago do Learning AI e testar todos os recursos por até 7 dias corridos. Se achar que a plataforma não acelerou seus estudos, basta solicitar o reembolso e devolvemos 100% do seu dinheiro sem burocracia.'
+      a: 'Conforme o Artigo 49 do Código de Defesa do Consumidor (CDC), você pode assinar qualquer plano pago do Argus e testar todos os recursos por até 7 dias corridos. Se achar que a plataforma não acelerou seus estudos, basta solicitar o reembolso e devolvemos 100% do seu dinheiro sem burocracia.'
     },
     {
       q: 'Posso cancelar minha assinatura a qualquer momento?',
@@ -207,7 +207,7 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
     },
     {
       q: 'A IA substitui a leitura da lei seca ou livros?',
-      a: 'Não! O Learning AI funciona como um copiloto e potencializador. Ele aponta exatamente quais artigos da lei seca possuem 80% de incidência nas provas e disseca os conceitos que você errou, eliminando perda de tempo com leituras inúteis.'
+      a: 'Não! O Argus funciona como um copiloto e potencializador. Ele aponta exatamente quais artigos da lei seca possuem 80% de incidência nas provas e disseca os conceitos que você errou, eliminando perda de tempo com leituras inúteis.'
     }
   ];
 
@@ -254,7 +254,7 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
           >
             <span>Cobrança Anual</span>
             <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-amber-400 text-slate-950 uppercase">
-              30% OFF
+              51% OFF
             </span>
           </button>
         </div>
@@ -397,11 +397,20 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
                           <span className="text-xs font-bold text-slate-400">/mês</span>
                         )}
                       </div>
-                      {isAnnual && p.priceMonthly > 0 && (
-                        <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold mt-1">
-                          Faturado anualmente (30% OFF)
+                      {isAnnual && p.priceMonthly > 0 ? (
+                        <div className="mt-1 space-y-0.5">
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">
+                            De <span className="line-through decoration-red-500/70 font-bold">R$ {p.priceMonthly.toFixed(0)}/mês</span> no avulso
+                          </p>
+                          <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">
+                            Faturado R$ {(p.priceAnnualPerMonth * 12).toFixed(0)}/ano • Economia de 51%
+                          </p>
+                        </div>
+                      ) : !isAnnual && p.priceMonthly > 0 ? (
+                        <p className="text-[11px] text-amber-600 dark:text-amber-400 font-bold mt-1">
+                          Plano mensal avulso • Dica: No anual sai por R$ {p.priceAnnualPerMonth.toFixed(0)}/mês
                         </p>
-                      )}
+                      ) : null}
                     </div>
                   )}
                 </div>
@@ -462,6 +471,18 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 )}
+
+                {/* Transparência de Preço, Periodicidade e Renovação (CDC Art. 39) */}
+                <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-white/5 text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed space-y-1">
+                  <p>
+                    <strong>Cobrança:</strong> {isBlack ? 'Pagamento único com acesso perpétuo (sem renovação).' : isAnnual ? `Plano anual (12x de R$ ${p.priceAnnualPerMonth.toFixed(0)} • Total de R$ ${(p.priceAnnualPerMonth * 12).toFixed(0)}/ano).` : `Plano mensal (R$ ${p.priceMonthly.toFixed(0)}/mês recorrente).`}
+                  </p>
+                  {!isBlack && (
+                    <p>
+                      <strong>Renovação Automática:</strong> Renovação periódica com <strong>notificação prévia por e-mail com 30 dias e 7 dias de antecedência</strong>. Cancele com 1 clique a qualquer momento.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           );

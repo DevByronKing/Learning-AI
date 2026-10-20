@@ -1,5 +1,5 @@
 {
-  "name": "learning-ai",
+  "name": "argus",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:stress": "vitest run src/__tests__/stressTesting.test.ts",
+    "security:audit": "vitest run src/__tests__/penetrationTesting.test.ts",
     "test:e2e": "playwright test",
     "test:a11y": "playwright test e2e/accessibility.spec.ts",
     "review": "ocr review",

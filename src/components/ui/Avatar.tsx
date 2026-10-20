@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-export type GuardianAvatarType = 'coruja' | 'gaviao' | 'leao' | 'lobo' | 'onca' | 'raposa';
+export type GuardianAvatarType = 'coruja' | 'gaviao' | 'leao' | 'lobo' | 'onca' | 'raposa' | 'fenix';
 
 export interface AvatarProps {
   type?: GuardianAvatarType;
@@ -19,38 +19,44 @@ const GUARDIAN_META: Record<GuardianAvatarType, { name: string; archetype: strin
   coruja: {
     name: 'Coruja Atena',
     archetype: 'Mestre Analítico',
-    file: '/avatars/coruja.jpg',
+    file: '/images/avatars/coruja.jpg',
     emoji: '🦉'
   },
   gaviao: {
     name: 'Gavião Real',
     archetype: 'Auditor Implacável',
-    file: '/avatars/gaviao.jpg',
+    file: '/images/avatars/gaviao.jpg',
     emoji: '🦅'
   },
   leao: {
     name: 'Leão Soberano',
     archetype: 'Tribuno Convicto',
-    file: '/avatars/leao.jpg',
+    file: '/images/avatars/leao.jpg',
     emoji: '🦁'
   },
   lobo: {
     name: 'Lobo-Guará',
     archetype: 'Operador de Elite',
-    file: '/avatars/lobo.jpg',
+    file: '/images/avatars/lobo.jpg',
     emoji: '🐺'
   },
   onca: {
     name: 'Onça Pintada',
     archetype: 'Guerreiro de Longo Prazo',
-    file: '/avatars/onca.jpg',
+    file: '/images/avatars/onca.jpg',
     emoji: '🐆'
   },
   raposa: {
     name: 'Raposa Ágil',
     archetype: 'Otimizador de Provas',
-    file: '/avatars/raposa.jpg',
+    file: '/images/avatars/raposa.jpg',
     emoji: '🦊'
+  },
+  fenix: {
+    name: 'Fênix Dourada',
+    archetype: 'Imortal da Posse',
+    file: '/images/avatars/fenix.jpg',
+    emoji: '🔥'
   },
 };
 
@@ -68,6 +74,12 @@ export const Avatar: React.FC<AvatarProps> = ({
   const imageSrc = src || meta.file;
   const displayName = name || meta.name;
   const displayArchetype = archetype || meta.archetype;
+
+  // Fallback real: se a imagem falhar, exibe o emoji do arquétipo em vez de um quadrado vazio
+  const [hasImageError, setHasImageError] = useState(false);
+  useEffect(() => {
+    setHasImageError(false);
+  }, [imageSrc]);
 
   const sizeClasses = {
     sm: 'w-8 h-8 text-xs',
@@ -93,15 +105,24 @@ export const Avatar: React.FC<AvatarProps> = ({
         `}
       >
         <div className={`w-full h-full overflow-hidden bg-[var(--surface-card)] ${shapeClasses[shape]} relative`}>
-          <img
-            src={imageSrc}
-            alt={`Avatar do Arquétipo ${displayName} — ${displayArchetype}`}
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-            onError={(e) => {
-              // Fallback para emoji caso a imagem falhe
-              (e.target as HTMLElement).style.display = 'none';
-            }}
-          />
+          {hasImageError ? (
+            <span
+              role="img"
+              aria-label={`Avatar do Arquétipo ${displayName} — ${displayArchetype}`}
+              className="w-full h-full flex items-center justify-center bg-[var(--surface-elevated)] text-[1.5em]"
+            >
+              {meta.emoji}
+            </span>
+          ) : (
+            <img
+              src={imageSrc}
+              alt={`Avatar do Arquétipo ${displayName} — ${displayArchetype}`}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+              onError={() => setHasImageError(true)}
+            />
+          )}
         </div>
       </div>
 

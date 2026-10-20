@@ -9,7 +9,11 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-inter)', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+        sans: ['var(--font-plus-jakarta)', '"Plus Jakarta Sans"', 'inherit', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+        outfit: ['Outfit', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        jakarta: ['var(--font-plus-jakarta)', '"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        inter: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        dmsans: ['"DM Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
       },
       letterSpacing: {
         tighter: '-0.04em',

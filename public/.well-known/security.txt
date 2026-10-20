@@ -1,0 +1,8 @@
+# Argus Security Policy - RFC 9116
+Contact: mailto:security@argus.app.br
+Contact: https://argus.app.br/contato
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: pt-BR, en
+Canonical: https://argus.app.br/.well-known/security.txt
+Policy: https://argus.app.br/privacidade
+Acknowledgments: https://argus.app.br/security-hall-of-fame

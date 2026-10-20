@@ -169,7 +169,7 @@ export const PaidUserChurnModal: React.FC<PaidUserChurnModalProps> = ({
             <span>Diagnóstico de Cancelamento de {isTrial ? 'Trial com Cartão' : 'Assinante Pagante'}</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-            Sentiremos sua falta no Learning AI
+            Sentiremos sua falta no Argus
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
             Para que nossa equipe de engenharia e produto calibre a plataforma, nos ajude a entender exatamente onde falhamos com sua preparação:
@@ -188,7 +188,7 @@ export const PaidUserChurnModal: React.FC<PaidUserChurnModalProps> = ({
           {/* PASSO 1: QUAL MÓDULO FALHOU? */}
           <div className="space-y-2">
             <label className="text-xs font-black text-slate-900 dark:text-slate-200 uppercase tracking-wide flex items-center gap-1.5">
-              <span>1. Em qual módulo ou funcionalidade o Learning AI não atendeu suas expectativas?</span>
+              <span>1. Em qual módulo ou funcionalidade o Argus não atendeu suas expectativas?</span>
               <span className="text-rose-500">*</span>
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -242,7 +242,7 @@ export const PaidUserChurnModal: React.FC<PaidUserChurnModalProps> = ({
             <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/15 border-2 border-amber-500/40 space-y-3 animate-fadeIn">
               <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-black text-xs uppercase tracking-wide">
                 <Sparkles className="w-4 h-4 fill-amber-500" />
-                <span>Oferta Especial de Permanência Learning AI</span>
+                <span>Oferta Especial de Permanência Argus</span>
               </div>
               <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed">
                 {isTrial ? (

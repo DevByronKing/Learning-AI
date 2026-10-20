@@ -16,7 +16,7 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
       <div className="text-center mb-16">
         <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-500 dark:text-amber-400 text-sm font-bold mb-4 shadow-sm">
           <Crown className="w-4 h-4 fill-amber-500 dark:fill-amber-400" />
-          <span className="uppercase tracking-widest">INVESTIMENTO NO SEU CARGO PÚBLICO</span>
+          <span>Investimento no seu cargo público</span>
         </div>
         <h2 className="text-4xl sm:text-6xl font-black text-slate-900 dark:text-white leading-tight">
           Planos Simples e Transparentes
@@ -32,7 +32,7 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 relative z-10">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-black tracking-wider uppercase flex items-center gap-1.5 shadow-sm">
+              <span className="px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold flex items-center gap-1.5 shadow-sm">
                 <Flame className="w-4 h-4 fill-current text-yellow-300" />
                 Lote 1 Exclusivo • Primeiros 200 Alunos
               </span>
@@ -56,7 +56,7 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
 
           <div className="text-left lg:text-right shrink-0 space-y-3 pt-2 lg:pt-0">
             <div>
-              <p className="text-xs uppercase font-extrabold tracking-wider text-orange-200">Taxa Única Sem Mensalidade</p>
+              <p className="text-xs font-bold text-orange-200">Taxa única sem mensalidade</p>
               <div className="flex items-baseline lg:justify-end gap-1">
                 <span className="text-5xl font-black text-white">R$ 97</span>
                 <span className="text-xs font-bold text-orange-200">/ dose única</span>
@@ -131,9 +131,9 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
           <div className="absolute inset-[2px] rounded-[calc(2rem-2px)] bg-white dark:bg-[#0d1321] -z-10" />
 
           {/* Badge Recomendado */}
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-full bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white text-[10px] sm:text-xs font-black tracking-widest uppercase shadow-[0_0_20px_rgba(99,102,241,0.5)] whitespace-nowrap flex items-center gap-1.5 border border-white/20">
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-full bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white text-[10px] sm:text-xs font-bold shadow-[0_0_20px_rgba(99,102,241,0.5)] whitespace-nowrap flex items-center gap-1.5 border border-white/20">
             <Crown className="w-3.5 h-3.5" />
-            RECOMENDADO POR APROVADOS
+            Recomendado por aprovados
           </div>
 
           <div>
@@ -144,13 +144,13 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
             
             <div className="mt-8 mb-8">
               <div className="flex items-baseline gap-2">
-                <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">R$ 69<span className="text-3xl text-slate-400">,90</span></span>
-                <span className="text-sm font-bold text-slate-400 uppercase tracking-wider">/ mês</span>
+                <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">R$ 49<span className="text-3xl text-slate-400">,00</span></span>
+                <span className="text-sm font-bold text-slate-400">/ mês</span>
               </div>
               <div className="inline-flex items-center gap-2 mt-3 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 px-3 py-1.5 rounded-lg">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <p className="text-xs text-emerald-700 dark:text-emerald-400 font-bold">
-                  ou R$ 497/ano no Pix (R$ 41,41/mês)
+                  De R$ 99/mês • 51% OFF no Anual (R$ 588/ano)
                 </p>
               </div>
             </div>
@@ -198,13 +198,13 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
             
             <div className="mt-8 mb-8">
               <div className="flex items-baseline gap-2">
-                <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">R$ 119<span className="text-3xl text-slate-400">,90</span></span>
-                <span className="text-sm font-bold text-slate-400 uppercase tracking-wider">/ mês</span>
+                <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">R$ 89<span className="text-3xl text-slate-400">,00</span></span>
+                <span className="text-sm font-bold text-slate-400">/ mês</span>
               </div>
               <div className="inline-flex items-center gap-2 mt-3 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 px-3 py-1.5 rounded-lg">
                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                 <p className="text-xs text-amber-700 dark:text-amber-400 font-bold">
-                  ou R$ 897/ano no Pix
+                  De R$ 189/mês • 53% OFF no Anual (R$ 1.068/ano)
                 </p>
               </div>
             </div>
@@ -250,12 +250,12 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
       <div className="preserve-dark mt-12 relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950/40 border-2 border-amber-500/50 text-white shadow-2xl">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-black uppercase tracking-wider">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold">
               <Crown className="w-3.5 h-3.5 fill-amber-300" />
               <span>Acesso Até a Posse • Edição Black</span>
             </div>
             <h3 className="text-2xl sm:text-3xl font-black text-white drop-shadow-sm">
-              Plano BLACK VITALÍCIO
+              Plano Black Vitalício
             </h3>
             <p className="text-slate-200 text-xs sm:text-sm max-w-2xl leading-relaxed font-medium">
               Pague uma única vez e nunca mais compre cursos ou plataformas. Tenha acesso perpétuo irrestrito a todas as ferramentas, IAs e atualizações até ser nomeado no Diário Oficial.
@@ -264,7 +264,7 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
 
           <div className="text-left lg:text-right shrink-0 space-y-3">
             <div>
-              <p className="text-xs uppercase font-extrabold tracking-wider text-amber-400">12x de R$ 149,70 sem juros</p>
+              <p className="text-xs font-bold text-amber-400">12x de R$ 149,70 sem juros</p>
               <div className="flex items-baseline lg:justify-end gap-1">
                 <span className="text-4xl font-black text-white">R$ 1.497</span>
                 <span className="text-xs font-bold text-amber-400">/ único</span>

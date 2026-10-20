@@ -39,7 +39,7 @@ export const MobileAppModal: React.FC<MobileAppModalProps> = ({ isOpen, onClose 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/40 dark:bg-black/80 backdrop-blur-xl animate-fadeIn">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-6 bg-slate-900/40 dark:bg-black/80 backdrop-blur-xl animate-fadeIn">
       <div className="relative w-full max-w-xl glass-panel bg-white/80 dark:bg-dark-surface/80 border border-slate-200/80 dark:border-white/10 rounded-[2rem] shadow-2xl overflow-hidden transition-all">
         
         {/* Glow de fundo */}
@@ -70,6 +70,7 @@ export const MobileAppModal: React.FC<MobileAppModalProps> = ({ isOpen, onClose 
 
           <button 
             onClick={onClose}
+            aria-label="Fechar modal mobile"
             className="text-slate-400 hover:text-slate-800 dark:hover:text-white p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-dark-card transition-colors"
           >
             <X className="w-5 h-5" />

@@ -1,5 +1,5 @@
 /**
- * Learning AI - Edge & Client A/B Testing & Feature Flag Engine
+ * Argus - Edge & Client A/B Testing & Feature Flag Engine
  * Permite alternância de variantes sem novo deploy com consistência determinística (Hash)
  */
 

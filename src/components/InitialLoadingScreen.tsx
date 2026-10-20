@@ -14,16 +14,16 @@ export const InitialLoadingScreen: React.FC<InitialLoadingScreenProps> = ({
 }) => {
   const [phase, setPhase] = useState<'enter' | 'hold' | 'exit'>('enter');
 
-  // Partículas suaves de fundo geradas uma única vez
+  // Partículas suaves de fundo determinísticas (elimina warnings de hidratação SSR)
   const particles = useMemo(() => 
     Array.from({ length: 32 }, (_, i) => ({
       id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: Math.random() * 4 + 2,
-      duration: Math.random() * 4 + 3,
-      delay: Math.random() * 2.5,
-      opacity: Math.random() * 0.45 + 0.15,
+      x: ((i * 37 + 13) % 94) + 3,
+      y: ((i * 61 + 29) % 90) + 5,
+      size: ((i * 7) % 4) + 2,
+      duration: ((i * 11) % 4) + 3,
+      delay: ((i * 5) % 25) / 10,
+      opacity: (((i * 9) % 45) / 100) + 0.15,
     })), []
   );
 
@@ -203,30 +203,33 @@ export const InitialLoadingScreen: React.FC<InitialLoadingScreenProps> = ({
           />
         </div>
 
-        {/* Halo de sombra dourada suave atrás do logo */}
+        {/* Halo de luz ciano e violeta atrás do logo da Íris Neural */}
         <div 
           className="absolute rounded-3xl pointer-events-none"
           style={{ 
-            width: '140px',
-            height: '140px',
-            background: 'radial-gradient(circle, rgba(245,158,11,0.25), rgba(2,132,199,0.2), transparent 70%)',
+            width: '180px',
+            height: '180px',
+            background: 'radial-gradient(circle, rgba(6,182,212,0.35) 0%, rgba(99,102,241,0.25) 50%, transparent 70%)',
             filter: 'blur(35px)',
           }}
         />
 
-        {/* ═══ LOGO OFICIAL: CÉREBRO 3D METÁLICO OURO & SAFIRA ═══ */}
+        {/* ═══ LOGO OFICIAL ARGUS: ÍRIS NEURAL CIBERNÉTICA ═══ */}
         <div className="relative transform hover:scale-105 transition-transform duration-300">
           <BrandLogo size={144} showGlow />
         </div>
 
-        {/* Nome da plataforma (Tema Claro: Alto Contraste) */}
+        {/* Nome da plataforma Argus */}
         <div className={`mt-6 text-center ${phase === 'enter' ? 'splash-text-enter-light' : ''}`}>
           <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 flex items-center justify-center gap-2">
-            <span>Learning</span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500">
+            <span>Argus</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500">
               AI
             </span>
           </h1>
+          <p className="mt-2 text-xs sm:text-sm font-bold tracking-wider uppercase text-slate-500">
+            A Lente Cognitiva da Aprovação
+          </p>
         </div>
       </div>
     </div>

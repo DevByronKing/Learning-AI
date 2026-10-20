@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { ArrowLeft, ShieldCheck, Lock, Eye, Database, CheckCircle2 } from 'lucide-react';
 
 export const metadata = {
-  title: 'Política de Privacidade & Proteção de Dados (LGPD) | Learning AI',
-  description: 'Conheça como a Learning AI trata, protege e armazena os seus dados de acordo com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).',
+  title: 'Política de Privacidade & Proteção de Dados (LGPD) | Argus',
+  description: 'Conheça como o Argus trata, protege e armazena os seus dados de acordo com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).',
 };
 
 export default function PrivacidadePage() {
@@ -24,7 +24,7 @@ export default function PrivacidadePage() {
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             <span className="font-extrabold text-sm text-slate-900 dark:text-white">
-              Learning <span className="text-indigo-600 dark:text-indigo-400">AI</span>
+              Argus <span className="text-indigo-600 dark:text-indigo-400">Inteligência</span>
             </span>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function PrivacidadePage() {
                 <span>1. Compromisso com a Privacidade</span>
               </h2>
               <p>
-                A <strong>Learning AI</strong> respeita a privacidade de seus usuários e adota medidas técnicas, administrativas e de segurança da informação adequadas para proteger todos os dados pessoais coletados contra acessos não autorizados, destruição, perda, alteração ou qualquer forma de tratamento ilícito.
+                O <strong>Argus</strong> respeita a privacidade de seus usuários e adota medidas técnicas, administrativas e de segurança da informação adequadas para proteger todos os dados pessoais coletados contra acessos não autorizados, destruição, perda, alteração ou qualquer forma de tratamento ilícito.
               </p>
             </section>
 
@@ -66,7 +66,7 @@ export default function PrivacidadePage() {
               <p className="mb-2">Coletamos exclusivamente os dados necessários para a prestação dos serviços educacionais:</p>
               <ul className="list-disc pl-5 space-y-1.5">
                 <li><strong>Dados Cadastrais:</strong> Nome completo, endereço de e-mail e cargo/carreira pretendida.</li>
-                <li><strong>Dados de Pagamento:</strong> Processados diretamente em ambiente seguro com tokenização criptográfica PCI-DSS pelos gateways autorizados (Asaas e Stripe). A Learning AI não armazena números de cartões de crédito em seus servidores.</li>
+                <li><strong>Dados de Pagamento:</strong> Processados diretamente em ambiente seguro com tokenização criptográfica PCI-DSS pelos gateways autorizados (Asaas e Stripe). O Argus não armazena números de cartões de crédito em seus servidores.</li>
                 <li><strong>Métricas de Aprendizado:</strong> Respostas assinaladas, tempo gasto por questão, taxa de acerto e cadernos de erros para geração de diagnósticos cognitivos personalizados.</li>
                 <li><strong>Cookies e Rastreamento de Anúncios:</strong> Identificadores anônimos de navegação para aprimoramento contínuo da experiência do usuário e mensuração de campanhas (Google Analytics e Meta Pixel).</li>
               </ul>
@@ -89,7 +89,7 @@ export default function PrivacidadePage() {
                 <span>4. Não Compartilhamento e Sigilo Absoluto</span>
               </h2>
               <p>
-                A Learning AI <strong>NÃO comercializa, não aluga e não compartilha</strong> os dados pessoais dos seus alunos com terceiros para fins publicitários externos. Os dados de performance cognitiva são estritamente confidenciais e acessíveis apenas pelo titular da respectiva conta.
+                O Argus <strong>NÃO comercializa, não aluga e não compartilha</strong> os dados pessoais dos seus alunos com terceiros para fins publicitários externos. Os dados de performance cognitiva são estritamente confidenciais e acessíveis apenas pelo titular da respectiva conta.
               </p>
             </section>
 
@@ -107,13 +107,34 @@ export default function PrivacidadePage() {
               </ul>
             </section>
 
-            {/* 6 */}
+            {/* 6 - Política de Cookies */}
+            <section id="cookies" className="p-5 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-800/40 space-y-3">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span>6. Política de Cookies e Tecnologias de Rastreamento</span>
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300">
+                Os cookies são pequenos arquivos de texto armazenados no seu navegador. O Argus utiliza cookies para proporcionar uma experiência fluida, segura e personalizada:
+              </p>
+              <div className="space-y-2 text-xs sm:text-sm">
+                <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5">
+                  <strong className="text-emerald-600 dark:text-emerald-400">Cookies Estritamente Necessários:</strong> Fundamentais para manter sua sessão autenticada (JWT), gerenciar tokens antifraude, prevenir ataques de CSRF/SQLi e manter preferências de segurança de 2FA. Não podem ser desativados.
+                </div>
+                <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5">
+                  <strong className="text-blue-600 dark:text-blue-400">Cookies de Desempenho e Psicométrica:</strong> Coletam métricas anônimas sobre o tempo de resolução de questões para calibrar a curva de esquecimento do algoritmo SM-2 e aprimorar a detecção de distratores de banca.
+                </div>
+                <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5">
+                  <strong className="text-amber-600 dark:text-amber-400">Controle do Usuário:</strong> Você pode alterar ou revogar suas preferências de cookies a qualquer momento através do nosso banner de consentimento ou nas configurações do seu navegador.
+                </div>
+              </div>
+            </section>
+
+            {/* 7 */}
             <section>
               <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                <span>6. Encarregado de Proteção de Dados (DPO)</span>
+                <span>7. Encarregado de Proteção de Dados (DPO)</span>
               </h2>
               <p>
-                Para exercer qualquer dos seus direitos previstos na LGPD ou esclarecer dúvidas sobre esta política, entre em contato diretamente com o nosso Encarregado de Dados pelo email: <strong className="text-indigo-600 dark:text-indigo-400">dpo@learningai.com.br</strong> ou <strong className="text-indigo-600 dark:text-indigo-400">privacidade@learningai.com.br</strong>.
+                Para exercer qualquer dos seus direitos previstos na LGPD ou esclarecer dúvidas sobre esta política, entre em contato diretamente com o nosso Encarregado de Dados pelo email: <strong className="text-indigo-600 dark:text-indigo-400">dpo@argus.app.br</strong> ou <strong className="text-indigo-600 dark:text-indigo-400">privacidade@argus.app.br</strong>.
               </p>
             </section>
           </div>

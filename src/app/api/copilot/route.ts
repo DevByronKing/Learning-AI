@@ -58,7 +58,7 @@ export async function POST(req: Request) {
       });
     }
 
-    const systemPrompt = `Você é o Copiloto Cognitivo de Alta Performance do Learning AI, mentor pessoal do aluno(a) ${warName}.
+    const systemPrompt = `Você é o Copiloto Cognitivo de Alta Performance do Argus, mentor pessoal do aluno(a) ${warName}.
 PERFIL DO ALUNO:
 - Cargo/Edital Alvo: ${targetExam}
 - Banca Examinadora: ${banca}

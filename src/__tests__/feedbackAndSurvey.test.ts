@@ -21,9 +21,9 @@ describe('Ciclo de Feedback & Teste de PMF (Sean Ellis)', () => {
       timestamp: new Date().toISOString()
     };
 
-    localStorage.setItem('aprovalens_ai_feedback_votes', JSON.stringify([firstVote]));
+    localStorage.setItem('argus_ai_feedback_votes', JSON.stringify([firstVote]));
     
-    let saved = JSON.parse(localStorage.getItem('aprovalens_ai_feedback_votes') || '[]');
+    let saved = JSON.parse(localStorage.getItem('argus_ai_feedback_votes') || '[]');
     expect(saved.length).toBe(1);
     expect(saved[0].vote).toBe('up');
     expect(saved[0].questionId).toBe(questionId);
@@ -41,8 +41,8 @@ describe('Ciclo de Feedback & Teste de PMF (Sean Ellis)', () => {
       timestamp: new Date().toISOString()
     });
 
-    localStorage.setItem('aprovalens_ai_feedback_votes', JSON.stringify(updatedVotes));
-    saved = JSON.parse(localStorage.getItem('aprovalens_ai_feedback_votes') || '[]');
+    localStorage.setItem('argus_ai_feedback_votes', JSON.stringify(updatedVotes));
+    saved = JSON.parse(localStorage.getItem('argus_ai_feedback_votes') || '[]');
 
     expect(saved.length).toBe(1);
     expect(saved[0].vote).toBe('down');

@@ -73,14 +73,14 @@ describe('SaaS Módulos: Modelagem de Preços, Planos PLG e Carrinho', () => {
 
   it('deve calcular corretamente os valores reposicionados dos planos PRO, ELITE e BLACK', () => {
     // Plano PRO: R$ 59,90/mês ou R$ 39,90/mês no anual (R$ 478,80)
-    const proMensal = 59.90;
-    const proAnual = 478.80;
-    expect(proAnual / 12).toBeCloseTo(39.90, 2);
+    const proMensal = 99.00;
+    const proAnual = 588.00;
+    expect(proAnual / 12).toBeCloseTo(49.00, 2);
 
     // Plano ELITE: R$ 129,90/mês ou R$ 89,90/mês no anual (R$ 1.078,80)
-    const eliteMensal = 129.90;
-    const eliteAnual = 1078.80;
-    expect(eliteAnual / 12).toBeCloseTo(89.90, 2);
+    const eliteMensal = 189.00;
+    const eliteAnual = 1068.00;
+    expect(eliteAnual / 12).toBeCloseTo(89.00, 2);
 
     // Plano BLACK VITALÍCIO: R$ 1.497,00 em até 12x de R$ 149,70
     const blackVitalicio = 1497.00;

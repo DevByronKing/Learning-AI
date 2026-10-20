@@ -341,21 +341,6 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
             )}
 
             <button
-              onClick={() => setActiveTab('guide')}
-              title={isCollapsed ? 'Guia do Aluno' : undefined}
-              className={`w-full flex items-center gap-3 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                activeTab === 'guide'
-                  ? isLight ? 'bg-blue-50 text-blue-900 font-extrabold' : 'bg-blue-600/20 text-white font-extrabold'
-                  : isLight ? 'text-slate-600 hover:bg-slate-100' : 'text-slate-400 hover:bg-white/5 hover:text-white'
-              }`}
-            >
-              <div className="p-1.5 rounded-lg shrink-0">
-                <BookOpen className="w-4 h-4" />
-              </div>
-              {!isCollapsed && <span className="truncate">Guia do Aluno</span>}
-            </button>
-
-            <button
               onClick={() => setActiveTab('settings')}
               title={isCollapsed ? 'Configurações' : undefined}
               className={`w-full flex items-center gap-3 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${

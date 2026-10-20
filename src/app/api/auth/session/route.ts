@@ -49,7 +49,7 @@ export async function GET(req: Request) {
         authenticated: true,
         user: {
           id: 'usr_local_active',
-          email: 'aluno@learningai.com.br',
+          email: 'aluno@argus.app.br',
           name: 'Concurseiro Alta Performance',
           role: 'student',
         },

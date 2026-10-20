@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Target, 
   Clock, 
@@ -184,6 +184,12 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
     }
   };
 
+  // Refs estáveis para atalhos de teclado evitando re-inscrições desnecessárias
+  const handleConfirmAnswerRef = useRef(handleConfirmAnswer);
+  handleConfirmAnswerRef.current = handleConfirmAnswer;
+  const handleNextRef = useRef(handleNext);
+  handleNextRef.current = handleNext;
+
   // Keyboard Shortcuts: A-E to select, Enter to confirm, ArrowRight/N to next, F for Zen
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -207,7 +213,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
       if (isAnswered) {
         if (e.key === 'Enter' || e.key === 'ArrowRight' || key === 'N') {
           e.preventDefault();
-          handleNext();
+          handleNextRef.current();
         }
         return;
       }
@@ -227,7 +233,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
 
         if (e.key === 'Enter' && selectedOptionId) {
           e.preventDefault();
-          handleConfirmAnswer();
+          handleConfirmAnswerRef.current();
         }
       }
     };
@@ -382,49 +388,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fadeIn">
-      
-      {/* Top Mode Switcher Bar */}
-      <div className="flex items-center justify-center sm:justify-start mb-6">
-        <div className="inline-flex flex-wrap p-1.5 rounded-2xl bg-white dark:bg-dark-surface border border-slate-300 dark:border-white/10 text-xs shadow-lg gap-1">
-          <button
-            onClick={() => setSimulatorMode('quick')}
-            className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2 ${
-              simulatorMode === 'quick'
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'
-            }`}
-          >
-            <Target className="w-4 h-4" />
-            <span>Treino Rápido por Matéria</span>
-          </button>
-          
-          <button
-            onClick={() => setSimulatorMode('ai_generator')}
-            className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2 ${
-              simulatorMode === 'ai_generator'
-                ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-extrabold shadow-md shadow-blue-600/25'
-                : 'text-blue-500 hover:text-blue-400'
-            }`}
-          >
-            <Sparkles className="w-4 h-4 text-cyan-400 animate-pulse" />
-            <span>Gerador Inédito com IA</span>
-          </button>
-
-          <button
-            onClick={() => setSimulatorMode('full_mock')}
-            className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2 ${
-              simulatorMode === 'full_mock'
-                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-black font-extrabold shadow-md shadow-amber-500/30 glow-emerald'
-                : 'text-amber-400 hover:text-amber-300'
-            }`}
-          >
-            <Trophy className="w-4 h-4" />
-            <span>Provas Anteriores & Simulados Oficiais</span>
-          </button>
-        </div>
-      </div>
-
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-20 animate-fadeIn">
       {simulatorMode === 'full_mock' ? (
         <FullMockExamSimulator
           onAddFlashcardsBatch={onAddFlashcardsBatch}
@@ -435,6 +399,15 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
       ) : simulatorMode === 'ai_generator' ? (
         /* AI GENERATOR VIEW */
         <div className="max-w-4xl mx-auto space-y-6">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setSimulatorMode('quick')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Voltar ao Treino Adaptativo</span>
+            </button>
+          </div>
           
           {/* AI Generator Control Box */}
           <div className="glass-panel p-6 rounded-[2rem] bg-white/70 dark:bg-dark-card/60 backdrop-blur-md border border-slate-200/80 dark:border-white/10 shadow-xl space-y-4 relative overflow-hidden">
@@ -636,122 +609,103 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
         </div>
       ) : (
         <div className="max-w-7xl mx-auto">
-          {/* Header & Filter Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-300 dark:border-white/10">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20 text-xs font-bold">
-                  Simulador Cognitivo
-                </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">Questões Comentadas por IA</span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
-                Treino Adaptativo de Questões
-              </h1>
+          {/* Unified Compact Controls: Modes + Filters in a Single High-Density Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-4 border-b border-slate-200 dark:border-white/10">
+            {/* Mode Switcher */}
+            <div className="inline-flex p-1 rounded-xl bg-slate-100 dark:bg-dark-surface border border-slate-200 dark:border-white/10 text-xs shadow-2xs gap-1">
+              <button
+                onClick={() => setSimulatorMode('quick')}
+                className="px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 text-xs bg-indigo-600 text-white shadow-xs shadow-indigo-600/30"
+              >
+                <Target className="w-3.5 h-3.5" />
+                <span>Treino Adaptativo</span>
+              </button>
+              
+              <button
+                onClick={() => setSimulatorMode('ai_generator')}
+                className="px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 text-xs text-blue-500 hover:text-blue-400 hover:bg-slate-200/60 dark:hover:bg-white/5"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+                <span>Inéditas IA</span>
+              </button>
+
+              <button
+                onClick={() => setSimulatorMode('full_mock')}
+                className="px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 text-xs text-amber-500 hover:text-amber-400 hover:bg-slate-200/60 dark:hover:bg-white/5"
+              >
+                <Trophy className="w-3.5 h-3.5" />
+                <span>Simulados Oficiais</span>
+              </button>
             </div>
 
-        {/* Filter Dropdown */}
-        <div className="flex flex-col sm:flex-row items-center gap-3">
-          {/* Exam Selector */}
-          {exams.length > 0 && onSelectExam && (
-            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-              <span>Concurso:</span>
+            {/* Filter Dropdowns */}
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              {exams.length > 0 && onSelectExam && (
+                <select
+                  value={selectedExam?.id || ''}
+                  onChange={(e) => {
+                    const exam = exams.find(ex => ex.id === e.target.value);
+                    if (exam) onSelectExam(exam);
+                    setCurrentIndex(0);
+                    setIsAnswered(false);
+                    setSelectedOptionId(null);
+                  }}
+                  className="px-2.5 py-1.5 rounded-xl glass-input text-xs text-slate-800 dark:text-white font-medium cursor-pointer border border-slate-200 dark:border-white/10"
+                >
+                  {exams.map(exam => (
+                    <option key={exam.id} value={exam.id}>{exam.title}</option>
+                  ))}
+                </select>
+              )}
+
               <select
-                value={selectedExam?.id || ''}
+                value={selectedSubjectFilter}
                 onChange={(e) => {
-                  const exam = exams.find(ex => ex.id === e.target.value);
-                  if (exam) onSelectExam(exam);
+                  setSelectedSubjectFilter(e.target.value);
                   setCurrentIndex(0);
                   setIsAnswered(false);
                   setSelectedOptionId(null);
                 }}
-                className="px-3 py-2 rounded-xl glass-input text-xs text-slate-900 dark:text-white font-medium cursor-pointer"
+                className="px-2.5 py-1.5 rounded-xl glass-input text-xs text-slate-800 dark:text-white font-medium cursor-pointer border border-slate-200 dark:border-white/10"
               >
-                {exams.map(exam => (
-                  <option key={exam.id} value={exam.id}>{exam.title}</option>
+                <option value="todas">Todas as Disciplinas</option>
+                {selectedExam && selectedExam.subjects.map(sub => (
+                  <option key={sub.id} value={sub.name}>
+                    ⭐ {sub.name} (Peso {sub.weight || 1})
+                  </option>
                 ))}
+                {Array.from(new Set(questions.map(q => q.subjectName)))
+                  .filter(sName => !selectedExam?.subjects.some(sub => sub.name.toLowerCase() === sName.toLowerCase()))
+                  .map(sName => (
+                    <option key={sName} value={sName}>{sName}</option>
+                  ))
+                }
               </select>
-            </div>
-          )}
 
-          {/* Subject Filter */}
-          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-            <Filter className="w-3.5 h-3.5" />
-            <span>Matéria:</span>
-          </div>
-          <select
-            value={selectedSubjectFilter}
-            onChange={(e) => {
-              setSelectedSubjectFilter(e.target.value);
-              setCurrentIndex(0);
-              setIsAnswered(false);
-              setSelectedOptionId(null);
-            }}
-            className="px-3 py-2 rounded-xl glass-input text-xs text-slate-900 dark:text-white font-medium cursor-pointer"
-          >
-            <option value="todas">Todas as Disciplinas</option>
-            {selectedExam && selectedExam.subjects.map(sub => (
-              <option key={sub.id} value={sub.name}>
-                ⭐ {sub.name} (Peso {sub.weight || 1})
-              </option>
-            ))}
-            {Array.from(new Set(questions.map(q => q.subjectName)))
-              .filter(sName => !selectedExam?.subjects.some(sub => sub.name.toLowerCase() === sName.toLowerCase()))
-              .map(sName => (
-                <option key={sName} value={sName}>{sName}</option>
-              ))
-            }
-          </select>
-
-          {/* Botão Rápido de Calcanhar de Aquiles do Onboarding */}
-          {studentProfile?.weakSubject && (
-            <button
-              onClick={() => {
-                const targetSub = selectedSubjectFilter.toLowerCase().includes((studentProfile.weakSubject || '').toLowerCase())
-                  ? 'todas'
-                  : studentProfile.weakSubject || 'todas';
-                setSelectedSubjectFilter(targetSub);
-                setCurrentIndex(0);
-                setIsAnswered(false);
-                setSelectedOptionId(null);
-              }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black transition-all border cursor-pointer ${
-                selectedSubjectFilter.toLowerCase().includes((studentProfile.weakSubject || '').toLowerCase())
-                  ? 'bg-rose-600 text-white border-rose-700 shadow-md shadow-rose-600/30'
-                  : 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-500/20 hover:bg-rose-100 dark:hover:bg-rose-500/20'
-              }`}
-              title="Filtrar instantaneamente questões da disciplina declarada no Onboarding"
-            >
-              <AlertTriangle className="w-3.5 h-3.5" />
-              <span>Calcanhar de Aquiles: {studentProfile.weakSubject}</span>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Banner Tático do Guardião na Arena */}
-      {studentProfile && (
-        <div className="mt-4 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-blue-900/30 via-indigo-900/20 to-purple-900/30 border border-blue-500/20 flex flex-wrap items-center justify-between gap-3 text-xs backdrop-blur-sm">
-          <div className="flex items-center gap-2.5">
-            <span className="text-xl">🎯</span>
-            <div>
-              <span className="font-black text-slate-900 dark:text-white">
-                Arena Calibrada para {studentProfile.warName || studentProfile.name}
-              </span>
-              <span className="text-slate-600 dark:text-slate-400 ml-2">
-                • Alvo: <strong className="text-blue-600 dark:text-blue-400">{studentProfile.targetExamTitle || selectedExam?.title}</strong> ({studentProfile.targetBanca || selectedExam?.banca || 'Cebraspe'})
-              </span>
+              {studentProfile?.weakSubject && (
+                <button
+                  onClick={() => {
+                    const targetSub = selectedSubjectFilter.toLowerCase().includes((studentProfile.weakSubject || '').toLowerCase())
+                      ? 'todas'
+                      : studentProfile.weakSubject || 'todas';
+                    setSelectedSubjectFilter(targetSub);
+                    setCurrentIndex(0);
+                    setIsAnswered(false);
+                    setSelectedOptionId(null);
+                  }}
+                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-black transition-all border cursor-pointer ${
+                    selectedSubjectFilter.toLowerCase().includes((studentProfile.weakSubject || '').toLowerCase())
+                      ? 'bg-rose-600 text-white border-rose-700 shadow-xs'
+                      : 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-500/20 hover:bg-rose-100'
+                  }`}
+                  title="Filtrar disciplina do seu Calcanhar de Aquiles"
+                >
+                  <AlertTriangle className="w-3 h-3" />
+                  <span>Foco: {studentProfile.weakSubject}</span>
+                </button>
+              )}
             </div>
           </div>
-          {studentProfile.weakSubject && (
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold text-rose-600 dark:text-rose-300 bg-rose-500/10 px-3 py-1 rounded-lg border border-rose-500/20">
-                🛡️ Foco de Blindagem: {studentProfile.weakSubject}
-              </span>
-            </div>
-          )}
-        </div>
-      )}
 
       {currentQuestion ? (
         <div className="mt-6">
@@ -762,57 +716,26 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
             {/* COLUNA ESQUERDA: ARENA DE COMBATE & ENUNCIADO (60% - 7 COLS) */}
             <div className="lg:col-span-7 space-y-5">
               
-              {/* Question Meta Bar with Zen Mode Trigger */}
-              <div className="glass-panel p-4 rounded-2xl border border-slate-300 dark:border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs shadow-sm">
-                <div className="flex flex-wrap items-center gap-2">
+              {/* Question Meta Bar with Tools and Zen Mode */}
+              <div className="glass-panel p-3.5 rounded-2xl border border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-2.5 text-xs shadow-2xs">
+                <div className="flex flex-wrap items-center gap-1.5">
                   <span className="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-bold border border-indigo-200 dark:border-indigo-500/30">
                     {currentQuestion.banca} • {currentQuestion.year}
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-dark-card text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-semibold">
                     {currentQuestion.subjectName}
                   </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-dark-card text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                  <span className="hidden sm:inline-block px-2.5 py-1 rounded-lg bg-white dark:bg-dark-card text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                     {currentQuestion.topicName}
                   </span>
-                </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-mono font-bold bg-white dark:bg-dark-surface px-3 py-1 rounded-xl border border-slate-200 dark:border-white/5">
-                    <Clock className="w-3.5 h-3.5 text-amber-400" />
-                    <span>{formatTimer(timeSpentSeconds)}</span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsZenMode(true)}
-                    className="px-3 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center gap-1.5 border border-slate-200 dark:border-slate-700 transition-all active:scale-95"
-                    title="Modo Foco Zen (Atalho: F)"
-                  >
-                    <Maximize2 className="w-3.5 h-3.5 text-indigo-500" />
-                    <span>Foco [F]</span>
-                  </button>
-
-                  <span className="text-slate-500 dark:text-slate-400 font-semibold">
-                    {currentIndex + 1} / {filteredQuestions.length}
-                  </span>
-                </div>
-              </div>
-
-              {/* Statement Box with Physical Exam Highlighter */}
-              <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-300 dark:border-white/10 space-y-4 relative shadow-sm">
-                
-                {/* Physical Exam Toolbar (Grifar e Riscar) */}
-                <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200 dark:border-white/10 text-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <Keyboard className="w-3.5 h-3.5" />
-                      Ferramentas de Prova Física:
-                    </span>
+                  {/* Physical Exam Tools */}
+                  <div className="flex items-center gap-1 ml-1 border-l border-slate-200 dark:border-white/10 pl-2">
                     <button
                       type="button"
                       onClick={() => handleHighlightSelection('mark')}
-                      className="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-500/20 dark:hover:bg-amber-500/30 text-amber-800 dark:text-amber-300 font-bold text-[11px] border border-amber-300 dark:border-amber-500/30 flex items-center gap-1 transition-all"
-                      title="Selecione o texto e clique para grifar em amarelo"
+                      className="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold text-[11px] border border-amber-300 dark:border-amber-500/30 flex items-center gap-1 transition-all"
+                      title="Selecione o texto e clique para grifar"
                     >
                       <Highlighter className="w-3 h-3 text-amber-600 dark:text-amber-400" />
                       <span>Grifar</span>
@@ -820,25 +743,48 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                     <button
                       type="button"
                       onClick={() => handleHighlightSelection('strike')}
-                      className="px-2.5 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 dark:bg-rose-500/20 dark:hover:bg-rose-500/30 text-rose-800 dark:text-rose-300 font-bold text-[11px] border border-rose-300 dark:border-rose-500/30 flex items-center gap-1 transition-all"
-                      title="Selecione o texto e clique para riscar termos proibidos"
+                      className="px-2 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 dark:bg-rose-500/20 text-rose-800 dark:text-rose-300 font-bold text-[11px] border border-rose-300 dark:border-rose-500/30 flex items-center gap-1 transition-all"
+                      title="Selecione o texto e clique para riscar"
                     >
                       <Scissors className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                       <span>Riscar</span>
                     </button>
+                    {(highlightedSnippets.length > 0 || strikethroughSnippets.length > 0) && (
+                      <button
+                        type="button"
+                        onClick={handleClearHighlights}
+                        className="text-[10px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 underline ml-1"
+                      >
+                        Limpar
+                      </button>
+                    )}
                   </div>
-
-                  {(highlightedSnippets.length > 0 || strikethroughSnippets.length > 0) && (
-                    <button
-                      type="button"
-                      onClick={handleClearHighlights}
-                      className="text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 underline"
-                    >
-                      Limpar Marcações
-                    </button>
-                  )}
                 </div>
 
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-mono font-bold bg-white dark:bg-dark-surface px-2.5 py-1 rounded-xl border border-slate-200 dark:border-white/5">
+                    <Clock className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{formatTimer(timeSpentSeconds)}</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsZenMode(true)}
+                    className="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center gap-1 border border-slate-200 dark:border-slate-700 transition-all active:scale-95"
+                    title="Modo Foco Zen (Atalho: F)"
+                  >
+                    <Maximize2 className="w-3.5 h-3.5 text-indigo-500" />
+                    <span>Foco [F]</span>
+                  </button>
+
+                  <span className="text-slate-500 dark:text-slate-400 font-semibold text-xs">
+                    {currentIndex + 1}/{filteredQuestions.length}
+                  </span>
+                </div>
+              </div>
+
+              {/* Statement Box */}
+              <div className="glass-panel p-5 sm:p-7 rounded-3xl border border-slate-300 dark:border-white/10 space-y-3 relative shadow-sm">
                 {/* Reference tag if available */}
                 {currentQuestion.codeCitation && (
                   <div className="text-[11px] font-mono text-indigo-500 dark:text-indigo-400 flex items-center gap-1.5">
@@ -1082,7 +1028,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
 
       {/* OVERLAY DO MODO FOCO TOTAL (ZEN MODE) */}
       {isZenMode && currentQuestion && (
-        <div className="fixed inset-0 z-50 bg-slate-950/98 text-white p-6 sm:p-12 overflow-y-auto flex flex-col justify-between animate-fadeIn backdrop-blur-xl preserve-dark">
+        <div role="dialog" aria-modal="true" className="fixed inset-0 z-[70] bg-slate-950/98 text-white p-6 sm:p-12 overflow-y-auto flex flex-col justify-between animate-fadeIn backdrop-blur-xl preserve-dark">
           
           {/* Zen Mode Header */}
           <div className="max-w-4xl w-full mx-auto flex items-center justify-between pb-4 border-b border-slate-800">
@@ -1182,7 +1128,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
           </div>
 
           <div className="text-center text-[11px] text-slate-600 max-w-4xl mx-auto w-full pt-4 border-t border-slate-800">
-            Arena de Combate Zen • Learning AI
+            Arena de Combate Zen • Argus
           </div>
 
         </div>

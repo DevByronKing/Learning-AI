@@ -1,5 +1,5 @@
 -- ==============================================================================
--- LEARNING AI - SUPABASE POSTGRESQL SCHEMA (CUSTO ZERO & ALTA ESCALABILIDADE)
+-- ARGUS - SUPABASE POSTGRESQL SCHEMA (CUSTO ZERO & ALTA ESCALABILIDADE)
 -- ==============================================================================
 
 -- 1. Enable Extensions

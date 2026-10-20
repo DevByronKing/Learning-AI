@@ -18,9 +18,15 @@ export const TrackingScripts: React.FC = () => {
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
   const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
-  // Disparo automático de PageView a cada navegação de página
+  // Disparo automático de PageView a cada navegação de página com salvaguardas estritas de privacidade
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      // Bloqueio preventivo e absoluto de gravação de sessões / keystroke logging (LGPD Art. 6º, III e Art. 14)
+      (window as any).__disableSessionReplay = true;
+      (window as any).__disableKeystrokeLogging = true;
+      (window as any).clarity = function() { /* Bloqueado preventivamente por conformidade LGPD */ };
+      (window as any).hj = function() { /* Bloqueado preventivamente por conformidade LGPD */ };
+
       const search = window.location.search || '';
       const fullPath = pathname + search;
 
@@ -29,10 +35,14 @@ export const TrackingScripts: React.FC = () => {
         window.fbq('track', 'PageView');
       }
 
-      // 2. Google Analytics PageView
+      // 2. Google Analytics PageView com IP Anonimizado e Proteção de Dados
       if (window.gtag && gaMeasurementId) {
         window.gtag('config', gaMeasurementId, {
           page_path: fullPath,
+          anonymize_ip: true,
+          allow_google_signals: false,
+          allow_ad_personalization_signals: false,
+          restricted_data_processing: true,
         });
       }
     }
@@ -98,6 +108,10 @@ export const TrackingScripts: React.FC = () => {
                 gtag('js', new Date());
                 gtag('config', '${gaMeasurementId}', {
                   page_path: window.location.pathname,
+                  anonymize_ip: true,
+                  allow_google_signals: false,
+                  allow_ad_personalization_signals: false,
+                  restricted_data_processing: true,
                 });
               `,
             }}

@@ -16,6 +16,11 @@ export async function POST() {
     });
 
     // Limpar cookie de sessão
+    response.cookies.set('argus-session', '', {
+      httpOnly: true,
+      expires: new Date(0),
+      path: '/',
+    });
     response.cookies.set('learning-ai-session', '', {
       httpOnly: true,
       expires: new Date(0),

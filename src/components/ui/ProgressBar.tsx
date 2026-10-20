@@ -10,6 +10,8 @@ export interface ProgressBarProps {
   size?: 'sm' | 'md' | 'lg';
   variant?: 'accent' | 'brand' | 'gradient';
   isAnimated?: boolean;
+  /** Exibe a mensagem de "Meta alcançada" quando o valor chega a 100% (padrão: true) */
+  showCompleteMessage?: boolean;
   className?: string;
 }
 
@@ -20,6 +22,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   size = 'md',
   variant = 'accent',
   isAnimated = true,
+  showCompleteMessage = true,
   className = '',
 }) => {
   const clampedValue = Math.min(100, Math.max(0, value));
@@ -85,7 +88,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         </div>
       </div>
 
-      {isComplete && (
+      {isComplete && showCompleteMessage && (
         <div className="flex items-center gap-1 text-[11px] text-[var(--brand-accent)] font-bold animate-fadeIn">
           <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
           <span>Meta alcançada! Ciclo de estudo blindado.</span>

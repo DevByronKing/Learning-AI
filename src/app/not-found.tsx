@@ -13,7 +13,7 @@ export default function NotFound() {
         Página não encontrada
       </h2>
       <p className="text-sm text-slate-400 max-w-md mb-8">
-        O módulo ou página que você está procurando não existe ou foi reorganizado no Learning AI.
+        O módulo ou página que você está procurando não existe ou foi reorganizado no Argus.
       </p>
       <Link
         href="/"

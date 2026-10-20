@@ -1,5 +1,5 @@
 /**
- * Learning AI - Motor de Inteligência Artificial Resiliente & Otimizado
+ * Argus - Motor de Inteligência Artificial Resiliente & Otimizado
  * Google Gemini 1.5 Flash + Cache Inteligente L1/L2 + Fallback Gracioso Determinístico
  */
 
@@ -176,7 +176,7 @@ export class AIEngine {
       const timeoutId = setTimeout(() => controller.abort(), this.TIMEOUT_MS);
 
       const prompt = `
-Você é o Copiloto Jurídico do Learning AI especializado na banca ${req.banca}.
+Você é o Copiloto Jurídico do Argus especializado na banca ${req.banca}.
 Analise a resolução do aluno:
 - Disciplina: ${req.subject}
 - Tópico: ${req.topic}

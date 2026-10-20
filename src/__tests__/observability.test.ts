@@ -6,7 +6,7 @@ describe('Observabilidade & Logger Estruturado', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     logger.info('Tentativa de autenticação', {
-      email: 'usuario@learningai.com.br',
+      email: 'usuario@argus.app.br',
       password: 'minhasenhasupersecreta',
       token: 'jwt_secret_token_123',
     });
@@ -15,7 +15,7 @@ describe('Observabilidade & Logger Estruturado', () => {
     const loggedArgs = consoleSpy.mock.calls[0];
     const loggedContext = loggedArgs[1];
 
-    expect(loggedContext.email).toBe('usuario@learningai.com.br');
+    expect(loggedContext.email).toBe('usuario@argus.app.br');
     expect(loggedContext.password).toBe('[REDACTED]');
     expect(loggedContext.token).toBe('[REDACTED]');
 

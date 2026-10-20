@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { getAllEditalSlugs } from '@/lib/editaisCatalog';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://learningai.app';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://argus.app.br';
   const now = new Date();
 
   // Rotas estáticas

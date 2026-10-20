@@ -147,7 +147,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
       // Clean up text and replace tabs with spaces
       const frontSanitized = fc.front.replace(/\t/g, ' ').replace(/\n/g, '<br>');
       const backSanitized = fc.back.replace(/\t/g, ' ').replace(/\n/g, '<br>');
-      const tags = `${fc.subjectName.replace(/\s+/g, '_')} ${fc.topicName.replace(/\s+/g, '_')} LearningAI_SRS`;
+      const tags = `${fc.subjectName.replace(/\s+/g, '_')} ${fc.topicName.replace(/\s+/g, '_')} Argus_SRS`;
       return `${frontSanitized}\t${backSanitized}\t${tags}`;
     }).join('\n');
 
@@ -156,7 +156,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `LearningAI_Anki_Deck_${todayStr}.txt`;
+    link.download = `Argus_Anki_Deck_${todayStr}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

@@ -476,6 +476,7 @@ export interface StudentProfile {
   dailyHoursGoal: number;
   experienceLevel: 'iniciante' | 'intermediario' | 'veterano';
   guardianAnimalId: GuardianAnimalId;
+  mainPainPoint?: 'pegadinhas' | 'tempo' | 'estagnado' | 'esquecimento';
   createdAt: string;
   updatedAt: string;
 }

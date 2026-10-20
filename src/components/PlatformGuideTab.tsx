@@ -45,7 +45,7 @@ export const PlatformGuideTab: React.FC<PlatformGuideTabProps> = ({
       subtitle: 'Matriz de Pesos & Priorização',
       icon: ScrollText,
       color: 'text-blue-500 bg-blue-500/10 border-blue-500/20',
-      description: 'Nunca estude um edital de forma linear do início ao fim. O Learning AI analisa o peso das matérias e a frequência histórica da banca examinadora.',
+      description: 'Nunca estude um edital de forma linear do início ao fim. O Argus analisa o peso das matérias e a frequência histórica da banca examinadora.',
       actionLabel: 'Ir para Edital IA',
       tips: [
         'Faça upload do PDF ou selecione um edital pronto no nosso banco oficial.',
@@ -125,7 +125,7 @@ export const PlatformGuideTab: React.FC<PlatformGuideTabProps> = ({
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black bg-blue-100 text-blue-800 border border-blue-200 dark:bg-blue-500/20 dark:text-blue-300 dark:border-blue-500/30">
             <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
-            <span>Manual Cognitivo de Maestria • Learning AI</span>
+            <span>Manual Cognitivo de Maestria • Argus</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">

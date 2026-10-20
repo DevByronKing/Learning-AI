@@ -69,7 +69,7 @@ export async function POST(req: Request) {
 
         // Set secure cookie
         if (data.session?.access_token) {
-          response.cookies.set('learning-ai-session', data.session.access_token, {
+          response.cookies.set('argus-session', data.session.access_token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
@@ -102,7 +102,7 @@ export async function POST(req: Request) {
       mode: 'local_dev',
     });
 
-    response.cookies.set('learning-ai-session', mockToken, {
+    response.cookies.set('argus-session', mockToken, {
       httpOnly: false,
       secure: false,
       sameSite: 'lax',

@@ -5,12 +5,6 @@ import {
   Target, 
   Clock, 
   ShieldAlert, 
-  BookOpen, 
-  CalendarClock, 
-  Crosshair, 
-  Scale, 
-  PenTool, 
-  FileText, 
   ChevronRight
 } from 'lucide-react';
 import { ExamNotice, StudentProfile } from '@/lib/types';
@@ -35,18 +29,8 @@ export const GlobalExamContextBar: React.FC<GlobalExamContextBarProps> = ({
     return null;
   }
 
-  const isOAB = selectedExam.title.toLowerCase().includes('oab') || selectedExam.role.toLowerCase().includes('advoga');
   const days = selectedExam.daysRemaining || 85;
   const isUrgent = days <= 60;
-
-  const quickNavItems = [
-    { id: 'edital', label: 'Edital Verticalizado', shortLabel: 'Edital', icon: BookOpen },
-    { id: 'cycle', label: 'Ciclo Meirelles', shortLabel: 'Ciclo', icon: CalendarClock },
-    { id: 'simulator', label: 'Arena de Questões', shortLabel: 'Arena', icon: Crosshair },
-    { id: 'vademecum', label: 'Vade Mecum (Leis)', shortLabel: 'Lei Seca', icon: Scale },
-    { id: 'discursivas', label: isOAB ? 'Peças Práticas 2ª Fase' : 'Estúdio Discursivas', shortLabel: isOAB ? 'Peças OAB' : 'Discursiva', icon: PenTool },
-    { id: 'summaries', label: 'Resumos Inteligentes', shortLabel: 'Resumos', icon: FileText },
-  ];
 
   return (
     <div className="w-full bg-slate-100/90 dark:bg-gradient-to-r dark:from-slate-900/90 dark:via-indigo-950/80 dark:to-slate-900/90 backdrop-blur-md border-b border-slate-200/90 dark:border-indigo-500/20 text-slate-800 dark:text-white py-2 px-4 sm:px-6 relative z-15 shadow-xs transition-all">
@@ -56,7 +40,7 @@ export const GlobalExamContextBar: React.FC<GlobalExamContextBarProps> = ({
         <div className="flex flex-wrap items-center gap-2.5 min-w-0">
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-indigo-50 dark:bg-indigo-500/20 border border-indigo-200 dark:border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-extrabold shrink-0">
             <Target className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 animate-pulse" />
-            <span className="uppercase tracking-wider text-[10px]">Alvo Ativo</span>
+            <span className="font-bold text-[11px]">Alvo Ativo</span>
           </div>
 
           <div className="flex items-center gap-2 min-w-0">
@@ -83,32 +67,8 @@ export const GlobalExamContextBar: React.FC<GlobalExamContextBarProps> = ({
           )}
         </div>
 
-        {/* Lado Direito: Deep Links do Ecossistema Interligado */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 hidden xl:inline-block mr-1">
-            Ecossistema:
-          </span>
-
-          {quickNavItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => onNavigateTab(item.id)}
-                title={`Ir para ${item.label} calibrado para este concurso`}
-                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl font-bold text-[11px] transition-all whitespace-nowrap cursor-pointer ${
-                  isActive
-                    ? 'bg-indigo-600 text-white shadow-xs shadow-indigo-600/30 ring-1 ring-indigo-400/40'
-                    : 'bg-white dark:bg-white/5 hover:bg-slate-200/70 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200/80 dark:border-white/10 shadow-2xs'
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                <span>{item.shortLabel}</span>
-              </button>
-            );
-          })}
-
+        {/* Lado Direito: Ação Rápida de Gerenciar Alvo */}
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={() => {
               if (onOpenEditalSelector) {
@@ -117,11 +77,11 @@ export const GlobalExamContextBar: React.FC<GlobalExamContextBarProps> = ({
                 onNavigateTab('edital');
               }
             }}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-500/15 dark:hover:bg-amber-500/25 text-amber-800 dark:text-amber-300 border border-amber-200/90 dark:border-amber-500/30 text-[11px] font-bold transition-all shrink-0 ml-1 cursor-pointer"
-            title="Alternar concurso ou fazer upload de novo edital"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 dark:bg-white/10 dark:hover:bg-white/20 text-indigo-700 dark:text-white border border-indigo-200 dark:border-white/10 text-xs font-bold transition-all cursor-pointer shadow-2xs hover:scale-102 active:scale-98"
+            title="Alternar edital em foco ou carregar novo edital oficial"
           >
-            <span>Trocar</span>
-            <ChevronRight className="w-3 h-3" />
+            <span>Alterar Edital</span>
+            <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
 

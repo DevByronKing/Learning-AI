@@ -1,5 +1,5 @@
 /**
- * Learning AI - Motor de Extração e Auditoria de Provas Oficiais
+ * Argus - Motor de Extração e Auditoria de Provas Oficiais
  * Suporta Bancas Cebraspe, FGV, Vunesp, FCC e Ingestão com Gabarito Pós-Recursos
  */
 
@@ -401,7 +401,7 @@ export function generatePostgresSql(
   statements.push(`-- ==============================================================================`);
   statements.push(`-- CARGA OFICIAL AUDITADA: ${metadata.institution} ${metadata.year} (${metadata.banca})`);
   statements.push(`-- Cargo: ${metadata.role} | Total: ${questions.length} questões`);
-  statements.push(`-- Gerado pelo Learning AI Ingestion Pipeline em: ${new Date().toISOString()}`);
+  statements.push(`-- Gerado pelo Argus Ingestion Pipeline em: ${new Date().toISOString()}`);
   statements.push(`-- ==============================================================================\n`);
 
   for (const q of questions) {

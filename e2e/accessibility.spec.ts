@@ -4,7 +4,7 @@ import AxeBuilder from '@axe-core/playwright';
 test.describe('Auditoria Automatizada de Acessibilidade (a11y — WCAG 2.1 AA)', () => {
   test('página de Termos de Uso deve cumprir os padrões de acessibilidade WCAG 2.1 AA', async ({ page }) => {
     await page.goto('/termos');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
 
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
@@ -16,7 +16,7 @@ test.describe('Auditoria Automatizada de Acessibilidade (a11y — WCAG 2.1 AA)',
 
   test('página de Política de Privacidade deve cumprir os padrões de acessibilidade WCAG', async ({ page }) => {
     await page.goto('/privacidade');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
 
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa'])
@@ -71,7 +71,7 @@ test.describe('Design System (/design-system) — Acessibilidade, Contraste e Na
     page.on('console', msg => console.log('PAGE LOG:', msg.text()));
     page.on('pageerror', err => console.log('PAGE ERROR:', err.message));
     await page.goto('/design-system');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
   });
 
   test('deve renderizar a rota /design-system com título semântico e cabeçalho principal', async ({ page }) => {

@@ -3,7 +3,6 @@
 import React from 'react';
 import { SubscriptionPlan } from '@/lib/types';
 import { LandingHero } from './landing/LandingHero';
-import { LandingHighPerfHub } from './landing/LandingHighPerfHub';
 import { LandingLeadMagnet } from './landing/LandingLeadMagnet';
 import { LandingMethodology } from './landing/LandingMethodology';
 import { LandingFeatures } from './landing/LandingFeatures';
@@ -18,6 +17,7 @@ interface LandingPageProps {
   onSelectPlan: (plan: SubscriptionPlan) => void;
   onOpenPsychometrics?: () => void;
   onNavigateTab?: (tab: string) => void;
+  onOpenFlashChallenge?: () => void;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({
@@ -26,18 +26,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   onOpenPricing,
   onSelectPlan,
   onOpenPsychometrics,
-  onNavigateTab
+  onNavigateTab,
+  onOpenFlashChallenge
 }) => {
   return (
-    <div className="min-h-screen overflow-hidden">
+    <div className="min-h-screen overflow-x-clip">
       <LandingHero 
         onStartEdital={onStartEdital} 
         onOpenPricing={onOpenPricing} 
+        onNavigateTab={onNavigateTab}
+        onStartDiscursivas={onStartDiscursivas}
+        onOpenFlashChallenge={onOpenFlashChallenge}
       />
-
-      {onNavigateTab && (
-        <LandingHighPerfHub onNavigateTab={onNavigateTab} />
-      )}
       
       <LandingLeadMagnet 
         onStartEdital={onStartEdital} 

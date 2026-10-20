@@ -1,5 +1,5 @@
 /**
- * Learning AI - CLI de Ingestão de Provas Oficiais
+ * Argus - CLI de Ingestão de Provas Oficiais
  * Uso: npx tsx scripts/ingestExamCli.ts [opcoes]
  */
 
@@ -19,7 +19,7 @@ import {
 
 async function runCli() {
   console.log('\n============================================================');
-  console.log('🚀 LEARNING AI - PIPELINE CLI DE INGESTÃO DE PROVAS');
+  console.log('🚀 ARGUS - PIPELINE CLI DE INGESTÃO DE PROVAS');
   console.log('============================================================\n');
 
   const metadata: ExamIngestionMetadata = {

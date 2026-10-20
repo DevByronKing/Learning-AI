@@ -172,7 +172,7 @@ export const MascotChatModal: React.FC<MascotChatModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
       <div className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-indigo-500/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Header do Copiloto */}

@@ -553,7 +553,7 @@ export const AVAILABLE_COUPONS: CouponDiscount[] = [
   {
     code: 'LANCAMENTO20',
     discountPercent: 20,
-    description: '20% OFF Especial de Lançamento da Plataforma Learning AI',
+    description: '20% OFF Especial de Lançamento da Plataforma Argus',
     validUntil: '31/12/2026'
   },
   {

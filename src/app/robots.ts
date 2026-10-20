@@ -5,8 +5,19 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/checkout', '/api/webhooks'],
+      disallow: [
+        '/api/*',
+        '/admin/*',
+        '/_next/*',
+        '/.well-known/*',
+        '/wp-admin',
+        '/wp-login.php',
+        '/xmlrpc.php',
+        '/*.sql',
+        '/*.bak',
+        '/*.zip',
+      ],
     },
-    sitemap: 'https://learningai.app/sitemap.xml',
+    sitemap: `${process.env.NEXT_PUBLIC_APP_URL || 'https://argus.app.br'}/sitemap.xml`,
   };
 }

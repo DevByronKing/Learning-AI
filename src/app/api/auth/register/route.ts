@@ -28,7 +28,16 @@ export async function POST(req: Request) {
       );
     }
 
-    const { email, password, fullName, targetExam } = body || {};
+    const {
+      email,
+      password,
+      fullName,
+      targetExam,
+      birthDate,
+      parentalConsent,
+      guardianName,
+      guardianContact,
+    } = body || {};
 
     if (!email || !password) {
       return NextResponse.json(
@@ -44,6 +53,77 @@ export async function POST(req: Request) {
       );
     }
 
+    // Validação de Idade (ECA Digital - Lei 14.811/2024, Código Civil Arts. 3º e 4º e LGPD Art. 14)
+    if (!birthDate) {
+      return NextResponse.json(
+        {
+          success: false,
+          code: 'BIRTHDATE_REQUIRED',
+          error: 'Data de nascimento é obrigatória para verificação etária em conformidade com o ECA Digital (Lei 14.811/2024) e a LGPD (Art. 14).',
+        },
+        { status: 400 }
+      );
+    }
+
+    const birth = new Date(birthDate);
+    if (isNaN(birth.getTime())) {
+      return NextResponse.json(
+        { success: false, error: 'Data de nascimento inválida.' },
+        { status: 400 }
+      );
+    }
+
+    const today = new Date();
+    let calculatedAge = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      calculatedAge--;
+    }
+
+    if (calculatedAge < 0 || calculatedAge > 125) {
+      return NextResponse.json(
+        { success: false, error: 'Data de nascimento incoerente.' },
+        { status: 400 }
+      );
+    }
+
+    // Menores de 16 anos: Absolutamente Incapazes (Bloqueio estrito de contratação digital direta)
+    if (calculatedAge < 16) {
+      return NextResponse.json(
+        {
+          success: false,
+          code: 'ECA_UNDER_16_RESTRICTED',
+          error: 'O cadastro autônomo é restrito a maiores de 16 anos conforme o ECA Digital (Lei 14.811/2024), Código Civil (Art. 3º) e LGPD (Art. 14). Menores de 16 anos necessitam de representação legal e contratação presencial/assistida.',
+        },
+        { status: 403 }
+      );
+    }
+
+    // Jovens de 16 e 17 anos: Relativamente Incapazes (Exigência de assistência legal e dados do responsável)
+    if (calculatedAge >= 16 && calculatedAge < 18) {
+      if (!parentalConsent || !guardianName || guardianName.trim().length < 3 || !guardianContact) {
+        return NextResponse.json(
+          {
+            success: false,
+            code: 'PARENTAL_CONSENT_REQUIRED',
+            error: 'Para usuários entre 16 e 17 anos, é obrigatório registrar a autorização, nome e contato (CPF ou e-mail) do responsável legal conforme o ECA e a LGPD.',
+          },
+          { status: 400 }
+        );
+      }
+    }
+
+    const complianceAudit = {
+      birthDate,
+      calculatedAge,
+      ageVerified: true,
+      legalCapacity: calculatedAge >= 18 ? 'plena_maioridade' : 'relativamente_incapaz_assistido',
+      parentalConsent: calculatedAge >= 18 ? null : true,
+      guardianName: calculatedAge >= 18 ? null : guardianName,
+      guardianContact: calculatedAge >= 18 ? null : guardianContact,
+      verifiedAt: new Date().toISOString(),
+    };
+
     if (isSupabaseConfigured()) {
       const client = getSupabase();
       if (client) {
@@ -54,6 +134,7 @@ export async function POST(req: Request) {
             data: {
               full_name: fullName || email.split('@')[0],
               target_exam: targetExam || 'Geral',
+              ...complianceAudit,
             },
           },
         });
@@ -86,6 +167,7 @@ export async function POST(req: Request) {
         email,
         name: fullName || email.split('@')[0],
         targetExam: targetExam || 'Concurso Público',
+        ...complianceAudit,
       },
       session: {
         accessToken: mockToken,
@@ -95,7 +177,7 @@ export async function POST(req: Request) {
       mode: 'local_dev',
     });
 
-    response.cookies.set('learning-ai-session', mockToken, {
+    response.cookies.set('argus-session', mockToken, {
       httpOnly: false,
       secure: false,
       sameSite: 'lax',

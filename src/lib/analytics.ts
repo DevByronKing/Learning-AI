@@ -1,5 +1,5 @@
 /**
- * Learning AI - Centralized Growth & Conversion Analytics Engine
+ * Argus - Centralized Growth & Conversion Analytics Engine
  * Provider-agnostic tracking supporting PostHog, Mixpanel, GA4, Meta Pixel, and in-memory persistence.
  */
 
@@ -16,11 +16,19 @@ export type GrowthAnalyticsEvent =
   | 'cta_clicked'                // Clique em CTAs de ativação / aquisição
   | 'onboarding_step_viewed'     // Visualização de etapa do onboarding (1 a 5)
   | 'onboarding_completed'       // Conclusão com sucesso do onboarding
+  | 'onboarding_skipped'         // Onboarding dispensado (Pular / Esc / fechar) antes de concluir
+  | 'onboarding_context_detected' // Detecção silenciosa de timezone, idioma e dispositivo (Regra 10)
   | 'paywall_cta_clicked'        // Intenção de compra / clique em assinar plano
   | 'checkout_started'           // Abertura do carrinho / checkout
   | 'experiment_assigned'        // Atribuição de variante de teste A/B
   | 'support_contact_initiated'  // Ponto de contato WhatsApp / Live Chat
-  | 'paid_user_churn_feedback';  // Diagnóstico de churn e cancelamento de pagante / trial
+  | 'paid_user_churn_feedback'  // Diagnóstico de churn e cancelamento de pagante / trial
+  | 'flash_challenge_started'   // Desafio Relâmpago das 3 Pegadinhas iniciado (D0 Aha Moment)
+  | 'flash_challenge_completed' // Desafio Relâmpago concluído com pontuação
+  | 'inactivity_recovery_triggered' // Resgate por Inatividade acionado (>= 48h)
+  | 'inactivity_recovery_accepted'  // Modo Pílula ativado pelo usuário
+  | 'referral_modal_opened'     // Modal de Indicação Aberto (Member-Get-Member)
+  | 'referral_link_shared';     // Link de Indicação copiado ou compartilhado via WhatsApp
 
 export type StandardAnalyticsEvent = CoreAnalyticsEvent | GrowthAnalyticsEvent;
 
@@ -262,6 +270,8 @@ class AnalyticsService {
       cta_clicked: 0,
       onboarding_step_viewed: 0,
       onboarding_completed: 0,
+      onboarding_skipped: 0,
+      onboarding_context_detected: 0,
       paywall_cta_clicked: 0,
       checkout_started: 0,
       subscription_activated: 0,
@@ -273,6 +283,12 @@ class AnalyticsService {
       paywall_checkout_started: 0,
       support_contact_initiated: 0,
       paid_user_churn_feedback: 0,
+      flash_challenge_started: 0,
+      flash_challenge_completed: 0,
+      inactivity_recovery_triggered: 0,
+      inactivity_recovery_accepted: 0,
+      referral_modal_opened: 0,
+      referral_link_shared: 0,
     };
 
     this.eventsLog.forEach((e) => {

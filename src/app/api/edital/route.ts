@@ -209,7 +209,7 @@ export async function POST(req: Request) {
     if (apiKey && editalText.trim().length > 100) {
       try {
         const prompt = `
-Você é o Analisador de Editais do Learning AI.
+Você é o Analisador de Editais do Argus.
 Extraia e estruture o conteúdo programático (edital verticalizado) a partir do texto do edital:
 Título: "${examTitle}" | Cargo: "${role}" | Banca: "${banca}"
 

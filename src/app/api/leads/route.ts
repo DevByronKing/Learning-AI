@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase';
 import { getEditalBySlug } from '@/lib/editaisCatalog';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimiter';
+import { inspectSafeInput } from '@/lib/securitySanitizer';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,6 +41,19 @@ export async function POST(req: NextRequest) {
     } catch {
       return NextResponse.json(
         { success: false, error: 'Payload JSON inválido ou malformado.' },
+        { status: 400 }
+      );
+    }
+
+    // Validação de Segurança contra SQL Injection e XSS
+    const safetyCheck = inspectSafeInput(body);
+    if (!safetyCheck.isSafe) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: `Entrada rejeitada por motivos de segurança (${safetyCheck.threatType}).`,
+          code: 'PAYLOAD_UNSAFE'
+        },
         { status: 400 }
       );
     }
@@ -116,7 +130,7 @@ export async function GET(req: NextRequest) {
   // Proteção de PII (Personally Identifiable Information)
   // Apenas contagem e resumo anônimo são públicos; PII completa requer chave administrativa
   const authHeader = req.headers.get('authorization') || '';
-  const adminSecret = process.env.ADMIN_API_KEY || 'learning-ai-admin-secret';
+  const adminSecret = process.env.ADMIN_API_KEY || 'argus-admin-secret';
   const isAdmin = authHeader === `Bearer ${adminSecret}`;
 
   if (isAdmin) {

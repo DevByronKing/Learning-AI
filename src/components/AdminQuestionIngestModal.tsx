@@ -36,6 +36,8 @@ import {
   SAMPLE_FGV_RECEITA_TEXT,
   SAMPLE_FGV_RECEITA_KEY,
 } from './adminIngestSamples';
+import { TwoFactorAuthModal } from './TwoFactorAuthModal';
+import { isTwoFactorSessionVerified } from '@/lib/twoFactorAuth';
 
 interface AdminQuestionIngestModalProps {
   isOpen: boolean;
@@ -81,6 +83,8 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
   const [activeTab, setActiveTab] = useState<'input' | 'audit_preview' | 'sql_export'>('input');
   const [copiedSql, setCopiedSql] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [is2FaChallengeOpen, setIs2FaChallengeOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
 
   // Refs para inputs de arquivo invisíveis
   const examFileInputRef = useRef<HTMLInputElement>(null);
@@ -218,6 +222,13 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
   const handleCommitToSupabase = async () => {
     if (!result || result.questions.length === 0) return;
 
+    // Pilar 6: Autenticação de Dois Fatores Obrigatória para Ações Administrativas Críticas
+    if (!isTwoFactorSessionVerified()) {
+      setPendingAction(() => () => handleCommitToSupabase());
+      setIs2FaChallengeOpen(true);
+      return;
+    }
+
     setIsSaving(true);
     try {
       const response = await fetch('/api/admin/ingest-exam', {
@@ -265,7 +276,7 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto animate-fadeIn">
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto animate-fadeIn">
       <div className="relative w-full max-w-5xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 flex items-center justify-between">
@@ -901,6 +912,21 @@ export const AdminQuestionIngestModal: React.FC<AdminQuestionIngestModalProps> =
           )}
         </div>
       </div>
+
+      {/* Validação de 2FA para Operações de Administração */}
+      <TwoFactorAuthModal
+        isOpen={is2FaChallengeOpen}
+        onClose={() => setIs2FaChallengeOpen(false)}
+        mode="challenge"
+        onSuccess={() => {
+          setIs2FaChallengeOpen(false);
+          if (pendingAction) {
+            const action = pendingAction;
+            setPendingAction(null);
+            action();
+          }
+        }}
+      />
     </div>
   );
 };

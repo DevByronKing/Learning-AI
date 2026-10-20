@@ -210,7 +210,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-sm animate-fadeIn flex justify-end">
+    <div className="fixed inset-0 z-[60] overflow-hidden bg-black/60 backdrop-blur-sm animate-fadeIn flex justify-end">
       <div 
         className="w-full max-w-lg bg-white dark:bg-dark-bg/95 border-l border-slate-200 dark:border-indigo-500/20 shadow-2xl h-full flex flex-col backdrop-blur-2xl animate-slideLeft"
       >
@@ -242,6 +242,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
 
           <button
             onClick={onClose}
+            aria-label="Fechar copiloto"
             className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-all"
           >
             <X className="w-4 h-4" />

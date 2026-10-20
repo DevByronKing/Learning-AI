@@ -2,8 +2,8 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Learning AI - O Copiloto Cognitivo para Concursos',
-    short_name: 'Learning AI',
+    name: 'Argus - O Copiloto Cognitivo para Concursos e OAB',
+    short_name: 'Argus',
     description: 'Plataforma de alta performance com IA, psicometria de bancas, simulados cognitivos e repetição espaçada.',
     start_url: '/',
     display: 'standalone',

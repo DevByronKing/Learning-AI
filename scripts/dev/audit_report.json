@@ -1,0 +1,458 @@
+[
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "landing",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "dashboard",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "simulator",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "flashcards",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "mistakes",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "vademecum",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "questions",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "edital",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "cycle",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "discursivas",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "summaries",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "psychometrics",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "radar",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "guide",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "pricing-plans",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "settings",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "checkout",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "subscription",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "light",
+    "tab": "help",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "landing",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "dashboard",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "simulator",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "flashcards",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "mistakes",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "vademecum",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "questions",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "edital",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "cycle",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "discursivas",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "summaries",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "psychometrics",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "radar",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "guide",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "pricing-plans",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "settings",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "checkout",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "subscription",
+    "issues": []
+  },
+  {
+    "viewport": "desktop",
+    "theme": "dark",
+    "tab": "help",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "landing",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "dashboard",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "simulator",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "flashcards",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "mistakes",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "vademecum",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "questions",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "edital",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "cycle",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "discursivas",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "summaries",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "psychometrics",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "radar",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "guide",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "pricing-plans",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "settings",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "checkout",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "subscription",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "light",
+    "tab": "help",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "landing",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "dashboard",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "simulator",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "flashcards",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "mistakes",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "vademecum",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "questions",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "edital",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "cycle",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "discursivas",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "summaries",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "psychometrics",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "radar",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "guide",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "pricing-plans",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "settings",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "checkout",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "subscription",
+    "issues": []
+  },
+  {
+    "viewport": "mobile",
+    "theme": "dark",
+    "tab": "help",
+    "issues": []
+  }
+]

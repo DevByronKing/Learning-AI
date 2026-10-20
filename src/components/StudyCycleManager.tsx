@@ -60,7 +60,7 @@ export const StudyCycleManager: React.FC<StudyCycleManagerProps> = ({
         )
       );
     }
-  }, [selectedExam, studentProfile?.dailyHoursGoal, studentProfile?.weakSubject]);
+  }, [selectedExam, studentProfile?.dailyHoursGoal, studentProfile?.weakSubject, dailyHours]);
 
   const toggleBlockStatus = (dayId: string, blockId: string) => {
     setSchedule((prev) =>

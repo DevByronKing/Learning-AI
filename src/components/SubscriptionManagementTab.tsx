@@ -69,7 +69,7 @@ export const SubscriptionManagementTab: React.FC<SubscriptionManagementTabProps>
   const handleDownloadReceipt = (receiptCode: string, amount: number) => {
     const dummyReceipt = `
 ============================================================
-              LEARNING AI SAAS - RECIBO DE PAGAMENTO
+              ARGUS SAAS - RECIBO DE PAGAMENTO
 ============================================================
 Código de Autenticação: ${receiptCode}
 Data de Emissão: ${new Date().toLocaleDateString('pt-BR')}
@@ -77,7 +77,7 @@ Plano: ${planTitle}
 Valor Pago: R$ ${amount.toFixed(2)}
 Forma de Pagamento: Pix / Cartão (Asaas Pagamentos S.A.)
 Status: LIQUIDADO / CONFIRMADO
-Instituição: Learning AI Tecnologia da Educação Ltda.
+Instituição: Argus Tecnologia da Educação Ltda.
 CNPJ: 54.892.102/0001-90
 Garantia Legal: Art. 49 da Lei nº 8.078/1990 (CDC)
 ============================================================

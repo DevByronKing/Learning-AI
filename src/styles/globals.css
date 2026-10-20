@@ -1,29 +1,5 @@
 @import './tokens.css';
 
-@font-face {
-  font-family: 'Outfit';
-  src: url('/fonts/Outfit-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Outfit';
-  src: url('/fonts/Outfit-500.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Outfit';
-  src: url('/fonts/Outfit-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -74,7 +50,10 @@
   }
 
   html {
-    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  html {
     font-size: 15px; /* Tamanho padrão do site: densidade e leitura de alta performance */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -94,8 +73,8 @@
     font-size: 1rem;
     line-height: 1.55;
     letter-spacing: -0.012em;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+    transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* Hierarquia Tipográfica Padrão Otimizada para Leitura e Sem Letras Esparsas */
@@ -131,10 +110,13 @@
 }
 
 /* ==============================================================================
-   CLASSES DE AMBIENTE & FUNDOS PERSONALIZADOS
+   CLASSES DE AMBIENTE & FUNDOS PERSONALIZADOS (MODOS ESCURO E CLARO)
    ============================================================================== */
 
-.app-bg-dark {
+/* MODO ESCURO — Opção 1: Ambient Mesh (Padrão) */
+.app-bg-dark,
+[data-bg-style="mesh"] .app-bg-dark,
+[data-bg-style="mesh"].app-bg-dark {
   background-color: #080C14;
   background-image: 
     radial-gradient(ellipse 80% 55% at 10% 5%, rgba(37, 99, 235, 0.16) 0%, transparent 60%),
@@ -145,7 +127,43 @@
   color: #F8FAFC;
 }
 
-.app-bg-light {
+/* MODO ESCURO — Opção 2: Architectural Tech Blueprint Grid (Dot Matrix) */
+[data-bg-style="grid"] .app-bg-dark,
+[data-bg-style="grid"].app-bg-dark,
+.app-bg-dark-grid {
+  background-color: #0A0F1D;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(37, 99, 235, 0.14) 0%, transparent 70%);
+  background-size: 24px 24px, 100% 100%;
+  background-attachment: fixed;
+  color: #F8FAFC;
+}
+
+/* MODO ESCURO — Opção 3: Velvet Deep Slate Monolith */
+[data-bg-style="monolith"] .app-bg-dark,
+[data-bg-style="monolith"].app-bg-dark,
+.app-bg-dark-monolith {
+  background-color: #030712;
+  background-image: none;
+  background-attachment: fixed;
+  color: #F8FAFC;
+}
+
+/* MODO CLARO — Opção 1: Porcelana Editorial / Swiss Clean (Padrão) */
+.app-bg-light,
+[data-bg-style="clean"] .app-bg-light,
+[data-bg-style="clean"].app-bg-light,
+.app-bg-light-clean {
+  background-color: #F8FAFC;
+  background-image: none;
+  background-attachment: fixed;
+  color: #0F172A;
+}
+
+/* MODO CLARO — Opção 2: Ambient Radiant Mesh */
+[data-bg-style="mesh"] .app-bg-light,
+[data-bg-style="mesh"].app-bg-light {
   background-color: #F8FAFC;
   background-image: 
     radial-gradient(ellipse 80% 55% at 10% 5%, rgba(37, 99, 235, 0.06) 0%, transparent 55%),
@@ -154,6 +172,65 @@
     radial-gradient(ellipse 40% 40% at 20% 70%, rgba(37, 99, 235, 0.03) 0%, transparent 50%);
   background-attachment: fixed;
   color: #0F172A;
+}
+
+/* MODO CLARO — Opção 3: Luminous Frost Aura (Gelo e Menta suave) */
+[data-bg-style="frost"] .app-bg-light,
+[data-bg-style="frost"].app-bg-light,
+.app-bg-light-frost {
+  background-color: #F8FAFC;
+  background-image: 
+    radial-gradient(ellipse 70% 60% at 0% 0%, rgba(224, 231, 255, 0.75) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 0%, rgba(209, 250, 229, 0.65) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 100%, rgba(224, 242, 254, 0.5) 0%, transparent 50%);
+  background-attachment: fixed;
+  color: #0F172A;
+}
+
+/* MODO CLARO — Opção 4: Technical Drafting Grid */
+[data-bg-style="grid"] .app-bg-light,
+[data-bg-style="grid"].app-bg-light,
+.app-bg-light-grid {
+  background-color: #FAFAFA;
+  background-image: radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-attachment: fixed;
+  color: #0F172A;
+}
+
+/* ==============================================================================
+   DESIGN SYSTEM 10/10 — MICRO-INTERAÇÕES & ELEVAÇÃO ULTRA-PREMIUM
+   ============================================================================== */
+
+/* Feedback Tátil de Clique Instantâneo */
+.active-press {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease;
+}
+.active-press:active {
+  transform: scale(0.975);
+}
+
+/* Cartão Interativo com Elevação e Física Natural (Linear/Raycast style) */
+.card-interactive {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.22s ease;
+}
+.card-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -8px rgba(37, 99, 235, 0.14);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+html.dark .card-interactive:hover {
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.6), 0 0 25px -4px rgba(99, 102, 241, 0.25);
+  border-color: rgba(129, 140, 248, 0.4);
+}
+
+/* Glass Pill com Micro Reflexo de Luz Especular */
+.glass-pill {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15), 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 /* Glassmorphism Dinâmico */
@@ -324,32 +401,7 @@ html.dark .theme-border {
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #475569;
-}
-
-html.light ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-}
-
-html.light ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
 
 /* ==============================================================================
    REGRAS DE ESTILO GLOBAIS PARA MODO CLARO
@@ -424,18 +476,18 @@ html.light [class*="bg-dark-card"]:hover {
 }
 
 /* Inversão de bordas sutis para modo claro */
-html.light .border-white\/5,
-html.light .border-white\/10,
-html.light .border-white\/15,
-html.light .border-white\/20 {
+html.light .border-white\/5:not(.preserve-dark *):not(.passport-card *),
+html.light .border-white\/10:not(.preserve-dark *):not(.passport-card *),
+html.light .border-white\/15:not(.preserve-dark *):not(.passport-card *),
+html.light .border-white\/20:not(.preserve-dark *):not(.passport-card *) {
   border-color: rgba(226, 232, 240, 0.95) !important;
 }
 
-html.light .bg-white\/5 {
+html.light .bg-white\/5:not(.preserve-dark *):not(.passport-card *) {
   background-color: rgba(241, 245, 249, 0.85) !important;
 }
 
-html.light .bg-white\/10 {
+html.light .bg-white\/10:not(.preserve-dark *):not(.passport-card *) {
   background-color: rgba(226, 232, 240, 0.85) !important;
 }
 
@@ -787,8 +839,10 @@ html.light .bg-slate-900:not(button):not(button *):not(a):not(.preserve-dark):no
    TRANSIÇÕES SUAVES DE ABAS E ROLAGEM DE TELA (UX ULTRA-PREMIUM)
    ============================================================================== */
 
-html {
-  scroll-behavior: smooth;
+html,
+body,
+:root {
+  scroll-behavior: smooth !important;
   scroll-padding-top: 5rem;
   -webkit-overflow-scrolling: touch;
 }
@@ -889,13 +943,12 @@ html.light .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Acessibilidade: Desativa animações se o usuário preferir movimento reduzido */
+/* Acessibilidade: Desativa animações se o usuário preferir movimento reduzido (mantendo rolagem fluida) */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }
 

@@ -617,7 +617,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
 
       {/* Interactive Revanche Modal View */}
       {isRevancheActive && currentRevancheMistake && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+        <div role="dialog" aria-modal="true" className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
           <div className="bg-white dark:bg-dark-surface border border-rose-500/30 rounded-3xl max-w-3xl w-full p-6 sm:p-8 space-y-6 shadow-2xl overflow-y-auto max-h-[90vh]">
             
             {/* Modal Header */}

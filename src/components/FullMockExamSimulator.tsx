@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Trophy, 
   Clock, 
@@ -66,14 +66,20 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
   const [visibleResultsCount, setVisibleResultsCount] = useState<number>(15);
   const [addedToSRS, setAddedToSRS] = useState<boolean>(false);
 
+
+  const handleFinishExamRef = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    handleFinishExamRef.current = handleFinishExam;
+  });
+
   // Timer countdown
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
-    if (viewMode === 'in_progress' && isTimerActive && remainingSeconds > 0) {
+    if (viewMode === 'in_progress' && isTimerActive) {
       timer = setInterval(() => {
         setRemainingSeconds((prev) => {
           if (prev <= 1) {
-            handleFinishExam();
+            handleFinishExamRef.current?.();
             return 0;
           }
           return prev - 1;
@@ -83,7 +89,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [viewMode, isTimerActive, remainingSeconds]);
+  }, [viewMode, isTimerActive]);
 
   const formatTime = (totalSecs: number) => {
     const mins = Math.floor(totalSecs / 60);
@@ -788,7 +794,7 @@ export const FullMockExamSimulator: React.FC<FullMockExamSimulatorProps> = ({
 
           {/* Confirm Finish Modal */}
           {showConfirmModal && (
-            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+            <div role="dialog" aria-modal="true" className="fixed inset-0 z-[70] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
               <div className="max-w-md w-full p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 shadow-2xl">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-500 dark:text-emerald-400 flex items-center justify-center mb-4">
                   <FileText className="w-6 h-6" />

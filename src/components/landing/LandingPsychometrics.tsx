@@ -17,7 +17,7 @@ export const LandingPsychometrics: React.FC<LandingPsychometricsProps> = ({
       <div className="text-center mb-16">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-500 dark:text-cyan-400 text-xs sm:text-sm font-bold mb-6 shadow-sm backdrop-blur-md">
           <Microscope className="w-4 h-4 text-cyan-500 dark:text-cyan-400 animate-pulse" />
-          <span className="uppercase tracking-wider">Metodologia Científica • Teoria de Resposta ao Item (TRI)</span>
+          <span className="font-semibold tracking-normal">Metodologia Científica • Teoria de Resposta ao Item (TRI)</span>
         </div>
         <h2 className="text-4xl sm:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
           Chega de Resolver Questões por Força Bruta.
@@ -26,7 +26,7 @@ export const LandingPsychometrics: React.FC<LandingPsychometricsProps> = ({
           Aprenda a decodificar a mente do examinador com Engenharia Reversa das Bancas.
         </p>
         <p className="mt-6 text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-          Plataformas convencionais vendem volume de questões. O Learning AI decifra a <strong className="text-slate-800 dark:text-white font-bold">Anatomia dos Distratores</strong>: 
+          Plataformas convencionais vendem volume de questões. O Argus decifra a <strong className="text-slate-800 dark:text-white font-bold">Anatomia dos Distratores</strong>: 
           nenhuma alternativa errada é criada ao acaso. Mapeamos os 8 arquétipos mentais que os examinadores utilizam para derrubar candidatos preparados.
         </p>
       </div>
@@ -92,7 +92,7 @@ export const LandingPsychometrics: React.FC<LandingPsychometricsProps> = ({
         <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="space-y-4 text-center sm:text-left flex-1 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-xs font-black uppercase tracking-wider shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-xs font-bold shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-cyan-300" />
             <span>Módulo Inédito no Brasil</span>
           </div>
