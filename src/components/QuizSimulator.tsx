@@ -33,6 +33,7 @@ import { FullMockExamSimulator } from './FullMockExamSimulator';
 import { AIFeedbackVote } from './AIFeedbackVote';
 import { ExamNotice, SubscriptionPlan } from '@/lib/types';
 import { useStudyStore } from '@/store/useStudyStore';
+import { nativeHaptics } from '@/lib/nativeHaptics';
 
 interface QuizSimulatorProps {
   onAddFlashcard: (flashcard: Flashcard) => void;
@@ -145,6 +146,12 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
     const isCorrect = !!selectedOpt?.isCorrect;
 
     setIsAnswered(true);
+
+    if (isCorrect) {
+      nativeHaptics.success();
+    } else {
+      nativeHaptics.warning();
+    }
 
     const attempt: QuestionAttempt = {
       id: `attempt-${Date.now()}`,
@@ -904,7 +911,10 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                       <div
                         key={option.id}
                         onClick={() => {
-                          if (!isAnswered) setSelectedOptionId(option.id);
+                          if (!isAnswered) {
+                            setSelectedOptionId(option.id);
+                            nativeHaptics.lightImpact();
+                          }
                         }}
                         className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-start gap-3.5 group ${optionStyle}`}
                       >

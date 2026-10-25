@@ -16,9 +16,21 @@
     "test:a11y": "playwright test e2e/accessibility.spec.ts",
     "review": "ocr review",
     "review:preview": "ocr delegate preview",
-    "review:agent": "ocr review --audience agent"
+    "review:agent": "ocr review --audience agent",
+    "cap:sync": "cap sync",
+    "cap:add:android": "cap add android",
+    "cap:add:ios": "cap add ios",
+    "cap:android": "cap open android",
+    "cap:ios": "cap open ios"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/keyboard": "^8.0.6",
+    "@capacitor/status-bar": "^8.0.4",
     "@supabase/supabase-js": "^2.115.0",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",

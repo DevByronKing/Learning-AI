@@ -20,6 +20,7 @@ import {
   Filter
 } from 'lucide-react';
 import { Flashcard } from '@/lib/types';
+import { nativeHaptics } from '@/lib/nativeHaptics';
 
 interface SRSFlashcardPlayerProps {
   flashcards: Flashcard[];
@@ -88,6 +89,12 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
   // Rating and SM-2 Progression
   const handleRate = useCallback((rating: 'facil' | 'bom' | 'dificil' | 'errei') => {
     if (!currentCard) return;
+
+    if (rating === 'errei') {
+      nativeHaptics.warning();
+    } else {
+      nativeHaptics.lightImpact();
+    }
 
     onReviewCard(currentCard.id, rating);
 
@@ -425,7 +432,10 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
 
           {/* The Flashcard (Interactive 3D Flip Card - <= 250ms) */}
           <div
-            onClick={() => setIsFlipped(!isFlipped)}
+            onClick={() => {
+              setIsFlipped(!isFlipped);
+              nativeHaptics.mediumImpact();
+            }}
             className="cursor-pointer min-h-[420px] w-full [perspective:1200px] select-none group"
           >
             <div

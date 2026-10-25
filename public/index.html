@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Argus AI Mobile</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: #0b1120;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid rgba(59, 130, 246, 0.2);
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-top: 18px;
+      letter-spacing: -0.5px;
+      color: #93c5fd;
+    }
+    .subtitle {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <div class="title">Argus AI Mobile</div>
+  <div class="subtitle">Inicializando ambiente nativo...</div>
+
+  <script>
+    // Redireciona para o app Next.js (Localhost ou servidor configurado)
+    const serverUrl = window.Capacitor?.getServerUrl?.() || 'http://localhost:3000';
+    setTimeout(() => {
+      window.location.replace(serverUrl);
+    }, 400);
+  </script>
+</body>
+</html>
