@@ -952,7 +952,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                         <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">
                           Grau de Convicção (Calibragem da IA):
                         </label>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           {[
                             { id: 'alta', label: 'Alta Convicção' },
                             { id: 'media', label: 'Dúvida Parcial' },
@@ -978,7 +978,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                       <button
                         onClick={handleConfirmAnswer}
                         disabled={!selectedOptionId}
-                        className={`min-h-[48px] px-8 py-3.5 rounded-xl font-black text-xs tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg ${
+                        className={`min-h-[48px] w-full sm:w-auto px-8 py-3.5 rounded-xl font-black text-xs tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg ${
                           selectedOptionId
                             ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white shadow-blue-600/25 active:scale-95'
                             : 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-200 dark:border-slate-700'
@@ -986,23 +986,23 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                       >
                         <CheckCircle2 className="w-4 h-4" />
                         <span>Confirmar Resposta</span>
-                        <kbd className="px-1.5 py-0.5 rounded bg-black/30 text-[10px] text-white/90 font-mono">
+                        <kbd className="hidden sm:inline px-1.5 py-0.5 rounded bg-black/30 text-[10px] text-white/90 font-mono">
                           Enter ↵
                         </kbd>
                       </button>
                     </>
                   ) : (
-                    <div className="w-full flex items-center justify-between">
+                    <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
                         Resposta registrada. Fundamentação e análise abaixo.
                       </span>
                       {/* CTA Primário Dominante de Próxima Questão (Fitts: min-h-48px) */}
                       <button
                         onClick={handleNext}
-                        className="min-h-[48px] px-7 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs flex items-center gap-2 shadow-lg shadow-emerald-600/25 active:scale-95 transition-all"
+                        className="min-h-[48px] w-full sm:w-auto px-7 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 active:scale-95 transition-all"
                       >
                         <span>Próxima Questão</span>
-                        <kbd className="px-1.5 py-0.5 rounded bg-black/30 text-[10px] text-white font-mono">
+                        <kbd className="hidden sm:inline px-1.5 py-0.5 rounded bg-black/30 text-[10px] text-white font-mono">
                           → ou Enter
                         </kbd>
                       </button>
