@@ -1205,10 +1205,15 @@ export function ArgusApp() {
             }
           }
 
-          // DIRETRIZ DE PRODUTO (Pilar 1): Funil 100% Linear sem Ramificações Gratuitas
-          // Ao concluir o onboarding, direciona 100% dos usuários imediatamente para a tela de conversão
-          setIsPricingOpen(true);
-          showToast(`🎯 Diagnóstico concluído! Escolha seu plano com garantia de 7 dias ou teste com cartão de crédito.`);
+          // 7 Leis de UX & Ativação D0 Instantânea:
+          // Direciona imediatamente para a 1ª bateria prática personalizada no simulador sem forçar paywall inicial
+          if (destinationTab === 'pricing') {
+            setIsPricingOpen(true);
+            showToast(`🎯 Diagnóstico concluído! Conheça os recursos do seu plano.`);
+          } else {
+            setActiveTab('simulator');
+            showToast(`🎯 Diagnóstico concluído! Sua primeira bateria personalizada de ${partialProfile.targetExamTitle || 'questões'} está pronta.`);
+          }
         }}
       />
 

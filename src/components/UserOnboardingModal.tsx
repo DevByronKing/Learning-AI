@@ -621,6 +621,11 @@ export const UserOnboardingModal: React.FC<UserOnboardingModalProps> = ({
                 <span className="text-[10px] font-bold text-[var(--text-muted)] whitespace-nowrap">
                   • Etapa {step} de 5
                 </span>
+                {step >= 4 && (
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-[10px] font-black animate-pulse">
+                    ⚡ Quase lá! Falta pouco!
+                  </span>
+                )}
               </div>
               <h2 id="onboarding-title" className="text-sm font-extrabold text-[var(--text-primary)] truncate">
                 {STEP_TITLES[step - 1]}

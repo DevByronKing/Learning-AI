@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argus — Apresentação Oficial de Lançamento (Motion 30s)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    :root {
+      --bg: #090D16;
+      --card-bg: #111827;
+      --primary: #818CF8;
+      --accent: #34D399;
+      --amber: #FBBF24;
+      --rose: #F87171;
+      --text: #F9FAFB;
+      --text-muted: #94A3B8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: #030712;
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* 16:9 Canvas Stage (1920x1080 Proporção) */
+    #stage-wrapper {
+      position: relative;
+      width: 100vw;
+      max-width: 1920px;
+      aspect-ratio: 16 / 9;
+      max-height: 100vh;
+      background: var(--bg);
+      overflow: hidden;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      perspective: 1200px;
+    }
+
+    /* Ambient Background Lights */
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.28;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      top: -10%;
+      left: 15%;
+      width: 600px;
+      height: 600px;
+      background: #4338CA;
+    }
+    .orb-2 {
+      bottom: -15%;
+      right: 15%;
+      width: 650px;
+      height: 650px;
+      background: #047857;
+    }
+
+    /* Grid Overlay */
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Scene Container */
+    .scene {
+      position: absolute;
+      inset: 0;
+      padding: 5% 8%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 10;
+      transform-style: preserve-3d;
+    }
+
+    /* Word Reveal Styling */
+    .headline {
+      font-size: clamp(2rem, 3.8vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      text-align: center;
+      max-width: 1200px;
+      margin-bottom: 2rem;
+    }
+
+    .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(24px) scale(0.96);
+      filter: blur(8px);
+      margin-right: 0.25em;
+    }
+
+    .highlight-brand {
+      color: var(--primary);
+      text-shadow: 0 0 40px rgba(129, 140, 248, 0.45);
+    }
+    .highlight-accent {
+      color: var(--accent);
+      text-shadow: 0 0 40px rgba(52, 211, 153, 0.45);
+    }
+    .highlight-rose {
+      color: var(--rose);
+      text-shadow: 0 0 40px rgba(248, 113, 113, 0.45);
+    }
+
+    /* UI Mockup Frame */
+    .mockup-card {
+      background: rgba(17, 24, 39, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 2.2rem;
+      width: 100%;
+      max-width: 920px;
+      box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(129, 140, 248, 0.15);
+      position: relative;
+    }
+
+    /* Bottom Control Bar */
+    #controls-bar {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      padding: 10px 22px;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .ctrl-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 20px;
+      transition: all 0.2s;
+    }
+    .ctrl-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .progress-track {
+      width: 220px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 3px;
+    }
+
+    .time-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="stage-wrapper">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- =================================================================== -->
+    <!-- CENA 0: ABERTURA DO LOGO ARGUS (0s a 4s) -->
+    <!-- =================================================================== -->
+    <div class="scene" id="scene-0">
+      <div id="logo-icon-wrap" style="transform: scale(0.6); opacity: 0;">
+        <svg width="120" height="120" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="44" stroke="url(#logo-grad)" stroke-width="4" stroke-dasharray="276" stroke-dashoffset="276" id="logo-circle"/>
+          <path d="M22 50C22 50 34 32 50 32C66 32 78 50 78 50C78 50 66 68 50 68C34 68 22 50 22 50Z" stroke="url(#logo-grad)" stroke-width="3.5" stroke-linejoin="round" id="logo-eye"/>
+          <circle cx="50" cy="50" r="9" fill="url(#iris-grad)" id="logo-iris"/>
+          <defs>
+            <linearGradient id="logo-grad" x1="0" y1="0" x2="100" y2="100">
+              <stop offset="0%" stop-color="#818CF8"/>
+              <stop offset="100%" stop-color="#34D399"/>
+            </linearGradient>
+            <linearGradient id="iris-grad" x1="41" y1="41" x2="59" y2="59">
+              <stop offset="0%" stop-color="#34D399"/>
+              <stop offset="100%" stop-color="#818CF8"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <h1 class="headline" style="margin-top: 1.5rem; margin-bottom: 0.5rem;" id="brand-title">
+        <span class="word" style="font-size: 1.2em; letter-spacing: 0.12em; background: linear-gradient(135deg, #fff 40%, #818CF8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ARGUS</span>
+      </h1>
+      <p class="word" id="brand-tagline" style="font-size: 1.3rem; color: var(--text-muted); font-weight: 600; letter-spacing: -0.01em;">
+        A Inteligência que Antecipa a Banca
+      </p>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- CENA 1: A DOR DOS EDITAIS TRADICIONAIS (4s a 9s) -->
+    <!-- =================================================================== -->
+    <div class="scene" id="scene-1">
+      <h2 class="headline" id="h-scene-1">
+        <span class="word">O</span>
+        <span class="word">estudo</span>
+        <span class="word">tradicional</span>
+        <span class="word">de</span>
+        <span class="word highlight-rose">200 páginas</span>
+        <span class="word">de</span>
+        <span class="word">PDF</span>
+        <span class="word">cansa.</span>
+      </h2>
+
+      <div class="mockup-card" id="mockup-pdf" style="max-width: 680px; text-align: center; border-color: rgba(248, 113, 113, 0.3);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #94A3B8;">edital_verticalizado_v12_final.pdf</span>
+          <span style="background: rgba(248, 113, 113, 0.15); color: #F87171; font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: 700;">Volume Inumano • 248 Páginas</span>
+        </div>
+        <div style="height: 120px; background: rgba(0,0,0,0.4); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 20px;">
+          <div style="height: 12px; background: rgba(255,255,255,0.08); border-radius: 6px; width: 85%;"></div>
+          <div style="height: 12px; background: rgba(255,255,255,0.08); border-radius: 6px; width: 95%;"></div>
+          <div style="height: 12px; background: rgba(255,255,255,0.08); border-radius: 6px; width: 60%;"></div>
+        </div>
+        <div style="margin-top: 1.5rem; font-size: 14px; color: #F87171; font-weight: 700;">
+          ⚠️ 95% dos concurseiros travam na sobrecarga de conteúdo teórico passivo.
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- CENA 2: RISCAR ALTERNATIVA EM 1 TOQUE (9s a 15s) -->
+    <!-- =================================================================== -->
+    <div class="scene" id="scene-2">
+      <h2 class="headline" id="h-scene-2">
+        <span class="word">Elimine</span>
+        <span class="word">distratores</span>
+        <span class="word">com</span>
+        <span class="word highlight-brand">1 Toque.</span>
+      </h2>
+
+      <div class="mockup-card" id="mockup-question" style="max-width: 860px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+          <span style="background: rgba(129, 140, 248, 0.15); color: #818CF8; border: 1px solid rgba(129, 140, 248, 0.3); padding: 4px 12px; border-radius: 8px; font-weight: 800; font-size: 12px;">
+            FGV • 2026 • Auditor Fiscal
+          </span>
+          <span style="font-family: 'JetBrains Mono'; font-size: 13px; color: #34D399; font-weight: 700;">
+            TRI Nível B • Alta Maldade
+          </span>
+        </div>
+
+        <p style="font-size: 15px; line-height: 1.6; color: #E2E8F0; margin-bottom: 1.5rem;">
+          "A respeito da repartição de receitas tributárias e dos princípios constitucionais do ICMS, assinale a afirmativa correta..."
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Opção A -->
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); font-size: 14px;">
+            <span><strong>A</strong> &nbsp; O princípio da anterioridade nonagesimal incide de forma irrestrita.</span>
+            <span style="color: #64748B; font-size: 12px;">✂️ Riscar</span>
+          </div>
+          <!-- Opção B (A que será riscada ao vivo) -->
+          <div id="option-to-strike" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); font-size: 14px; transition: all 0.3s;">
+            <span id="option-b-text"><strong>B</strong> &nbsp; A imunidade recíproca alcança as empresas públicas delegatárias de serviço postal.</span>
+            <span id="option-b-badge" style="background: rgba(248, 113, 113, 0.2); color: #F87171; border: 1px solid rgba(248, 113, 113, 0.4); padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">✂️ Riscada</span>
+          </div>
+          <!-- Opção C -->
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-radius: 12px; background: rgba(52, 211, 153, 0.1); border: 1px solid #34D399; font-size: 14px; font-weight: 700; color: #34D399;">
+            <span><strong>C</strong> &nbsp; Pertence aos Municípios 25% do produto da arrecadação do ICMS.</span>
+            <span>✓ Gabarito</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- CENA 3: LEI SECA & COMENTÁRIO INLINE (15s a 21s) -->
+    <!-- =================================================================== -->
+    <div class="scene" id="scene-3">
+      <h2 class="headline" id="h-scene-3">
+        <span class="word">Lei</span>
+        <span class="word">Seca</span>
+        <span class="word">e</span>
+        <span class="word highlight-accent">Comentário Inline.</span>
+        <span class="word">Sem</span>
+        <span class="word">Scroll.</span>
+      </h2>
+
+      <div class="mockup-card" id="mockup-feedback" style="max-width: 860px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1rem;">
+          <span style="background: rgba(52, 211, 153, 0.2); color: #34D399; font-weight: 800; font-size: 12px; padding: 4px 12px; border-radius: 8px; border: 1px solid rgba(52, 211, 153, 0.3);">
+            ✓ GABARITO CORRETO • LETRA C
+          </span>
+          <span style="font-size: 12px; color: #94A3B8;">Tempo de Resolução: 48s</span>
+        </div>
+
+        <div style="background: rgba(129, 140, 248, 0.1); border: 1px solid rgba(129, 140, 248, 0.3); border-radius: 12px; padding: 14px 18px; margin-bottom: 12px;">
+          <span style="color: #818CF8; font-weight: 800; font-size: 12px; display: block; margin-bottom: 4px;">
+            ⚖️ LEI SECA VINCULADA: ART. 158, IV DA CONSTITUIÇÃO FEDERAL
+          </span>
+          <p style="font-size: 13px; color: #E2E8F0; font-family: 'JetBrains Mono';">
+            "Art. 158. Pertencem aos Municípios: IV - vinte e cinco por cento do produto da arrecadação do imposto do Estado sobre operações relativas à circulação de mercadorias..."
+          </p>
+        </div>
+
+        <div style="background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 12px; padding: 14px 18px;">
+          <span style="color: #FBBF24; font-weight: 800; font-size: 12px; display: block; margin-bottom: 4px;">
+            💡 ALERTA DE PEGADINHA DA FGV:
+          </span>
+          <p style="font-size: 13px; color: #FDE68A;">
+            A banca costuma trocar o percentual de 25% para 20% ou dizer que é facultativo. Cuidado com o comando!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- CENA 4: TREINO RÁPIDO EM 1 CLIQUE & ZEIGARNIK (21s a 26s) -->
+    <!-- =================================================================== -->
+    <div class="scene" id="scene-4">
+      <h2 class="headline" id="h-scene-4">
+        <span class="word">Treino</span>
+        <span class="word">em</span>
+        <span class="word highlight-accent">1 Clique.</span>
+        <span class="word">Zero</span>
+        <span class="word">fricção.</span>
+      </h2>
+
+      <div class="mockup-card" id="mockup-dashboard" style="max-width: 900px; background: linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(15, 23, 42, 0.95)); border-color: rgba(129, 140, 248, 0.35);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <div>
+            <span style="background: rgba(129, 140, 248, 0.2); color: #818CF8; font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 800;">⚡ COCKPIT DO ESTUDANTE</span>
+            <h3 style="font-size: 22px; font-weight: 900; color: #fff; margin-top: 6px;">Bateria Recomendada para Hoje</h3>
+          </div>
+          <button style="background: linear-gradient(135deg, #34D399, #059669); color: #090D16; font-weight: 900; font-size: 15px; padding: 14px 28px; border-radius: 14px; border: none; cursor: pointer; box-shadow: 0 10px 25px rgba(52, 211, 153, 0.4); display: flex; align-items: center; gap: 8px;">
+            <span>⚡ Iniciar Treino Rápido (10 Questões)</span>
+          </button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 1rem;">
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px;">
+            <span style="font-size: 11px; color: #94A3B8; font-weight: 700;">PRECISÃO GLOBAL</span>
+            <div style="font-size: 26px; font-weight: 900; color: #818CF8; margin-top: 4px;" id="stat-accuracy">84.2%</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px;">
+            <span style="font-size: 11px; color: #94A3B8; font-weight: 700;">PREDIÇÃO DE POSSE</span>
+            <div style="font-size: 26px; font-weight: 900; color: #34D399; margin-top: 4px;" id="stat-passing">91.8%</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px;">
+            <span style="font-size: 11px; color: #94A3B8; font-weight: 700;">OFENSIVA ATIVA</span>
+            <div style="font-size: 26px; font-weight: 900; color: #FBBF24; margin-top: 4px;">🔥 14 Dias</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- CENA 5: CLÍMAX & CTA FINAL (26s a 30s) -->
+    <!-- =================================================================== -->
+    <div class="scene" id="scene-5">
+      <div id="final-logo" style="margin-bottom: 1.5rem; transform: scale(1.2);">
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="44" stroke="url(#logo-grad-final)" stroke-width="4"/>
+          <path d="M22 50C22 50 34 32 50 32C66 32 78 50 78 50C78 50 66 68 50 68C34 68 22 50 22 50Z" stroke="url(#logo-grad-final)" stroke-width="3.5" stroke-linejoin="round"/>
+          <circle cx="50" cy="50" r="9" fill="url(#logo-grad-final)"/>
+          <defs>
+            <linearGradient id="logo-grad-final" x1="0" y1="0" x2="100" y2="100">
+              <stop offset="0%" stop-color="#818CF8"/>
+              <stop offset="100%" stop-color="#34D399"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <h1 class="headline" id="h-scene-5" style="margin-bottom: 1rem;">
+        <span class="word">Não</span>
+        <span class="word">dispute</span>
+        <span class="word">vagas.</span>
+        <span class="word highlight-accent">Garanta</span>
+        <span class="word highlight-accent">a</span>
+        <span class="word highlight-accent">sua</span>
+        <span class="word highlight-accent">posse.</span>
+      </h1>
+
+      <p class="word" id="final-tagline" style="font-size: 1.5rem; font-weight: 800; color: #818CF8; letter-spacing: 0.05em; margin-bottom: 2rem;">
+        ARGUS • A INTELIGÊNCIA QUE ANTECIPA A BANCA
+      </p>
+
+      <div id="final-cta" style="opacity: 0; transform: translateY(20px);">
+        <a href="/" style="background: linear-gradient(135deg, #4338CA, #6366F1); color: #fff; font-weight: 900; font-size: 18px; padding: 18px 42px; border-radius: 18px; text-decoration: none; box-shadow: 0 15px 40px rgba(99, 102, 241, 0.45); display: inline-block;">
+          Fazer Diagnóstico Gratuito Agora →
+        </a>
+      </div>
+    </div>
+
+    <!-- Controls Overlay -->
+    <div id="controls-bar">
+      <button class="ctrl-btn" id="btn-play">
+        <span id="play-icon">⏸</span> <span id="play-text">Pausar</span>
+      </button>
+      <button class="ctrl-btn" id="btn-restart">
+        <span>🔄</span> <span>Reiniciar</span>
+      </button>
+      <div class="progress-track" id="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <span class="time-label" id="time-display">00:00 / 00:30</span>
+      <button class="ctrl-btn" id="btn-fullscreen">
+        <span>⛶</span> <span>Tela Cheia (1080p)</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Configuração da Linha do Tempo Mestre GSAP (30 Segundos Exatos)
+    const masterTimeline = gsap.timeline({
+      paused: false,
+      onUpdate: updateProgressUI
+    });
+
+    const progressFill = document.getElementById('progress-fill');
+    const timeDisplay = document.getElementById('time-display');
+    const playIcon = document.getElementById('play-icon');
+    const playText = document.getElementById('play-text');
+
+    // Helper: Reveal de palavras com blur e escala
+    function animateHeadline(selector) {
+      return gsap.to(`${selector} .word`, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        filter: 'blur(0px)',
+        duration: 0.6,
+        stagger: 0.09,
+        ease: 'power3.out'
+      });
+    }
+
+    // =========================================================================
+    // CENA 0 (0.0s - 4.0s): Identidade e Logo Reveal
+    // =========================================================================
+    masterTimeline
+      .set('#scene-0', { visibility: 'visible', opacity: 1 })
+      .to('#logo-circle', { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut' })
+      .to('#logo-icon-wrap', { opacity: 1, scale: 1, duration: 1, ease: 'back.out(1.7)' }, '-=0.8')
+      .to('#brand-title .word', { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' }, '-=0.4')
+      .to('#brand-tagline', { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' }, '-=0.2')
+      .to('#scene-0', { opacity: 0, scale: 0.94, filter: 'blur(10px)', duration: 0.6, ease: 'power2.in' }, '+=0.8');
+
+    // =========================================================================
+    // CENA 1 (4.0s - 9.0s): A Dor dos PDFs Tradicionais
+    // =========================================================================
+    masterTimeline
+      .set('#scene-1', { visibility: 'visible', opacity: 1 })
+      .add(animateHeadline('#h-scene-1'))
+      .from('#mockup-pdf', { opacity: 0, y: 40, rotationX: 15, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+      .to('#mockup-pdf', { x: -6, repeat: 5, yoyo: true, duration: 0.08, ease: 'sine.inOut' }, '+=0.5')
+      .to('#scene-1', { opacity: 0, scale: 0.95, filter: 'blur(8px)', duration: 0.6, ease: 'power2.in' }, '+=0.8');
+
+    // =========================================================================
+    // CENA 2 (9.0s - 15.0s): Riscar Alternativa com 1 Toque
+    // =========================================================================
+    masterTimeline
+      .set('#scene-2', { visibility: 'visible', opacity: 1 })
+      .add(animateHeadline('#h-scene-2'))
+      .from('#mockup-question', { opacity: 0, y: 50, scale: 0.96, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+      // Ação de Riscar Alternativa B
+      .to('#option-to-strike', { 
+        backgroundColor: 'rgba(248, 113, 113, 0.08)',
+        borderColor: 'rgba(248, 113, 113, 0.4)',
+        scale: 0.98,
+        duration: 0.4,
+        ease: 'power2.out'
+      }, '+=0.6')
+      .to('#option-b-text', { textDecoration: 'line-through', color: '#64748B', duration: 0.3 }, '-=0.2')
+      .to('#scene-2', { opacity: 0, scale: 0.95, filter: 'blur(8px)', duration: 0.6, ease: 'power2.in' }, '+=1.0');
+
+    // =========================================================================
+    // CENA 3 (15.0s - 21.0s): Lei Seca & Comentário Inline
+    // =========================================================================
+    masterTimeline
+      .set('#scene-3', { visibility: 'visible', opacity: 1 })
+      .add(animateHeadline('#h-scene-3'))
+      .from('#mockup-feedback', { opacity: 0, y: 45, rotationY: -5, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+      .from('#mockup-feedback > div', { opacity: 0, y: 20, stagger: 0.2, duration: 0.6, ease: 'power2.out' }, '-=0.2')
+      .to('#scene-3', { opacity: 0, scale: 0.95, filter: 'blur(8px)', duration: 0.6, ease: 'power2.in' }, '+=1.2');
+
+    // =========================================================================
+    // CENA 4 (21.0s - 26.0s): Treino em 1 Clique & Cockpit
+    // =========================================================================
+    masterTimeline
+      .set('#scene-4', { visibility: 'visible', opacity: 1 })
+      .add(animateHeadline('#h-scene-4'))
+      .from('#mockup-dashboard', { opacity: 0, y: 50, scale: 0.92, duration: 0.8, ease: 'back.out(1.4)' }, '-=0.4')
+      .to('#scene-4', { opacity: 0, scale: 1.05, filter: 'blur(10px)', duration: 0.6, ease: 'power2.in' }, '+=1.5');
+
+    // =========================================================================
+    // CENA 5 (26.0s - 30.0s): Clímax, Posse & CTA Final
+    // =========================================================================
+    masterTimeline
+      .set('#scene-5', { visibility: 'visible', opacity: 1 })
+      .from('#final-logo', { scale: 0.4, opacity: 0, rotation: -90, duration: 0.8, ease: 'back.out(1.8)' })
+      .add(animateHeadline('#h-scene-5'), '-=0.3')
+      .to('#final-tagline', { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.6, ease: 'power3.out' }, '-=0.2')
+      .to('#final-cta', { opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.6)' }, '-=0.1');
+
+    // UI Updates e Controles
+    function updateProgressUI() {
+      const progress = masterTimeline.progress();
+      const currentTime = masterTimeline.time();
+      const totalTime = masterTimeline.duration();
+
+      progressFill.style.width = (progress * 100) + '%';
+      
+      const curM = Math.floor(currentTime / 60).toString().padStart(2, '0');
+      const curS = Math.floor(currentTime % 60).toString().padStart(2, '0');
+      const totM = Math.floor(totalTime / 60).toString().padStart(2, '0');
+      const totS = Math.floor(totalTime % 60).toString().padStart(2, '0');
+      timeDisplay.textContent = `${curM}:${curS} / ${totM}:${totS}`;
+    }
+
+    document.getElementById('btn-play').addEventListener('click', () => {
+      if (masterTimeline.paused()) {
+        masterTimeline.play();
+        playIcon.textContent = '⏸';
+        playText.textContent = 'Pausar';
+      } else {
+        masterTimeline.pause();
+        playIcon.textContent = '▶';
+        playText.textContent = 'Play';
+      }
+    });
+
+    document.getElementById('btn-restart').addEventListener('click', () => {
+      masterTimeline.restart();
+      playIcon.textContent = '⏸';
+      playText.textContent = 'Pausar';
+    });
+
+    document.getElementById('progress-track').addEventListener('click', (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / rect.width;
+      masterTimeline.progress(pos);
+    });
+
+    document.getElementById('btn-fullscreen').addEventListener('click', () => {
+      const wrapper = document.getElementById('stage-wrapper');
+      if (!document.fullscreenElement) {
+        wrapper.requestFullscreen().catch(err => alert(err.message));
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // Atalhos de teclado (Espaço: Play/Pause, R: Restart, F: Fullscreen)
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        document.getElementById('btn-play').click();
+      } else if (e.key.toLowerCase() === 'r') {
+        masterTimeline.restart();
+      } else if (e.key.toLowerCase() === 'f') {
+        document.getElementById('btn-fullscreen').click();
+      }
+    });
+  </script>
+</body>
+</html>

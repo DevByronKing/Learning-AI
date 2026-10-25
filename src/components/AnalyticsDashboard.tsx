@@ -154,6 +154,56 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         </div>
       </div>
 
+      {/* 7 Leis de UX: Ação Principal de 1 Clique no Topo (Fitts + Von Restorff) & Efeito Zeigarnik */}
+      <div className="mt-6 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-blue-900/90 via-indigo-900/90 to-slate-900 border border-blue-500/30 text-white shadow-xl shadow-blue-950/20 flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden">
+        <div className="space-y-2 relative z-10">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
+              <Zap className="w-3 h-3 text-amber-400" />
+              Ação Rápida em 1 Clique
+            </span>
+            <span className="text-xs text-slate-300 font-semibold">
+              Edital Alvo: {studentProfile?.targetExamTitle || selectedExam.title}
+            </span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-black text-white">
+            Treino Rápido de 10 Questões Calibradas
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
+            Inicie imediatamente uma sessão de estudo filtrada para a banca <strong>{studentProfile?.targetBanca || selectedExam.banca || 'FGV'}</strong> sem perder tempo configurando filtros manuais.
+          </p>
+
+          {/* Efeito Zeigarnik: Checklist com primeiro passo já concluído */}
+          <div className="flex flex-wrap items-center gap-3 pt-2 text-xs text-slate-300">
+            <span className="flex items-center gap-1 font-bold text-emerald-400">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Edital Alvo Definido
+            </span>
+            <span className="text-slate-500">•</span>
+            <span className="flex items-center gap-1 text-slate-300">
+              <span className="w-3.5 h-3.5 rounded-full border border-slate-400 flex items-center justify-center text-[9px] font-mono">2</span>
+              Resolver Bateria de 10 Questões
+            </span>
+            <span className="text-slate-500">•</span>
+            <span className="flex items-center gap-1 text-slate-300">
+              <span className="w-3.5 h-3.5 rounded-full border border-slate-400 flex items-center justify-center text-[9px] font-mono">3</span>
+              Revisar Flashcards do Dia
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 relative z-10 shrink-0">
+          {/* CTA Primário Dominante (Fitts: min-h-48px) */}
+          <button
+            onClick={() => onGoToSimulator()}
+            className="min-h-[48px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-xl shadow-emerald-500/25 active:scale-95 transition-all cursor-pointer"
+          >
+            <Zap className="w-4 h-4 fill-current" />
+            <span>Iniciar Treino Rápido</span>
+            <span className="text-xs opacity-75 font-mono">⚡ 1 Clique</span>
+          </button>
+        </div>
+      </div>
+
       {/* Card de Diretriz Tática Hiper-Personalizada do Guardião */}
       {studentProfile && (
         <div className="mt-6 relative overflow-hidden rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-white/10 bg-gradient-to-br from-white via-slate-50 to-blue-50/40 dark:from-[#0f172a] dark:via-[#0c1322] dark:to-blue-950/20 shadow-xl shadow-slate-900/5">

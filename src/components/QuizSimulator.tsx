@@ -22,7 +22,9 @@ import {
   Keyboard,
   BookOpen,
   ArrowRight,
-  AlertTriangle
+  AlertTriangle,
+  Scale,
+  Type
 } from 'lucide-react';
 import { Question, QuestionAttempt, Flashcard, UserMetrics, StudentProfile } from '@/lib/types';
 import { MOCK_QUESTIONS } from '@/lib/mockData';
@@ -45,6 +47,13 @@ interface QuizSimulatorProps {
   onOpenPricing?: () => void;
   studentProfile?: StudentProfile;
 }
+
+const FONT_CLASSES: Record<'sm' | 'base' | 'lg' | 'xl', { statement: string; option: string }> = {
+  sm: { statement: 'text-xs sm:text-sm', option: 'text-xs' },
+  base: { statement: 'text-sm sm:text-base', option: 'text-xs sm:text-sm' },
+  lg: { statement: 'text-base sm:text-lg', option: 'text-sm sm:text-base' },
+  xl: { statement: 'text-lg sm:text-xl', option: 'text-base sm:text-lg' }
+};
 
 export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
   onAddFlashcard,
@@ -74,6 +83,17 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
   const [highlightedSnippets, setHighlightedSnippets] = useState<string[]>([]);
   const [strikethroughSnippets, setStrikethroughSnippets] = useState<string[]>([]);
   const [personalNotes, setPersonalNotes] = useState<string>('');
+
+  // 7 Leis de UX: Riscar alternativas individuais & Ajuste de Fonte (Fitts + Jakob)
+  const [eliminatedOptionIds, setEliminatedOptionIds] = useState<string[]>([]);
+  const [fontSizeLevel, setFontSizeLevel] = useState<'sm' | 'base' | 'lg' | 'xl'>('base');
+
+  const toggleEliminateOption = (optId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEliminatedOptionIds((prev) =>
+      prev.includes(optId) ? prev.filter((id) => id !== optId) : [...prev, optId]
+    );
+  };
 
   // AI Generator specific states
   const [aiBanca, setAiBanca] = useState<'Cebraspe' | 'FGV' | 'FCC' | 'Vunesp'>('Cebraspe');
@@ -172,6 +192,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
   const handleNext = () => {
     setIsAnswered(false);
     setSelectedOptionId(null);
+    setEliminatedOptionIds([]);
     setTimeSpentSeconds(0);
     setConfidence('alta');
     setHighlightedSnippets([]);
@@ -729,25 +750,25 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                     {currentQuestion.topicName}
                   </span>
 
-                  {/* Physical Exam Tools */}
+                  {/* Physical Exam Tools & Font Sizing (Lei de Jakob & Fitts) */}
                   <div className="flex items-center gap-1 ml-1 border-l border-slate-200 dark:border-white/10 pl-2">
                     <button
                       type="button"
                       onClick={() => handleHighlightSelection('mark')}
-                      className="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold text-[11px] border border-amber-300 dark:border-amber-500/30 flex items-center gap-1 transition-all"
+                      className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-amber-100 dark:bg-dark-surface dark:hover:bg-amber-500/20 text-slate-700 dark:text-slate-300 font-bold text-[11px] border border-slate-200 dark:border-white/10 flex items-center gap-1 transition-all"
                       title="Selecione o texto e clique para grifar"
                     >
-                      <Highlighter className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                      <Highlighter className="w-3 h-3 text-amber-500" />
                       <span>Grifar</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => handleHighlightSelection('strike')}
-                      className="px-2 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 dark:bg-rose-500/20 text-rose-800 dark:text-rose-300 font-bold text-[11px] border border-rose-300 dark:border-rose-500/30 flex items-center gap-1 transition-all"
-                      title="Selecione o texto e clique para riscar"
+                      className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-rose-100 dark:bg-dark-surface dark:hover:bg-rose-500/20 text-slate-700 dark:text-slate-300 font-bold text-[11px] border border-slate-200 dark:border-white/10 flex items-center gap-1 transition-all"
+                      title="Selecione o texto e clique para riscar trecho"
                     >
-                      <Scissors className="w-3 h-3 text-rose-600 dark:text-rose-400" />
-                      <span>Riscar</span>
+                      <Scissors className="w-3 h-3 text-rose-500" />
+                      <span>Riscar Trecho</span>
                     </button>
                     {(highlightedSnippets.length > 0 || strikethroughSnippets.length > 0) && (
                       <button
@@ -758,6 +779,36 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                         Limpar
                       </button>
                     )}
+
+                    {/* Font Size Adjuster A- / A+ (Acessibilidade e Leitura Longa) */}
+                    <div className="flex items-center gap-0.5 ml-1 border-l border-slate-200 dark:border-white/10 pl-1.5" title="Ajustar tamanho da fonte">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const levels: Array<'sm' | 'base' | 'lg' | 'xl'> = ['sm', 'base', 'lg', 'xl'];
+                          const currentIdx = levels.indexOf(fontSizeLevel);
+                          if (currentIdx > 0) setFontSizeLevel(levels[currentIdx - 1]);
+                        }}
+                        disabled={fontSizeLevel === 'sm'}
+                        className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-dark-surface hover:bg-slate-200 dark:hover:bg-slate-700 text-[10px] font-black text-slate-600 dark:text-slate-300 disabled:opacity-30 border border-slate-200 dark:border-white/10"
+                        title="Diminuir fonte (A-)"
+                      >
+                        A-
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const levels: Array<'sm' | 'base' | 'lg' | 'xl'> = ['sm', 'base', 'lg', 'xl'];
+                          const currentIdx = levels.indexOf(fontSizeLevel);
+                          if (currentIdx < levels.length - 1) setFontSizeLevel(levels[currentIdx + 1]);
+                        }}
+                        disabled={fontSizeLevel === 'xl'}
+                        className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-dark-surface hover:bg-slate-200 dark:hover:bg-slate-700 text-[10px] font-black text-slate-600 dark:text-slate-300 disabled:opacity-30 border border-slate-200 dark:border-white/10"
+                        title="Aumentar fonte (A+)"
+                      >
+                        A+
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -777,6 +828,13 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                     <span>Foco [F]</span>
                   </button>
 
+                  {/* Gradiente de Meta: Microcopy dinâmico acima de 75% da bateria */}
+                  {filteredQuestions.length > 0 && ((currentIndex + 1) / filteredQuestions.length) >= 0.75 && (
+                    <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-extrabold text-[10px] animate-pulse">
+                      ⚡ Falta pouco!
+                    </span>
+                  )}
+
                   <span className="text-slate-500 dark:text-slate-400 font-semibold text-xs">
                     {currentIndex + 1}/{filteredQuestions.length}
                   </span>
@@ -795,8 +853,8 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                   </div>
                 )}
 
-                {/* Enunciado Interativo */}
-                <div className="text-sm sm:text-base text-slate-800 dark:text-slate-100 font-normal leading-relaxed whitespace-pre-line select-text">
+                {/* Enunciado Interativo com Tamanho Ajustável */}
+                <div className={`${FONT_CLASSES[fontSizeLevel].statement} text-slate-800 dark:text-slate-100 font-normal leading-relaxed whitespace-pre-line select-text`}>
                   {currentQuestion.statement.split(/(\s+)/).map((word, idx) => {
                     const clean = word.replace(/[.,;?!:()]/g, '');
                     const isMarked = clean.length > 1 && highlightedSnippets.some(s => s.toLowerCase().includes(clean.toLowerCase()));
@@ -820,14 +878,17 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                   })}
                 </div>
 
-                {/* Options List with Keyboard Hints [A, B, C, D, E] */}
+                {/* Options List with Keyboard Hints & 1-Click Strike Out */}
                 <div className="mt-8 space-y-3">
                   {currentQuestion.options.map((option, idx) => {
                     const isSelected = selectedOptionId === option.id;
+                    const isEliminated = eliminatedOptionIds.includes(option.id);
                     const letter = String.fromCharCode(65 + idx);
                     let optionStyle = 'bg-white dark:bg-dark-surface/80 border-slate-200 dark:border-white/5 hover:border-indigo-400 dark:hover:border-indigo-500/50 text-slate-700 dark:text-slate-200 shadow-sm';
 
-                    if (isSelected && !isAnswered) {
+                    if (isEliminated && !isAnswered) {
+                      optionStyle = 'opacity-40 bg-slate-100/70 dark:bg-slate-900/40 border-dashed border-rose-300 dark:border-rose-900/50 text-slate-400 select-none';
+                    } else if (isSelected && !isAnswered) {
                       optionStyle = 'bg-indigo-50 dark:bg-indigo-600/20 border-indigo-500 text-indigo-900 dark:text-white ring-2 ring-indigo-500/30 shadow-md';
                     } else if (isAnswered) {
                       if (option.isCorrect) {
@@ -854,7 +915,27 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                         }`}>
                           <span>{letter}</span>
                         </div>
-                        <span className="text-xs sm:text-sm leading-relaxed flex-1 pt-1">{option.text}</span>
+                        <span className={`${FONT_CLASSES[fontSizeLevel].option} leading-relaxed flex-1 pt-1 ${isEliminated ? 'line-through text-slate-400 dark:text-slate-500' : ''}`}>
+                          {option.text}
+                        </span>
+
+                        {/* Botão de Riscar Alternativa com 1 Toque (Lei de Fitts & Jakob) */}
+                        {!isAnswered && (
+                          <button
+                            type="button"
+                            onClick={(e) => toggleEliminateOption(option.id, e)}
+                            className={`p-1.5 rounded-lg border transition-all text-xs flex items-center justify-center shrink-0 ${
+                              isEliminated
+                                ? 'bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 border-rose-300 dark:border-rose-800'
+                                : 'opacity-30 group-hover:opacity-100 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 border-transparent hover:border-slate-300 dark:hover:border-slate-700'
+                            }`}
+                            title={isEliminated ? "Restaurar alternativa eliminada" : "Riscar alternativa (Eliminar opção)"}
+                            aria-label={isEliminated ? "Restaurar alternativa" : "Riscar alternativa"}
+                          >
+                            <Scissors className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+
                         <kbd className="hidden sm:inline px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-mono text-slate-400 border border-slate-200 dark:border-slate-700">
                           {letter}
                         </kbd>
@@ -893,10 +974,11 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                         </div>
                       </div>
 
+                      {/* CTA Primário Dominante de Confirmação (Fitts: min-h-48px) */}
                       <button
                         onClick={handleConfirmAnswer}
                         disabled={!selectedOptionId}
-                        className={`px-7 py-3.5 rounded-xl font-black text-xs tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg ${
+                        className={`min-h-[48px] px-8 py-3.5 rounded-xl font-black text-xs tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg ${
                           selectedOptionId
                             ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white shadow-blue-600/25 active:scale-95'
                             : 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-200 dark:border-slate-700'
@@ -912,11 +994,12 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                   ) : (
                     <div className="w-full flex items-center justify-between">
                       <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
-                        Resposta registrada. Inspecione a análise ao lado.
+                        Resposta registrada. Fundamentação e análise abaixo.
                       </span>
+                      {/* CTA Primário Dominante de Próxima Questão (Fitts: min-h-48px) */}
                       <button
                         onClick={handleNext}
-                        className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs flex items-center gap-2 shadow-lg shadow-emerald-600/25 active:scale-95 transition-all"
+                        className="min-h-[48px] px-7 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs flex items-center gap-2 shadow-lg shadow-emerald-600/25 active:scale-95 transition-all"
                       >
                         <span>Próxima Questão</span>
                         <kbd className="px-1.5 py-0.5 rounded bg-black/30 text-[10px] text-white font-mono">
@@ -926,6 +1009,80 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                     </div>
                   )}
                 </div>
+
+                {/* Comentário Inline, Lei Seca & Telemetria Imediata (Ergonomia Mobile & Jakob) */}
+                {isAnswered && (
+                  <div className="mt-6 p-5 sm:p-6 rounded-2xl bg-slate-50 dark:bg-dark-card/90 border border-slate-200 dark:border-white/10 shadow-sm space-y-4 animate-fadeIn">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200 dark:border-white/10">
+                      <div className="flex items-center gap-2">
+                        {selectedOptionId && currentQuestion.options.find(o => o.id === selectedOptionId)?.isCorrect ? (
+                          <span className="flex items-center gap-1.5 text-xs font-black text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-500/20 px-3 py-1 rounded-xl border border-emerald-300 dark:border-emerald-500/30">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                            Gabarito Correto!
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-1.5 text-xs font-black text-rose-700 dark:text-rose-300 bg-rose-100 dark:bg-rose-500/20 px-3 py-1 rounded-xl border border-rose-300 dark:border-rose-500/30">
+                            <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                            Resposta Incorreta
+                          </span>
+                        )}
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                          Gabarito Oficial: Letra {String.fromCharCode(65 + Math.max(0, currentQuestion.options.findIndex(o => o.isCorrect)))}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Explicação da Banca */}
+                    <div className="space-y-1.5">
+                      <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                        <BookOpen className="w-3.5 h-3.5 text-blue-500" />
+                        Comentário do Especialista & Fundamentação:
+                      </h4>
+                      <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-line">
+                        {currentQuestion.explanation}
+                      </p>
+                    </div>
+
+                    {/* Citação Direta da Lei Seca */}
+                    {currentQuestion.codeCitation && (
+                      <div className="p-3.5 rounded-xl bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-500/30 text-xs flex items-start gap-2.5">
+                        <Scale className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
+                        <div>
+                          <span className="font-bold text-indigo-900 dark:text-indigo-200 block mb-0.5">
+                            Legislação / Lei Seca Vinculada:
+                          </span>
+                          <span className="font-mono text-indigo-700 dark:text-indigo-300">
+                            {currentQuestion.codeCitation}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Raio-X da Pegadinha */}
+                    {currentQuestion.cognitiveAnalysis?.commonTrap && (
+                      <div className="p-3.5 rounded-xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-500/30 text-xs flex items-start gap-2.5">
+                        <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                        <div>
+                          <span className="font-bold text-amber-900 dark:text-amber-200 block mb-0.5">
+                            Pegadinha Detectada pela Banca ({currentQuestion.banca}):
+                          </span>
+                          <p className="text-amber-800 dark:text-amber-300 leading-relaxed">
+                            {currentQuestion.cognitiveAnalysis.commonTrap}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Telemetria e Feedback Rápido de 1 Toque */}
+                    <div className="pt-2 border-t border-slate-200 dark:border-white/10">
+                      <AIFeedbackVote
+                        questionId={currentQuestion.id}
+                        banca={currentQuestion.banca}
+                        subject={currentQuestion.subjectName}
+                      />
+                    </div>
+                  </div>
+                )}
 
               </div>
 

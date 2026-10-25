@@ -12,11 +12,11 @@ export interface AIFeedbackVoteProps {
 }
 
 const COMMON_REASONS = [
-  'Faltou citar artigo/lei',
-  'Jurisprudência desatualizada',
-  'Pegadinha mal explicada',
-  'Texto prolixo / confuso',
-  'Gabarito controverso'
+  'Questão desatualizada',
+  'Explicação confusa',
+  'Erro no sistema',
+  'Gabarito controverso',
+  'Faltou citar artigo/lei'
 ];
 
 export const AIFeedbackVote: React.FC<AIFeedbackVoteProps> = ({
