@@ -467,6 +467,9 @@ export const Navbar: React.FC<NavbarProps> = ({
     setActiveTab(tabId);
     setIsMegaMenuOpen(false);
     setIsMobileMenuOpen(false);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const isLight = theme === 'light';
@@ -1231,67 +1234,78 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       )}
 
-      {/* Barra de Navegação Inferior para Telas Pequenas (Polegar) - apenas quando navMode não for dock */}
-      {navMode !== 'dock' && (
-        <nav className={`sm:hidden fixed bottom-0 left-0 right-0 z-40 border-t py-1.5 px-2 flex items-center justify-around transition-colors ${
+      {/* Barra de Navegação Inferior Nativa para Mobile (Sempre visível em smartphones < 768px) */}
+      <nav
+        aria-label="Navegação móvel inferior por abas"
+        className={`md:hidden fixed bottom-0 left-0 right-0 z-50 border-t py-2 px-1 flex items-center justify-around transition-colors shadow-2xl safe-area-bottom ${
           isLight 
-            ? 'bg-white/95 backdrop-blur-2xl border-slate-200 text-slate-600' 
-            : 'bg-[#0c1222]/95 backdrop-blur-2xl border-slate-800 dark:border-white/10 text-slate-400'
-        }`}>
-          <button
-            onClick={() => handleTabClick('simulator')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl active:scale-90 transition-all duration-150 cursor-pointer ${
-              activeTab === 'simulator' ? 'text-blue-600 font-extrabold' : ''
-            }`}
-          >
-            <Crosshair className="w-4 h-4" />
-            <span className="text-[10px]">Arena</span>
-          </button>
+            ? 'bg-white/95 backdrop-blur-2xl border-slate-200 text-slate-600 shadow-slate-300/60' 
+            : 'bg-[#0c1222]/95 backdrop-blur-2xl border-slate-800 text-slate-400 shadow-black/90'
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => handleTabClick('simulator')}
+          className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl active:scale-95 transition-all cursor-pointer ${
+            activeTab === 'simulator' 
+              ? 'text-blue-600 dark:text-blue-400 font-black' 
+              : 'hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Crosshair className={`w-5 h-5 ${activeTab === 'simulator' ? 'text-blue-600 dark:text-blue-400 scale-110' : ''}`} />
+          <span className="text-[10px] tracking-tight">Simulador</span>
+        </button>
 
-          <button
-            onClick={() => handleTabClick('dashboard')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl active:scale-90 transition-all duration-150 cursor-pointer ${
-              activeTab === 'dashboard' ? 'text-blue-600 font-extrabold' : ''
-            }`}
-          >
-            <Activity className="w-4 h-4" />
-            <span className="text-[10px]">Cockpit</span>
-          </button>
+        <button
+          type="button"
+          onClick={() => handleTabClick('flashcards')}
+          className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl active:scale-95 transition-all cursor-pointer ${
+            activeTab === 'flashcards' 
+              ? 'text-blue-600 dark:text-blue-400 font-black' 
+              : 'hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <BookOpen className={`w-5 h-5 ${activeTab === 'flashcards' ? 'text-blue-600 dark:text-blue-400 scale-110' : ''}`} />
+          <span className="text-[10px] tracking-tight">Flashcards</span>
+        </button>
 
-          <button
-            onClick={() => handleTabClick('mistakes')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl relative active:scale-90 transition-all duration-150 cursor-pointer ${
-              activeTab === 'mistakes' ? 'text-rose-600 font-extrabold' : ''
-            }`}
-          >
-            <ShieldAlert className="w-4 h-4" />
-            <span className="text-[10px]">Erros</span>
-            {pendingMistakesCount > 0 && (
-              <span className="absolute top-0 right-1 w-3.5 h-3.5 rounded-full bg-rose-500 text-white text-[9px] font-black flex items-center justify-center">
-                {pendingMistakesCount}
-              </span>
-            )}
-          </button>
+        <button
+          type="button"
+          onClick={() => handleTabClick('vademecum')}
+          className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl active:scale-95 transition-all cursor-pointer ${
+            activeTab === 'vademecum' 
+              ? 'text-amber-600 dark:text-amber-400 font-black' 
+              : 'hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Scale className={`w-5 h-5 ${activeTab === 'vademecum' ? 'text-amber-600 dark:text-amber-400 scale-110' : ''}`} />
+          <span className="text-[10px] tracking-tight">Vade Mecum</span>
+        </button>
 
-          <button
-            onClick={() => handleTabClick('vademecum')}
-            className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl active:scale-90 transition-all duration-150 cursor-pointer ${
-              activeTab === 'vademecum' ? 'text-amber-600 font-extrabold' : ''
-            }`}
-          >
-            <Scale className="w-4 h-4" />
-            <span className="text-[10px]">Vade</span>
-          </button>
+        <button
+          type="button"
+          onClick={() => handleTabClick('dashboard')}
+          className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl active:scale-95 transition-all cursor-pointer ${
+            activeTab === 'dashboard' 
+              ? 'text-emerald-600 dark:text-emerald-400 font-black' 
+              : 'hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Activity className={`w-5 h-5 ${activeTab === 'dashboard' ? 'text-emerald-600 dark:text-emerald-400 scale-110' : ''}`} />
+          <span className="text-[10px] tracking-tight">Cockpit</span>
+        </button>
 
-          <button
-            onClick={() => setIsMegaMenuOpen(true)}
-            className="flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl hover:opacity-100 active:scale-90 transition-all duration-150 cursor-pointer"
-          >
-            <Layers className="w-4 h-4 text-blue-500" />
-            <span className="text-[10px]">Módulos</span>
-          </button>
-        </nav>
-      )}
+        <button
+          type="button"
+          onClick={() => setIsMobileMenuOpen(true)}
+          className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl active:scale-95 transition-all cursor-pointer ${
+            isMobileMenuOpen ? 'text-blue-500 font-black' : 'hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Menu className="w-5 h-5 text-blue-500" />
+          <span className="text-[10px] tracking-tight">Mais Abas</span>
+        </button>
+      </nav>
 
       {/* Modal de Onboarding Multimodal (fallback local se não controlado pelo pai) */}
       {!onOpenMobileModal && (

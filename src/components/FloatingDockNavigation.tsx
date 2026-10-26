@@ -308,7 +308,7 @@ export const FloatingDockNavigation: React.FC<FloatingDockNavigationProps> = ({
     return (
       <aside
         aria-label="Controle de navegação minimizado"
-        className={`fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 select-none transition-all duration-300 ${
+        className={`hidden md:block fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 select-none transition-all duration-300 ${
           isScrolledDown ? 'translate-y-20 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
         }`}
       >
@@ -334,7 +334,7 @@ export const FloatingDockNavigation: React.FC<FloatingDockNavigationProps> = ({
   return (
     <nav
       aria-label="Navegação principal da plataforma"
-      className={`fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 select-none w-auto max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-2rem)] lg:max-w-fit transition-all duration-300 ${
+      className={`hidden md:block fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 select-none w-auto max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-2rem)] lg:max-w-fit transition-all duration-300 ${
         isScrolledDown ? 'translate-y-28 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
       }`}
     >

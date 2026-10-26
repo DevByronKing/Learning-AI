@@ -874,8 +874,8 @@ export function ArgusApp() {
             }}
           />
 
-      {/* Main Content Area com espaçamento equilibrado */}
-      <main className={`flex-1 relative z-10 ${activeTab === 'landing' ? 'pb-0' : 'pb-16 sm:pb-12'}`}>
+      {/* Main Content Area com espaçamento equilibrado para barra de abas mobile */}
+      <main className={`flex-1 relative z-10 ${activeTab === 'landing' ? 'pb-20 md:pb-0' : 'pb-24 md:pb-16'}`}>
         <div key={activeTab} className="tab-page-wrapper">
           {activeTab === 'landing' && (
           <LandingPage
