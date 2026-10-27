@@ -253,7 +253,7 @@ export const PricingPlansTab: React.FC<PricingPlansTabProps> = ({
             }`}
           >
             <span>Cobrança Anual</span>
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-amber-400 text-slate-950 uppercase">
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-amber-400 !text-slate-950 uppercase">
               51% OFF
             </span>
           </button>

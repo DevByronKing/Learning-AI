@@ -25,6 +25,8 @@ export type GrowthAnalyticsEvent =
   | 'paid_user_churn_feedback'  // Diagnóstico de churn e cancelamento de pagante / trial
   | 'flash_challenge_started'   // Desafio Relâmpago das 3 Pegadinhas iniciado (D0 Aha Moment)
   | 'flash_challenge_completed' // Desafio Relâmpago concluído com pontuação
+  | 'micro_commitment_selected' // Micro-Compromisso D0 (Edital e Banca foco selecionados)
+  | 'soft_paywall_cta_clicked'  // Paywall Suave acionado pós-desafio
   | 'inactivity_recovery_triggered' // Resgate por Inatividade acionado (>= 48h)
   | 'inactivity_recovery_accepted'  // Modo Pílula ativado pelo usuário
   | 'referral_modal_opened'     // Modal de Indicação Aberto (Member-Get-Member)
@@ -285,6 +287,8 @@ class AnalyticsService {
       paid_user_churn_feedback: 0,
       flash_challenge_started: 0,
       flash_challenge_completed: 0,
+      micro_commitment_selected: 0,
+      soft_paywall_cta_clicked: 0,
       inactivity_recovery_triggered: 0,
       inactivity_recovery_accepted: 0,
       referral_modal_opened: 0,

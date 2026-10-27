@@ -639,30 +639,26 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
         <div className="max-w-7xl mx-auto">
           {/* Unified Compact Controls: Modes + Filters in a Single High-Density Bar */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-4 border-b border-slate-200 dark:border-white/10">
-            {/* Mode Switcher */}
+            {/* Mode Switcher - Foco Racional em Micro-Sessões Táticas */}
             <div className="inline-flex p-1 rounded-xl bg-slate-100 dark:bg-dark-surface border border-slate-200 dark:border-white/10 text-xs shadow-2xs gap-1">
               <button
                 onClick={() => setSimulatorMode('quick')}
-                className="px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 text-xs bg-indigo-600 text-white shadow-xs shadow-indigo-600/30"
+                className={`px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 text-xs cursor-pointer ${
+                  simulatorMode === 'quick' 
+                    ? 'bg-blue-600 text-white shadow-xs shadow-blue-600/30' 
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
               >
                 <Target className="w-3.5 h-3.5" />
-                <span>Treino Adaptativo</span>
+                <span>Micro-Sessão Tática (10-15q)</span>
               </button>
               
               <button
                 onClick={() => setSimulatorMode('ai_generator')}
-                className="px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 text-xs text-blue-500 hover:text-blue-400 hover:bg-slate-200/60 dark:hover:bg-white/5"
+                className="px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 text-xs cursor-pointer text-blue-600 dark:text-cyan-400 hover:text-blue-700 hover:bg-slate-200/60 dark:hover:bg-white/5"
               >
                 <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
                 <span>Inéditas IA</span>
-              </button>
-
-              <button
-                onClick={() => setSimulatorMode('full_mock')}
-                className="px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 text-xs text-amber-500 hover:text-amber-400 hover:bg-slate-200/60 dark:hover:bg-white/5"
-              >
-                <Trophy className="w-3.5 h-3.5" />
-                <span>Simulados Oficiais</span>
               </button>
             </div>
 
@@ -996,7 +992,7 @@ export const QuizSimulator: React.FC<QuizSimulatorProps> = ({
                       >
                         <CheckCircle2 className="w-4 h-4" />
                         <span>Confirmar Resposta</span>
-                        <kbd className="hidden sm:inline px-1.5 py-0.5 rounded bg-black/30 text-[10px] text-white/90 font-mono">
+                        <kbd className={`hidden sm:inline px-1.5 py-0.5 rounded text-[10px] font-mono ${selectedOptionId ? 'bg-black/30 text-white/90' : 'bg-slate-200 text-slate-600 dark:bg-black/30 dark:text-white/90'}`}>
                           Enter ↵
                         </kbd>
                       </button>

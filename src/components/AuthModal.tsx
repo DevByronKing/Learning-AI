@@ -165,38 +165,38 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[130] flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in overflow-y-auto">
+    <div className="fixed inset-0 z-[130] flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fade-in overflow-y-auto">
       <div
-        className="relative w-full max-w-md rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-2xl p-6 sm:p-7 my-6 transition-all"
+        className="relative w-full max-w-lg rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/15 shadow-2xl p-7 sm:p-9 my-8 transition-all"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Glow de fundo */}
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-56 h-56 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-56 h-56 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
 
         {/* Botão Fechar */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer z-10"
+          className="absolute top-5 right-5 p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer z-10"
           aria-label="Fechar modal"
         >
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5" />
         </button>
 
         <div>
           {/* Header */}
-          <div className="text-center mb-5">
-            <div className="inline-flex items-center justify-center mb-2">
-              <BrandLogo size={42} showGlow />
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center justify-center mb-3">
+              <BrandLogo size={52} showGlow />
             </div>
-            <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight flex items-center justify-center gap-1.5">
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center justify-center gap-2">
               <span>{mode === 'login' ? 'Acesse sua conta' : 'Criar Conta Oficial'}</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-400">
                 Argus
               </span>
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-md mx-auto leading-relaxed">
               {mode === 'login'
                 ? 'Sincronize seu Caderno de Erros, simulados e estatísticas de qualquer lugar.'
                 : 'Cadastro verificado com conformidade integral ao ECA Digital e à LGPD.'}
@@ -204,14 +204,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
 
           {/* Toggle Modo: Login vs Cadastro */}
-          <div className="grid grid-cols-2 p-1 rounded-2xl bg-slate-100 dark:bg-slate-800/80 mb-4 text-xs font-bold">
+          <div className="grid grid-cols-2 p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-800/80 mb-6 text-xs sm:text-sm font-bold">
             <button
               type="button"
               onClick={() => {
                 setMode('login');
                 setErrorMessage(null);
               }}
-              className={`py-2 rounded-xl transition-all ${
+              className={`py-2.5 rounded-xl transition-all ${
                 mode === 'login'
                   ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm'
                   : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
@@ -225,7 +225,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 setMode('signup');
                 setErrorMessage(null);
               }}
-              className={`py-2 rounded-xl transition-all ${
+              className={`py-2.5 rounded-xl transition-all ${
                 mode === 'signup'
                   ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm'
                   : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
@@ -237,18 +237,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
           {/* Destaque OAuth Google (apenas no login ou como alternativa rápida) */}
           {mode === 'login' && (
-            <div className="space-y-4">
+            <div className="space-y-4 mb-2">
               <GoogleSignInButton
                 text="Continuar com o Google"
                 size="lg"
                 fullWidth
                 variant="standard"
+                className="py-3.5 text-base shadow-sm hover:shadow-md"
                 onSuccess={() => {}}
               />
 
-              <div className="relative flex items-center justify-center my-3">
+              <div className="relative flex items-center justify-center my-4">
                 <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
-                <span className="bg-white dark:bg-slate-900 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0">
+                <span className="bg-white dark:bg-slate-900 px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0">
                   ou link mágico por e-mail
                 </span>
                 <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
@@ -291,13 +292,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleEmailSignIn} className="space-y-3">
+              <form onSubmit={handleEmailSignIn} className="space-y-4">
                 <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1.5">
                     Seu e-mail cadastrado:
                   </label>
                   <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <Mail className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
                     <input
                       type="email"
                       value={email}
@@ -307,7 +308,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       data-mask="true"
                       data-private="true"
                       autoComplete="email"
-                      className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:border-blue-500 transition-colors"
+                      className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-medium focus:outline-none focus:border-blue-500 transition-colors"
                       required
                     />
                   </div>
@@ -316,10 +317,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer disabled:opacity-50"
+                  className="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white text-sm font-bold transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer disabled:opacity-50"
                 >
                   <span>{isLoading ? 'Enviando...' : 'Receber Link Mágico de Acesso'}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </form>
             )

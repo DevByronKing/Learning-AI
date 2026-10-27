@@ -675,19 +675,7 @@ export function ArgusApp() {
       } catch {}
       SupabaseService.syncMetrics('user-demo', updated);
 
-      // Gatilho inteligente do Sean Ellis Test após 10 resoluções de questões
-      if (newTotal >= 10) {
-        try {
-          const completed = localStorage.getItem('argus_sean_ellis_survey_completed') || localStorage.getItem('learning_ai_sean_ellis_survey_completed');
-          const skipUntilStr = localStorage.getItem('argus_sean_ellis_skip_until') || localStorage.getItem('learning_ai_sean_ellis_skip_until');
-          const skipUntil = skipUntilStr ? parseInt(skipUntilStr, 10) : 0;
-          if (!completed && Date.now() > skipUntil) {
-            setTimeout(() => {
-              setIsSeanEllisSurveyOpen(true);
-            }, 1200);
-          }
-        } catch {}
-      }
+      // Gatilho automático da pesquisa de satisfação desativado para gravação limpa e foco do aluno
 
       return updated;
     });
@@ -1260,6 +1248,10 @@ export function ArgusApp() {
         onOpenMistakes={() => {
           setIsFlashChallengeOpen(false);
           setActiveTab('mistakes');
+        }}
+        onOpenPricing={() => {
+          setIsFlashChallengeOpen(false);
+          setIsPricingOpen(true);
         }}
       />
 

@@ -13,7 +13,9 @@ export async function POST(req: NextRequest) {
       billingCycle = 'annual', 
       paymentMethod = 'pix', 
       userEmail = 'aluno@argus.app.br', 
-      userName = 'Concurseiro' 
+      userName = 'Concurseiro',
+      cpfCnpj,
+      customerCpf,
     } = body;
 
     // Cálculo de preços baseado em ciclo (Estratégia do Plano Isca / Âncora de Preço)
@@ -43,6 +45,7 @@ export async function POST(req: NextRequest) {
       amount,
       userEmail,
       userName,
+      cpfCnpj: cpfCnpj || customerCpf,
       description: `Argus - Assinatura ${planConfig.name} (${billingCycle === 'annual' ? 'Anual' : 'Mensal'})`,
     });
 

@@ -1349,6 +1349,15 @@ export const UserOnboardingModal: React.FC<UserOnboardingModalProps> = ({
 
                   {/* AÇÕES DE CONVERSÃO LINEAR COM COMPONENTES BUTTON DO DESIGN SYSTEM */}
                   {/* DIRETRIZ DE PRODUTO (Pilar 1): Funil 100% Linear sem Ramificações Gratuitas — ambos os CTAs levam aos planos */}
+                  <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-500/10 via-indigo-500/15 to-blue-500/10 border border-blue-500/30 text-left space-y-1">
+                    <p className="text-xs font-black text-blue-900 dark:text-cyan-300">
+                      "Gostaria de salvar este ponto cego no seu Caderno de Erros com Repetição Espaçada e garantir que não errará na prova?"
+                    </p>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
+                      Sua anamnese mapeou o ponto vulnerável em <strong>{weakSubject}</strong> contra a banca <strong>{detectedBanca}</strong>. O algoritmo SM-2 agenda sua primeira blindagem.
+                    </p>
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                     <Button
                       variant="primary"

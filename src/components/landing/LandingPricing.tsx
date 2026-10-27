@@ -108,7 +108,7 @@ export const LandingPricing: React.FC<LandingPricingProps> = ({
                 <CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" />
                 <span>Cronograma estático básico</span>
               </li>
-              <li className="flex items-center gap-3 text-slate-400/60 dark:text-slate-500/60">
+              <li className="flex items-center gap-3 text-slate-500 dark:text-slate-500/60">
                 <XCircle className="w-5 h-5 text-slate-300/50 dark:text-slate-600/50 shrink-0" />
                 <span className="line-through decoration-slate-300/50 dark:decoration-slate-600/50">Diagnóstico Cognitivo de Erros</span>
               </li>

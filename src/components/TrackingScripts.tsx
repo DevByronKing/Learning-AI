@@ -30,6 +30,15 @@ export const TrackingScripts: React.FC = () => {
       const search = window.location.search || '';
       const fullPath = pathname + search;
 
+      // Suporte a código de evento de teste do Meta Events Manager (?test_event_code=TESTxxxxx)
+      try {
+        const urlParams = new URLSearchParams(search);
+        const testCode = urlParams.get('test_event_code');
+        if (testCode && window.fbq) {
+          window.fbq('set', 'testEventCode', testCode);
+        }
+      } catch (e) {}
+
       // 1. Meta Pixel PageView
       if (window.fbq) {
         window.fbq('track', 'PageView');
@@ -48,46 +57,12 @@ export const TrackingScripts: React.FC = () => {
     }
   }, [pathname, gaMeasurementId]);
 
-  if (!metaPixelId && !gaMeasurementId) {
+  if (!gaMeasurementId) {
     return null;
   }
 
   return (
     <>
-      {/* ========================================================================= */}
-      {/* 1. META PIXEL (FACEBOOK & INSTAGRAM ADS)                                  */}
-      {/* ========================================================================= */}
-      {metaPixelId && (
-        <>
-          <Script
-            id="meta-pixel-script"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: `
-                !function(f,b,e,v,n,t,s)
-                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-                n.queue=[];t=b.createElement(e);t.async=!0;
-                t.src=v;s=b.getElementsByTagName(e)[0];
-                s.parentNode.insertBefore(t,s)}(window, document,'script',
-                'https://connect.facebook.net/en_US/fbevents.js');
-                fbq('init', '${metaPixelId}');
-                fbq('track', 'PageView');
-              `,
-            }}
-          />
-          <noscript>
-            <img
-              height="1"
-              width="1"
-              style={{ display: 'none' }}
-              src={`https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1`}
-              alt=""
-            />
-          </noscript>
-        </>
-      )}
 
       {/* ========================================================================= */}
       {/* 2. GOOGLE ANALYTICS 4 / GOOGLE ADS TAG                                    */}

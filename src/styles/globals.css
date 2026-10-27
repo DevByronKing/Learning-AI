@@ -54,11 +54,11 @@
   }
 
   html {
-    font-size: 15px; /* Tamanho padrão do site: densidade e leitura de alta performance */
+    font-size: 16px; /* Tamanho padrão de 16px: leitura nítida, confortável e proporção perfeita ao dar zoom */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.011em;
   }
 
   body {
@@ -464,14 +464,14 @@ html.light .bg-\[\#090d16\] {
 }
 
 /* Elementos com bg-dark-* no Modo Claro */
-html.light [class*="bg-dark-surface"],
-html.light [class*="bg-dark-card"] {
+html.light :is([class~="bg-dark-surface"], [class*=" bg-dark-surface/"], [class^="bg-dark-surface/"]),
+html.light :is([class~="bg-dark-card"], [class*=" bg-dark-card/"], [class^="bg-dark-card/"]) {
   background-color: #ffffff !important;
   color: #1e293b;
 }
 
-html.light [class*="bg-dark-surface"]:hover,
-html.light [class*="bg-dark-card"]:hover {
+html.light :is([class~="bg-dark-surface"], [class*=" bg-dark-surface/"], [class^="bg-dark-surface/"]):hover,
+html.light :is([class~="bg-dark-card"], [class*=" bg-dark-card/"], [class^="bg-dark-card/"]):hover {
   background-color: #f1f5f9 !important;
 }
 
@@ -502,12 +502,12 @@ html.light h6:not(.preserve-dark *):not(.passport-card *):not([class*="from-"]):
 }
 
 /* Ajusta textos claros/apagados para tons escuros legíveis no Modo Claro (exceto containers escuros, botões e docks) */
-html.light .text-slate-200:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not([class*="bg-indigo-600"] *):not([class*="bg-blue-600"] *):not(.dock-nav *),
-html.light .text-slate-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not([class*="bg-indigo-600"] *):not([class*="bg-blue-600"] *):not(.dock-nav *) {
+html.light .text-slate-200:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(:is([class~="from-slate-900"], [class*=" from-slate-900/"], [class^="from-slate-900/"]) *):not(:is([class~="bg-indigo-600"], [class*=" bg-indigo-600/"], [class^="bg-indigo-600/"]) *):not(:is([class~="bg-blue-600"], [class*=" bg-blue-600/"], [class^="bg-blue-600/"]) *):not(.dock-nav *),
+html.light .text-slate-300:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(:is([class~="from-slate-900"], [class*=" from-slate-900/"], [class^="from-slate-900/"]) *):not(:is([class~="bg-indigo-600"], [class*=" bg-indigo-600/"], [class^="bg-indigo-600/"]) *):not(:is([class~="bg-blue-600"], [class*=" bg-blue-600/"], [class^="bg-blue-600/"]) *):not(.dock-nav *) {
   color: #334155;
 }
 
-html.light .text-slate-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not([class*="bg-indigo-600"] *):not([class*="bg-blue-600"] *):not(.dock-nav *) {
+html.light .text-slate-400:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(:is([class~="from-slate-900"], [class*=" from-slate-900/"], [class^="from-slate-900/"]) *):not(:is([class~="bg-indigo-600"], [class*=" bg-indigo-600/"], [class^="bg-indigo-600/"]) *):not(:is([class~="bg-blue-600"], [class*=" bg-blue-600/"], [class^="bg-blue-600/"]) *):not(.dock-nav *) {
   color: #475569;
 }
 
@@ -526,41 +526,41 @@ html.light span[class*="bg-clip-text"] {
 }
 
 /* Números de métricas e estatísticas com alto contraste no Modo Claro */
-html.light .text-indigo-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *),
-html.light .text-blue-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *) {
+html.light .text-indigo-300:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(.dock-nav *),
+html.light .text-blue-300:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(.dock-nav *) {
   color: #1d4ed8 !important;
 }
-html.light .text-cyan-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *) {
+html.light .text-cyan-300:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(.dock-nav *) {
   color: #0891b2 !important;
 }
-html.light .text-emerald-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *) {
+html.light .text-emerald-300:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(.dock-nav *) {
   color: #059669 !important;
 }
-html.light .text-amber-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *) {
+html.light .text-amber-300:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(.dock-nav *) {
   color: #d97706 !important;
 }
-html.light .text-purple-300:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not(.dock-nav *) {
+html.light .text-purple-300:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(.dock-nav *) {
   color: #2563eb !important;
 }
 
 /* Mapeamento de tons neon 400 para cores acessíveis de alto contraste no Modo Claro */
-html.light .text-indigo-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *),
-html.light .text-blue-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+html.light .text-indigo-400:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(:is([class~="from-slate-900"], [class*=" from-slate-900/"], [class^="from-slate-900/"]) *):not(.dock-nav *),
+html.light .text-blue-400:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(:is([class~="from-slate-900"], [class*=" from-slate-900/"], [class^="from-slate-900/"]) *):not(.dock-nav *) {
   color: #1d4ed8 !important;
 }
-html.light .text-cyan-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+html.light .text-cyan-400:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(:is([class~="from-slate-900"], [class*=" from-slate-900/"], [class^="from-slate-900/"]) *):not(.dock-nav *) {
   color: #0284c7 !important;
 }
-html.light .text-emerald-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+html.light .text-emerald-400:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(:is([class~="from-slate-900"], [class*=" from-slate-900/"], [class^="from-slate-900/"]) *):not(.dock-nav *) {
   color: #059669 !important;
 }
-html.light .text-amber-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+html.light .text-amber-400:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(:is([class~="from-slate-900"], [class*=" from-slate-900/"], [class^="from-slate-900/"]) *):not(.dock-nav *) {
   color: #b45309 !important;
 }
-html.light .text-rose-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+html.light .text-rose-400:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(:is([class~="from-slate-900"], [class*=" from-slate-900/"], [class^="from-slate-900/"]) *):not(.dock-nav *) {
   color: #e11d48 !important;
 }
-html.light .text-purple-400:not(.preserve-dark *):not(.passport-card *):not(button *):not([class*="from-slate-950"] *):not([class*="from-slate-900"] *):not(.dock-nav *) {
+html.light .text-purple-400:not(.preserve-dark *):not(.passport-card *):not(button *):not(:is([class~="from-slate-950"], [class*=" from-slate-950/"], [class^="from-slate-950/"]) *):not(:is([class~="from-slate-900"], [class*=" from-slate-900/"], [class^="from-slate-900/"]) *):not(.dock-nav *) {
   color: #7c3aed !important;
 }
 
@@ -662,13 +662,13 @@ html.light .passport-card .text-amber-400 {
 }
 
 /* Preserva .text-white dentro de botões/links com fundo colorido saturado */
-html.light button[class*="from-blue"] .text-white,
-html.light button[class*="from-indigo"] .text-white,
-html.light button[class*="from-purple"] .text-white,
-html.light button[class*="from-amber"] .text-white,
-html.light button[class*="from-rose"] .text-white,
-html.light button[class*="from-emerald"] .text-white,
-html.light button[class*="from-teal"] .text-white,
+html.light button:is([class*=" from-blue-"], [class^="from-blue-"]) .text-white,
+html.light button:is([class*=" from-indigo-"], [class^="from-indigo-"]) .text-white,
+html.light button:is([class*=" from-purple-"], [class^="from-purple-"]) .text-white,
+html.light button:is([class*=" from-amber-"], [class^="from-amber-"]) .text-white,
+html.light button:is([class*=" from-rose-"], [class^="from-rose-"]) .text-white,
+html.light button:is([class*=" from-emerald-"], [class^="from-emerald-"]) .text-white,
+html.light button:is([class*=" from-teal-"], [class^="from-teal-"]) .text-white,
 html.light a[class*="from-"] .text-white {
   color: #ffffff !important;
 }
@@ -688,13 +688,8 @@ html.light a.bg-blue-600,
 html.light a.bg-blue-700,
 html.light a.bg-indigo-600,
 html.light a.bg-indigo-700,
-html.light button[class*="from-blue-600"],
-html.light button[class*="from-indigo-500"],
-html.light button[class*="from-purple-600"],
-html.light button[class*="from-emerald-500"],
-html.light button[class*="from-teal-600"],
-html.light a[class*="from-blue-600"],
-html.light a[class*="from-indigo-500"],
+html.light button:is([class~="from-blue-600"], [class~="from-indigo-600"], [class~="from-indigo-500"], [class~="from-purple-600"], [class~="from-emerald-600"], [class~="from-teal-600"]):not([class*="/5"]):not([class*="/10"]):not([class*="/15"]):not([class*="/20"]):not([class*="/25"]):not([class*="/30"]),
+html.light a:is([class~="from-blue-600"], [class~="from-indigo-500"]):not([class*="/5"]):not([class*="/10"]):not([class*="/15"]):not([class*="/20"]):not([class*="/25"]):not([class*="/30"]),
 html.light .badge-color,
 html.light .badge-white-text,
 html.light .preserve-white,
@@ -702,26 +697,26 @@ html.light .force-white {
   color: #ffffff !important;
 }
 
-/* Fallback de Segurança Anti-Divergência: se algum container tiver gradiente escuro fixo, textos nunca ficam pretos */
-html.light [class*="from-blue-950"]:not([class*="from-blue-50"]) h1,
-html.light [class*="from-blue-950"]:not([class*="from-blue-50"]) h2,
-html.light [class*="from-blue-950"]:not([class*="from-blue-50"]) h3,
-html.light [class*="from-blue-950"]:not([class*="from-blue-50"]) p:not(.text-slate-900),
-html.light [class*="from-amber-950"]:not([class*="from-amber-50"]) h1,
-html.light [class*="from-amber-950"]:not([class*="from-amber-50"]) h2,
-html.light [class*="from-amber-950"]:not([class*="from-amber-50"]) h3,
-html.light [class*="from-amber-950"]:not([class*="from-amber-50"]) p:not(.text-slate-900),
-html.light [class*="from-emerald-950"]:not([class*="from-emerald-50"]) h1,
-html.light [class*="from-emerald-950"]:not([class*="from-emerald-50"]) h2,
-html.light [class*="from-emerald-950"]:not([class*="from-emerald-50"]) h3,
-html.light [class*="from-emerald-950"]:not([class*="from-emerald-50"]) p:not(.text-slate-900) {
+/* Fallback de Segurança Anti-Divergência: se algum container tiver gradiente escuro fixo, textos nunca ficam pretos.
+   IMPORTANTE: usa casamento por TOKEN INTEIRO ([class~=] / " from-x-950/"). O antigo :is([class~="from-x-950"], [class*=" from-x-950/"], [class^="from-x-950/"])
+   casava por substring com "dark:from-x-950/25" (variante exclusiva do modo escuro) e forçava texto BRANCO
+   !important em cards claros (contraste 1.04:1). Com espaço antes de "from-" nunca casa com "dark:from-". */
+html.light :is([class~="from-blue-950"], [class*=" from-blue-950/"], [class^="from-blue-950/"]) h1,
+html.light :is([class~="from-blue-950"], [class*=" from-blue-950/"], [class^="from-blue-950/"]) h2,
+html.light :is([class~="from-blue-950"], [class*=" from-blue-950/"], [class^="from-blue-950/"]) h3,
+html.light :is([class~="from-blue-950"], [class*=" from-blue-950/"], [class^="from-blue-950/"]) p:not(.text-slate-900),
+html.light :is([class~="from-amber-950"], [class*=" from-amber-950/"], [class^="from-amber-950/"]) h1,
+html.light :is([class~="from-amber-950"], [class*=" from-amber-950/"], [class^="from-amber-950/"]) h2,
+html.light :is([class~="from-amber-950"], [class*=" from-amber-950/"], [class^="from-amber-950/"]) h3,
+html.light :is([class~="from-amber-950"], [class*=" from-amber-950/"], [class^="from-amber-950/"]) p:not(.text-slate-900),
+html.light :is([class~="from-emerald-950"], [class*=" from-emerald-950/"], [class^="from-emerald-950/"]) h1,
+html.light :is([class~="from-emerald-950"], [class*=" from-emerald-950/"], [class^="from-emerald-950/"]) h2,
+html.light :is([class~="from-emerald-950"], [class*=" from-emerald-950/"], [class^="from-emerald-950/"]) h3,
+html.light :is([class~="from-emerald-950"], [class*=" from-emerald-950/"], [class^="from-emerald-950/"]) p:not(.text-slate-900) {
   color: #ffffff !important;
 }
 
-html.light button[class*="from-blue-600"] *,
-html.light button[class*="from-indigo-500"] *,
-html.light button[class*="from-purple-600"] *,
-html.light button[class*="from-emerald-500"] *,
+html.light button:is([class~="from-blue-600"], [class~="from-indigo-600"], [class~="from-indigo-500"], [class~="from-purple-600"], [class~="from-emerald-600"]):not([class*="/5"]):not([class*="/10"]):not([class*="/15"]):not([class*="/20"]):not([class*="/25"]):not([class*="/30"]) *,
 html.light button.bg-blue-600 *,
 html.light button.bg-indigo-600 *,
 html.light button.bg-purple-600 *,
@@ -732,9 +727,9 @@ html.light button.bg-emerald-600 * {
 
 /* Garante contraste perfeito em botões secundários baseados em surface no Modo Claro */
 html.light button.bg-dark-surface,
-html.light button[class*="bg-dark-surface"],
+html.light button:is([class~="bg-dark-surface"], [class*=" bg-dark-surface/"], [class^="bg-dark-surface/"]),
 html.light button.bg-dark-card,
-html.light button[class*="bg-dark-card"] {
+html.light button:is([class~="bg-dark-card"], [class*=" bg-dark-card/"], [class^="bg-dark-card/"]) {
   background-color: #ffffff !important;
   border-color: #cbd5e1 !important;
   color: #1e293b !important;
@@ -742,48 +737,64 @@ html.light button[class*="bg-dark-card"] {
 }
 
 html.light button.bg-dark-surface:hover,
-html.light button[class*="bg-dark-surface"]:hover,
+html.light button:is([class~="bg-dark-surface"], [class*=" bg-dark-surface/"], [class^="bg-dark-surface/"]):hover,
 html.light button.bg-dark-card:hover,
-html.light button[class*="bg-dark-card"]:hover {
+html.light button:is([class~="bg-dark-card"], [class*=" bg-dark-card/"], [class^="bg-dark-card/"]):hover {
   background-color: #f1f5f9 !important;
   border-color: #94a3b8 !important;
   color: #0f172a !important;
 }
 
 html.light button.bg-dark-surface *,
-html.light button[class*="bg-dark-surface"] *,
+html.light button:is([class~="bg-dark-surface"], [class*=" bg-dark-surface/"], [class^="bg-dark-surface/"]) *,
 html.light button.bg-dark-card *,
-html.light button[class*="bg-dark-card"] * {
+html.light button:is([class~="bg-dark-card"], [class*=" bg-dark-card/"], [class^="bg-dark-card/"]) * {
   color: inherit;
 }
 
-/* Badges e botões pastéis (bg-*-50) devem sempre exibir cores escuras e saturadas no Modo Claro */
-html.light [class*="bg-blue-50"],
-html.light [class*="bg-blue-100"],
-html.light [class*="bg-indigo-50"],
-html.light [class*="bg-indigo-100"] {
+/* Badges e botões pastéis (bg-*-50) devem sempre exibir cores escuras e saturadas no Modo Claro.
+   Casamento por TOKEN INTEIRO: :is([class~="bg-emerald-50"], [class*=" bg-emerald-50/"], [class^="bg-emerald-50/"]) antigo casava com "hover:bg-emerald-500" e
+   "bg-emerald-500" (botões sólidos) e pintava o texto deles de verde-escuro com !important. */
+html.light :is(
+  [class~="bg-blue-50"], [class~="bg-blue-100"], [class~="bg-indigo-50"], [class~="bg-indigo-100"],
+  [class*=" bg-blue-50/"], [class*=" bg-blue-100/"], [class*=" bg-indigo-50/"], [class*=" bg-indigo-100/"],
+  [class^="bg-blue-50/"], [class^="bg-blue-100/"], [class^="bg-indigo-50/"], [class^="bg-indigo-100/"]
+) {
   color: #1d4ed8 !important;
 }
-html.light [class*="bg-blue-50"] svg,
-html.light [class*="bg-blue-100"] svg,
-html.light [class*="bg-indigo-50"] svg,
-html.light [class*="bg-indigo-100"] svg {
+html.light :is(
+  [class~="bg-blue-50"], [class~="bg-blue-100"], [class~="bg-indigo-50"], [class~="bg-indigo-100"],
+  [class*=" bg-blue-50/"], [class*=" bg-blue-100/"], [class*=" bg-indigo-50/"], [class*=" bg-indigo-100/"],
+  [class^="bg-blue-50/"], [class^="bg-blue-100/"], [class^="bg-indigo-50/"], [class^="bg-indigo-100/"]
+) svg {
   color: #2563eb !important;
 }
-html.light [class*="bg-purple-50"],
-html.light [class*="bg-purple-100"] {
+html.light :is(
+  [class~="bg-purple-50"], [class~="bg-purple-100"],
+  [class*=" bg-purple-50/"], [class*=" bg-purple-100/"],
+  [class^="bg-purple-50/"], [class^="bg-purple-100/"]
+) {
   color: #1d4ed8 !important;
 }
-html.light [class*="bg-purple-50"] svg,
-html.light [class*="bg-purple-100"] svg {
+html.light :is(
+  [class~="bg-purple-50"], [class~="bg-purple-100"],
+  [class*=" bg-purple-50/"], [class*=" bg-purple-100/"],
+  [class^="bg-purple-50/"], [class^="bg-purple-100/"]
+) svg {
   color: #2563eb !important;
 }
-html.light [class*="bg-amber-50"],
-html.light [class*="bg-amber-100"] {
+html.light :is(
+  [class~="bg-amber-50"], [class~="bg-amber-100"],
+  [class*=" bg-amber-50/"], [class*=" bg-amber-100/"],
+  [class^="bg-amber-50/"], [class^="bg-amber-100/"]
+) {
   color: #92400e !important;
 }
-html.light [class*="bg-emerald-50"],
-html.light [class*="bg-emerald-100"] {
+html.light :is(
+  [class~="bg-emerald-50"], [class~="bg-emerald-100"],
+  [class*=" bg-emerald-50/"], [class*=" bg-emerald-100/"],
+  [class^="bg-emerald-50/"], [class^="bg-emerald-100/"]
+) {
   color: #065f46 !important;
 }
 
@@ -975,4 +986,38 @@ html.light .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   .tracking-tighter {
     letter-spacing: -0.04em !important;
   }
+}
+
+/* ==============================================================================
+   CONTRASTE WCAG AA — textos de acento no Modo Claro
+   amber-500/600, emerald-500/600 e cyan-500 não atingem 4.5:1 sobre branco/pastel.
+   Não se aplica dentro de superfícies escuras fixas (.preserve-dark, .force-white).
+   ============================================================================== */
+html.light .text-amber-500:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *),
+html.light .text-amber-600:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *),
+html.light .text-amber-600\/70:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *) {
+  color: #92400e;
+}
+html.light .text-emerald-500:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *),
+html.light .text-emerald-600:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *),
+html.light .text-emerald-600\/70:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *) {
+  color: #047857;
+}
+html.light .text-cyan-500:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *) {
+  color: #0e7490;
+}
+html.light .text-slate-400:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *):not(button.bg-slate-900 *):not(button.bg-slate-800 *) {
+  color: #64748b;
+}
+html.light .text-amber-400:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *):not(button *),
+html.light .text-amber-300:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *):not(button *) {
+  color: #92400e;
+}
+html.light .text-emerald-400:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *):not(button *),
+html.light .text-emerald-300:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *):not(button *) {
+  color: #047857;
+}
+html.light .text-indigo-300:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *):not(button *),
+html.light .text-indigo-400:not(.preserve-dark *):not(.force-white *):not(.bg-slate-900 *):not(.bg-slate-950 *):not(button *) {
+  color: #4338ca;
 }

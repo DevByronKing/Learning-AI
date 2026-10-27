@@ -25,6 +25,10 @@ export function FloatingContactSupport({
   const [feedbackCategory, setFeedbackCategory] = useState<string>('Dúvida no Edital');
   const [feedbackMessage, setFeedbackMessage] = useState<string>('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return sessionStorage.getItem('argus_hide_support') === 'true';
+  });
 
   const isCommittedUser = isPayingOrCommitted || (typeof window !== 'undefined' && (
     ((localStorage.getItem('argus_plan') || localStorage.getItem('aprovalens_plan')) && (localStorage.getItem('argus_plan') || localStorage.getItem('aprovalens_plan')) !== 'aspirante') ||
@@ -100,30 +104,43 @@ export function FloatingContactSupport({
     }, 2200);
   };
 
+  if (isDismissed) return null;
+
   return (
     <>
-      {/* Botão Gatilho Flutuante */}
-      <div className="fixed bottom-16 right-3 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end">
+      {/* Botão Gatilho Flutuante Compacto para Gravação Limpa */}
+      <div className="fixed bottom-16 right-2 sm:bottom-6 sm:right-6 z-40 flex items-center gap-1 group/btn">
         {!isOpen && (
-          <button
-            onClick={() => {
-              setIsOpen(true);
-              analytics.track('cta_clicked', {
-                cta_name: 'floating_support_bubble_open',
-                tab: currentTab,
-              });
-            }}
-            className="group relative flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white font-bold text-xs sm:text-sm tracking-wide shadow-2xl shadow-emerald-500/30 border border-white/20 transition-all transform hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-md"
-            aria-label="Abrir suporte e chat ao vivo"
-          >
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-300" />
-            </span>
-            <MessageSquare className="w-4 h-4 text-white" />
-            <span className="hidden sm:inline">Suporte & WhatsApp</span>
-            <span className="sm:hidden">Ajuda</span>
-          </button>
+          <>
+            <button
+              onClick={() => {
+                setIsDismissed(true);
+                try {
+                  sessionStorage.setItem('argus_hide_support', 'true');
+                } catch {}
+              }}
+              className="opacity-0 group-hover/btn:opacity-100 p-1 rounded-full bg-slate-800/80 hover:bg-rose-600 text-slate-400 hover:text-white text-[10px] transition-all cursor-pointer shadow-xs"
+              title="Ocultar botão de suporte nesta sessão (gravação limpa)"
+              aria-label="Ocultar suporte"
+            >
+              <X className="w-3 h-3" />
+            </button>
+
+            <button
+              onClick={() => {
+                setIsOpen(true);
+                analytics.track('cta_clicked', {
+                  cta_name: 'floating_support_bubble_open',
+                  tab: currentTab,
+                });
+              }}
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-900/80 hover:bg-emerald-600 text-slate-300 hover:text-white border border-slate-700/80 shadow-md transition-all flex items-center justify-center cursor-pointer backdrop-blur-md opacity-60 hover:opacity-100 hover:scale-105 active:scale-95"
+              aria-label="Abrir suporte e chat ao vivo"
+              title="Suporte"
+            >
+              <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </button>
+          </>
         )}
 
         {/* Modal / Painel Pop-up de Contato */}

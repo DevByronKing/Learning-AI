@@ -150,8 +150,50 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
   const couponDiscountValue = appliedCoupon ? totalAfterCycle * (appliedCoupon.percent / 100) : 0;
   const finalPrice = Math.max(0, totalAfterCycle - couponDiscountValue);
 
-  // Pix Code Simulado mas Realista
-  const pixCode = `00020126580014br.gov.bcb.pix0136argus-pagamentos-asaas-2026520400005303986540${finalPrice.toFixed(2).replace('.', '')}5802BR5920ARGUS SAAS LTDA6009SAO PAULO62070503***6304E8A9`;
+  // Pix Code Real via Asaas ou Bacen EMVCo
+  const [realPixCode, setRealPixCode] = useState<string>('');
+  const [realQrCodeImg, setRealQrCodeImg] = useState<string | null>(null);
+  const [isLoadingPix, setIsLoadingPix] = useState(false);
+
+  // Pix Code Simulado de contingência
+  const fallbackPixCode = `00020126580014br.gov.bcb.pix0136argus-pagamentos-asaas-2026520400005303986540${finalPrice.toFixed(2).replace('.', '')}5802BR5920ARGUS SAAS LTDA6009SAO PAULO62070503***6304E8A9`;
+  const pixCode = realPixCode || fallbackPixCode;
+
+  // Carregar Cobrança Pix Real via Asaas
+  useEffect(() => {
+    if (paymentMethod !== 'pix') return;
+
+    let isMounted = true;
+    const fetchPix = async () => {
+      setIsLoadingPix(true);
+      try {
+        const res = await fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            planId: selectedPlan,
+            billingCycle,
+            paymentMethod: 'pix',
+            userEmail: customerEmail || 'aluno@argus.app.br',
+            userName: customerName || 'Aluno Argus',
+            cpfCnpj: customerCpf,
+          }),
+        });
+        const data = await res.json();
+        if (isMounted && data.success && data.pix) {
+          setRealPixCode(data.pix.copyPasteCode);
+          setRealQrCodeImg(data.pix.qrCodeUrl);
+        }
+      } catch (err) {
+        console.warn('Erro ao carregar Pix real do Asaas:', err);
+      } finally {
+        if (isMounted) setIsLoadingPix(false);
+      }
+    };
+
+    fetchPix();
+    return () => { isMounted = false; };
+  }, [paymentMethod, selectedPlan, billingCycle, customerEmail, customerName, customerCpf]);
 
   // Disparo de InitiateCheckout de Anúncios
   useEffect(() => {
@@ -272,7 +314,7 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
               >
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                    <span className="px-2.5 py-0.5 rounded-full bg-orange-700 text-white text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-sm">
                       <Flame className="w-3 h-3 fill-current" /> Lote 1 • Exclusivo 200 Vagas
                     </span>
                     <span className="text-xs text-orange-600 dark:text-orange-400 font-extrabold">
@@ -342,7 +384,7 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                     </span>
                     {selectedPlan === 'elite' && <CheckCircle2 className="w-4 h-4 text-indigo-500" />}
                   </div>
-                  <p className="text-xl font-black text-slate-900 dark:text-white">R$ 89,00 <span className="text-xs font-normal text-slate-400">/mês no anual</span></p>
+                  <p className="text-xl font-black text-slate-900 dark:text-white">R$ 89,00 <span className="text-xs font-normal text-slate-500 dark:text-slate-400">/mês no anual</span></p>
                   <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-extrabold mt-0.5">53% OFF • De R$ 189/mês no avulso</p>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Psicometria TRI + 10 Peças OAB/mês + Gemini Pro.</p>
                 </button>
@@ -366,7 +408,7 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                     </span>
                     {selectedPlan === 'black' && <CheckCircle2 className="w-4 h-4 text-amber-400" />}
                   </div>
-                  <p className="text-xl font-black text-slate-900 dark:text-white">R$ 1.497 <span className="text-xs font-normal text-amber-400">único</span></p>
+                  <p className="text-xl font-black text-slate-900 dark:text-white">R$ 1.497 <span className="text-xs font-normal text-amber-700 dark:text-amber-400">único</span></p>
                   <p className="text-[11px] text-amber-500 font-bold mt-0.5">12x R$ 149,70 ou R$ 197/mês</p>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Acesso Até a Posse + Todas Ferramentas + Fênix Dourada.</p>
                 </button>
@@ -444,7 +486,7 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                       }`}
                     >
                       <span>Trimestral</span>
-                      <span className="block text-[9px] text-emerald-400 font-extrabold">-15% OFF</span>
+                      <span className={`block text-[9px] font-extrabold ${billingCycle === 'trimestral' ? 'text-emerald-200' : 'text-emerald-700 dark:text-emerald-400'}`}>-15% OFF</span>
                     </button>
 
                     <button
@@ -457,7 +499,7 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                       }`}
                     >
                       <span>Anual</span>
-                      <span className="block text-[9px] text-amber-300 font-extrabold">-51% OFF</span>
+                      <span className={`block text-[9px] font-extrabold ${billingCycle === 'anual' ? 'text-amber-200' : 'text-amber-700 dark:text-amber-300'}`}>-51% OFF</span>
                     </button>
                   </div>
                 )}
@@ -618,36 +660,26 @@ export const CheckoutCartTab: React.FC<CheckoutCartTabProps> = ({
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4 bg-white dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
-                  {/* Mock Visual QR Code SVG */}
-                  <div className="w-32 h-32 bg-white p-2 rounded-xl border border-slate-200 shadow-inner shrink-0 flex items-center justify-center">
-                    <svg viewBox="0 0 100 100" className="w-full h-full text-slate-900">
-                      <rect width="100" height="100" fill="white" />
-                      {/* Pix corner squares */}
-                      <rect x="5" y="5" width="30" height="30" fill="black" />
-                      <rect x="9" y="9" width="22" height="22" fill="white" />
-                      <rect x="13" y="13" width="14" height="14" fill="black" />
-
-                      <rect x="65" y="5" width="30" height="30" fill="black" />
-                      <rect x="69" y="9" width="22" height="22" fill="white" />
-                      <rect x="73" y="13" width="14" height="14" fill="black" />
-
-                      <rect x="5" y="65" width="30" height="30" fill="black" />
-                      <rect x="9" y="69" width="22" height="22" fill="white" />
-                      <rect x="13" y="73" width="14" height="14" fill="black" />
-
-                      {/* Random pixels for aesthetic preview */}
-                      <rect x="42" y="10" width="8" height="8" fill="black" />
-                      <rect x="42" y="24" width="8" height="8" fill="black" />
-                      <rect x="52" y="18" width="8" height="8" fill="black" />
-                      <rect x="10" y="42" width="8" height="8" fill="black" />
-                      <rect x="25" y="45" width="8" height="8" fill="black" />
-                      <rect x="45" y="45" width="10" height="10" fill="#2563eb" />
-                      <rect x="65" y="42" width="8" height="8" fill="black" />
-                      <rect x="80" y="50" width="8" height="8" fill="black" />
-                      <rect x="42" y="65" width="8" height="8" fill="black" />
-                      <rect x="55" y="75" width="8" height="8" fill="black" />
-                      <rect x="75" y="75" width="12" height="12" fill="black" />
-                    </svg>
+                  {/* QR Code Container Oficial Asaas */}
+                  <div className="w-36 h-36 bg-white p-2 rounded-2xl border-2 border-emerald-500 shadow-md shrink-0 flex items-center justify-center">
+                    {realQrCodeImg ? (
+                      <img 
+                        src={realQrCodeImg} 
+                        alt="QR Code Pix Oficial Asaas" 
+                        className="w-full h-full object-contain rounded-xl"
+                      />
+                    ) : isLoadingPix ? (
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="w-8 h-8 border-3 border-emerald-500/20 border-t-emerald-600 rounded-full animate-spin" />
+                        <span className="text-[10px] font-bold text-slate-500">Gerando QR...</span>
+                      </div>
+                    ) : (
+                      <img 
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`} 
+                        alt="QR Code Pix" 
+                        className="w-full h-full object-contain rounded-xl"
+                      />
+                    )}
                   </div>
 
                   <div className="flex-1 space-y-2 w-full">

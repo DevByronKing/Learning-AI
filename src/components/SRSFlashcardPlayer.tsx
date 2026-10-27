@@ -374,7 +374,7 @@ export const SRSFlashcardPlayer: React.FC<SRSFlashcardPlayerProps> = ({
                           {card.subjectName}
                         </span>
                         <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                          isDue ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                          isDue ? 'bg-amber-500/20 text-amber-800 dark:text-amber-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                         }`}>
                           {isDue ? 'Revisar Hoje' : `Em ${card.intervalDays}d`}
                         </span>

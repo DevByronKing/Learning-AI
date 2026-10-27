@@ -447,7 +447,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fadeIn">
       
       {/* Header Banner */}
-      <div className="relative rounded-3xl bg-white dark:bg-gradient-to-r dark:from-amber-950/30 dark:via-dark-surface dark:to-indigo-950/30 bg-gradient-to-r from-amber-50 to-indigo-50 border border-amber-200 dark:border-amber-500/20 p-6 sm:p-8 backdrop-blur-xl shadow-2xl overflow-hidden">
+      <div className="relative rounded-3xl bg-white dark:bg-transparent dark:bg-gradient-to-r dark:from-amber-950/30 dark:via-dark-surface dark:to-indigo-950/30 bg-gradient-to-r from-amber-50 to-indigo-50 border border-amber-200 dark:border-amber-500/20 p-6 sm:p-8 backdrop-blur-xl shadow-2xl overflow-hidden">
         <div className="absolute -right-16 -top-16 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
         
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -480,9 +480,9 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
 
             <button
               onClick={() => onGoToSimulator?.()}
-              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-700 dark:border-white/10 text-white font-bold text-xs tracking-wide transition-all shadow-sm"
+              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-slate-50 dark:bg-dark-card dark:hover:bg-dark-hover border border-slate-300 dark:border-white/10 text-slate-800 dark:text-white font-bold text-xs tracking-wide transition-all shadow-sm"
             >
-              <BookOpen className="w-4 h-4 text-amber-400" />
+              <BookOpen className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <span>SIMULADOR DE QUESTÕES</span>
             </button>
           </div>
@@ -654,7 +654,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
       <div className="space-y-3">
         {selectedExam && (
           <div className="flex flex-wrap items-center gap-2 p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs">
-            <span className="font-black text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+            <span className="font-black text-amber-800 dark:text-amber-400 flex items-center gap-1.5">
               <span>🎯</span>
               <span>Concurso Ativo: {selectedExam.title}</span>
             </span>
@@ -804,7 +804,7 @@ export const SmartVadeMecum: React.FC<SmartVadeMecumProps> = ({
                 </div>
 
                 {/* Banca Trap Golden Note */}
-                <div className="bg-amber-50 dark:bg-gradient-to-r dark:from-amber-950/25 dark:via-dark-bg dark:to-dark-surface border border-amber-200 dark:border-amber-500/25 rounded-xl p-4 space-y-2">
+                <div className="bg-amber-50 dark:bg-transparent dark:bg-gradient-to-r dark:from-amber-950/25 dark:via-dark-bg dark:to-dark-surface border border-amber-200 dark:border-amber-500/25 rounded-xl p-4 space-y-2">
                   <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 text-xs font-black uppercase tracking-wider">
                     <ShieldAlert className="w-4 h-4 text-amber-500 dark:text-amber-400" />
                     <span>Dica de Ouro da Banca (Como você é testado)</span>

@@ -12,6 +12,7 @@
     "test:coverage": "vitest run --coverage",
     "test:stress": "vitest run src/__tests__/stressTesting.test.ts",
     "security:audit": "vitest run src/__tests__/penetrationTesting.test.ts",
+    "test:pix": "node scripts/test_asaas_pix.js",
     "test:e2e": "playwright test",
     "test:a11y": "playwright test e2e/accessibility.spec.ts",
     "review": "ocr review",
