@@ -12,16 +12,17 @@ const client = createClient(supabaseUrl, supabaseKey);
 
 async function checkDatabase() {
   console.log('Testing connection to Supabase (' + supabaseUrl + ')...');
-  
+
   const tablesToCheck = [
     'profiles',
     'exam_notices',
     'questions',
-    'mistakes_notebook',
-    'flashcards',
-    'study_cycles',
     'question_attempts',
-    'discursive_submissions'
+    'flashcards',
+    'mistakes_notebook',
+    'ai_diagnostic_cache',
+    'leads',
+    'transactions',
   ];
 
   for (const table of tablesToCheck) {

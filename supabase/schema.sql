@@ -1,10 +1,9 @@
 -- ==============================================================================
 -- ARGUS - SUPABASE POSTGRESQL SCHEMA (CUSTO ZERO & ALTA ESCALABILIDADE)
--- ==============================================================================
-
--- ==============================================================================
 -- Architecture, RLS Policies, and SDD/TDD Guardrails validated via AI Agents
 -- (see .agents/skills/sdd-tdd-guardrails-agent-rules & .agents/plugins/cognitive-focus-plugin)
+-- ==============================================================================
+
 -- 1. Enable Extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "vector";
@@ -19,15 +18,38 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   study_methodology TEXT DEFAULT 'ciclo_meirelles',
   daily_hours_goal NUMERIC DEFAULT 3.0,
   streak_days INT DEFAULT 1,
-  subscription_tier TEXT DEFAULT 'aspirante', -- 'aspirante', 'pro', 'elite'
+  subscription_tier TEXT DEFAULT 'aspirante', -- 'aspirante', 'pro', 'elite', 'black', 'lancamento'
   subscription_status TEXT DEFAULT 'active',
-  avatar_animal TEXT DEFAULT 'coruja', -- 'coruja', 'lobo', 'gaviao', 'leao', 'raposa', 'onca'
+  avatar_animal TEXT DEFAULT 'coruja', -- 'coruja', 'lobo', 'gaviao', 'leao', 'raposa', 'onca', 'fenix'
   war_name TEXT DEFAULT 'Futuro Servidor',
   daily_ai_requests_count INT DEFAULT 0,
   daily_ai_requests_reset_at DATE DEFAULT CURRENT_DATE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+-- 2.1 Auto-create Profile on Supabase Auth Signup (Trigger)
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER SET search_path = public
+AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email, full_name)
+  VALUES (
+    NEW.id,
+    COALESCE(NEW.email, ''),
+    COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name', 'Futuro Servidor')
+  )
+  ON CONFLICT (id) DO NOTHING;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- 3. Exam Notices (Editais) Table
 CREATE TABLE IF NOT EXISTS public.exam_notices (
@@ -107,7 +129,7 @@ CREATE TABLE IF NOT EXISTS public.mistakes_notebook (
 
 -- 8. AI Diagnostic Cache (Redução de até 85% no Consumo de Tokens Gemini)
 CREATE TABLE IF NOT EXISTS public.ai_diagnostic_cache (
-  cache_key TEXT PRIMARY KEY, -- hash md5(question_id || '_' || selected_option_id)
+  cache_key TEXT PRIMARY KEY,
   question_id UUID REFERENCES public.questions(id) ON DELETE CASCADE,
   selected_option_id TEXT NOT NULL,
   error_type TEXT NOT NULL,
@@ -146,50 +168,43 @@ CREATE TABLE IF NOT EXISTS public.transactions (
 -- 11. ÍNDICES DE ALTA PERFORMANCE (CONSULTAS CRUZADAS SEM TABLE SCANS)
 -- ==============================================================================
 
--- A. Repetição Espaçada: busca ultra-rápida de flashcards devidos no dia
 CREATE INDEX IF NOT EXISTS idx_flashcards_user_review 
   ON public.flashcards (user_id, next_review_date);
 
--- B. Analytics e Diagnóstico: cálculo instantâneo de precisão e pontos cegos
 CREATE INDEX IF NOT EXISTS idx_attempts_user_analytics 
   ON public.question_attempts (user_id, is_correct, answered_at DESC);
 
 CREATE INDEX IF NOT EXISTS idx_attempts_question 
   ON public.question_attempts (question_id);
 
--- C. Caderno de Erros: listagem rápida de erros pendentes de revanche
 CREATE INDEX IF NOT EXISTS idx_mistakes_user_status 
   ON public.mistakes_notebook (user_id, is_overcome, last_attempt_date DESC);
 
 CREATE INDEX IF NOT EXISTS idx_mistakes_question 
   ON public.mistakes_notebook (question_id);
 
--- D. Banco de Questões: filtros por banca, disciplina e ano
 CREATE INDEX IF NOT EXISTS idx_questions_banca_subject 
   ON public.questions (banca, subject_name, year DESC);
 
--- E. Busca Textual Rápida no Enunciado (Trigram GIN)
 CREATE INDEX IF NOT EXISTS idx_questions_statement_trgm 
   ON public.questions USING gin (statement gin_trgm_ops);
 
--- F. Cache de IA: verificação em O(1) de respostas prontas
 CREATE INDEX IF NOT EXISTS idx_cache_lookup 
   ON public.ai_diagnostic_cache (cache_key);
 
--- G. Transações: polling de pagamento por email e status
 CREATE INDEX IF NOT EXISTS idx_transactions_user_status 
   ON public.transactions (user_email, status);
 
--- H. Editais por usuário
 CREATE INDEX IF NOT EXISTS idx_exam_notices_user 
   ON public.exam_notices (user_id);
 
 -- ==============================================================================
--- 12. ROW LEVEL SECURITY (RLS) POLICIES
+-- 12. ROW LEVEL SECURITY (RLS) POLICIES (IDEMPOTENT)
 -- ==============================================================================
 
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.exam_notices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.question_attempts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.flashcards ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.mistakes_notebook ENABLE ROW LEVEL SECURITY;
@@ -197,34 +212,42 @@ ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ai_diagnostic_cache ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can manage their own profile" ON public.profiles;
 CREATE POLICY "Users can manage their own profile" ON public.profiles
   FOR ALL USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can manage their own editais" ON public.exam_notices;
 CREATE POLICY "Users can manage their own editais" ON public.exam_notices
   FOR ALL USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can manage their own attempts" ON public.question_attempts;
 CREATE POLICY "Users can manage their own attempts" ON public.question_attempts
   FOR ALL USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can manage their own flashcards" ON public.flashcards;
 CREATE POLICY "Users can manage their own flashcards" ON public.flashcards
   FOR ALL USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can manage their own mistakes" ON public.mistakes_notebook;
 CREATE POLICY "Users can manage their own mistakes" ON public.mistakes_notebook
   FOR ALL USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Anyone authenticated can view questions" ON public.questions;
 CREATE POLICY "Anyone authenticated can view questions" ON public.questions
   FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Anyone authenticated can read diagnostic cache" ON public.ai_diagnostic_cache;
 CREATE POLICY "Anyone authenticated can read diagnostic cache" ON public.ai_diagnostic_cache
   FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Authenticated users can insert to diagnostic cache" ON public.ai_diagnostic_cache;
 CREATE POLICY "Authenticated users can insert to diagnostic cache" ON public.ai_diagnostic_cache
   FOR INSERT WITH CHECK (true);
 
--- Leads: permit public anonymous insert from SEO landing pages
+DROP POLICY IF EXISTS "Public anonymous insert for leads" ON public.leads;
 CREATE POLICY "Public anonymous insert for leads" ON public.leads
   FOR INSERT WITH CHECK (true);
 
--- Transactions: permit reading for polling and updates via service key
+DROP POLICY IF EXISTS "Public read for transactions polling" ON public.transactions;
 CREATE POLICY "Public read for transactions polling" ON public.transactions
   FOR SELECT USING (auth.jwt() ->> 'email' = user_email OR current_setting('request.jwt.claims', true)::json ->> 'role' = 'service_role');
