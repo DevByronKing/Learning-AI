@@ -60,7 +60,7 @@ export class PaymentGateway {
 
     // Configuração de TLS para proxy local Windows
     if (typeof process !== 'undefined' && process.env) {
-      if (process.env.NODE_ENV !== 'production' || process.env.ALLOW_INSECURE_TLS === 'true') {
+      if (process.env.ALLOW_INSECURE_TLS === 'true') {
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
       }
     }
@@ -80,7 +80,7 @@ export class PaymentGateway {
         const rawCpf = params.cpfCnpj ? params.cpfCnpj.replace(/\D/g, '') : '';
         const cleanCpf = rawCpf.length === 11 || rawCpf.length === 14 
           ? rawCpf 
-          : '01234567890'; // CPF padrão de homologação caso o usuário ainda não tenha preenchido
+          : '11144477735'; // CPF Mod-11 válido de homologação caso o usuário ainda não tenha preenchido
 
         // Asaas em produção exige valor mínimo de R$ 5,00
         const chargeValue = isAsaasProduction ? Math.max(params.amount, 5.00) : params.amount;

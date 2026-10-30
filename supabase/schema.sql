@@ -227,4 +227,4 @@ CREATE POLICY "Public anonymous insert for leads" ON public.leads
 
 -- Transactions: permit reading for polling and updates via service key
 CREATE POLICY "Public read for transactions polling" ON public.transactions
-  FOR SELECT USING (true);
+  FOR SELECT USING (auth.jwt() ->> 'email' = user_email OR current_setting('request.jwt.claims', true)::json ->> 'role' = 'service_role');

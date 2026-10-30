@@ -77,6 +77,11 @@ export async function POST(req: NextRequest) {
 
     // 3. Webhook Oficial Stripe (checkout.session.completed)
     if (body.type && body.data?.object) {
+      const stripeSig = req.headers.get('stripe-signature') || req.headers.get('x-stripe-webhook-secret');
+      const expectedStripeSecret = process.env.STRIPE_WEBHOOK_SECRET;
+      if (process.env.NODE_ENV === 'production' && expectedStripeSecret && stripeSig !== expectedStripeSecret) {
+        return NextResponse.json({ success: false, error: 'Assinatura de webhook Stripe não autorizada.' }, { status: 401 });
+      }
       const eventType = body.type;
       const session = body.data.object;
       const eventId = body.id || `stripe_${session.id}_${eventType}`;

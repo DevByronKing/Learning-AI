@@ -12,8 +12,8 @@ export async function POST(req: Request) {
   try {
     // 0. Controle de Acesso Administrativo em Produção
     const adminKey = req.headers.get('x-admin-key') || req.headers.get('authorization')?.replace('Bearer ', '');
-    const configuredSecret = process.env.ADMIN_API_KEY || 'argus-admin-secret';
-    if (process.env.NODE_ENV === 'production' && adminKey !== configuredSecret) {
+    const configuredSecret = process.env.ADMIN_API_KEY;
+    if (process.env.NODE_ENV === 'production' && (!configuredSecret || adminKey !== configuredSecret)) {
       return NextResponse.json(
         { success: false, error: 'Acesso não autorizado. Chave administrativa ausente ou inválida.' },
         { status: 401 }
