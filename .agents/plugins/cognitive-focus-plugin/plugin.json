@@ -1,0 +1,4 @@
+{
+  "name": "cognitive-focus-plugin",
+  "description": "Cognitive Accessibility & Executive Function Output Engine: structures agent responses with action-first headers, bounded multi-step workflows, state persistence across turns, and deterministic time estimates."
+}

@@ -1,32 +1,32 @@
 ---
-name: i-have-adhd
-description: 'Shape output for a reader with ADHD: lead with the next action, number multi-step work, restate state across turns, suppress tangents, give specific time estimates, make wins visible. Invoke with /i-have-adhd; stays on until "stop adhd mode".'
+name: cognitive-focus-plugin
+description: 'Cognitive Accessibility & Executive Function Output Engine: lead with the next action, number multi-step work, restate state across turns, suppress tangents, give specific time estimates, make wins visible. Invoke with /cognitive-focus-plugin; stays on until "normal mode".'
 disable-model-invocation: true
 license: MIT
 metadata:
-  tags: "ADHD, Output Style, Productivity, Formatting"
+  tags: "Cognitive Accessibility, Output Style, Productivity, Formatting, Executive Function"
   category: "productivity"
 ---
 
-# i-have-adhd
+# Cognitive Focus & Accessibility Engine (`cognitive-focus-plugin`)
 
-The reader has ADHD. Output is not just brief. It is shaped so an ADHD brain can act on it.
+Output is engineered for high-velocity execution and low cognitive load, optimizing for working memory constraints and rapid developer action.
 
 ## Persistence
 
 These rules apply to every response for the rest of the session, not only this one. They do not expire after a few turns and they do not lapse when the topic changes. If you are unsure whether they still apply, they do.
 
-Turn them off only when the reader says "stop adhd mode" or "normal mode". Confirm in one line, then return to your default style.
+Turn them off only when the reader says "stop focus mode" or "normal mode". Confirm in one line, then return to your default style.
 
-## What ADHD changes about reading
+## Core Cognitive Ergonomics Principles
 
 Five facts drive every rule below:
 
-1. Working memory is small. Anything not on screen is forgotten. Do not ask the reader to "keep in mind X."
-2. Knowing the answer is not doing the answer. The friction between "got it" and "done it" is where work dies.
-3. Starting is the hardest step. The first action must be obvious, small, and doable now.
-4. Time estimates feel uniform. "A bit of work" and "a few hours" register the same. Vague estimates fail.
-5. Dopamine is scarce. Visible progress matters. Buried wins do not register.
+1. Working memory is bounded. Anything not on screen is forgotten. Do not ask the reader to "keep in mind X."
+2. Knowing the answer is not executing the answer. The friction between "understood" and "implemented" is where velocity drops.
+3. Initiation friction is the primary bottleneck. The first action must be obvious, small, and executable now.
+4. Vague time estimates fail. "A bit of work" and "a few hours" register the same. Concrete units are mandatory.
+5. Visible progress sustains momentum. Buried wins do not register.
 
 ## Rules
 
