@@ -1,41 +1,40 @@
 ---
 name: sete-leis-ux-arquitetura-tela
-description: Diretrizes obrigatórias de engenharia de UI/UX baseadas nas 7 Leis de UX (Fitts, Hick, Zeigarnik, Jakob, Gradiente de Meta, Von Restorff e Miller). Aplique ao criar, revisar ou refatorar qualquer página, dashboard, menu, tela de preços ou fluxo de usuário.
+description: Mandatory UI/UX engineering guidelines based on the 7 Laws of UX (Fitts, Hick, Zeigarnik, Jakob, Goal-Gradient, Von Restorff, and Miller). Apply when creating, reviewing, or refactoring any screen, dashboard, navigation menu, pricing page, or onboarding flow.
 ---
 
-# Diretrizes de Engenharia de Tela: As 7 Leis de UX
+# Screen Architecture Guidelines: The 7 Laws of UX
 
-Princípio Central: **Tela boa faz o cliente pensar menos.** Todo componente e layout construído neste projeto deve obedecer às seguintes regras técnicas:
+Core Principle: **Great screens minimize cognitive load.** Every component and layout built in this repository must enforce the following engineering constraints:
 
-## 1. Lei de Fitts (Ação Principal Perto e Grande)
-- **Regra:** O tempo para atingir um alvo depende da distância e do tamanho dele.
-- **Implementação:** O Call-to-Action (CTA) principal da tela deve ter dimensões generosas (altura mínima de `48px` no mobile, padding amplo) e estar posicionado na área de foco imediato (centro visual ou fixo na zona do polegar no mobile).
-- **Proibido:** Esconder a ação principal em cantos distantes, menus dropdown ocultos ou usar botões pequenos para conversões críticas.
+## 1. Fitts's Law (Primary Targets Close & Large)
+- **Rule:** The time to acquire a target is a function of the distance to and size of the target.
+- **Implementation:** The primary Call-to-Action (CTA) on any screen must have generous dimensions (minimum height of `48px` on mobile, ample padding) and sit within the immediate visual focus area or thumb zone.
+- **Prohibited:** Hiding primary actions in distant corners, nested dropdown menus, or undersized buttons.
 
-## 2. Lei de Hick (Menos Escolhas, Menos Atrito)
-- **Regra:** Quanto mais opções na tela, maior o tempo de decisão e a chance de desistência.
-- **Implementação:** Limite decisões simultâneas (ex: no máximo 2 a 3 planos em telas de preços; no máximo 3 a 4 ações rápidas por card). Use *Progressive Disclosure* (revelação progressiva) para esconder configurações avançadas em abas ou modais secundários.
+## 2. Hick's Law (Fewer Choices, Less Friction)
+- **Rule:** The time it takes to make a decision increases with the number and complexity of choices.
+- **Implementation:** Cap simultaneous decisions (e.g., 2 to 3 highlighted tiers on pricing views; max 3 to 4 quick actions per card). Use *Progressive Disclosure* to tuck advanced filters or settings into secondary tabs or modals.
 
-## 3. Efeito Zeigarnik (Tarefa à Vista para Puxar Conclusão)
-- **Regra:** Tarefas iniciadas e não concluídas geram tensão cognitiva que motiva o fechamento.
-- **Implementação:** Em fluxos de ativação, onboarding ou metas diárias, implemente um componente de Checklist Visível (ex: "Primeiros passos: 4/5 concluídos") onde o primeiro passo já venha marcado como concluído (ex: "Criar conta [x]").
+## 3. Zeigarnik Effect (Visible Incomplete Tasks Drive Completion)
+- **Rule:** People remember uncompleted or interrupted tasks better than completed tasks.
+- **Implementation:** In onboarding, activation, and daily study flows, render a visible checklist component (e.g., "Activation Steps: 4/5 completed") with the initial step pre-checked upon account creation.
 
-## 4. Lei de Jakob (Padrões que o Usuário Já Conhece)
-- **Regra:** O usuário espera que o sistema funcione como os aplicativos que ele já usa todos os dias.
-- **Implementação:** Mantenha convenções universais de UI:
-  - Busca sempre no topo com ícone de lupa (`Search`).
-  - Notificações com ícone de sino (`Bell`) no cabeçalho.
-  - Perfil e Configurações no canto superior direito ou no final da barra lateral.
-- **Proibido:** Reinventar ícones, mudar comportamentos padrão de navegação ou criar layouts experimentais que exijam curva de aprendizado.
+## 4. Jakob's Law (Familiar Mental Models)
+- **Rule:** Users spend most of their time on other sites and expect your application to work the same way.
+- **Implementation:** Preserve universal UI conventions:
+  - Search bar at the top with a magnifying glass icon (`Search`).
+  - Notifications using a bell icon (`Bell`) in the header.
+  - Profile and Settings anchored in the top-right header or bottom of the sidebar.
 
-## 5. Gradiente de Meta (Progresso Visível)
-- **Regra:** A motivação humana acelera conforme a pessoa enxerga que está perto do fim.
-- **Implementação:** Em qualquer jornada de múltiplos passos (cadastro, configuração, simulado, bateria de estudo), renderize uma barra de progresso contínua mostrando a porcentagem atual e adicione microcopy dinâmico de incentivo acima de 75% (ex: "Falta pouco!", "Quase lá!").
+## 5. Goal-Gradient Effect (Visible Progress Accelerates Effort)
+- **Rule:** The tendency to approach a goal increases with proximity to the goal.
+- **Implementation:** In multi-step journeys (onboarding, mock exams, flashcard decks), render a continuous progress bar and trigger encouraging dynamic microcopy once progress reaches `>= 75%` (e.g., "Almost there!").
 
-## 6. Efeito Von Restorff (Um Destaque Só por Tela)
-- **Regra:** Se tudo grita na tela com cores vibrantes, nada aparece. O elemento diferente só se destaca se o redor for neutro.
-- **Implementação:** Deve existir **apenas 1 botão com estilo Primário (cor sólida de destaque)** por seção/tela. Todas as ações secundárias ("Compartilhar", "Exportar", "Ver detalhes", "Agendar") devem usar variantes neutras (`secondary`, `outline` ou `ghost`).
+## 6. Von Restorff Effect (Single Primary Highlight Per Section)
+- **Rule:** When multiple similar objects are present, the one that differs from the rest is most likely to be remembered and acted upon.
+- **Implementation:** Render **only 1 Primary-styled button (solid accent fill)** per visual section. Secondary actions ("Share", "Export", "Details", "Schedule") must use neutral variants (`secondary`, `outline`, or `ghost`).
 
-## 7. Lei de Miller (Agrupamento / Chunking — Uma Decisão por Vez)
-- **Regra:** A memória de trabalho suporta no máximo ~7 elementos isolados (idealmente de 3 a 5 grupos).
-- **Implementação:** Nunca renderize listas ou barras de navegação com mais de 7 itens soltos do mesmo peso visual. Agrupe métricas, links e configurações em **3 a 4 categorias claras** (cards ou seções com títulos visíveis) e solicite apenas uma decisão por vez ao usuário.
+## 7. Miller's Law (Chunking — 3 to 5 Groups)
+- **Rule:** The average person can only keep `7 ± 2` items (ideally 3 to 5 chunks) in working memory.
+- **Implementation:** Never render flat navigation bars or metric lists with more than 7 ungrouped items of equal visual weight. Group metrics, links, and controls into **3 to 4 clear categories** with distinct section headers.
