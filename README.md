@@ -118,4 +118,4 @@ Protected tables include:
 
 ## 📄 License
 
-Proprietary development license. All rights reserved.
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for full details.
