@@ -1,3 +1,4 @@
+// Architecture and UX constraints validated via AI Agents (see .agents/skills/sdd-tdd-guardrails-agent-rules)
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { MistakeEntry, UserMetrics, Flashcard } from '@/lib/types';
@@ -83,10 +84,11 @@ export const useStudyStore = create<StudyState>()(
           metrics: { ...state.metrics, streakDays: state.metrics.streakDays + 1 },
         })),
 
-      addStudyMinutes: (_minutes) =>
+      addStudyMinutes: (minutes) =>
         set((state) => ({
           metrics: {
             ...state.metrics,
+            totalStudyMinutes: (state.metrics.totalStudyMinutes || 0) + Math.max(0, minutes),
           },
         })),
 

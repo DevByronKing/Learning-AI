@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
-    const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
+    const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
 
     if (!apiKey) {
       return NextResponse.json(
@@ -177,7 +177,7 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura precisa:
     return NextResponse.json({
       success: true,
       data: parsed,
-      source: 'gemini_3.6_flash',
+      source: 'gemini_2.0_flash',
     });
   } catch (error: any) {
     console.error('Erro na rota /api/discursive:', error);

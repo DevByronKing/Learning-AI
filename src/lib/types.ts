@@ -141,6 +141,7 @@ export type UserMetrics = {
   totalCorrect: number;
   globalAccuracy: number;
   streakDays: number;
+  totalStudyMinutes?: number;
   estimatedCutoffScore: number;
   probabilityOfPassing: number; // 0 to 100%
   errorDistribution: {

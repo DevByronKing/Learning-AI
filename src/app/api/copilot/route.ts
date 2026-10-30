@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
-    const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
+    const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
 
     const warName = studentProfile.warName || studentProfile.name || 'Guerreiro(a)';
     const targetExam = studentProfile.targetExamTitle || examContext.title || 'Concurso Público';

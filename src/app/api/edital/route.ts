@@ -204,7 +204,7 @@ export async function POST(req: Request) {
 
     let subjects: ExamSubject[] = [];
     const apiKey = process.env.GEMINI_API_KEY;
-    const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
+    const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
 
     if (apiKey && editalText.trim().length > 100) {
       try {
@@ -289,8 +289,8 @@ Retorne ESTRITAMENTE um array JSON de disciplinas no seguinte formato:
       role,
       salary,
       vacancies: Number(vacancies) || 150,
-      examDate: '2026-12-15',
-      daysRemaining: 95,
+      examDate: body.examDate || new Date(Date.now() + 95 * 86400000).toISOString().split('T')[0],
+      daysRemaining: body.examDate ? Math.max(1, Math.ceil((new Date(body.examDate).getTime() - Date.now()) / 86400000)) : 95,
       pdfFileName,
       uploadedAt: new Date().toISOString().split('T')[0],
       subjects
@@ -300,7 +300,7 @@ Retorne ESTRITAMENTE um array JSON de disciplinas no seguinte formato:
       success: true, 
       data: parsedNotice,
       processedOnServer: true,
-      source: subjects.length > 0 && apiKey && editalText.length > 100 ? 'gemini_3.6_flash' : 'heuristica_banca',
+      source: subjects.length > 0 && apiKey && editalText.length > 100 ? 'gemini_2.0_flash' : 'heuristica_banca',
       message: 'Edital verticalizado com sucesso no backend!'
     });
   } catch (error: any) {
