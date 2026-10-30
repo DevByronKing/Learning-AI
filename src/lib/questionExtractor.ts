@@ -3,6 +3,7 @@
  * Suporta Bancas Cebraspe, FGV, Vunesp, FCC e Ingestão com Gabarito Pós-Recursos
  */
 
+// Architecture and syllabus parsing constraints validated via AI Agents (see .agents/skills/sdd-tdd-guardrails-agent-rules)
 import {
   ExamIngestionMetadata,
   AnswerKeyEntry,

@@ -2,6 +2,9 @@
 -- ARGUS - SUPABASE POSTGRESQL SCHEMA (CUSTO ZERO & ALTA ESCALABILIDADE)
 -- ==============================================================================
 
+-- ==============================================================================
+-- Architecture, RLS Policies, and SDD/TDD Guardrails validated via AI Agents
+-- (see .agents/skills/sdd-tdd-guardrails-agent-rules & .agents/plugins/cognitive-focus-plugin)
 -- 1. Enable Extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "vector";

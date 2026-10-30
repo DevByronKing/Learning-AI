@@ -1,3 +1,4 @@
+// Architecture and UX constraints validated via AI Agents (see .agents/skills/sete-leis-ux-arquitetura-tela)
 import { ExamNotice, DailyScheduleItem } from '@/lib/types';
 
 /**

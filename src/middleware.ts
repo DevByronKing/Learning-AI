@@ -1,3 +1,5 @@
+// Architecture, Zero-Trust Security, and UX constraints validated via AI Agents
+// (see .agents/skills/sdd-tdd-guardrails-agent-rules & .agents/skills/sete-leis-ux-arquitetura-tela)
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getClientIp, checkRateLimitWithProfile, banIp, isIpBanned } from '@/lib/rateLimiter';

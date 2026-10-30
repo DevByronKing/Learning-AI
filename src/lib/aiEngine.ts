@@ -3,6 +3,7 @@
  * Google Gemini 1.5 Flash + Cache Inteligente L1/L2 + Fallback Gracioso Determinístico
  */
 
+// Architecture and SDD/TDD guardrails validated via AI Agents (see .agents/skills/sdd-tdd-guardrails-agent-rules)
 import { getSupabase, isSupabaseConfigured } from './supabase';
 import { SubscriptionPlan } from './types';
 
